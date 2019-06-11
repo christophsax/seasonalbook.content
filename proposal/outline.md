@@ -1,74 +1,125 @@
-
 PART I: Basics of Seasonal Adjsustment
+======================================
 
-Introduction
+## Introduction
 
-Seasonal Adjustment with X13
+- What is Seasonal Adjustment?
 
-Start with a concrete example, use it to explain theory.
+- What is X13?
+
+- Who uses X13?
+
+- Alternatives: Other things available in R (perhaps move to Chap VI)
+  - stl
+  - jDemetra
+  - daily seas adjustment
+  - https://otexts.com/fpp2/complexseasonality.html
+
+- Discuss Alternative Use Cases: Seasonal Adjusmtent of Business Data
 
 
-Basic example
+Start with a concrete example as quick as possible:
 
-seas(AirPassengers)
+    library(seasonal)
+    m <- seas(AirPassengers)
+    plot(m)
 
-X = I x S x T
+Use it to explain the idea of seasonal adjustment.
+
+    X = I x S x T
 
 
+## How to use the Book
 
-Seasonal Adjustment in R
+- Overview of the Book
 
-Other stuff (may be moved to the end)
-
-stl
-jDemetra
-daily seas adjustment
-…
+- The Book wants to give concrete advise in case of a problem.
+Idealy we want to have a quick check list that gives readers a starting point where to look for further advice. That could be something like a Cheat Sheet (https://www.rstudio.com/resources/cheatsheets/) with quick advise and chapter references.
 
 
 PART II: X-13 ARIMA-SEATS
+=========================
 
-Overview of the Sofware
+## Overview of the Sofware
 
-regARIMA Model
+- Elements of the Software
 
-SEATS vs X-11
+- History of the Software
 
+
+## regARIMA Model
+
+- Idea of regARIMA
+
+- Using the `regression` spec (with examples)
+
+
+## SEATS
+
+- Using the `seats` spec
+
+- Case Study: How about having a box with a slightly challenging example for each spec?
+
+
+## X11
+
+- Using the `x11` spec
 
 
 PART III: Data Problems
+=======================
 
-Irregular holidays (Easter CNY Diwali Ramadan)
+## Irregular holidays
 
-Trading Days
+- Easter etc adjusment
 
-Outliers
+- User defined adjustments (Chinese New Year, Diwali)
 
-Seasonal Breaks
+- Case Study: Ramadan (no idea how to do that, but would be nice to give some good answers on difficult questions)
+
+
+## Trading Days
+
+## Outliers
+
+## Seasonal Breaks
 
 
 
 PART IV: Other Issues
+=====================
 
-Should we seasonal adjust at all?
+## Should we seasonal adjust at all?
 
-Annual Constraining
+- How to test
+
+## Annual Constraining
 
 - Should the annual values be restrained?
 - Force spec
 
-Indirect vs direct adjustment
+## Indirect vs direct adjustment
+
 
 PART V: Quality assessment
+==========================
 
-Quality measures
+## Quality measures
 
 - M statistics
 - Other stuff
 
-Revisions
+## Revisions
 
 - How to measure?
 - Should the model be reestimated?
 - slidingspan, history
+
+
+PART VI: The future of seaonal adjustment
+=========================================
+
+- daily adjusmtent
+- other methods
+
 
