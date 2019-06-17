@@ -44,14 +44,14 @@ PART II: X-13 ARIMA-SEATS
 
 - Elements of the Software
 
-	* Input and Output structure
-	* Specs
-
 - History of the Software
 
 
-PART III: Main Specs
-====================
+## regARIMA Model
+
+- Idea of regARIMA
+
+- Using the `regression` spec (with examples)
 
 
 ## SEATS
@@ -66,16 +66,10 @@ PART III: Main Specs
 - Using the `x11` spec
 
 
-PART IV: Data Problems (secondary specs)
-========================================
+PART III: Data Problems
+=======================
 
-## regARIMA Model
-
-- Idea of regARIMA
-
-- Using the `regression` spec (with examples)
-
-### Irregular holidays
+## Irregular holidays
 
 - Easter etc adjusment
 
@@ -83,15 +77,16 @@ PART IV: Data Problems (secondary specs)
 
 - Case Study: Ramadan (no idea how to do that, but would be nice to give some good answers on difficult questions)
 
-### Trading Days (regression spec)
 
-## Outliers (outlier spec)
+## Trading Days
+
+## Outliers
 
 ## Seasonal Breaks
 
 
 
-PART V: Other Issues
+PART IV: Other Issues
 =====================
 
 ## Should we seasonal adjust at all?
@@ -106,7 +101,7 @@ PART V: Other Issues
 ## Indirect vs direct adjustment
 
 
-PART VI: Quality assessment
+PART V: Quality assessment
 ==========================
 
 ## Quality measures
@@ -121,7 +116,7 @@ PART VI: Quality assessment
 - slidingspan, history
 
 
-PART VII: The future of seaonal adjustment
+PART VI: The future of seaonal adjustment
 =========================================
 
 - daily adjusmtent
