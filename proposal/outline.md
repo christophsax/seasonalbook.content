@@ -75,7 +75,7 @@ At least an informative example. For SEATS, challenging can be quite challenging
 
 - Using the `x11` spec
 
-- Case Study Ideas: length of trend or seasonal filter, 
+- Case Study Ideas: length of trend or seasonal filter
 
 
 ## regARIMA Model
@@ -84,6 +84,7 @@ At least an informative example. For SEATS, challenging can be quite challenging
 
 - Using the `regression` spec (with examples)
 
+- Case study ideas: Decide if you should include AO in May 2014 OR have reader construct very simple user defined regressor to handle specific issue.
 
 
 PART III: Data Problems
