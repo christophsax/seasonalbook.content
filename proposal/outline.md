@@ -42,9 +42,40 @@ PART II: X-13 ARIMA-SEATS
 
 ## Overview of the Sofware
 
+- History of the Software
+
 - Elements of the Software
 
-- History of the Software
+- Overiew of main choices user needs to make
+
+## Series Input
+
+- available data formats
+
+- overview of series spec
+
+## Transform Spec
+
+- short section about transform
+
+- Could use to discuss multiplicative vs additive adjument here.
+
+- Case Study idea: Decide between log vs no-log transformation 
+
+
+## SEATS
+
+- Using the `seats` spec
+
+- Case Study: How about having a box with a slightly challenging example for each spec? 
+At least an informative example. For SEATS, challenging can be quite challenging since it relies heavily on seasonal ARIMA modeling. 
+
+
+## X11
+
+- Using the `x11` spec
+
+- Case Study Ideas: length of trend or seasonal filter, 
 
 
 ## regARIMA Model
@@ -53,17 +84,6 @@ PART II: X-13 ARIMA-SEATS
 
 - Using the `regression` spec (with examples)
 
-
-## SEATS
-
-- Using the `seats` spec
-
-- Case Study: How about having a box with a slightly challenging example for each spec?
-
-
-## X11
-
-- Using the `x11` spec
 
 
 PART III: Data Problems
