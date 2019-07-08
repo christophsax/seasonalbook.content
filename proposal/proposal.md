@@ -22,8 +22,7 @@ This text will focus on seasonal adjustment and its implementation in R.
 Specifically, the audience will be both R users who want to learn about seasonal adjustment as well as seasonal adjustment practitioners, such as those at governmental agencies, who are starting to become more interested in using R.
 The book will feature accessible background material and references for those theoretically minded but will be tailored more directly to the practical applications of seasonal adjustment with R.
 Specifically, we plan to showcase methods through detailed examples with associated code.
-This presentation will allow the academic level can be quite broad; understood by undergraduates and interesting all the way through final year Ph.D.
-students.
+This presentation will allow the academic level can be quite broad; understood by undergraduates and interesting all the way through final year Ph.D. students.
 
 ### 4. Please describe your motivation for writing the book; why it is important.
 
@@ -47,11 +46,11 @@ Some Examples: Chinese New Year, Structural Break, Direct or indirect seasonal a
 
 
 ### 5. Please list up to six key features of your proposed book.
-• Each chapter start with a concrete practical problem and shows how X-13 can be used to address it
-• Teach-by-example format
-• Continuous connection of X-13ARIMA-SEATS input with R input and vice-versa
-• Fundamental theoretical material when needed
-• For each example given the book will give answers, code and provide data.
+- Each chapter start with a concrete practical problem and shows how X-13 can be used to address it
+- Teach-by-example format
+- Continuous connection of X-13ARIMA-SEATS input with R input and vice-versa
+- Fundamental theoretical material when needed
+- For each example given the book will give answers, code and provide data.
 
 
 
@@ -112,7 +111,14 @@ Moreover, the proposed textbook will include running or X-13ARIMA-SEATS not just
 
 ### 11. Approximately how many printed pages will your book contain? Approximately how many figures?
 
+
+- 150 to 200 Pages
+- 40 an 80 Figures
+
+
 ### 12. When would you hope to be able to submit the final draft of the book to us? And in which format, Latex or Word?
+
+End of summer 2020.
 
 We will write the document as an RMarkdown document that includes reproducible examples.
 This will translate to a Latex document that we want to provide
