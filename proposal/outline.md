@@ -1,7 +1,9 @@
 PART I: Basics of Seasonal Adjustment
 ======================================
 
-This section focuses on explaining the very basics of seasonal adjustment and gets the reader involved with a minimal working example. It keeps the technical jargon to a minimum. Finally, the layout of the textbook and future sections is clearly spelled out.
+This section focuses on explaining the very basics of seasonal adjustment and gets the reader involved with a minimal working example. 
+It keeps the technical jargon to a minimum. 
+Finally, the layout of the textbook and future sections is clearly spelled out.
 
 ## Introduction
 
@@ -42,7 +44,9 @@ Ideally we want to have a quick check list that gives readers a starting point w
 PART II: X-13 ARIMA-SEATS
 =========================
 
-This section gets readers familiar with X-13ARIMA-SEATS. The section begins by explaining the history and pedagogy of the software. This leads directly into discussing the most crucial aspects of X-13ARIMA-SEATS.
+This section gets readers familiar with X-13ARIMA-SEATS. 
+The section begins by explaining the history and pedagogy of the software. 
+This leads directly into discussing the most crucial aspects of X-13ARIMA-SEATS.
 
 ## Overview of the Software
 
@@ -89,7 +93,9 @@ At least an informative example. For SEATS, challenging can be quite challenging
 PART III: Data Problems
 =======================
 
-In part III we look at more in depth issues seasonal adjustment practitioners face. Here, the focus is on practical solutions to each situation presented. Each subsection will prominently feature a case study dedicated to each problem.
+In part III we look at more in depth issues seasonal adjustment practitioners face. 
+Here, the focus is on practical solutions to each situation presented. 
+Each subsection will prominently feature a case study dedicated to each problem.
 
 ## Irregular holidays
 
@@ -111,7 +117,9 @@ In part III we look at more in depth issues seasonal adjustment practitioners fa
 PART IV: Other Issues
 =====================
 
-Part IV investigates more holistic issues that practitioners face. The main focus is to give classical methodology to answer their problems. Since these types of issues can be highly specialized, we concentrate on known solutions to the topics. 
+Part IV investigates more holistic issues that practitioners face. 
+The main focus is to give classical methodology to answer their problems. 
+Since these types of issues can be highly specialized, we concentrate on known solutions to the topics. 
 
 ## Should we seasonal adjust at all?
 
@@ -128,7 +136,9 @@ Part IV investigates more holistic issues that practitioners face. The main focu
 PART V: Quality assessment
 ==========================
 
-This section focuses on diagnostic tools for seasonal adjustment. This will be written as a stand alone section as well as a continuance of prior sections. The idea here is that many readers may be interested in checking the quality of their adjustments but not need help performing it.  
+This section focuses on diagnostic tools for seasonal adjustment. 
+This will be written as a stand alone section as well as a continuance of prior sections. 
+The idea here is that many readers may be interested in checking the quality of their adjustments but not need help performing it.  
 
 ## Quality measures
 
