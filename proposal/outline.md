@@ -108,9 +108,17 @@ Each subsection will prominently feature a case study dedicated to each problem.
 
 ## Trading Days
 
+- Seven vs two coefficient trading day
+
+- Case Study: Movie tickets (or another series with very clear trading day effects)
+
 ## Outliers
 
+- additive outliers, level shifts, temporary changes 
+
 ## Seasonal Breaks
+
+- detection of seasonal breaks 
 
 
 
