@@ -7,6 +7,14 @@ STATISTICS BOOK PROPOSAL, Chapman & Hall/CRC
 
 Seasonal adjustment with X-13ARIMA-SEATS in R: A practical guide
 
+
+Alternative:
+
+Hands-on Seasonal Adjustment
+
+Using X-13ARIMA-SEATS in R
+
+
 ### 2. Authors and affiliations.
 
 Christoph Sax (University of Basel, cynkra LLC)
@@ -20,7 +28,8 @@ James Livsey (US Census Bureau)
 This text will focus on seasonal adjustment and its implementation in R.
 
 Specifically, the audience will be both R users who want to learn about seasonal adjustment as well as seasonal adjustment practitioners, such as those at governmental agencies, who are starting to become more interested in using R.
-The book will feature accessible background material and references for those theoretically minded but will be tailored more directly to the practical applications of seasonal adjustment with R.
+The book will be tailored to the practical applications of seasonal adjustment within R. Accessible background material is featured and references for the theoretically minded reader is given. The main focus, however, is on concrete problems and examples.
+
 Specifically, we plan to showcase methods through detailed examples with associated code.
 This presentation will allow the academic level can be quite broad; understood by undergraduates and interesting all the way through final year Ph.D. students.
 
@@ -44,24 +53,21 @@ The use of R allows them to have reproducible examples at hand.
 Some Examples: Chinese New Year, Structural Break, Direct or indirect seasonal adjustment, SEATS or X-11
 
 
-
 ### 5. Please list up to six key features of your proposed book.
 - Each chapter start with a concrete practical problem and shows how X-13 can be used to address it
 - Teach-by-example format
 - Continuous connection of X-13ARIMA-SEATS input with R input and vice-versa
-- Fundamental theoretical material when needed
+- Fundamental theoretical material is provided when needed
 - For each example given the book will give answers, code and provide data.
 
 
-
-### 6. Will your book feature any supplementary material, e.g.
-code and datasets online, or a solutions manual?
+### 6. Will your book feature any supplementary material, e.g. code and datasets online, or a solutions manual?
 
 All material from the text will be made available to the reader.
 This includes but is not limited to:
 
-• R Package to accompany the book, containing all data and examples
-• Interactive website, on which the examples can be run (similar to seasonal.website)
+- R Package to accompany the book, containing all data and examples
+- Interactive website, on which the examples can be run (similar to www.seasonal.website)
 
 
 ## AUDIENCE AND RELATED BOOKS
@@ -71,49 +77,60 @@ Will it be used for teaching, research or both? Are there any secondary markets?
 
 There are two primary audiences:
 
-A. Current practitioners of seasonal adjustment who are interested in learning how to implement in R.
+1. Current practitioners of seasonal adjustment who are interested in learning how to implement in R.
 This audience includes researchers from statistical agencies who want to include the scripting language features of R to evaluate properties of their seasonal adjustments.
 It also serves as a guide to address concrete problems.
 
-B. Current R users who, for one reason or another, want to learn seasonal adjustment.
-We are able to leverage the readers knowledge of R and make learning seasonal adjustment easier.
-
+2. Current R users who, for one reason or another, want to learn seasonal adjustment.
+We are able to leverage the readers knowledge of R and make learning seasonal adjustment easier. We will feature a few interesting applications outside of official statistics, such as the seasonal adjustment of business data.
 
 
 ### 8. If your book is a textbook, for which courses will it be the primary text? For which will it be supplementary reading?
 
-While the it wouldn’t be written to be a primary textbook for a course, it is highly applicable for a module in a time series or econometrics class.
+While the book is not intended as a primary textbook for a course, it is highly applicable for a module in a time series or econometrics class.
 
 ### 9. What competitive and/or related books are available? (If possible, please indicate author, title, publisher and publication year).
 
-
 There are no directly relevant competitors to the proposed textbook.
+
 There is a book that serves as a primary reference to the X-11 method, a single type of seasonal adjustment:
 
-Seasonal Adjustment with the X-11 Method, Dominique Ladiray and Benoit Quenneville, 2001, Springer-Verlag New York
+Ladiray D, Quenneville B (2012). Seasonal Adjustment with the X-11 Method, volume 158. Springer-Verlag.
 
-[Shall we mention the ONS ‘DRAFT’ document? From the style of the book, that’s the closest think around]
+The following book covers the SEATS method:
+
+Dagum EB, Bianconcini S (2016). “Seasonal Adjustment Based on ARIMA Model Decom- position: TRAMO-SEATS.” In Seasonal Adjustment Methods and Real Time Trend-Cycle Estimation, pp. 115–145. Springer-Verlag.
+
+
+There are various documents by statistical agencies on topics of the book:
+
+Monsell B (2007). “The X-13A-S Seasonal Adjustment Program.” In Proceedings of the 2007 Federal Committee on Statistical Methodology Research Conference. URL http://www. fcsm.gov/07papers/Monsell.II-B.pdf.
+
+Caporello G, Maravall A, Sánchez FJ (2001). “Program TSW Reference Manual.” Technical Report 0112, Banco de España Madrid. URL https://ideas.repec.org/p/bde/wpaper/ 0112.html.
+
+National Bank of Belgium, Deutsche Bundesbank, Eurostat (2017). JDemetra+: Econometric Software for Seasonal Adjustment and Other Time Series Methods. Eurostat. URL https: //ec.europa.eu/eurostat/cros/content/download.
+
+UK Office for National Statistics (2007). Guide to Seasonal Adjustment with X-12-ARIMA. URL http://www.ons.gov.uk/ons/guide-method/method-quality/ general-methodology/time-series-analysis/guide-to-seasonal-adjustment.pdf.
+
+
+This book relies on the 'seasonal' package to access X13, which is described in.
+
+Sax C, Eddelbuettel D (2018). “Seasonal Adjustment by X-13ARIMA-SEATS
+in R.” _Journal of Statistical Software_, *87*(11), 1-17. doi:
+10.18637/jss.v087.i11 (URL: https://doi.org/10.18637/jss.v087.i11).
+
 
 
 ### 10. What advantages does your book have over those mentioned above, i.e. identify the niche that your book fills?
 
-Ladiray: Focus on practical problems, rather than theory
-ONS: Runable examples in R
-
-Both: Covers latest X13, including SEATS
-
-
-This textbook will be implemented in R and include all code and data for users to get ‘hands-on’ with.
-Moreover, the proposed textbook will include running or X-13ARIMA-SEATS not just the method behind the software.
+This is the first book that focuses on practical problems, rather than theory. It also the only book that covers all aspects of X13, i.e. both X-11 and SEATS. This textbook will be focuses on R and include all code and data for users to get ‘hands-on’ with.
 
 
 ## ADDITIONAL DETAILS
 
 ### 11. Approximately how many printed pages will your book contain? Approximately how many figures?
 
-
-- 150 to 200 Pages
-- 40 an 80 Figures
+This is obviously difficult to guess at this stage. Judged from our proposed outline, and the heavy use of practical examples in R, we estimate between 40 and 80 figures. Including these figures, the content may result in 120 to 200 pages.
 
 
 ### 12. When would you hope to be able to submit the final draft of the book to us? And in which format, Latex or Word?
@@ -121,15 +138,15 @@ Moreover, the proposed textbook will include running or X-13ARIMA-SEATS not just
 End of summer 2020.
 
 We will write the document as an RMarkdown document that includes reproducible examples.
-This will translate to a Latex document that we want to provide
+This will translate to a Latex document that we can provide.
 
 ### 13. Please give the names and e-mail addresses of four people who would be qualified to give an opinion on your proposed book.
 (We will not necessarily contact these people).
 
 - Brian Monsell
-- Dirk Eddelbuettel
+- Dirk Eddelbuettel, dirk@eddelbuettel.com
 
-
+Dirk Eddelbuettel has also informally expressed his interest and would be available for collaboration.
 
 ## TABLE OF CONTENTS
 
