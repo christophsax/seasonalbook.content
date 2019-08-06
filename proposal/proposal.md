@@ -8,13 +8,6 @@ STATISTICS BOOK PROPOSAL, Chapman & Hall/CRC
 Seasonal adjustment with X-13ARIMA-SEATS in R: A practical guide
 
 
-Alternative:
-
-Hands-on Seasonal Adjustment
-
-Using X-13ARIMA-SEATS in R
-
-
 ### 2. Authors and affiliations.
 
 Christoph Sax (University of Basel, cynkra LLC)
@@ -27,8 +20,9 @@ James Livsey (US Census Bureau)
 
 This text will focus on seasonal adjustment and its implementation in R.
 
-Specifically, the audience will be both R users who want to learn about seasonal adjustment as well as seasonal adjustment practitioners, such as those at governmental agencies, who are starting to become more interested in using R.
-The book will be tailored to the practical applications of seasonal adjustment within R. Accessible background material is featured and references for the theoretically minded reader is given. The main focus, however, is on concrete problems and examples.
+Specifically, the audience will be both R users who want to learn about seasonal adjustment as well as seasonal adjustment practitioners, who are starting to become interested in using R.
+The book will be tailored to the practical applications of seasonal adjustment within R. It presents background material and references for the theoretically minded reader.
+The main focus, however, is on concrete problems and examples.
 
 Specifically, we plan to showcase methods through detailed examples with associated code.
 This presentation will allow the academic level can be quite broad; understood by undergraduates and interesting all the way through final year Ph.D. students.
@@ -40,7 +34,7 @@ Moreover, there is a movement in statistical agencies toward the use of R and op
 This text will serve the following:
 
 1. Guide to professional seasonal adjustment with R
-To make the entry to the world of seasonal adjustment more accessible for those with a beginner understanding of R.
+To make the entry to the world of seasonal adjustment more accessible for those with an understanding of R.
 We leverage the users R knowledge to more easily understand the input/output of the X-13ARIMA-SEATS program.
 We also will give an overview of other possibilities of seasonal adjustment in R (e.g.
 stl, JDemetra).
@@ -50,14 +44,14 @@ To bridge an important gap in the training for many seasonal adjustment practiti
 The book addresses practical problems and shows how they can be addressed in X-13ARIMA-SEATS.
 The use of R allows them to have reproducible examples at hand.
 
-Some Examples: Chinese New Year, Structural Break, Direct or indirect seasonal adjustment, SEATS or X-11
+Some Examples: Chinese New Year, structural breaks, direct or indirect seasonal adjustment, SEATS or X-11.
 
 
 ### 5. Please list up to six key features of your proposed book.
 - Each chapter start with a concrete practical problem and shows how X-13 can be used to address it
 - Teach-by-example format
 - Continuous connection of X-13ARIMA-SEATS input with R input and vice-versa
-- Fundamental theoretical material is provided when needed
+- Fundamental theoretical material is provided mainly as an option.
 - For each example given the book will give answers, code and provide data.
 
 
@@ -82,7 +76,7 @@ This audience includes researchers from statistical agencies who want to include
 It also serves as a guide to address concrete problems.
 
 2. Current R users who, for one reason or another, want to learn seasonal adjustment.
-We are able to leverage the readers knowledge of R and make learning seasonal adjustment easier. We will feature a few interesting applications outside of official statistics, such as the seasonal adjustment of business data.
+We are able to leverage the readers knowledge of R and make learning seasonal adjustment easy. We will feature a few interesting applications outside of official statistics, such as the seasonal adjustment of business data.
 
 
 ### 8. If your book is a textbook, for which courses will it be the primary text? For which will it be supplementary reading?
@@ -113,7 +107,7 @@ National Bank of Belgium, Deutsche Bundesbank, Eurostat (2017). JDemetra+: Econo
 UK Office for National Statistics (2007). Guide to Seasonal Adjustment with X-12-ARIMA. URL http://www.ons.gov.uk/ons/guide-method/method-quality/ general-methodology/time-series-analysis/guide-to-seasonal-adjustment.pdf.
 
 
-This book relies on the 'seasonal' package to access X13, which is described in.
+This book relies on the 'seasonal' package to access X13, which is described in:
 
 Sax C, Eddelbuettel D (2018). “Seasonal Adjustment by X-13ARIMA-SEATS
 in R.” _Journal of Statistical Software_, *87*(11), 1-17. doi:
@@ -130,7 +124,7 @@ This is the first book that focuses on practical problems, rather than theory. I
 
 ### 11. Approximately how many printed pages will your book contain? Approximately how many figures?
 
-This is obviously difficult to guess at this stage. Judged from our proposed outline, and the heavy use of practical examples in R, we estimate between 40 and 80 figures. Including these figures, the content may result in 120 to 200 pages.
+Judged from our proposed outline, and the heavy use of practical examples in R, we estimate between 40 and 80 figures. Including these figures, the content may result in 120 to 200 pages.
 
 
 ### 12. When would you hope to be able to submit the final draft of the book to us? And in which format, Latex or Word?
@@ -138,7 +132,7 @@ This is obviously difficult to guess at this stage. Judged from our proposed out
 End of summer 2020.
 
 We will write the document as an RMarkdown document that includes reproducible examples.
-This will translate to a Latex document that we can provide.
+This will translate to a LaTeX document that we can provide.
 
 ### 13. Please give the names and e-mail addresses of four people who would be qualified to give an opinion on your proposed book.
 (We will not necessarily contact these people).
