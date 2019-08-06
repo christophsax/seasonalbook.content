@@ -1,9 +1,9 @@
 PART I: Basics of Seasonal Adjustment
 ======================================
 
-This section focuses on explaining the very basics of seasonal adjustment and gets the reader involved with a minimal working example.
+This section focuses on explaining the basics of seasonal adjustment and gets the reader involved with a minimal working example.
 It keeps the technical jargon to a minimum.
-Finally, the layout of the textbook and future sections is clearly spelled out.
+Finally, the layout of the book and future sections is clearly spelled out.
 
 ## Introduction
 
@@ -52,16 +52,18 @@ This leads directly into discussing the principal elements of X-13ARIMA-SEATS.
 
 ## Transform
 
-- Discuss multiplicative vs additive adjustment here.
+- Discuss multiplicative vs additive adjustment
 
 - How to use the transform spec
 
-- Case Study idea: Decide between log vs no-log transformation
+- Case Study idea: Decide between log vs non-log transformation
 
 
 ## SEATS
 
 - How to use the SEATS spec
+
+- SEATS vs X11
 
 - Case Study:
 
@@ -87,8 +89,8 @@ For SEATS, challenging can be quite challenging since it relies heavily on seaso
 PART III: Data Problems
 =======================
 
-In part III we look at more in depth issues seasonal adjustment practitioners face.
-Here, the focus is on practical solutions to each situation presented.
+In part III we look at more in-depth issues of seasonal adjustment practice.
+The focus is on concrete solutions to each situation presented.
 Each subsection will prominently feature a case study dedicated to each problem.
 
 ## Irregular holidays
@@ -99,7 +101,7 @@ Each subsection will prominently feature a case study dedicated to each problem.
 
 - User defined adjustments (Chinese New Year, Diwali)
 
-- Case Study: How to adjust for Ramadan (which is connected to some additional challenges)
+- Case Study: How to adjust for Ramadan (which is connected with some additional challenges)
 
 
 ## Trading days
@@ -180,7 +182,7 @@ PART VI: The future of seasonal adjustment
 
 This short section outlines the future projects in the seasonal adjustment field.
 Daily or multiple seasonal adjustment plays a major role here.
-Ideally, examples of who to solve these problems are given.
+Ideally, examples of how to solve these problems are given.
 
 - Daily adjustment
 
