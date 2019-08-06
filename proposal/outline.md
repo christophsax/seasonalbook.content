@@ -9,7 +9,7 @@ Finally, the layout of the book and future sections is clearly spelled out.
 
 - What is Seasonal Adjustment?
 
-- What is X13?
+- What is X-13ARIMA-SEATS (X13)?
 
 - Who uses X13?
 
@@ -34,7 +34,7 @@ Start with a concrete example as quick as possible and use it to explain the bas
 - For each section, we want to provide a concrete and informative case study. Some examples are provided in the outline.
 
 
-PART II: X-13 ARIMA-SEATS
+PART II: X-13ARIMA-SEATS
 =========================
 
 This section gets readers familiar with X-13ARIMA-SEATS.
@@ -67,14 +67,14 @@ This leads directly into discussing the principal elements of X-13ARIMA-SEATS.
 
 - Case Study:
 
-For SEATS, challenging can be quite challenging since it relies heavily on seasonal ARIMA modeling.
+For SEATS, can be quite challenging since it relies heavily on seasonal ARIMA modeling.
 
 
 ## X11
 
 - How to use the X11 spec
 
-- Case Study: Playing with the length of trend or the seasonal filter
+- Case Study: Changing the length of trend and/or seasonal filter
 
 
 ## regARIMA Model
@@ -83,13 +83,14 @@ For SEATS, challenging can be quite challenging since it relies heavily on seaso
 
 - How to use the regression spec
 
-- Case studies: Decide if you should include AO in May 2014. Construct a simple user defined regressor to handle specific issue.
+- Case studies: Decide if you should include AO in May 2014. 
+Construct a simple user defined regressor to handle specific issue.
 
 
 PART III: Data Problems
 =======================
 
-In part III we look at more in-depth issues of seasonal adjustment practice.
+In part III we look at more in-depth at practical issues with seasonal adjustment.
 The focus is on concrete solutions to each situation presented.
 Each subsection will prominently feature a case study dedicated to each problem.
 
@@ -117,7 +118,7 @@ Each subsection will prominently feature a case study dedicated to each problem.
 
 ## Outliers
 
-- Why to care about outliers?
+- Why care about outliers?
 
 - Additive outliers, level shifts, temporary changes
 
