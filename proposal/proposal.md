@@ -20,18 +20,19 @@ James Livsey (US Census Bureau)
 
 This text will focus on seasonal adjustment and its implementation in R.
 
-Specifically, the audience will be both R users who want to learn about seasonal adjustment as well as seasonal adjustment practitioners, who are starting to become interested in using R.
+Specifically, the audience will be both R users who want to learn about seasonal adjustment as well as seasonal adjustment practitioners, who are interested in using R.
 The book will be tailored to the practical applications of seasonal adjustment within R. It presents background material and references for the theoretically minded reader.
 The main focus, however, is on concrete problems and examples.
 
-Specifically, we plan to showcase methods through detailed examples with associated code.
-This presentation will allow the academic level can be quite broad; understood by undergraduates and interesting all the way through final year Ph.D. students.
+We will showcase methods through detailed examples with associated code.
+This presentation allows the academic level to be quite broad; understood by undergraduates all the way through advanced Ph.D. students.
 
 ### 4. Please describe your motivation for writing the book; why it is important.
 
 X-13ARIMA-SEATS is one of, if not the most, widely used seasonal adjustment software within federal and statistical agencies.
 Moreover, there is a movement in statistical agencies toward the use of R and open-source products.
-This text will serve the following:
+This text is motivated to unify these two positions. 
+Additionally, it and also serve the following:
 
 1. Guide to professional seasonal adjustment with R
 To make the entry to the world of seasonal adjustment more accessible for those with an understanding of R.
@@ -48,11 +49,11 @@ Some Examples: Chinese New Year, structural breaks, direct or indirect seasonal 
 
 
 ### 5. Please list up to six key features of your proposed book.
-- Each chapter start with a concrete practical problem and shows how X-13 can be used to address it
+- Each chapter include a concrete practical problem and shows how X-13 can be used to address it
 - Teach-by-example format
 - Continuous connection of X-13ARIMA-SEATS input with R input and vice-versa
-- Fundamental theoretical material is provided mainly as an option.
-- For each example given the book will give answers, code and provide data.
+- Fundamental theoretical material is referenced throughout (mainly as an option)
+- For each example given the book will give answers, code and provide data
 
 
 ### 6. Will your book feature any supplementary material, e.g. code and datasets online, or a solutions manual?
@@ -66,17 +67,16 @@ This includes but is not limited to:
 
 ## AUDIENCE AND RELATED BOOKS
 
-### 7. Please give details of the primary audience for the book.
-Will it be used for teaching, research or both? Are there any secondary markets?
+### 7. Please give details of the primary audience for the book. Will it be used for teaching, research or both? Are there any secondary markets?
 
 There are two primary audiences:
 
 1. Current practitioners of seasonal adjustment who are interested in learning how to implement in R.
 This audience includes researchers from statistical agencies who want to include the scripting language features of R to evaluate properties of their seasonal adjustments.
-It also serves as a guide to address concrete problems.
 
-2. Current R users who, for one reason or another, want to learn seasonal adjustment.
-We are able to leverage the readers knowledge of R and make learning seasonal adjustment easy. We will feature a few interesting applications outside of official statistics, such as the seasonal adjustment of business data.
+2. Current R users who want to learn seasonal adjustment.
+We are able to leverage the readers knowledge of R to make learning seasonal adjustment easier. 
+We will feature interesting applications outside of official statistics, such as the seasonal adjustment of business data.
 
 
 ### 8. If your book is a textbook, for which courses will it be the primary text? For which will it be supplementary reading?
@@ -117,14 +117,17 @@ in R.” _Journal of Statistical Software_, *87*(11), 1-17. doi:
 
 ### 10. What advantages does your book have over those mentioned above, i.e. identify the niche that your book fills?
 
-This is the first book that focuses on practical problems, rather than theory. It also the only book that covers all aspects of X13, i.e. both X-11 and SEATS. This textbook will be focuses on R and include all code and data for users to get ‘hands-on’ with.
+This is the first book that focuses on practical problems, rather than theory. 
+It also the only book that covers all aspects of X13, i.e. both X-11 and SEATS. 
+This textbook will focus on R and include all code and data for users to get ‘hands-on’ with.
 
 
 ## ADDITIONAL DETAILS
 
 ### 11. Approximately how many printed pages will your book contain? Approximately how many figures?
 
-Judged from our proposed outline, and the heavy use of practical examples in R, we estimate between 40 and 80 figures. Including these figures, the content may result in 120 to 200 pages.
+Judged from our proposed outline, and the heavy use of practical examples in R, we estimate between 40 and 80 figures. 
+Including these figures, the content may result in 120 to 200 pages.
 
 
 ### 12. When would you hope to be able to submit the final draft of the book to us? And in which format, Latex or Word?
