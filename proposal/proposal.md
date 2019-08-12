@@ -140,8 +140,10 @@ This will translate to a LaTeX document that we can provide.
 ### 13. Please give the names and e-mail addresses of four people who would be qualified to give an opinion on your proposed book.
 (We will not necessarily contact these people).
 
-- Brian Monsell
+- Brian Monsell, bcmonsell@gmail.com
 - Dirk Eddelbuettel, dirk@eddelbuettel.com
+- Osbert C. Pang, Osbert.C.Pang@census.gov
+- Steve Matthews, steve.matthews@canada.ca
 
 Dirk Eddelbuettel has also informally expressed his interest and would be available for collaboration.
 
