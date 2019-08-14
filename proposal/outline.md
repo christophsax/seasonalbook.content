@@ -1,11 +1,12 @@
+
 PART I: Basics of Seasonal Adjustment
-======================================
+-------------------------------------
 
 This section focuses on explaining the basics of seasonal adjustment and gets the reader involved with a minimal working example.
 It keeps the technical jargon to a minimum.
 Finally, the layout of the book and future sections is clearly spelled out.
 
-## Introduction
+### Introduction
 
 - What is Seasonal Adjustment?
 
@@ -23,7 +24,7 @@ Start with a concrete example as quick as possible and use it to explain the bas
     m <- seas(AirPassengers)
     plot(m)
 
-## How to use the book
+### How to use the book
 
 - Overview of the book
 
@@ -35,13 +36,13 @@ Start with a concrete example as quick as possible and use it to explain the bas
 
 
 PART II: X-13ARIMA-SEATS
-=========================
+------------------------
 
 This section gets readers familiar with X-13ARIMA-SEATS.
 It begins by explaining the history and pedagogy of the software.
 This leads directly into discussing the principal elements of X-13ARIMA-SEATS.
 
-## Overview of the software
+### Overview of the software
 
 - History of the software
 
@@ -50,7 +51,7 @@ This leads directly into discussing the principal elements of X-13ARIMA-SEATS.
 - Overview of main choices a user needs to make
 
 
-## Transform
+### Transform
 
 - Discuss multiplicative vs additive adjustment
 
@@ -59,7 +60,7 @@ This leads directly into discussing the principal elements of X-13ARIMA-SEATS.
 - Case Study idea: Decide between log vs non-log transformation
 
 
-## SEATS
+### SEATS
 
 - How to use the SEATS spec
 
@@ -70,31 +71,31 @@ This leads directly into discussing the principal elements of X-13ARIMA-SEATS.
 For SEATS, can be quite challenging since it relies heavily on seasonal ARIMA modeling.
 
 
-## X11
+### X11
 
 - How to use the X11 spec
 
 - Case Study: Changing the length of trend and/or seasonal filter
 
 
-## regARIMA Model
+### regARIMA Model
 
 - Idea of regARIMA
 
 - How to use the regression spec
 
-- Case studies: Decide if you should include AO in May 2014. 
+- Case studies: Decide if you should include AO in May 2014.
 Construct a simple user defined regressor to handle specific issue.
 
 
 PART III: Data Problems
-=======================
+-----------------------
 
 In part III we look at more in-depth at practical issues with seasonal adjustment.
 The focus is on concrete solutions to each situation presented.
 Each subsection will prominently feature a case study dedicated to each problem.
 
-## Irregular holidays
+### Irregular holidays
 
 - Why should we adjust for holiday effects
 
@@ -105,7 +106,7 @@ Each subsection will prominently feature a case study dedicated to each problem.
 - Case Study: How to adjust for Ramadan (which is connected with some additional challenges)
 
 
-## Trading days
+### Trading days
 
 - Why should we adjust for trading day effects
 
@@ -116,14 +117,14 @@ Each subsection will prominently feature a case study dedicated to each problem.
 - Case Study: Movie tickets (or another series with very clear trading day effects)
 
 
-## Outliers
+### Outliers
 
 - Why care about outliers?
 
 - Additive outliers, level shifts, temporary changes
 
 
-## Seasonal breaks
+### Seasonal breaks
 
 - Why to care about seasonal breaks?
 
@@ -133,35 +134,35 @@ Each subsection will prominently feature a case study dedicated to each problem.
 
 
 PART IV: Other Issues
-=====================
+---------------------
 
 Part IV investigates more holistic issues that practitioners face.
 The main focus is to give classical methodology to answer their problems.
 Since these types of issues can be highly specialized, we concentrate on known solutions to the topics.
 
-## Should a series be seasonally adjusted at all?
+### Should a series be seasonally adjusted at all?
 
 - How to test for the presence of seasonality
 
-## Annual constraining
+### Annual constraining
 
 - Should the annual values be restrained?
 
 - How to use the force spec
 
-## Indirect vs direct adjustment
+### Indirect vs direct adjustment
 
 - Should the subcomponents of a series be adjusted separately?
 
 
 PART V: Quality assessment
-==========================
+--------------------------
 
 This section focuses on diagnostic tools for seasonal adjustment.
 This will be written as a stand-alone section as well as a continuance of prior sections.
 The idea here is that many readers may be interested in checking the quality of their adjustments but not need help performing it.
 
-## Quality measures
+### Quality measures
 
 - What is a good seasonal adjustment?
 
@@ -169,7 +170,7 @@ The idea here is that many readers may be interested in checking the quality of 
 
 - Other statistics available in X13
 
-## Revisions
+### Revisions
 
 - How to measure revisions?
 
@@ -179,7 +180,7 @@ The idea here is that many readers may be interested in checking the quality of 
 
 
 PART VI: The future of seasonal adjustment
-==========================================
+------------------------------------------
 
 This short section outlines the future projects in the seasonal adjustment field.
 Daily or multiple seasonal adjustment plays a major role here.
@@ -190,5 +191,3 @@ Ideally, examples of how to solve these problems are given.
 - Multivariate seasonal adjustment
 
 - Other methods
-
-
