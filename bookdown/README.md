@@ -9,7 +9,7 @@ bookdown::render_book('index.Rmd', 'bookdown::gitbook')
 or into PDF:
 
 ```r
-bookdown::render_book('index.Rmd', 'bookdown::gitbook')
+bookdown::render_book('index.Rmd', 'bookdown::pdf_book')
 ```
 
 The result of both commands is written to the `_book` folder.

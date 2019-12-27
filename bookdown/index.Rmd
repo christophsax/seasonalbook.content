@@ -24,4 +24,10 @@ knitr::write_bib(c(
 ), 'packages.bib')
 ```
 
+# Basics of Seasonal Adjustment
+
+This section focuses on explaining the basics of seasonal adjustment and gets the reader involved with a minimal working example.
+It keeps the technical jargon to a minimum.
+Finally, the layout of the book and future sections is clearly spelled out.
+
 
