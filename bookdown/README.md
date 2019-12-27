@@ -1,4 +1,4 @@
-Content is drated in R Markdown and **bookdown** (https://github.com/rstudio/bookdown).
+Content is drafted in R Markdown and **bookdown** (https://github.com/rstudio/bookdown).
 
 The book can be compiled into HTML:
 
