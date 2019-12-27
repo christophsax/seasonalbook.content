@@ -1,4 +1,4 @@
-Content is drafted in R Markdown and **bookdown** (https://github.com/rstudio/bookdown).
+Content is drafted in R Markdown and [bookdown](https://github.com/rstudio/bookdown).
 
 The book can be compiled into HTML:
 
@@ -12,4 +12,4 @@ or into PDF:
 bookdown::render_book('index.Rmd', 'bookdown::pdf_book')
 ```
 
-The result of both commands is written to the `_book` folder.
+The result of both commands are available as `_book/index.html` or `_book/_main.pdf`.
