@@ -1,0 +1,7 @@
+## Outliers
+
+- Why care about outliers?
+
+- Additive outliers, level shifts, temporary changes
+
+

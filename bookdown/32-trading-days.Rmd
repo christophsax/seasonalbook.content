@@ -1,0 +1,10 @@
+## Trading days
+
+- Why should we adjust for trading day effects
+
+- Seven or two coefficient trading day
+
+- Using country specific calendars
+
+- Case Study: Movie tickets (or another series with very clear trading day effects)
+

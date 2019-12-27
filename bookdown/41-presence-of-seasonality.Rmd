@@ -1,0 +1,10 @@
+# Other Issues
+
+Part IV investigates more holistic issues that practitioners face.
+The main focus is to give classical methodology to answer their problems.
+Since these types of issues can be highly specialized, we concentrate on known solutions to the topics.
+
+## Should a series be seasonally adjusted at all?
+
+- How to test for the presence of seasonality
+

@@ -1,0 +1,10 @@
+## Transform
+
+- Discuss multiplicative vs additive adjustment
+
+- How to use the transform spec
+
+- Case Study idea: Decide between log vs non-log transformation
+
+
+

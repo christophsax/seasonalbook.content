@@ -1,0 +1,18 @@
+
+# Data Problems
+
+In part III we look at more in-depth at practical issues with seasonal adjustment.
+The focus is on concrete solutions to each situation presented.
+Each subsection will prominently feature a case study dedicated to each problem.
+
+## Irregular holidays
+
+- Why should we adjust for holiday effects
+
+- Easter adjustment
+
+- User defined adjustments (Chinese New Year, Diwali)
+
+- Case Study: How to adjust for Ramadan (which is connected with some additional challenges)
+
+

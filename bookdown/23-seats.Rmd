@@ -1,0 +1,10 @@
+## SEATS
+
+- How to use the SEATS spec
+
+- SEATS vs X11
+
+- Case Study:
+
+For SEATS, can be quite challenging since it relies heavily on seasonal ARIMA modeling.
+

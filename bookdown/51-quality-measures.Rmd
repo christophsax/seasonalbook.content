@@ -1,0 +1,13 @@
+# Quality assessment
+
+This section focuses on diagnostic tools for seasonal adjustment.
+This will be written as a stand-alone section as well as a continuance of prior sections.
+The idea here is that many readers may be interested in checking the quality of their adjustments but not need help performing it.
+
+## Quality measures
+
+- What is a good seasonal adjustment?
+
+- M statistics
+
+- Other statistics available in X13

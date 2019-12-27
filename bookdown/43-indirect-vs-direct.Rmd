@@ -1,0 +1,3 @@
+## Indirect vs direct adjustment
+
+- Should the subcomponents of a series be adjusted separately?

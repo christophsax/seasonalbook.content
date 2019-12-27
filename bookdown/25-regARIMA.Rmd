@@ -1,0 +1,9 @@
+## regARIMA Model
+
+- Idea of regARIMA
+
+- How to use the regression spec
+
+- Case studies: Decide if you should include AO in May 2014.
+Construct a simple user defined regressor to handle specific issue.
+

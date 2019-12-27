@@ -1,0 +1,27 @@
+---
+title: "Seasonal Adjustment in R"
+author: 'James Livsey, Christoph Sax'
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+output:
+  bookdown::gitbook:
+    lib_dir: "book_assets"
+    config:
+      sharing: null
+  bookdown::pdf_book:
+    keep_tex: yes
+documentclass: book
+bibliography: [book.bib, packages.bib]
+biblio-style: apalike
+link-citations: yes
+---
+
+
+```{r include=FALSE}
+# automatically create a bib database for R packages
+knitr::write_bib(c(
+  .packages(), 'seasonal', 'x13binary'
+), 'packages.bib')
+```
+
+

@@ -1,0 +1,24 @@
+# Basics of Seasonal Adjustment
+
+This section focuses on explaining the basics of seasonal adjustment and gets the reader involved with a minimal working example.
+It keeps the technical jargon to a minimum.
+Finally, the layout of the book and future sections is clearly spelled out.
+
+## Introduction
+
+- What is Seasonal Adjustment?
+
+- What is X-13ARIMA-SEATS (X13)?
+
+- Who uses X13?
+
+- Available alternatives in and outside of R (some topics are covered in chapter VI)
+
+- Case Study: A use cases outside of official statistics: seasonal adjustment of business data
+
+Start with a concrete example as quick as possible and use it to explain the basic idea of seasonal adjustment:
+
+    library(seasonal)
+    m <- seas(AirPassengers)
+    plot(m)
+

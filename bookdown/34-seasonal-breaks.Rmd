@@ -1,0 +1,8 @@
+## Seasonal breaks
+
+- Why to care about seasonal breaks?
+
+- Detection of seasonal breaks
+
+- Correction for seasonal breaks
+

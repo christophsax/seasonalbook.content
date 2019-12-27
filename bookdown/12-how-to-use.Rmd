@@ -1,0 +1,9 @@
+## How to use the book
+
+- Overview of the book
+
+- The Book wants to give concrete advise in case of a problem.
+
+- Ideally we want to have a quick check list that gives readers a starting point where to look for further advice. That could be something like a Cheat Sheet (https://www.rstudio.com/resources/cheatsheets/) with quick advise and chapter references.
+
+- For each section, we want to provide a concrete and informative case study. Some examples are provided in the outline.

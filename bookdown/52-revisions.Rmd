@@ -1,0 +1,8 @@
+## Revisions
+
+- How to measure revisions?
+
+- Should a model be re-estimated each period?
+
+- How to use the slidingspan and history spec
+
