@@ -1,5 +1,5 @@
 #' ---
-#' title: Trading Days
+#' title: Trading Days (Replication)
 #' output: github_document
 #' ---
 #'
