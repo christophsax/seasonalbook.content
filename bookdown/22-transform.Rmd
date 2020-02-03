@@ -6,5 +6,20 @@
 
 - Case Study idea: Decide between log vs non-log transformation
 
+One of the first choices to make when modeling a time series is whether or not it needs to be transformed. 
+X-13A-S only decides between log and no transformation.
+This choice is made by comparing the AICC value of an Airline model fit to the log transformed series and the original series. 
+For all practical purposed this is an effective choice and can be left to the program to decide. 
+Note, if your series has negative values it can not be log transformed and no transform is automatically selected by X-13. 
 
+We can see the results of the transformation tests:
+
+```{r}
+library(seasonal)
+m <- seas(AirPassengers)
+udg(m, c("aictest.trans.aicc.nolog", "aictest.trans.aicc.log"))
+```
+
+We see the AICC for log transformation is lower and hence selected. 
+The summary of the seasonal object `summary(m)` tells us this with `Transform: log` displayed. 
 
