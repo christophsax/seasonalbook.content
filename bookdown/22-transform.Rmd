@@ -4,15 +4,27 @@
 
 - How to use the transform spec
 
+- This is our first chance to mention the idea of test first then hard-code in production
+
 - Case Study idea: Decide between log vs non-log transformation
 
-One of the first choices to make when modeling a time series is whether or not it needs to be transformed. 
-X-13A-S only decides between log and no transformation.
-This choice is made by comparing the AICC value of an Airline model fit to the log transformed series and the original series. 
-For all practical purposed this is an effective choice and can be left to the program to decide. 
-Note, if your series has negative values it can not be log transformed and no transform is automatically selected by X-13. 
+One of the first choices to make when modeling a time series is whether or not it needs to be transformed prior to modeling. 
+There are two types of transformation types that typically occur within X13. 
+The first is a prior modification.
+A prior modification scales each observation for known fixed effects. 
+These effects can be well known and established such as length of a month/quarter and leap-year or more subjective such as a modification for a workers strike.
+Additionally, these prior modification factors can be permanent (defualt) or temporary.
+The difference between permanent and temporary is wheither or not the effect is included back in the final seasonally adjusted series or not; permanent factors are excluded from the final seasonal adjustment while temporary are removed while calculating seasonal factors but then added back to the seasonally adjusted series. 
+The second type is a nonlinear transformation applied to the observations.
+This is typically a choice between logarithmic transform and no transformation but for modeling can be any power of the Box-Cox transformation CITE. 
 
-We can see the results of the transformation tests:
+X-13A-S has a built in statisitcal test to decide between log and no transformatin.
+This is done with an information criteria based statistical test. 
+The choice is made by comparing the AICC value CITE of an Airline model fit, or user specified ARIMA model, to the log transformed series and the original series. 
+For all practical purposes this is an effective choice and can be left to the program to decide. 
+Note, if your series has negative values it can not be log transformed and no transform is automatically selected by X-13 when automatic transformation is asked for.
+Other restrictions on the allowed transformtions exisit and can be found in CITE but these situations are rare.
+We can see the results of the transformation tests by looking at specific inputs to the UDG file.
 
 ```{r}
 library(seasonal)
@@ -21,5 +33,18 @@ udg(m, c("aictest.trans.aicc.nolog", "aictest.trans.aicc.log"))
 ```
 
 We see the AICC for log transformation is lower and hence selected. 
-The summary of the seasonal object `summary(m)` tells us this with `Transform: log` displayed. 
+The summary of the seasonal object `summary(m)` tells us this with `Transform: log` displayed. The automatically selected transformation can also be found in many other places such as the HTML output with `out(m)` or the udg with agruement name *aictrans* such as `udg(m, "aictrans")`. 
+
+The choice between log and none changes the type of seasonal decomposition that will occur and hence your interpretation of the seasonal factors. 
+With no transformation, X13 will do an additive seasonal adjustment
+$$X_t = T_t + S_t + I_t.$$
+If a long transformation is selected, X13 will do a multiplicative adjustment
+$$X_t = T_t \cdot S_t \cdot I_t.$$
+This is major difference here is the way seasonal factors are interpreted and applied to the observed data to remove seasonality. 
+For additive models the seasonal factor is subtracted from the original $X_t - S_t$. 
+For multiplicative models the observed data is divided by the seasonal factor $\frac{X_t}{S_t}$. 
+Hence for multiplicative models values of $S_t>1$, decrease the observed value and $S_t < 1$ increase it.
+
+
+The `transform` spec controls these options. 
 
