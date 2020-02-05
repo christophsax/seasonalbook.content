@@ -47,4 +47,11 @@ Hence for multiplicative models values of $S_t>1$, decrease the observed value a
 
 
 The `transform` spec controls these options. 
+The primary options within this spec are 
+
+Spec option | Use | Example values
+------------|------------|-------------
+function    | specify transform | none, log, auto
+
+
 
