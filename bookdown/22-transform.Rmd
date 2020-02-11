@@ -13,6 +13,7 @@ There are two types of transformation types that typically occur within X13.
 The first is a prior modification.
 A prior modification scales each observation for known fixed effects. 
 These effects can be well known and established such as length of a month/quarter and leap-year or more subjective such as a modification for a workers strike.
+We can think of prior modification factors of events or corrections made to your data that are fixed throughout the adjustment proeess. 
 Additionally, these prior modification factors can be permanent (defualt) or temporary.
 The difference between permanent and temporary is wheither or not the effect is included back in the final seasonally adjusted series or not; permanent factors are excluded from the final seasonal adjustment while temporary are removed while calculating seasonal factors but then added back to the seasonally adjusted series. 
 The second type is a nonlinear transformation applied to the observations.
@@ -42,16 +43,18 @@ If a long transformation is selected, X13 will do a multiplicative adjustment
 $$X_t = T_t \cdot S_t \cdot I_t.$$
 This is major difference here is the way seasonal factors are interpreted and applied to the observed data to remove seasonality. 
 For additive models the seasonal factor is subtracted from the original $X_t - S_t$. 
+For example, an observed value of 100 with seasonal factor of 3.2 would result in a seasonally adjusted value of $100 - 3.2 = 96.8$.
 For multiplicative models the observed data is divided by the seasonal factor $\frac{X_t}{S_t}$. 
+For example, an observed value of 100 with seasonal factor of 1.08 would result in a seasonally adjusted value of $100 / 1.08 = 92.59259$.
 Hence for multiplicative models values of $S_t>1$, decrease the observed value and $S_t < 1$ increase it.
 
-
 The `transform` spec controls these options. 
-The primary options within this spec are 
+Some primary options within this spec are 
 
-Spec option | Use | Example values
-------------|------------|-------------
-function    | specify transform | none, log, auto
-
+Spec option | Use | Example values | default
+------------|------------|-------------|-------------
+function    | specify transform | none, log, auto | none
+data or file | specify prior adjustment factor | (1.2, 1.1, ..., .99) | (1,1,...,1)
+aicdiff | adjust tolerance of AIC test for log transform | 0.0 3.0 4.5 | 0.0
 
 
