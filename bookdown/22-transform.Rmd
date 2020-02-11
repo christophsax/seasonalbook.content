@@ -112,9 +112,11 @@ Perform an X-11 adjustmnet with all of `seasonal` defaults.
 ```{r}
 m <- seas(grocery, x11 = "")
 udg(m, c("aictest.trans.aicc.nolog", "aictest.trans.aicc.log"))
-summary(m)
 ```
 This is interesting since the AICC for no transformation is lower than the AICC for log transform. 
-However, the default value for transform.aicdiff is -2 meaning the program slightly prefers log transform and the difference between the AICC values must exceed 2. 
+```{r}
+transformfunction(m)
+```
+The default value for transform.aicdiff is -2 meaning the program slightly prefers log transform and the difference between the AICC values must exceed 2. 
 In this situation we see the difference between the two AICC values is -1.917597.
 
