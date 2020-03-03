@@ -118,5 +118,10 @@ This is interesting since the AICC for no transformation is lower than the AICC 
 transformfunction(m)
 ```
 The default value for transform.aicdiff is -2 meaning the program slightly prefers log transform and the difference between the AICC values must exceed 2. 
-In this situation we see the difference between the two AICC values is -1.917597.
+In this situation we see the difference between the two AICC values is -1.917597. If you were to change this option to transform.aicdiff = 0 then the program selects no transform.
+```{r}
+m2 <- seas(grocery, x11 = "", transform.aicdiff = 2)
+transformfunction(m2)
+```
+
 
