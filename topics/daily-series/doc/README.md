@@ -79,6 +79,15 @@ Expectation: Beating the dummy models should not be too hard. Is TBATS really th
 Perhaps they just used it the wrong way?
 
 
+Concretely:
+
+- [ ] Adjust: TBATS
+- [ ] Adjust: Prophet
+- [ ] Adjust: Arima Dummy
+- [ ] Adjust: dsa
+- [ ] Compare results a la timmermans 2018
+
+
 
 ### Chapter Plan
 
