@@ -1,12 +1,15 @@
-library(tidyverse)
-library(tsbox)
+pkgload::load_all(".")
 
-snb_main <- read_csv("data/data.csv", col_types = cols())
 
-# More example series from trendecon
-trendecon <-
-  read_csv("https://raw.githubusercontent.com/trendecon/data/master/daily/trendecon_keywords.csv", col_types = cols()) %>%
-  filter(id == "orig") %>%
-  select(-id)
+# prophet ----------------------------------------------------------------------
+
+out_pr <- seas_prophet(transact)
+
+
+# we don't get the end of month effects
+out_pr %>%
+  ts_pick("orig", "fct") %>%
+  ts_span(2013) %>%
+  ts_plot()
 
 
