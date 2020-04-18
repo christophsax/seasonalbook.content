@@ -4,6 +4,8 @@
 # - output: z
 
 
+.exp_cols <- c("trend", "seas", "fct", "orig", "adj")
+
 validate_seas_input <- function(x) {
   stopifnot(inherits(x, "data.frame"))
   stopifnot(identical(colnames(x), c("time", "value")))
@@ -15,11 +17,10 @@ validate_seas_input <- function(x) {
 
 
 validate_seas_output <- function(z) {
-  exp_cols <- c("trend", "seas", "fct", "orig", "adj")
   stopifnot(inherits(z, "data.frame"))
   stopifnot(identical(colnames(z), c("id", "time", "value")))
   stopifnot(tsbox::ts_boxable(z))
   stopifnot(all(tsbox::ts_summary(z)$diff == "1 day"))
-  stopifnot(length(setdiff(exp_cols, unique(z$id))) == 0)
+  stopifnot(length(setdiff(.exp_cols, unique(z$id))) == 0)
   z
 }
