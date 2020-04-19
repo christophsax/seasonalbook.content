@@ -34,13 +34,14 @@ oos_evals <- function(x, seas_fun, by = "-1 month") {
   xs <- setNames(lapply(ends, function(end) ts_span(x, end = end)), ends)
   z <- lapply(xs, oos_eval, seas_fun = seas_fun, by = by)
 
-  bind_rows(z, .id = "end")
+  bind_rows(z, .id = "end") %>%
+    ts_regular()
 
 }
 
 
-plot_oos_evals <- function(p) {
-  ggplot(p, aes(x = time, y = value)) +
+plot_oos_evals <- function(x) {
+  ggplot(x, aes(x = time, y = value)) +
   geom_line(aes(color = id)) +
   facet_wrap(vars(end), scales = "free_x")
 }
