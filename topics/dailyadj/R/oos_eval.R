@@ -13,37 +13,21 @@ oos_eval <- function(x, seas_fun, by = "-1 month", end_short = tsbox:::time_shif
 }
 
 
-
-oos_summary <- function(x){
+summary_oos_eval <- function(x){
   x %>%
     ts_wide() %>%
     mutate(diff = abs(fct - x)) %>%
     mutate(diff_sq = diff^2) %>%
     mutate(pc = diff / x) %>%
     summarize(
-      mae = mean(diff, na.rm = TRUE),
       mrse = sqrt(mean(diff_sq, na.rm = TRUE)),
+      mae = mean(diff, na.rm = TRUE),
       mpce = mean(pc, na.rm = TRUE)
     )
 }
 
 
-oos_evals <- function(x, seas_fun, by = "-1 month") {
-
-  ends <- seq(as.Date("2015-01-01"), as.Date("2014-02-01"), by = by)
-  xs <- setNames(lapply(ends, function(end) ts_span(x, end = end)), ends)
-  z <- lapply(xs, oos_eval, seas_fun = seas_fun, by = by)
-
-  bind_rows(z, .id = "end") %>%
-    ts_regular()
-
+oos_summary <- function(x) {
+  .Deprecated("summary_oos_eval")
+  summary_oos_eval(x)
 }
-
-
-plot_oos_evals <- function(x) {
-  ggplot(x, aes(x = time, y = value)) +
-  geom_line(aes(color = id)) +
-  facet_wrap(vars(end), scales = "free_x")
-}
-
-
