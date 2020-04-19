@@ -169,6 +169,7 @@ smooth_and_forecast <- function(y, ...) {
 
 
 add_weekdays <- function(x, n = 10) {
+    if (n == 0) return(x)
     last_day <- utils::tail(x$time, 1)
     future_days <- seq(last_day, length.out = ceiling(n * 1.5), by = "day")[-1]
     future_weekdays <- future_days[data.table::wday(future_days) %in% 2:6]  # only monday to friday
