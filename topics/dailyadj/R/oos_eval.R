@@ -26,3 +26,23 @@ oos_summary <- function(x){
       mpce = mean(pc, na.rm = TRUE)
     )
 }
+
+
+oos_evals <- function(x, seas_fun, by = "-1 month") {
+
+  ends <- seq(as.Date("2015-01-01"), as.Date("2014-02-01"), by = by)
+  xs <- setNames(lapply(ends, function(end) ts_span(x, end = end)), ends)
+  z <- lapply(xs, oos_eval, seas_fun = seas_fun, by = by)
+
+  bind_rows(z, .id = "end")
+
+}
+
+
+plot_oos_evals <- function(p) {
+  ggplot(p, aes(x = time, y = value)) +
+  geom_line(aes(color = id)) +
+  facet_wrap(vars(end), scales = "free_x")
+}
+
+

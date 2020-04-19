@@ -15,7 +15,7 @@ seas_dummy <- function(x, h = 30) {
 
 
   td_extra <-
-    timmermans_dummies(x, h = 30) %>%
+    timmermans_dummies(x, h = h) %>%
     ts_span(start = tsbox:::time_shift(ts_summary(x)$end, "1 day")) %>%
     ts_wide()
 
