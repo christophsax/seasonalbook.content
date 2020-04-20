@@ -53,24 +53,13 @@
 #'     ts_pick(c("orig", "sadj")) %>%
 #'     ts_c(ca_x13_adj, ca_x13_fct) %>%
 #'     ts_ggplot()
-seas_loess <- function(x, h = 25) {
-    x <- ts_tbl(x)
+seas_loess <- function(x, h = 35) {
 
-    diff <- ts_summary(x)$diff
-
-    if (diff %in% c("1 month", "3 month")) {
-        add_fct <- add_months_qrts
-        span_trend <- 2
-        span_year <- 3
-    } else {
-        add_fct <- add_weekdays
-        span_trend <- 0.5
-        span_year <- 5
-    }
+    validate_seas_input(x)
 
     x_effects <-
         x %>%
-        add_fct(n = h) %>%
+        add_weekdays(n = h) %>%
         filter(!(data.table::month(time) == 2 & data.table::mday(time) == 29)) %>%   # FIXME feb 29 hack
         rename(orig = value) %>%
         mutate(
@@ -78,47 +67,64 @@ seas_loess <- function(x, h = 25) {
             mday = data.table::mday(time),
             yday = data.table::yday(time),
             year = data.table::year(time)
-        ) %>%
-        group_by(year) %>%
-        mutate(yday = seq_along(yday)) %>%
-        ungroup()
+        ) #%>%
+        # group_by(year) %>%
+        # mutate(yday = seq_along(yday)) %>%
+        # ungroup()
 
     x_trend <-
         x_effects %>%
         # removing trend
-        mutate(trend = smooth_and_forecast(orig, span = span_trend)) %>%
+        mutate(trend = smooth_and_forecast(orig, span = 0.15)) %>%
         mutate(irreg = orig - trend)
 
+    x_trend_week_month <-
+        x_trend %>%
+        group_by(wday) %>%
+        # removing intra-week effect
+        mutate(seas_w = smooth_and_forecast(irreg, span = 0.4)) %>%
+        ungroup()  %>%
+        # ggplot(aes(x = time)) +
+        #   geom_line(aes(y = irreg)) +
+        #   geom_line(aes(y = seas_w)) +
+        #   facet_wrap(vars(wday))
 
-    if (diff %in% c("1 month", "3 month")) {
-        x_trend_week_month <-
-            x_trend %>%
-            mutate(seas_w = 0) %>%
-            mutate(seas_m = 0)
-    } else {
-        x_trend_week_month <-
-            x_trend %>%
-            group_by(wday) %>%
-            # removing intra-week effect
-            mutate(seas_w = smooth_and_forecast(irreg, span = 1.5)) %>%
-            ungroup() %>%
-            mutate(irreg = irreg - seas_w) %>%
-            group_by(mday) %>%
-            # removing intra-month effect
-            mutate(seas_m = smooth_and_forecast(irreg, span = 5)) %>%
-            ungroup() %>%
-            mutate(irreg = irreg - seas_m)
-    }
+        # select(time, irreg, seas_w) %>%
+        # ts_long() %>%
+        # ts_plot()
+
+
+        mutate(irreg = irreg - seas_w) %>%
+        group_by(mday) %>%
+        # removing intra-month effect
+        mutate(seas_m = smooth_and_forecast(irreg, span = 5)) %>%
+        ungroup()  %>%
+        # ggplot(aes(x = time)) +
+        #   geom_line(aes(y = irreg)) +
+        #   geom_line(aes(y = seas_m)) +
+        #   facet_wrap(vars(mday))
+
+
+        mutate(irreg = irreg - seas_m)
 
     x_trend_week_month_year <-
         x_trend_week_month %>%
+        # mutate(seas_y = 0) %>%
+
         group_by(yday) %>%
         # removing intra-year effect
-        mutate(seas_y = smooth_and_forecast(irreg, span = span_year)) %>%
+        mutate(seas_y = smooth_and_forecast(irreg, span = 5)) %>%
         ungroup() %>%
         mutate(irreg = irreg - seas_y) %>%
         # re-add trend
         mutate(adj = irreg + trend)
+
+        #  %>%
+        # ggplot(aes(x = time)) +
+        #   geom_line(aes(y = irreg)) +
+        #   geom_line(aes(y = seas_y)) +
+        #   facet_wrap(vars(yday))
+
 
     z_wide <- x_trend_week_month_year %>%
         select(-wday, -mday, -yday, -year) %>%
@@ -161,10 +167,15 @@ smooth_and_forecast <- function(y, ...) {
         return(ans)
     }
     y_hist <- zoo::na.trim(y, sides = "right")
+    h <- length(y) - length(y_hist )
+    # message(h)
     x <- seq_along(y)
     x_hist <- seq_along(y_hist)
     m <- loess(y_hist ~ x_hist, surface = "direct", ...)
-    predict(m, newdata = x)
+    y_smooth <- predict(m, newdata = x_hist)
+    if (h == 0) return(y_smooth)
+    y_fct <- forecast(ets(y_smooth), h = h)$mean
+    c(y_smooth, as.numeric(y_fct))
 }
 
 

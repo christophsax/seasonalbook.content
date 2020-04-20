@@ -16,4 +16,5 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.0.2
 Depends:
     tidyverse,
-    tsbox
+    tsbox,
+    forecast
