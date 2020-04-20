@@ -14,7 +14,7 @@
 #' if (interactive()) {
 #'   sadj_dsa(casualties)
 #' }
-seas_dsa <- function(x, h = 30) {
+seas_dsa <- function(x, h = 40) {
 
     validate_seas_input(x)
 
@@ -35,9 +35,13 @@ seas_dsa <- function(x, h = 30) {
         # irreg = fct - trend - sc_fac,
         seas = sc_fac
       ) %>%
+      # mutate(fct = if_else(is.na(orig), NA_real_, fct)) %>%
+      # mutate(adj = if_else(is.na(orig), NA_real_, adj)) %>%
+      # mutate(seas = if_else(is.na(orig), NA_real_, seas)) %>%
+      # mutate(trend = if_else(is.na(orig), NA_real_, trend)) %>%
       select(time, !! .exp_cols)
 
-    z <- ts_long(z_wide)
+    z <- ts_na_omit(ts_long(z_wide))
 
     validate_seas_output(z)
 }
