@@ -11,5 +11,5 @@ Jim
 
 Christoph
 
-- [ ] Draft Daily Stuff
+- [x] Draft Daily Stuff
 - [ ] How to knit chapters individually in RStudio
