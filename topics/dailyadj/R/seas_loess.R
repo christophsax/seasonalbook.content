@@ -127,16 +127,17 @@ seas_loess <- function(x, h = 35) {
 
 
     z_wide <- x_trend_week_month_year %>%
+        mutate(seas_x = 0) %>%
         select(-wday, -mday, -yday, -year) %>%
         select(time, orig, adj, everything()) %>%
         mutate(seas = seas_w + seas_m + seas_y) %>%
-        select(-seas_w, -seas_m, -seas_y) %>%
+        # select(-seas_w, -seas_m, -seas_y) %>%
         mutate(irreg_fct = smooth_and_forecast(irreg, span = 1.5)) %>%
         mutate(irreg = if_else(is.na(irreg), irreg_fct, irreg)) %>%
         select(-irreg_fct) %>%
         mutate(fct = trend + irreg + seas) %>%
         select(-irreg) %>%
-        select(time, !! .exp_cols)
+        select(time, !! .exp_cols_comp)
 
 
       z <- ts_long(z_wide)
