@@ -6,53 +6,6 @@
 #' @author XCSAX
 #'
 #' @export
-#' @examples
-#' # compare adjustment of montly series with X13
-#' library(seasonal)
-#' library(tsbox)
-#' library(tidyverse)
-#'
-#' md_x13 <- seas(mdeaths, forecast.save = "fct", x11 = "")
-#'
-#' md_x13_fct <- ts_bind(mdeaths, series(md_x13, "forecast.forecasts")[, 'forecast'])
-#' md_x13_adj <- final(md_x13)
-#'
-#' seas_loess(mdeaths, h = 12) %>%
-#'     select(time, orig, sadj) %>%
-#'     ts_long() %>%
-#'     ts_c(md_x13_adj, md_x13_fct) %>%
-#'     ts_ggplot()
-#'
-#' # also works for longer series
-#' ap_x13 <- seas(AirPassengers, forecast.save = "fct", x11 = "")
-#' ap_x13_fct <- ts_bind(AirPassengers, series(ap_x13, "forecast.forecasts")[, 'forecast'])
-#' ap_x13_adj <- final(ap_x13)
-#'
-#' seas_loess(AirPassengers, h = 12) %>%
-#'     select(time, orig, sadj) %>%
-#'     ts_long() %>%
-#'     ts_c(ap_x13_adj, ap_x13_fct) %>%
-#'     ts_ggplot()
-#'
-#'
-#' # compare daily adjustments to montly adjustments X13
-#' ca_loess <- seas_loess(casualties, h = 360)
-#'
-#' ca_loess_m <-
-#'     ca_loess %>%
-#'     ts_long() %>%
-#'     ts_frequency(to = "month", aggregate = "mean", na.rm = TRUE)
-#'
-#' ca_m <- ts_ts(ts_frequency(casualties, to = "month", aggregate = "mean"))
-#' ca_x13 <- seas(ca_m, x11 = "")
-#'
-#' ca_x13_fct <- ts_bind(ca_m, series(ca_x13, "forecast.forecasts")[, 'forecast'])
-#' ca_x13_adj <- final(ca_x13)
-#'
-#' ca_loess_m %>%
-#'     ts_pick(c("orig", "sadj")) %>%
-#'     ts_c(ca_x13_adj, ca_x13_fct) %>%
-#'     ts_ggplot()
 seas_loess <- function(x, h = 35) {
 
     validate_seas_input(x)
