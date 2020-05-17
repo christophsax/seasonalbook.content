@@ -38,7 +38,7 @@ comp_plot_draft <- function(z) {
   ts_pick(z, "seas_y") %>%
     add_effects() %>%
     ggplot(aes(x = yday, y = value)) +
-    geom_point() +
+    geom_line() +
     facet_wrap(vars(year))
 
   list(

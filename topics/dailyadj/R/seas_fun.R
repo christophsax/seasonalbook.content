@@ -26,6 +26,7 @@ validate_seas_output <- function(z) {
   stopifnot(all(tsbox::ts_summary(z)$diff == "1 day"))
 
   if (!all(.extra_cols %in% unique(z$id))) {
+    message("adding extra cols")
     z <-
       z %>%
       ts_wide() %>%

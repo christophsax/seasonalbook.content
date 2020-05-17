@@ -21,11 +21,9 @@ plot_oos_evals(z)
 
 
 #' ## seas_loess
-z <-  oos_evals(x, seas_loess)
+z <-  oos_evals(x, seas_loess5)
 summary_oos_evals(z)
 plot_oos_evals(z)
-
-
 
 #' ## seas_dsa
 z <-  oos_evals(x, seas_dsa)

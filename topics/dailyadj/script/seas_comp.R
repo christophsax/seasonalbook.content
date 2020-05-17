@@ -14,9 +14,17 @@ pkgload::load_all(".")
 
 x <- transact
 
-z_loess <- seas_loess(x)
-comp_plot_draft(z_loess)
+z <- seas_loess2(x)
+comp_plot_draft(z)
 
-z_dsa <- seas_dsa(x)
-comp_plot_draft(z_loess)
 
+res <- dsa::dsa(ts_xts(x))
+output(res)
+
+
+# z_dsa <- seas_dsa(x)
+# comp_plot_draft(z_loess)
+output(res)
+
+library(dsa)
+m <- dsa::dsa(ts_xts(x))
