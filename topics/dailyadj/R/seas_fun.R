@@ -31,7 +31,7 @@ validate_seas_output <- function(z) {
       z %>%
       ts_wide() %>%
       mutate(
-        sesa_w = 0,
+        seas_w = 0,
         seas_m = 0,
         seas_y = 0,
         seas_x = seas

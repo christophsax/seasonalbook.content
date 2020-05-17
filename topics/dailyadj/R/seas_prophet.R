@@ -25,7 +25,16 @@ seas_prophet <- function(x) {
 
   z_wide <-
     forecast %>%
-    transmute(time = as.Date(ds), trend, seas = additive_terms, fct = yhat) %>%    # additive_terms = yhat - trend,
+    transmute(
+      time = as.Date(ds),
+      trend,
+      seas = additive_terms,
+      seas_x = holidays,
+      seas_y = yearly,
+      seas_m = 0,
+      seas_w = weekly,
+      fct = yhat
+    ) %>%    # additive_terms = yhat - trend,
     left_join(x, by = "time") %>%
     rename(orig = value) %>%
     mutate(adj = orig - seas)

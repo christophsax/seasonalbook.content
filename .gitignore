@@ -4,3 +4,4 @@ book/.DS_Store
 .Rproj.user
 topics/trading-days/replicating-td-adj.md
 topics/dailyadj/script/oos_evals_cache
+topics/dailyadj/out/*
