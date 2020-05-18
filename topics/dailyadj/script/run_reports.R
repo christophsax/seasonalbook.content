@@ -22,3 +22,12 @@ oos_report(count)
 
 oos_report(transact)
 
+
+
+# seas_loess_it <- function(x, h = 35) {
+#   z0 <- seas_loess2(x, h = h)
+#   x1 <- seas_loess2(x, h = h, adj0 = select(ts_pick(z0, "adj"), -id))
+#   x1
+# }
+
+

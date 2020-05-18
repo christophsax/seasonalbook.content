@@ -1,12 +1,12 @@
-#' ---
-#' title: OOS-Evaluation Report
-#' output: html_document
-#' params:
-#'   x: !r transact
-#'   x_name: "transact"
-#' ---
+---
+title: OOS-Evaluation Report
+output: html_document
+params:
+  x: !r transact
+  x_name: "transact"
+---
 
-#+ init, include=FALSE
+```{r init, include=FALSE}
 
 library(knitr)
 library(forecast)
@@ -28,7 +28,8 @@ x_name <- params$x_name
 
 
 
-#+ calculaitons, include=FALSE
+```
+```{r calculaitons, include=FALSE}
 
 funs <- lst(
   seas_naive,
@@ -65,39 +66,40 @@ ref <- pull(overview, 2)
 overview_normalized <-
   overview %>%
   mutate_at(vars(-period), ~ . / !! ref)
+```
 
+## Overview
 
-
-#' ## Overview
-
-
-#+ echo = FALSE, warning = FALSE
+```{r echo = FALSE, warning = FALSE}
 
 kable(overview_normalized, digits = 2)
+```
 
-#' ## OOS Plots
+## OOS Plots
 
-#+ echo = FALSE, warning = FALSE
+```{r echo = FALSE, warning = FALSE}
 
 walk(models$plot_oos_evals, print)
+```
 
+## Component Plots
 
-#' ## Component Plots
-
-#+ echo = FALSE, warning = FALSE
+```{r echo = FALSE, warning = FALSE}
 
 walk(models$plot_components, print)
+```
 
+## Final Adjusted Series
 
-#' ## Final Adjusted Series
-
-#+ echo = FALSE, warning = FALSE
+```{r echo = FALSE, warning = FALSE}
 
 htmltools::tagList(models$plot_final_series_dygraph)
+```
 
 
-
-
-
-
+---
+title: "oos_eval_report.R"
+author: "christoph"
+date: "2020-05-18"
+---
 

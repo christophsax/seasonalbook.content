@@ -47,6 +47,9 @@ plot_pattern_x <- function(z) {
 
 #' @export
 plot_components <- function(z) {
+  library(ggplot2)
+  library(cowplot)
+
   plot_grid(
     plot_pattern_trend(z),
     plot_pattern_y(z),
