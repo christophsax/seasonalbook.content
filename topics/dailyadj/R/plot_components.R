@@ -38,6 +38,13 @@ plot_pattern_y <- function(z) {
   theme_cowplot()
 }
 
+plot_pattern_x <- function(z) {
+  ts_pick(z, "seas_x") %>%
+  ggplot(aes(x = time, y = value, color)) +
+  geom_line() +
+  theme_cowplot()
+}
+
 #' @export
 plot_components <- function(z) {
   plot_grid(
@@ -45,7 +52,9 @@ plot_components <- function(z) {
     plot_pattern_y(z),
     plot_pattern_m(z),
     plot_pattern_w(z),
-    labels = c('trend', 'year', 'monht', 'week')
+    plot_pattern_x(z),
+    labels = c('trend', 'year', 'monht', 'week', "holiday"),
+    ncol = 2
   )
 }
 

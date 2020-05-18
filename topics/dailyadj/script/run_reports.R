@@ -18,3 +18,7 @@ oos_report <- function(x) {
 
 
 oos_report(count)
+
+
+oos_report(transact)
+
