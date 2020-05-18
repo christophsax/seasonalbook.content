@@ -10,7 +10,7 @@ seas_naive <- function(x, h = 30) {
 
   monthly_means <- filter(x, lubridate::year(time) %in% c(!!last_year:(!!last_year - 3))) %>%
     group_by(month = lubridate::month(time)) %>%
-    summarize(fct_naive = mean(value)) %>%
+    summarize(fct_naive = mean(value, na.rm = TRUE)) %>%
     ungroup()
 
 
@@ -21,12 +21,12 @@ seas_naive <- function(x, h = 30) {
     left_join(monthly_means, by = "month") %>%
     mutate(orig = value) %>%
     mutate(fct = if_else(is.na(value), fct_naive, value)) %>%
+    mutate(trend = mean(orig, na.rm = TRUE)) %>%
     mutate(seas_m = 0) %>%
-    mutate(seas_y = fct_naive) %>%
+    mutate(seas_y = (fct_naive - trend)) %>%
     mutate(seas_w = 0) %>%
     mutate(seas_x = 0) %>%
-    mutate(trend = 0) %>%
-    mutate(adj = orig - fct_naive) %>%
+    mutate(adj = orig - seas_y) %>%
     mutate(seas = fct_naive) %>%
     select(-month, -fct_naive, -value) %>%
     select(time, !! .exp_cols_comp)

@@ -1,5 +1,5 @@
 #' @export
-plot_final_series_dygraph <- function(z, main) {
+plot_final_series_dygraph <- function(z, main = deparse(substitute(z))) {
   z %>%
     ts_pick(c("adj", "orig")) %>%
     ts_dygraphs(main = main)
