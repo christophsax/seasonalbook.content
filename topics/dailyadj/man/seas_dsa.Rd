@@ -19,7 +19,7 @@ https://cran.r-project.org/web/packages/dsa/vignettes/dsa-vignette.html
 }
 \examples{
 if (interactive()) {
-  sadj_dsa(casualties)
+  x <- transact
 }
 }
 \author{

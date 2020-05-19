@@ -1,6 +1,6 @@
 # x <- transact
 
-seas_loess6 <- function(x, h = 35, adj0 = x) {
+seas_loess7 <- function(x, h = 35, adj0 = x) {
 
 validate_seas_input(x)
 
@@ -30,7 +30,7 @@ x_trend <-
   x_effects %>%
   left_join(rename(adj0, adj0 = value), by = "time") %>%
   # removing trend  0.15
-  mutate(trend = smooth_and_forecast(adj0,span = 0.15)) %>%
+  mutate(trend = smooth_and_forecast(adj0,span = 0.25)) %>%
   select(-adj0) %>%
   mutate(irreg = orig - trend)
 

@@ -16,7 +16,7 @@ seas_naive <- function(x, h = 30) {
 
   z_wide <-
     x %>%
-    add_weekdays(n = h) %>%
+    add_days(n = h) %>%
     mutate(month = lubridate::month(time)) %>%
     left_join(monthly_means, by = "month") %>%
     mutate(orig = value) %>%

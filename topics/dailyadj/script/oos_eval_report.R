@@ -28,13 +28,25 @@ x_name <- params$x_name
 
 
 
+seas_loess_it <- function(x, h = 35) {
+  z0 <- seas_loess6(x, h = h)
+  x1 <- seas_loess6(x, h = h, adj0 = select(ts_pick(z0, "adj"), -id))
+  x1
+}
+
+
 #+ calculaitons, include=FALSE
 
 funs <- lst(
   seas_naive,
-  seas_loess5,
+  # seas_dummy,
+  # seas_loess6,
+  seas_loess7,
+  # seas_loess8,
+  seas_loess9,
+  # seas_loess_it,
   seas_prophet,
-  seas_dsa
+  # seas_dsa
 )
 
 models_raw <-
@@ -51,7 +63,7 @@ models <-
   models_raw_eval %>%
   mutate(smry = lapply(result, summary_oos_evals)) %>%
   mutate(plot_oos_evals = map2(result, name, ~ plot_oos_evals(.x) + ggtitle(.y))) %>%
-  mutate(plot_components = map2(latest, name, ~ plot_components(.x) + ggtitle(.y))) %>%
+  mutate(plot_components = map2(latest, name, ~ plot_components(.x))) %>%
   mutate(plot_final_series_dygraph = map2(latest, name, ~ plot_final_series_dygraph(.x, main = .y)))
 
 overview <-
