@@ -45,14 +45,27 @@ seas(
 # composite spec ---------------------------------------------------------------
 
 # same spec for all series
-m <- seas(cbind(mdeaths, fdeaths), series.comptype = "add")
+m <- seas(
+  cbind(mdeaths, fdeaths),
+  composite = list(),           # adding an empty composite will use the seas() defaults for the indirect adjustment
+  series.comptype = "add"       # may be added automatically if composite is not NULL
+)
 
-# composite.comptype = "add" would be inconsequencial, because it would
+m <- seas(
+  cbind(mdeaths, fdeaths),
+  composite = list(x11 = ""),   # use x11 for indirect adjustment
+  series.comptype = "add"
+)
+
 
 # different spec for all series
 m <- seas(
   cbind(mdeaths, fdeaths),
-  composite.comptype = "add",  # requires the SOME specs.args for all series
+  series.comptype = "add",  # requires the SOME specs.args for all series
+  composite = list(
+    regression.aictest = NULL,
+    x11.seasonalma = "s3x9",
+  ),
   list = list(
     list(x11 = ""),
     list()
