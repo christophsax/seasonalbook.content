@@ -141,4 +141,19 @@ static(m)
 # ideally, a mulitseas object is just a list of seas objects, so we could still
 # use all the functions on individual elements. So we may not need e.g. static()
 
+# backend spezifikation --------------------------------------------------------
+
+m <- seas(
+  cbind(mdeaths, fdeaths),
+  batchmode = c("R", "x13", "multiprocess", "multicore", "multisession")
+)
+
+# R mode would use lapply, and probably would be the default. I think it will be
+# usually easier to debug.
+
+# With composite activated, batchmode would switch to "x13".
+
+# Parallelism could make use of the future package. Perhaps future work.
+
+
 
