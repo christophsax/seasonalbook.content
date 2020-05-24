@@ -54,14 +54,12 @@ m <- seas(
 m <- seas(
   cbind(mdeaths, fdeaths),
   composite = list(x11 = ""),   # use x11 for indirect adjustment
-  series.comptype = "add"
 )
 
 
 # different spec for all series
 m <- seas(
   cbind(mdeaths, fdeaths),
-  series.comptype = "add",  # requires the SOME specs.args for all series
   composite = list(
     regression.aictest = NULL,
     x11.seasonalma = "s3x9",
