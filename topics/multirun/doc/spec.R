@@ -22,6 +22,17 @@ seas(
   )
 )
 
+# this would be nice: specify SOME specs.args for all series
+seas(
+  x = mdta,
+  regression.aictest = NULL,
+  list = list(
+    list(x11 = ""),
+    list()
+  )
+)
+
+
 # alternatively, use x in lists
 seas(
   # lengths of list must be equal to number of series
@@ -33,8 +44,20 @@ seas(
 
 # composite spec ---------------------------------------------------------------
 
+# same spec for all series
+m <- seas(cbind(mdeaths, fdeaths), series.comptype = "add")
 
+# composite.comptype = "add" would be inconsequencial, because it would
 
+# different spec for all series
+m <- seas(
+  cbind(mdeaths, fdeaths),
+  composite.comptype = "add",  # requires the SOME specs.args for all series
+  list = list(
+    list(x11 = ""),
+    list()
+  )
+)
 
 
 # extractor functions ----------------------------------------------------------
@@ -48,23 +71,11 @@ final(m)
 # Apr 1949 127.5286 127.5286
 # May 1949 127.3584 127.3584
 
-
-as.tslist <- function(x) {
-  stopifnot(is.list(x))
-  class(x) <- "tslist"
-  x
-}
-
-tsbox::ts_ts(as.tslist(lapply(tsbox::ts_tslist(mdta), function(e) final(seas(e)))))
-
 original(m)
 #            a   b
 # Jan 1949 112 112
 # Feb 1949 118 118
 # Mar 1949 132 132
-
-
-tsbox::ts_ts(as.tslist(lapply(tsbox::ts_tslist(mdta), function(e) resid(seas(e)))))
 
 resid(m)
 #                      a             b
@@ -72,12 +83,6 @@ resid(m)
 # Feb 1949  0.0064511533  0.0064511533
 # Mar 1949 -0.0052868236 -0.0052868236
 # Apr 1949  0.0083328630  0.0083328630
-
-
-multiseas
-
-
-lapply(tsbox::ts_tslist(mdta), function(e) fivebestmdl(seas(e)))
 
 
 fivebestmdl(m)
@@ -124,9 +129,5 @@ static(m)
 
 # ideally, a mulitseas object is just a list of seas objects, so we could still
 # use all the functions on individual elements. So we may not need e.g. static()
-
-
-
-
 
 
