@@ -1,6 +1,16 @@
 # x <- transact
 
-seas_loess10 <- function(x, h = 35) {
+seas_loess10 <- function(x, h = 35, holiday_df = NULL) {
+
+
+  if (is.null(holiday_df)) {
+    holiday_df <- bind_rows(
+      mutate(holidays(), holiday = paste(holiday, "-1"), time = time - 1),
+      holidays()
+    )
+  }
+
+
 
 validate_seas_input(x)
 
@@ -33,14 +43,28 @@ x_trend <-
   mutate(trend = smooth_and_forecast(value,span = 0.25)) %>%
   mutate(irreg = orig - trend)
 
-
-x_trend_week_month <-
-  x_trend %>%
+  x_trend_week <-
+    x_trend %>%
     group_by(wday) %>%
     # removing intra-week effect
     mutate(seas_w = smooth_and_forecast2(irreg,span = 0.3)) %>%
     ungroup() %>%
-    mutate(irreg = irreg - seas_w) %>%
+    mutate(irreg = irreg - seas_w)
+
+  # holiday adjustment (applied on weekday and trend adjusted data, as proposed
+  # in bundenbank paper)
+  seas_x <-
+    x_trend_week %>%
+    select(time, value = irreg) %>%
+    seas_x(holiday_df)
+
+  x_trend_week_x <-
+    x_trend_week %>%
+    left_join(seas_x, by = "time") %>%
+    mutate(irreg = irreg - seas_x)
+
+  x_trend_week_month <-
+    x_trend_week_x %>%
     # pull(irreg)
     group_by(mday) %>%
     # removing intra-month effect
@@ -48,11 +72,6 @@ x_trend_week_month <-
     ungroup()  %>%
     # mutate(seas_m = stats::filter(seas_m, rep(1, 3))) %>%
     mutate(irreg = irreg - seas_m)
-
-# select(x_trend_week_month,time,orig,seas_m, irreg) %>%
-#   ts_long() %>%
-#   ts_dygraphs()
-
 
 x_trend_week_month_year <-
     x_trend_week_month %>%
