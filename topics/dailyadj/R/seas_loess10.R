@@ -101,10 +101,10 @@ x_trend_week_month_year <-
 
 
 z_wide <- x_trend_week_month_year %>%
-  mutate(seas_x = 0) %>%
+  # mutate(seas_x = 0) %>%
   select(-wday,-mday,-yday,-year) %>%
   select(time,orig,adj,everything()) %>%
-  mutate(seas = seas_w + seas_m + seas_y) %>%
+  mutate(seas = seas_w + seas_m + seas_y + seas_x) %>%
   # tail()
   # select(-seas_w,-seas_m,-seas_y) %>%
   mutate(irreg_fct = irreg_forecast(irreg)) %>%

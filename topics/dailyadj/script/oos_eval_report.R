@@ -41,11 +41,11 @@ funs <- lst(
   seas_naive,
   # seas_dummy,
   # seas_loess6,
-  seas_loess7,
+  seas_loess10,
   # seas_loess8,
   seas_loess9,
   # seas_loess_it,
-  seas_prophet,
+  # seas_prophet,
   # seas_dsa
 )
 

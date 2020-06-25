@@ -20,15 +20,15 @@
 # holiday adjustment
 seas_x <- function(x, df) {
   xreg <-
-    hol %>%
+    df %>%
     group_by(holiday) %>%
     summarize(genhol_daily(time)) %>%
     ungroup() %>%
     ts_wide()
 
   dta_m <-
-    x_wide %>%
-    select(time, value = adj) %>%
+    x %>%
+    ts_default() %>%
     left_join(xreg, by = "time")
 
   # estimate a few times and only keep significant vars
@@ -39,7 +39,7 @@ seas_x <- function(x, df) {
   # prediction, based on final model
   dta_m %>%
     select(time) %>%
-    mutate(seas_x = unname(predict(m_ols)) - coef(m_ols)['(Intercept)'])
+    mutate(seas_x = unname(predict(m_ols, newdata = dta_m[,-1])) - coef(m_ols)['(Intercept)'])
 }
 
 

@@ -10,41 +10,41 @@ oos_report <- function(x, x_name = deparse(substitute(x))) {
 
 ### SNB
 
-# dta_raw <- read_csv("~/git/snb/seasadj/data/SIC_ts4XCSAX_d_extern.csv", col_types = cols())
+dta_raw <- read_csv("~/git/snb/seasadj/data/SIC_ts4XCSAX_d_extern.csv", col_types = cols())
 
 
-# count <-
-#   filter(dta_raw, PaymentCategory == "all") %>%
-#   transmute(time = SettlementDateSic, value = trx_count / 1e3)
+count <-
+  filter(dta_raw, PaymentCategory == "all") %>%
+  transmute(time = SettlementDateSic, value = trx_count / 1e3)
 
-# count_inter <-
-#   filter(dta_raw, PaymentCategory == "Interbank") %>%
-#   transmute(time = SettlementDateSic, value = trx_count / 1e3)
+count_inter <-
+  filter(dta_raw, PaymentCategory == "Interbank") %>%
+  transmute(time = SettlementDateSic, value = trx_count / 1e3)
 
-# count_retail <-
-#   filter(dta_raw, PaymentCategory == "Retail") %>%
-#   transmute(time = SettlementDateSic, value = trx_count / 1e3)
-
-
-# transact <-
-#   filter(dta_raw, PaymentCategory == "all") %>%
-#   transmute(time = SettlementDateSic, value = trx_CHF_sum / 1e6)
-
-# transact_inter <-
-#   filter(dta_raw, PaymentCategory == "Interbank") %>%
-#   transmute(time = SettlementDateSic, value = trx_CHF_sum / 1e6)
-
-# transact_retail <-
-#   filter(dta_raw, PaymentCategory == "Retail") %>%
-#   transmute(time = SettlementDateSic, value = trx_CHF_sum / 1e6)
+count_retail <-
+  filter(dta_raw, PaymentCategory == "Retail") %>%
+  transmute(time = SettlementDateSic, value = trx_count / 1e3)
 
 
-# oos_report(count)
-# oos_report(count_inter)
-# oos_report(count_retail)
-# oos_report(transact)
-# oos_report(transact_inter)
-# oos_report(transact_retail)
+transact <-
+  filter(dta_raw, PaymentCategory == "all") %>%
+  transmute(time = SettlementDateSic, value = trx_CHF_sum / 1e6)
+
+transact_inter <-
+  filter(dta_raw, PaymentCategory == "Interbank") %>%
+  transmute(time = SettlementDateSic, value = trx_CHF_sum / 1e6)
+
+transact_retail <-
+  filter(dta_raw, PaymentCategory == "Retail") %>%
+  transmute(time = SettlementDateSic, value = trx_CHF_sum / 1e6)
+
+
+oos_report(count)
+oos_report(count_inter)
+oos_report(count_retail)
+oos_report(transact)
+oos_report(transact_inter)
+oos_report(transact_retail)
 
 
 ### Trendecon
