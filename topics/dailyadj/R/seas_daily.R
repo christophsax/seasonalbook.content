@@ -54,6 +54,30 @@ seas_daily <- function(x,
     ungroup() %>%
     mutate(irreg = irreg - seas_w)
 
+  # plots for presentation
+  # op <- options(
+  #   tsbox.lwd = c(0.5, 3),
+  #   tsbox.col = c("gray51", "blue")
+  # )
+
+  # x_trend %>%
+  #   filter(wday == 6) %>%
+  #   # removing intra-week effect
+  #   mutate(seas_w = smooth_and_forecast2(irreg, span = span_week)) %>%
+  #   select(time, `Detrended Series (Friday)`= irreg, `LOESS estimator` = seas_w) %>%
+  #   ts_long() %>%
+  #   ts_plot(title = "Total transaction value", subtitle = "Non-parametric estimation of a Friday effect")
+  # abline(h=0)
+
+  # x_trend %>%
+  #   filter(wday == 5) %>%
+  #   # removing intra-week effect
+  #   mutate(seas_w = smooth_and_forecast2(irreg, span = span_week)) %>%
+  #   select(time, `Detrended Series (Thursay)`= irreg, `LOESS estimator` = seas_w) %>%
+  #   ts_long() %>%
+  #   ts_plot(title = "Estimating Thursday Effect")
+
+
   # holiday adjustment (applied on weekday and trend adjusted data, as proposed
   # in bundenbank paper)
   seas_x <-
@@ -79,7 +103,7 @@ x_trend_week_month_year <-
     group_by(yday) %>%
     mutate(seas_y = mean(irreg, na.rm = TRUE)) %>%
     ungroup() %>%
-    mutate(seas_y = smooth_and_forecast2(seas_y, span = span_year)) %>%
+    mutate(seas_y = smooth_and_forecast2(seas_y, span = span_intrayear)) %>%
     group_by(yday) %>%
     mutate(seas_y = mean(seas_y, na.rm = TRUE)) %>%
     ungroup() %>%

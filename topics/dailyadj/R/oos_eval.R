@@ -1,3 +1,4 @@
+#' @exports
 oos_eval <- function(x, seas_fun, by = "-1 month", end_short = tsbox:::time_shift(ts_summary(x)$end, by)) {
 
   x_short <- ts_span(x, end = end_short)

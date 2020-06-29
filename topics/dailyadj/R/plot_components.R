@@ -45,6 +45,15 @@ plot_pattern_x <- function(z) {
   theme_cowplot()
 }
 
+plot_pattern_i <- function(z) {
+  ts_wide(z) %>%
+  transmute(time, value = orig - trend - seas) %>%
+  ggplot(aes(x = time, y = value, color)) +
+  geom_line() +
+  theme_cowplot()
+}
+
+
 #' @export
 plot_components <- function(z) {
   library(ggplot2)
@@ -56,7 +65,8 @@ plot_components <- function(z) {
     plot_pattern_m(z),
     plot_pattern_w(z),
     plot_pattern_x(z),
-    labels = c('trend', 'year', 'monht', 'week', "holiday"),
+    plot_pattern_i(z),
+    labels = c('T', 'Y', 'M', 'W', "H", "I"),
     ncol = 2
   )
 }
