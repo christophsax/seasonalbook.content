@@ -1,5 +1,3 @@
-
-
 oos_evals <- function(x, seas_fun, by = "-1 month") {
 
   periods <- seq(as.Date("2015-01-01"), as.Date("2014-02-01"), by = by)
@@ -10,7 +8,6 @@ oos_evals <- function(x, seas_fun, by = "-1 month") {
     ts_regular()
 
 }
-
 
 summary_oos_evals <- function(x){
   z <-

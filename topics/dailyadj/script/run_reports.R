@@ -38,6 +38,7 @@ transact_retail <-
   filter(dta_raw, PaymentCategory == "Retail") %>%
   transmute(time = SettlementDateSic, value = trx_CHF_sum / 1e6)
 
+save(count, count_inter, count_retail, transact_inter, transact_retail, file = "data/snb-data.RData")
 
 oos_report(count)
 oos_report(count_inter)

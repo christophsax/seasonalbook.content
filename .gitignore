@@ -5,3 +5,4 @@ book/.DS_Store
 topics/trading-days/replicating-td-adj.md
 topics/dailyadj/script/oos_evals_cache
 topics/dailyadj/out/*
+topics/dailyadj/data/snb-data.RData

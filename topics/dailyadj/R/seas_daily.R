@@ -1,7 +1,14 @@
 # x <- transact
 
 #' @export
-seas_daily <- function(x, h = 35, holiday_df = NULL) {
+seas_daily <- function(x,
+  h = 35,
+  holiday_df = NULL,
+  span_trend = 0.25,
+  span_week = 0.3,
+  span_month = 0.7,
+  span_intrayear =  0.02
+  ) {
 
   if (is.null(holiday_df)) {
     holiday_df <- bind_rows(
@@ -10,15 +17,12 @@ seas_daily <- function(x, h = 35, holiday_df = NULL) {
     )
   }
 
-
   validate_seas_input(x)
-
   stopifnot(nrow(filter(x, is.na(value))) == 0)
 
   x_effects <-
     x %>%
     add_days(n = h) %>%
-    # filter(!(data.table::month(time) == 2 & data.table::mday(time) == 29)) %>%   # FIXME feb 29 hack
     rename(orig = value) %>%
     mutate(
     wday = data.table::wday(time),
@@ -39,14 +43,14 @@ seas_daily <- function(x, h = 35, holiday_df = NULL) {
     x_effects %>%
     left_join(x, by = "time") %>%
     # removing trend  0.15
-    mutate(trend = smooth_and_forecast(value,span = 0.25)) %>%
+    mutate(trend = smooth_and_forecast(value, span = span_trend)) %>%
     mutate(irreg = orig - trend)
 
   x_trend_week <-
     x_trend %>%
     group_by(wday) %>%
     # removing intra-week effect
-    mutate(seas_w = smooth_and_forecast2(irreg,span = 0.3)) %>%
+    mutate(seas_w = smooth_and_forecast2(irreg, span = span_week)) %>%
     ungroup() %>%
     mutate(irreg = irreg - seas_w)
 
@@ -64,27 +68,21 @@ seas_daily <- function(x, h = 35, holiday_df = NULL) {
 
   x_trend_week_month <-
     x_trend_week_x %>%
-    # pull(irreg)
     group_by(mday) %>%
     # removing intra-month effect
-    mutate(seas_m = smooth_and_forecast2(irreg, span = 0.7)) %>%
+    mutate(seas_m = smooth_and_forecast2(irreg, span = span_month)) %>%
     ungroup()  %>%
-    # mutate(seas_m = stats::filter(seas_m, rep(1, 3))) %>%
     mutate(irreg = irreg - seas_m)
 
 x_trend_week_month_year <-
     x_trend_week_month %>%
-
     group_by(yday) %>%
     mutate(seas_y = mean(irreg, na.rm = TRUE)) %>%
     ungroup() %>%
-
-    mutate(seas_y = smooth_and_forecast2(seas_y, span = 0.02)) %>%
-
+    mutate(seas_y = smooth_and_forecast2(seas_y, span = span_year)) %>%
     group_by(yday) %>%
     mutate(seas_y = mean(seas_y, na.rm = TRUE)) %>%
     ungroup() %>%
-
     mutate(irreg = irreg - seas_y) %>%
     # re-add trend
     mutate(adj = irreg + trend)
