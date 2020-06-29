@@ -1,7 +1,7 @@
 # x <- transact
 
-seas_loess10 <- function(x, h = 35, holiday_df = NULL) {
-
+#' @export
+seas_daily <- function(x, h = 35, holiday_df = NULL) {
 
   if (is.null(holiday_df)) {
     holiday_df <- bind_rows(
@@ -11,37 +11,36 @@ seas_loess10 <- function(x, h = 35, holiday_df = NULL) {
   }
 
 
+  validate_seas_input(x)
 
-validate_seas_input(x)
+  stopifnot(nrow(filter(x, is.na(value))) == 0)
 
-stopifnot(nrow(filter(x, is.na(value))) == 0)
+  x_effects <-
+    x %>%
+    add_days(n = h) %>%
+    # filter(!(data.table::month(time) == 2 & data.table::mday(time) == 29)) %>%   # FIXME feb 29 hack
+    rename(orig = value) %>%
+    mutate(
+    wday = data.table::wday(time),
+    mday = data.table::mday(time),
+    yday = yday_leap(time),
+    year = data.table::year(time)
+    ) %>%
+    group_by(year) %>%
+    mutate(yday = seq_along(yday)) %>%
+    ungroup()
 
-x_effects <-
-  x %>%
-  add_days(n = h) %>%
-  # filter(!(data.table::month(time) == 2 & data.table::mday(time) == 29)) %>%   # FIXME feb 29 hack
-  rename(orig = value) %>%
-  mutate(
-  wday = data.table::wday(time),
-  mday = data.table::mday(time),
-  yday = yday_leap(time),
-  year = data.table::year(time)
-  ) %>%
-  group_by(year) %>%
-  mutate(yday = seq_along(yday)) %>%
-  ungroup()
-
-# select(x_effects,time,orig,wday) %>%
-#   ts_long() %>%
-#   ts_dygraphs()
+  # select(x_effects,time,orig,wday) %>%
+  #   ts_long() %>%
+  #   ts_dygraphs()
 
 
-x_trend <-
-  x_effects %>%
-  left_join(x, by = "time") %>%
-  # removing trend  0.15
-  mutate(trend = smooth_and_forecast(value,span = 0.25)) %>%
-  mutate(irreg = orig - trend)
+  x_trend <-
+    x_effects %>%
+    left_join(x, by = "time") %>%
+    # removing trend  0.15
+    mutate(trend = smooth_and_forecast(value,span = 0.25)) %>%
+    mutate(irreg = orig - trend)
 
   x_trend_week <-
     x_trend %>%
