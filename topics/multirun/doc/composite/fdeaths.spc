@@ -2,7 +2,7 @@ series{
   title="West ONE-FAMILY 2"
   format = "datevalue"
   period = 12
-  file = "/var/folders/_0/8ksbm6x56vg67bdqy6rms_4c0000gn/T//Rtmp9d5e09/x13ba3035537f6d/data2.dta"
+  file = "doc/composite/fdeaths.dta"
   comptype=add
 }
 
