@@ -1,0 +1,221 @@
+---
+output: github_document
+---
+
+
+# Seasonal adjustment of daily time series in R: An overview
+
+Automated data processing and the Internet have brought an enormous increase in data that is processed on a high frequency, e.g., at a daily, hourly or even higher frequency.
+While some higher frequency series have been used in the past (e.g., Fisher 1923, cited by Ladiray 2018) these series are much more abundant now.
+X-13ARIMA-SEATS offers a well tested and time proven way of adjusting monthly, quarterly (or bi-annual) series, but it cannot deal with data at a higher frequency.
+
+This [article/chaper/post] discusses how to perform seasonal adjustment on a higher frequency. We focus on daily data, as this is the most common use case, but will briefly discuss some challenges involving weekly or intra-day adjustments.
+
+Despite the large interest, there is not much consensus on the appropriate adjustment method for daily series. Adjusting daily series often involves a substantial amount of trial and error, subjective judgment and exploration. This [article/chapter/post] gives an overview of the tools that are currently (2020) available in R.
+
+
+## Problems
+
+Daily seasonal adjustment comes with a few challenges that are not present in lower frequency data.
+Let's focus on daily ice-cream sales.
+
+First, daily data comes at multiple periodicities: There is an annual periodicity, such as the effect of the temperature in the summer.
+Then there is a weekly periodicity. Ice-cream sales may be higher during the weekends. For some series, there may be also a monthly periodicity. If people are get their salaries by the end of the month, they may be more likely to perform certain investments.
+
+Second, many daily data series are available for a few years only. Whily, e.g., the SEATS adjustment requires a minimal series length of XX years, many daily series are shorter.
+
+Third, higher frequency series are generally more volatile and prone to outliers.
+
+Fourth, the effect of individual holiday is challenging to estimate. Often, economic effects of holidays may occur before or after a holiday, thus lagging or leading them is crucial.
+
+
+## Parametric versus Non-parametric Models
+
+Various attempts to seasonly adjust data can be broadly distinguished into parametric and non-parametric approaches.
+Non-parametric approaches seem to be the more obvious candidates to use with the irregular structure of daily data. Parametric models require the time units to be regularly spaced.
+Non-parametric estimation is also what is used in the X-11 method of X-13.
+
+
+## R Packages
+
+As mentioned before, there is no accepted consensus on how to perform daily seasonal adjustment.
+In the following, we discuss various possibilities to adjust series in R.
+We focus on a single time series, and describe the concrete steps that are required to perform an adjustment.
+
+
+```{r}
+library(dailyadj)
+library(tsbox)
+
+x <- transact
+```
+
+### ARIMA + Month, Weekday / Holiday Dummies
+
+Let's start with a simple model.
+
+Perhaps because of their simplicity, these kind of adjustments are frequently found in the literature. E.g., timmermans 18, lengwiler, (forthcoming, ask Ronald)
+
+[The following code is not correct, needs a bit of work]
+
+```{r, arimax, cache = TRUE}
+
+dums <-
+  x %>%
+  mutate(wday = lubridate::wday(time)) %>%
+  mutate(month = lubridate::month(time)) %>%
+  select(time, wday, month) %>%
+  fastDummies::dummy_cols("wday", remove_first_dummy = TRUE, remove_selected_columns = TRUE) %>%
+  fastDummies::dummy_cols("month", remove_first_dummy = TRUE, remove_selected_columns = TRUE)
+
+dums
+
+# ARMA
+fit <- auto.arima(x$value, stationary = TRUE, seasonal = FALSE, xreg = as.matrix(dums[, -1]))
+
+z <- x
+z$seas <- forecast(fit, xreg = as.matrix(dums[, -1]))$mean
+
+z %>%
+  mutate(adj = value - seas) %>%
+  select(time, adj, value) %>%
+  ts_long() %>%
+  ts_plot()
+
+
+```
+
+### STL
+
+This package contains a simple implementation of STL
+
+```{r, stl, cache = TRUE}
+
+seas_daily(x) %>%
+  ts_pick("orig", "adj") %>%
+  ts_plot()
+
+```
+
+### dsa
+
+```{r, dsa}
+
+library(dsa)
+
+z <- dsa::dsa(ts_xts(x))
+
+z
+
+```
+
+### prophet
+
+```{r, prophet, cache = TRUE}
+library(prophet)
+df <- rename(x, ds = time, y = value)
+m <-
+  prophet(daily.seasonality = FALSE) %>%
+  # including swiss holidays, which seems to have no effect
+  add_country_holidays(country_name = 'CH') %>%
+  fit.prophet(df)
+
+# not strictly needed, but will include forecast too
+future <- make_future_dataframe(m, periods = 31)
+forecast <- as_tibble(predict(m, future))
+
+forecast %>%
+  transmute(
+    time = as.Date(ds),
+    additive_terms,
+    yhat
+  ) %>%
+  left_join(x, by = "time") %>%
+  mutate(adj = value - additive_terms) %>%
+  select(time, value, adj) %>%
+  ts_long() %>%
+  ts_plot()
+```
+
+### stlf
+
+Some models require the data to be equispaced.
+I.e., each low frequency period must include the same number of high frequency periods. `ts_ts` from the tsbox package offers an easy way to convert daily data into regular `"ts"` objects with a frequency of 365.2425.
+Thus, days are slightly offset in each year.
+
+```{r, ts_ts}
+x_ts <- ts_ts(x)
+head(x_ts)
+```
+
+[Probably don't show everything. This one contributes nothing]
+
+```{r, stlf}
+m <- stlf(x_ts)
+fct <- ts_tbl(m$mean)
+adj <- m$fitted
+ts_plot(x, adj)
+```
+
+### TBATS
+
+Other models require the data to be equispaced and without missing values.
+Imputation offers an easy way out.
+
+```{r, tbats, cache = TRUE}
+fit <- tbats(imputeTS::na_interpolation(x_ts))
+adj <- fit$fitted
+ts_plot(x, adj)
+```
+
+
+## Evaluation
+
+Based on the example above, compare according to the following criteria:
+
+
+### Out-of-sample forecast
+
+As in (timmermans 18).
+
+
+The function `dailyseas::eval_oos()` performs an OOS forecast evaluation for all models.
+
+[TODO this still needs to be implemented, but I have most of the code needed for it.
+
+dsa is probably the best, prophet 2nd, and then the rest. My stl procedure is also decent.]
+
+[Main Table like this:]
+
+```
+seas\_stlf     Mean       19917. 14809. 0.122
+seas\_prophet  Mean       19082. 13934. 0.117
+seas\_dsa      Mean       19082. 13934. 0.117
+...
+```
+
+
+### Other Criteria??
+
+- Variance?
+
+- Tests for remaining seasonality?
+
+- ???
+
+
+
+### Computation time
+
+```
+stl (my one): 0.639
+seas_dummy:   2.319
+prophet:     10.181
+dsa:        145.553
+```
+
+
+
+## Conclusions
+
+
