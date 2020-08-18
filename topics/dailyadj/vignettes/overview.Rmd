@@ -105,8 +105,6 @@ library(dsa)
 
 z <- dsa::dsa(ts_xts(x))
 
-z
-
 ```
 
 ### prophet
