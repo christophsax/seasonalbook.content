@@ -47,7 +47,12 @@ We focus on a single time series, and describe the concrete steps that are requi
 library(dailyadj)
 library(tsbox)
 
-x <- transact
+x <- casualities
+
+
+ts_plot(x)
+
+
 ```
 
 ### ARIMA + Month, Weekday / Holiday Dummies
@@ -58,7 +63,7 @@ Perhaps because of their simplicity, these kind of adjustments are frequently fo
 
 
 We start by constructing a dummy variables with weekday and monthly effects:
-```{r, arimax, cache = TRUE}
+```{r, dummy-matrix, cache = TRUE}
 dums <-
   x %>%
   mutate(wday = lubridate::wday(time, label = TRUE)) %>%
@@ -66,7 +71,7 @@ dums <-
   select(time, wday, month) %>%
   fastDummies::dummy_cols("wday", remove_selected_columns = TRUE) %>%
   fastDummies::dummy_cols("month", remove_selected_columns = TRUE) %>%
-  select(-wday_Mon, -wday_Sat, -wday_Sun, -month_Jan)
+  select(-wday_Mon, -month_Jan)
 
 dums
 ```
@@ -81,14 +86,15 @@ fit <- auto.arima(x$value, stationary = TRUE, seasonal = FALSE, xreg = as.matrix
 adj <- x
 adj$value <- as.numeric(fit$fitted)
 
-ts_plot(adj, x)
+ts_plot(x, adj)
+
 
 ```
 
 
 The nice think about the dummy model is that its seasonal effects are very easy to interprete. By construction, they are constant over time, and can be visualized as follows:
 
-```{r, arimax, cache = TRUE}
+```{r, coeff-plots, cache = TRUE}
 
 enframe(coef(fit)) %>%
   filter(grepl("wday", name)) %>%
@@ -109,7 +115,7 @@ enframe(coef(fit)) %>%
 
 ```
 
-We see that, on average, transcations are lower on tuesday and thursay and peak on wednesday. We also see that, on average, transactions are higher in the first half of the year.
+We see that, on average, transcations are lower on Sunday and peak on Friday. We also see that, on average, transactions are sligthly lower in early autumn.
 
 
 

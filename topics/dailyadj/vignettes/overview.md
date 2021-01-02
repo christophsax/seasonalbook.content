@@ -62,34 +62,15 @@ adjustment.
 
 ``` r
 library(dailyadj)
-```
-
-    ## Loading required package: tidyverse
-
-    ## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.0 ──
-
-    ## ✔ ggplot2 3.3.2     ✔ purrr   0.3.4
-    ## ✔ tibble  3.0.3     ✔ dplyr   1.0.1
-    ## ✔ tidyr   1.1.1     ✔ stringr 1.4.0
-    ## ✔ readr   1.3.1     ✔ forcats 0.5.0
-
-    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-    ## ✖ dplyr::filter() masks stats::filter()
-    ## ✖ dplyr::lag()    masks stats::lag()
-
-    ## Loading required package: tsbox
-
-    ## Loading required package: forecast
-
-    ## Registered S3 method overwritten by 'quantmod':
-    ##   method            from
-    ##   as.zoo.data.frame zoo
-
-``` r
 library(tsbox)
 
-x <- transact
+x <- casualities
+
+
+ts_plot(x)
 ```
+
+![](overview_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
 
 ### ARIMA + Month, Weekday / Holiday Dummies
 
@@ -99,51 +80,88 @@ Perhaps because of their simplicity, these kind of adjustments are
 frequently found in the literature. E.g., timmermans 18, lengwiler,
 (forthcoming, ask Ronald)
 
-\[The following code is not correct, needs a bit of work\]
+We start by constructing a dummy variables with weekday and monthly
+effects:
 
 ``` r
 dums <-
   x %>%
-  mutate(wday = lubridate::wday(time)) %>%
-  mutate(month = lubridate::month(time)) %>%
+  mutate(wday = lubridate::wday(time, label = TRUE)) %>%
+  mutate(month = lubridate::month(time, label = TRUE)) %>%
   select(time, wday, month) %>%
-  fastDummies::dummy_cols("wday", remove_first_dummy = TRUE, remove_selected_columns = TRUE) %>%
-  fastDummies::dummy_cols("month", remove_first_dummy = TRUE, remove_selected_columns = TRUE)
+  fastDummies::dummy_cols("wday", remove_selected_columns = TRUE) %>%
+  fastDummies::dummy_cols("month", remove_selected_columns = TRUE) %>%
+  select(-wday_Mon, -month_Jan)
 
 dums
 ```
 
-    ## # A tibble: 2,524 x 16
-    ##    time       wday_3 wday_4 wday_5 wday_6 month_10 month_11 month_12 month_2
-    ##    <date>      <int>  <int>  <int>  <int>    <int>    <int>    <int>   <int>
-    ##  1 2005-01-03      0      0      0      0        0        0        0       0
-    ##  2 2005-01-04      1      0      0      0        0        0        0       0
-    ##  3 2005-01-05      0      1      0      0        0        0        0       0
-    ##  4 2005-01-06      0      0      1      0        0        0        0       0
-    ##  5 2005-01-07      0      0      0      1        0        0        0       0
-    ##  6 2005-01-10      0      0      0      0        0        0        0       0
-    ##  7 2005-01-11      1      0      0      0        0        0        0       0
-    ##  8 2005-01-12      0      1      0      0        0        0        0       0
-    ##  9 2005-01-13      0      0      1      0        0        0        0       0
-    ## 10 2005-01-14      0      0      0      1        0        0        0       0
-    ## # … with 2,514 more rows, and 7 more variables: month_3 <int>, month_4 <int>,
-    ## #   month_5 <int>, month_6 <int>, month_7 <int>, month_8 <int>, month_9 <int>
+    ## # A tibble: 4,383 x 18
+    ##    time       wday_Sun wday_Tue wday_Wed wday_Thu wday_Fri wday_Sat month_Feb
+    ##    <date>        <int>    <int>    <int>    <int>    <int>    <int>     <int>
+    ##  1 2005-01-01        0        0        0        0        0        1         0
+    ##  2 2005-01-02        1        0        0        0        0        0         0
+    ##  3 2005-01-03        0        0        0        0        0        0         0
+    ##  4 2005-01-04        0        1        0        0        0        0         0
+    ##  5 2005-01-05        0        0        1        0        0        0         0
+    ##  6 2005-01-06        0        0        0        1        0        0         0
+    ##  7 2005-01-07        0        0        0        0        1        0         0
+    ##  8 2005-01-08        0        0        0        0        0        1         0
+    ##  9 2005-01-09        1        0        0        0        0        0         0
+    ## 10 2005-01-10        0        0        0        0        0        0         0
+    ## # … with 4,373 more rows, and 10 more variables: month_Mar <int>,
+    ## #   month_Apr <int>, month_May <int>, month_Jun <int>, month_Jul <int>,
+    ## #   month_Aug <int>, month_Sep <int>, month_Oct <int>, month_Nov <int>,
+    ## #   month_Dec <int>
+
+These variables can be used as exogenous variables in a ARIMA model. We
+use `forecat::auto.arima()` to determine the ARMA order. Note that we do
+not want to use the seasonal part of the model, since we use dummies for
+this purpose.
 
 ``` r
 # ARMA
 fit <- auto.arima(x$value, stationary = TRUE, seasonal = FALSE, xreg = as.matrix(dums[, -1]))
 
-z <- x
-z$seas <- forecast(fit, xreg = as.matrix(dums[, -1]))$mean
+adj <- x
+adj$value <- as.numeric(fit$fitted)
 
-z %>%
-  mutate(adj = value - seas) %>%
-  select(time, adj, value) %>%
-  ts_long() %>%
-  ts_plot()
+ts_plot(x, adj)
 ```
 
 ![](overview_files/figure-gfm/arimax-1.png)<!-- -->
+
+The nice think about the dummy model is that its seasonal effects are
+very easy to interprete. By construction, they are constant over time,
+and can be visualized as follows:
+
+``` r
+enframe(coef(fit)) %>%
+  filter(grepl("wday", name)) %>%
+  mutate(name = gsub("wday_", "", name)) %>%
+  mutate(name = factor(name, levels = unique(name))) %>%
+  ggplot(aes(x = name, y = value)) +
+    geom_col() +
+    ggtitle("Weekday effects", subtitle = "Baseline: Monday")
+```
+
+![](overview_files/figure-gfm/coeff-plots-1.png)<!-- -->
+
+``` r
+enframe(coef(fit)) %>%
+  filter(grepl("month", name)) %>%
+  mutate(name = gsub("month_", "", name)) %>%
+  mutate(name = factor(name, levels = unique(name))) %>%
+  ggplot(aes(x = name, y = value)) +
+    geom_col() +
+    ggtitle("Month effects", subtitle = "Baseline: January")
+```
+
+![](overview_files/figure-gfm/coeff-plots-2.png)<!-- -->
+
+We see that, on average, transcations are lower on Sunday and peak on
+Friday. We also see that, on average, transactions are sligthly lower in
+early autumn.
 
 ### STL
 
@@ -211,10 +229,10 @@ head(x_ts)
 ```
 
     ## Time Series:
-    ## Start = 2005.00547581401 
-    ## End = 2005.01916534905 
+    ## Start = 2005 
+    ## End = 2005.01368953503 
     ## Frequency = 365.2425 
-    ## [1] 116867.6 108184.3 138179.8 162258.4 170081.6       NA
+    ## [1] 452 468 418 599 686 710
 
 \[Probably don’t show everything. This one contributes nothing\]
 
