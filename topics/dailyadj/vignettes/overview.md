@@ -120,8 +120,7 @@ not want to use the seasonal part of the model, since we use dummies for
 this purpose.
 
 ``` r
-# ARMA
-fit <- auto.arima(x$value, stationary = TRUE, seasonal = FALSE, xreg = as.matrix(dums[, -1]))
+fit <- auto.arima(x$value, seasonal = FALSE, xreg = as.matrix(dums[, -1]))
 
 adj <- x
 adj$value <- as.numeric(fit$fitted)

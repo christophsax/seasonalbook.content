@@ -80,8 +80,7 @@ These variables can be used as exogenous variables in a ARIMA model. We use `for
 
 ```{r, arimax, cache = TRUE}
 
-# ARMA
-fit <- auto.arima(x$value, stationary = TRUE, seasonal = FALSE, xreg = as.matrix(dums[, -1]))
+fit <- auto.arima(x$value, seasonal = FALSE, xreg = as.matrix(dums[, -1]))
 
 adj <- x
 adj$value <- as.numeric(fit$fitted)
@@ -94,7 +93,7 @@ ts_plot(x, adj)
 
 The nice think about the dummy model is that its seasonal effects are very easy to interprete. By construction, they are constant over time, and can be visualized as follows:
 
-```{r, coeff-plots, cache = TRUE}
+```{r, coeff-plots}
 
 enframe(coef(fit)) %>%
   filter(grepl("wday", name)) %>%
@@ -133,7 +132,7 @@ seas_daily(x) %>%
 
 ### dsa
 
-```{r, dsa}
+```{r, dsa, cache = TRUE}
 
 library(dsa)
 
@@ -182,7 +181,7 @@ head(x_ts)
 
 [Probably don't show everything. This one contributes nothing]
 
-```{r, stlf}
+```{r, stlf, cache = TRUE}
 m <- stlf(x_ts)
 fct <- ts_tbl(m$mean)
 adj <- m$fitted
