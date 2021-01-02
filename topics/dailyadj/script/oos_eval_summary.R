@@ -21,13 +21,3 @@ z_transact <- oos_evals_all(transact)
 
 save(z_casualties, z_transact, file = "script/oos_eval_summary_ans.RData")
 
-
-# lapply(z, summary_oos_evals) %>%
-#   bind_rows(.id = "model") %>%
-#   filter(period == "Mean") %>%
-
-
-# plot_oos_evals(z)
-
-
-

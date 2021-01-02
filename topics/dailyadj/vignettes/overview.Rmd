@@ -135,6 +135,7 @@ This package contains a very simple implementation of STL that works in many cir
 
 ```{r, stl, cache = TRUE}
 
+
 seas_daily(x) %>%
   ts_pick("orig", "adj") %>%
   ts_plot()
@@ -199,6 +200,7 @@ head(x_ts)
 [Probably don't show everything. This one is useless]
 
 ```{r, stlf, cache = TRUE}
+
 m <- stlf(x_ts)
 fct <- ts_tbl(m$mean)
 adj <- m$fitted
@@ -211,6 +213,7 @@ Other models require the data to be equispaced and without missing values.
 Imputation offers an easy way out.
 
 ```{r, tbats, cache = TRUE}
+
 fit <- tbats(imputeTS::na_interpolation(x_ts))
 adj <- fit$fitted
 ts_plot(x, adj)
@@ -232,10 +235,33 @@ The full OOS results can be found [here](https://github.com/christophsax/x13book
 
 [I think the detailed OOS results are quite interesting, as they show you what a method 'gets' and what it does not.]
 
-Here is the table for two sereis, all models [it is realtively easy to extend that...]
+Here is the table for two series, showing the mean percentage deviation:
 
 
+```{r, echo = FALSE, messages = FALSE}
 
+
+env <- new.env()
+load(file = here::here("script/oos_eval_summary_ans.RData"),  envir = env)
+
+library(tidyverse)
+
+
+summary_per_series <- function(x) {
+  lapply(x, summary_oos_evals) %>%
+  bind_rows(.id = "model") %>%
+  filter(period == "Mean") %>%
+  select(model, mpce)
+}
+
+bind_rows(lapply(as.list(env), summary_per_series), .id = "series") %>%
+  mutate(series = gsub("z_", "", series)) %>%
+  pivot_wider(names_from = "series", values_from = "mpce") %>%
+  kable()
+
+```
+
+[The framework is now quite clean, so it is easy to include new methods and series, or show other statistics]
 
 
 
@@ -290,6 +316,13 @@ If month effects (e.g., salary payment at the end of a month) collide with week 
 ### Series specific effects
 
 Transaction series have an end of months effect (Timmermans 18), but we don't find it in other data. How to deal with such things?
+
+
+### Weekly seasonality
+
+One solution would be to disaggregate, perform daily seasonal adjustment and aggregate again. Could provide an example.
+
+Compare to weekly methods?
 
 
 ## Conclusions

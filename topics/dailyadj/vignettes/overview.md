@@ -18,19 +18,28 @@ Despite the large interest, there is not much consensus on the
 appropriate adjustment method for daily series. Adjusting daily series
 often involves a substantial amount of trial and error, subjective
 judgment and exploration. This \[article/chapter/post\] gives an
-overview of the tools that are currently (2020) available in R.
+overview of the tools that are currently (2021) available in R.
+
+## Contribution of this \[article/chaper/post\]
+
+  - Discuss literature on daily seasonal adjustment
+  - Overview of available methods in R (including examples)
+  - OOS forecast evaluation of available methods in R
+  - Discuss specific problems
 
 ## Problems
 
 Daily seasonal adjustment comes with a few challenges that are not
-present in lower frequency data. Let’s focus on daily ice-cream sales.
+present in lower frequency data. Let’s focus on daily traffic
+casualties.
 
 First, daily data comes at multiple periodicities: There is an annual
-periodicity, such as the effect of the temperature in the summer. Then
-there is a weekly periodicity. Ice-cream sales may be higher during the
-weekends. For some series, there may be also a monthly periodicity. If
-people are get their salaries by the end of the month, they may be more
-likely to perform certain investments.
+periodicity, such as the effect of weather condiditions or holiday
+patterns. Then there is a weekly periodicity. Casualities may be higher
+during the weekdays, due to increased work traffic. For some series,
+there may be also a monthly periodicity. If people are get their
+salaries by the end of the month, they may be more likely to perform
+certain investments.
 
 Second, many daily data series are available for a few years only.
 Whily, e.g., the SEATS adjustment requires a minimal series length of XX
@@ -64,8 +73,7 @@ adjustment.
 library(dailyadj)
 library(tsbox)
 
-x <- casualities
-
+x <- casualties
 
 ts_plot(x)
 ```
@@ -164,7 +172,8 @@ early autumn.
 
 ### STL
 
-This package contains a simple implementation of STL
+This package contains a very simple implementation of STL that works in
+many circumstances.
 
 ``` r
 seas_daily(x) %>%
@@ -176,18 +185,29 @@ seas_daily(x) %>%
 
 ### dsa
 
+Similarly in spirit, the dsa packages implements a version of STL that
+works well in many circumstances, but is computationally slow. The
+following code automatlically decomposes `casulties`.
+
 ``` r
 library(dsa)
-
 z <- dsa::dsa(ts_xts(x))
 ```
 
     ##   |                                                                              |                                                                      |   0%  |                                                                              |===                                                                   |   5%  |                                                                              |=======                                                               |  10%  |                                                                              |====================                                                  |  29%  |                                                                              |===========================                                           |  38%  |                                                                              |===============================================                       |  67%  |                                                                              |==================================================                    |  71%  |                                                                              |=====================================================                 |  76%  |                                                                              |===============================================================       |  90%  |                                                                              |======================================================================| 100%
 
+``` r
+plot(z, dy = FALSE)
+```
+
+![](overview_files/figure-gfm/dsa-1.png)<!-- -->
+
 ### prophet
 
 ``` r
 library(prophet)
+
+
 df <- rename(x, ds = time, y = value)
 m <-
   prophet(daily.seasonality = FALSE) %>%
@@ -233,7 +253,7 @@ head(x_ts)
     ## Frequency = 365.2425 
     ## [1] 452 468 418 599 686 710
 
-\[Probably don’t show everything. This one contributes nothing\]
+\[Probably don’t show everything. This one is useless\]
 
 ``` r
 m <- stlf(x_ts)
@@ -259,29 +279,42 @@ ts_plot(x, adj)
 
 ## Evaluation
 
-Based on the example above, compare according to the following criteria:
+Which method should you choose? \[discuss criterions\]
 
 ### Out-of-sample forecast
 
-As in (timmermans 18).
+As in (Timmermans 18), the following produces OOS forecasts for the
+twelve last months for UK traffic deaths. We apply
+`dailyseas::eval_oos()` to perform an OOS forecast evaluation for all
+models.
 
-The function `dailyseas::eval_oos()` performs an OOS forecast evaluation
-for all models.
+The full OOS results can be found
+[here](https://github.com/christophsax/x13book/blob/master/topics/dailyadj/vignettes/overview.md)
 
-\[TODO this still needs to be implemented, but I have most of the code
-needed for it.
+\[I think the detailed OOS results are quite interesting, as they show
+you what a method ‘gets’ and what it does not.\]
 
-dsa is probably the best, prophet 2nd, and then the rest. My stl
-procedure is also decent.\]
+Here is the table for two series, showing the mean percentage deviation:
 
-\[Main Table like this:\]
+| model   | casualties |  transact |
+| :------ | ---------: | --------: |
+| dummy   |  0.1564534 | 0.1554219 |
+| daily   |  0.1101139 | 0.1105550 |
+| dsa     |  0.0976475 | 0.1016794 |
+| prophet |  0.1049195 | 0.1165156 |
+| harmon  |  0.1234707 | 0.1542884 |
+| tbats   |  0.1314058 | 0.1306881 |
+| naive   |  0.1402331 | 0.1710234 |
 
-    seas\_stlf     Mean       19917. 14809. 0.122
-    seas\_prophet  Mean       19082. 13934. 0.117
-    seas\_dsa      Mean       19082. 13934. 0.117
-    ...
+\[The framework is now quite clean, so it is easy to include new methods
+and series, or show other statistics\]
 
-### Other Criteria??
+prophet, dsa, and my stl work realatively good, the other methods are
+not working very well.
+
+### Other Criteria
+
+What other criteria could we look at?
 
   - Variance?
 
@@ -295,5 +328,39 @@ procedure is also decent.\]
     seas_dummy:   2.319
     prophet:     10.181
     dsa:        145.553
+
+## Other challenges
+
+\[Discuss some other challenges of daily seas adj\]
+
+### Short series
+
+Many daily time series are short. What does it mean with respect to the
+discussion above. If I have only 3 years of data, which methods still
+work?
+
+### Calendar effects
+
+\[Will try to improve my method on that, prophet and dsa do somehting
+about it. Could provide an example, OOS comparison\]
+
+### Cross Seasonal Effects
+
+If month effects (e.g., salary payment at the end of a month) collide
+with week effects (e.g., weekend), we can get some patterns that are
+very hard to model. How relevant is the problem? What should you be done
+about it?
+
+### Series specific effects
+
+Transaction series have an end of months effect (Timmermans 18), but we
+don’t find it in other data. How to deal with such things?
+
+### Weekly seasonality
+
+One solution would be to disaggregate, perform daily seasonal adjustment
+and aggregate again. Could provide an example.
+
+Compare to weekly methods?
 
 ## Conclusions
