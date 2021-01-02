@@ -1,3 +1,5 @@
+# latest version of seas_loess
+
 # x <- transact
 
 #' @export
