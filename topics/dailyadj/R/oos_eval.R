@@ -7,7 +7,7 @@
 #' @examples
 #' oos_eval(casualities, seas_daily)
 #' oos_eval(transact, seas_daily)
-#' @exports
+#' @export
 oos_eval <- function(x, seas_fun) {
 
 

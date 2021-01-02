@@ -3,7 +3,7 @@
 #' @examples
 #' oos_evals(casualities, seas_daily)
 #' oos_evals(transact, seas_daily)
-#' @exports
+#' @export
 oos_evals <- function(x, seas_fun) {
 
   by = "-1 month"

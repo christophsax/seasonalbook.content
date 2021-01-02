@@ -2,7 +2,7 @@
 #'
 #' Seasonal adjustment of daily time series, using prophet
 #'
-#' @exports
+#' @export
 #' @examples seas_prophet(transact)
 seas_prophet <- function(x) {
 
