@@ -2,14 +2,9 @@
 % Please edit documentation in R/oos_eval.R
 \name{oos_eval}
 \alias{oos_eval}
-\title{Evalutat OOS forecast error}
+\title{Evalutate OOS forecast error}
 \usage{
-oos_eval(
-  x,
-  seas_fun,
-  by = "-1 month",
-  end_short = tsbox:::time_shift(ts_summary(x)$end, by)
-)
+oos_eval(x, seas_fun)
 }
 \description{
 This should work with every \code{seas_} function in the package. Typically, the

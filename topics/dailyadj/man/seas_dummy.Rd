@@ -9,3 +9,9 @@ seas_dummy(x, h = 30)
 \description{
 Seasonal adjustment
 }
+\examples{
+# oos_eval(casualities, seas_dummy)
+# oos_eval(transact, seas_dummy)
+# oos_evals(casualities, seas_dummy)
+# oos_evals(transact, seas_dummy)
+}
