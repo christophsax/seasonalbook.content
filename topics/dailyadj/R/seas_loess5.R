@@ -175,14 +175,3 @@ z <- ts_long(z_wide)
 
 validate_seas_output(z)
 }
-
-
-add_days <- function(x, n = 10) {
-  if (n == 0) return(x)
-  last_day <- utils::tail(x$time, 1)
-  future_days <- seq(last_day, length.out = ceiling(n * 1.5), by = "day")[-1]
-  stopifnot(length(future_days) >= n)
-  bind_rows(arrange(x, time), tibble(time = future_days[1:n], value = NA_real_))
-}
-
-
