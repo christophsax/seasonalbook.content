@@ -12,7 +12,7 @@ library(forecast)
 pkgload::load_all(".")
 
 
-x <- casualities
+x <- casualties
 # x <- transact
 
 #' ## seas_dummy
