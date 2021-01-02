@@ -2,15 +2,20 @@ timmermans_dummies <- function(x, h = 30) {
 
   # ARIMA with dummy variables for days of the week and first,middle and last
   # three days of the month (Dummy model 1).
+
+  # only keep wdays that are also in x
+  wdays_in_x <- unique(data.table::wday(unique(x$time)))
+
   x_dummies <-
     x %>%
-    add_weekdays(n = h) %>%
+    add_days(n = h) %>%
     rename(orig = value) %>%
     mutate(
       wday = data.table::wday(time),
       year = data.table::year(time),
       month = data.table::month(time)
     ) %>%
+    filter(wday %in% wdays_in_x) %>%
     group_by(year,month) %>%
     mutate(start = seq(n())) %>%
     mutate(end = rev(seq(n()))) %>%
@@ -21,7 +26,7 @@ timmermans_dummies <- function(x, h = 30) {
     mutate(end = if_else(end %in% c(1,2,3),end,0L)) %>%
     mutate(middle = if_else(middle %in% c(1,2,3),middle,0L))
 
-  stopifnot((NROW(x) + h) == NROW(x_dummies))
+  # stopifnot((NROW(x) + h) == NROW(x_dummies))
 
   # ts_interpolate <- ts_(function(x,...) imputeTS::na_interpolation(x,...))
   ts_dum <-

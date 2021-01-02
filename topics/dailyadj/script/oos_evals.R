@@ -12,7 +12,8 @@ library(forecast)
 pkgload::load_all(".")
 
 
-x <- transact
+x <- casualities
+# x <- transact
 
 #' ## seas_dummy
 z <- oos_evals(x, seas_dummy)

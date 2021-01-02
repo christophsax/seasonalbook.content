@@ -1,13 +1,19 @@
 #' Seasonal adjustment
 #'
 #' @export
+#' @examples
+#' # oos_eval(casualities, seas_dummy)
+#' # oos_eval(transact, seas_dummy)
+#' # oos_evals(casualities, seas_dummy)
+#' # oos_evals(transact, seas_dummy)
 seas_dummy <- function(x, h = 30) {
 
   validate_seas_input(x)
 
   library(tsbox)
 
-  dums <- timmermans_dummies(x, h = 0) %>%
+  dums <-
+    timmermans_dummies(x, h = 0) %>%
     ts_wide() %>%
     select(-time) %>%
     fastDummies::dummy_cols(remove_first_dummy = TRUE, remove_selected_columns = T)  %>%
@@ -26,6 +32,8 @@ seas_dummy <- function(x, h = 30) {
     as.matrix()
 
   y <- x$value
+
+  stopifnot(identical(colnames(dums), colnames(dums_extra)))
 
   stopifnot(NROW(y) == NROW(dums))
 

@@ -1,5 +1,17 @@
+#' Evalutate OOS forecast error
+#'
+#' This should work with every `seas_` function in the package. Typically, the
+#' series is shortened by one month. The series is then forecasted and can be
+#' compared to the actual values.
+#'
+#' @examples
+#' oos_eval(casualities, seas_daily)
+#' oos_eval(transact, seas_daily)
 #' @exports
-oos_eval <- function(x, seas_fun, by = "-1 month", end_short = tsbox:::time_shift(ts_summary(x)$end, by)) {
+oos_eval <- function(x, seas_fun) {
+
+
+  end_short = tsbox:::time_shift(tsbox:::time_shift(ts_summary(x)$end, "1 day"), "-1 month") - 1
 
   x_short <- ts_span(x, end = end_short)
 
@@ -32,6 +44,6 @@ summary_oos_eval <- function(x){
 
 
 oos_summary <- function(x) {
-  .Deprecated("summary_oos_eval")
+  .Defunct("summary_oos_eval")
   summary_oos_eval(x)
 }
