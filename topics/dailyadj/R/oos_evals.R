@@ -23,6 +23,9 @@ oos_evals <- function(x, seas_fun) {
 }
 
 summary_oos_evals <- function(x){
+  # also allow period to be of class Date
+  if (inherits(x$period, "Date")) x$period <- as.character(x$period)
+
   z <-
     x %>%
     pivot_wider(names_from = id, values_from = value) %>%
