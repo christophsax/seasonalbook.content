@@ -6,63 +6,79 @@ pkgload::load_all(".")
 library(tidyverse)
 
 dta <- lst(
-  transact,
-  transact_inter,
-  transact_retail,
+
+  casualties,
 
   count,
   count_inter,
   count_retail,
 
-  trendecon,
+  transact,
+  transact_inter,
+  transact_retail,
 
-  casualties
+  trendecon
+
 )
 
-
-
+# sort(names(dta))
 
 
 oos_prophet <- read_csv("script/data/oos_prophet.csv", col_types = cols())
-
+ans_prophet <- read_csv("script/data/ans_prophet.csv", col_types = cols())
 
 oos_daily <- read_csv("script/data/oos_daily.csv", col_types = cols())
+ans_daily <- read_csv("script/data/ans_daily.csv", col_types = cols())
+
+oos_dsa <- read_csv("script/data/oos_dsa.csv", col_types = cols())
+ans_dsa <- read_csv("script/data/ans_dsa.csv", col_types = cols())
 
 
 # what can we look at
 
-ll <- group_split(oos_daily, series, .keep = F)
-
 # - monthly OOS
-plot_oos_evals(ll[[1]])
+plot_oos_evals(filter(oos_dsa, series == "casualties"))
+plot_oos_evals(filter(oos_prophet, series == "casualties"))
+plot_oos_evals(filter(oos_daily, series == "casualties"))
 
 # - OOS summary stats
-summary_oos_evals(ll[[1]])
-
+summary_oos_evals(filter(oos_dsa, series == "casualties"))
+summary_oos_evals(filter(oos_prophet, series == "casualties"))
+summary_oos_evals(filter(oos_daily, series == "casualties"))
 
 # - look at components
-plot_components(ll[[1]])
+plot_components(filter(ans_dsa, series == "casualties"))
+plot_components(filter(ans_daily, series == "casualties"))
+plot_components(filter(ans_dsa, series == "casualties"))
 
 
 
-summary_oos_evals(z)
-plot_oos_evals(z)
+# Model tweak on casualties
+
+
+ans <- seas_daily(
+  casualties,
+  span_trend = 0.25,
+  span_week = 0.3,
+  span_month = 2,
+  span_intrayear =  0.02,
+)
+plot_components(ans)
+
+oos <- oos_evals(casualties, seas_daily,
+  span_trend = 0.25,
+  span_week = 0.3,
+  span_month = 2,
+  span_intrayear =  0.02,
+)
+summary_oos_evals(oos)
+plot_components(oos)
 
 
 
 
 
 
-
-summary_oos_evals(z)
-plot_oos_evals(z)
-
-
-ll[[1]]
-
-z
-
-ll[[1]]
 
 
 
