@@ -25,14 +25,14 @@ dta <- lst(
 
 # apply to all series
 
-ans_daily <- bind_rows(lapply(dta, seas_daily), .id = "series")
-write_csv(ans_daily, "script/data/ans_daily.csv")
+# ans_daily <- bind_rows(lapply(dta, seas_daily), .id = "series")
+# write_csv(ans_daily, "script/data/ans_daily.csv")
 
-ans_prophet <- bind_rows(lapply(dta, seas_prophet), .id = "series")
-write_csv(ans_prophet, "script/data/ans_prophet.csv")
+# ans_prophet <- bind_rows(lapply(dta, seas_prophet), .id = "series")
+# write_csv(ans_prophet, "script/data/ans_prophet.csv")
 
-ans_dsa <- bind_rows(lapply(dta, seas_dsa), .id = "series")
-write_csv(ans_dsa, "script/data/ans_dsa.csv")
+# ans_dsa <- bind_rows(lapply(dta, seas_dsa), .id = "series")
+# write_csv(ans_dsa, "script/data/ans_dsa.csv")
 
 
 
