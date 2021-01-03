@@ -7,8 +7,6 @@ library(tsbox)
 
 # More example series from trendecon
 trendecon <-
-  read_csv("https://raw.githubusercontent.com/trendecon/data/master/daily/trendecon_keywords.csv", col_types = cols()) %>%
-  filter(id == "orig") %>%
-  select(-id)
+  read_csv("https://raw.githubusercontent.com/trendecon/data/master/raw/ch/trendecon_sa.csv", col_types = cols())
 
-
+usethis::use_data(trendecon)
