@@ -4,7 +4,7 @@
 #' oos_evals(casualities, seas_daily)
 #' oos_evals(transact, seas_daily)
 #' @export
-oos_evals <- function(x, seas_fun) {
+oos_evals <- function(x, seas_fun, ...) {
 
   by = "-1 month"
   # noramlize
@@ -15,7 +15,7 @@ oos_evals <- function(x, seas_fun) {
   periods <- seq(tsbox:::time_shift(last_period_start, "1 month"), by = by, length.out = 12) - 1
 
   xs <- setNames(lapply(periods, function(period) ts_span(x, end = period)), periods)
-  z <- lapply(xs, oos_eval, seas_fun = seas_fun)
+  z <- lapply(xs, oos_eval, seas_fun = seas_fun, ...)
 
   bind_rows(z, .id = "period") %>%
     ts_regular()

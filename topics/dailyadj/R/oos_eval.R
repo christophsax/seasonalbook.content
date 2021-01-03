@@ -8,14 +8,14 @@
 #' oos_eval(casualities, seas_daily)
 #' oos_eval(transact, seas_daily)
 #' @export
-oos_eval <- function(x, seas_fun) {
+oos_eval <- function(x, seas_fun, ...) {
 
 
   end_short = tsbox:::time_shift(tsbox:::time_shift(ts_summary(x)$end, "1 day"), "-1 month") - 1
 
   x_short <- ts_span(x, end = end_short)
 
-  out <- seas_fun(x_short)
+  out <- seas_fun(x_short, ...)
 
   out %>%
     ts_pick("fct") %>%
