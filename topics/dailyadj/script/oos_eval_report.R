@@ -23,8 +23,8 @@ pkgload::load_all(here::here("."))
 x <- params$x
 x_name <- params$x_name
 
-# x <- transact
-# x_name <- "transact"
+x <- count_retail
+x_name <- "count_retail"
 
 
 
@@ -41,9 +41,9 @@ funs <- lst(
   seas_naive,
   # seas_dummy,
   # seas_loess6,
-  seas_loess10,
+  seas_daily
   # seas_loess8,
-  seas_loess9,
+  # seas_loess9,
   # seas_loess_it,
   # seas_prophet,
   # seas_dsa
