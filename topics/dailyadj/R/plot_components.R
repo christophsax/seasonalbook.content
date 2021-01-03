@@ -56,6 +56,13 @@ plot_pattern_i <- function(z) {
 
 #' @export
 plot_components <- function(z) {
+
+  if ("series" %in% colnames(z)) {
+    # still dont know how to use title in plot_grid...
+    title <- unique(z$series)
+    stopifnot(length(title) == 1)
+    z <- select(z, -series)
+  }
   library(ggplot2)
   library(cowplot)
 
