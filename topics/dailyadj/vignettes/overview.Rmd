@@ -272,9 +272,11 @@ prophet, dsa, and my stl work realatively good, the other methods are not workin
 
 What other criteria could we look at?
 
-- Variance?
+- Aggregation tests: How do the aggregated series compare to X-13 adjustments? there is a literature on this (montly GDP vs quarterly). If a monthly adjustment seems good but produces a bad quarterly adjustemnt, it is probably not a good adjustment.
 
-- Tests for remaining seasonality?
+- `qs()`
+
+- compare compontents to X-13
 
 - ???
 
