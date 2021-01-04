@@ -34,6 +34,8 @@ dta <- lst(
 # ans_dsa <- bind_rows(lapply(dta, seas_dsa), .id = "series")
 # write_csv(ans_dsa, "script/data/ans_dsa.csv")
 
+# ans_naive <- bind_rows(lapply(dta, seas_naive), .id = "series")
+# write_csv(ans_naive, "script/data/ans_naive.csv")
 
 
 # OOS --------------------------------------------------------------------------
@@ -49,3 +51,5 @@ dta <- lst(
 # oos_dsa <- bind_rows(lapply(dta, oos_evals, seas_fun = seas_dsa), .id = "series")
 # write_csv(oos_dsa, "script/data/oos_dsa.csv")
 
+# oos_naive <- bind_rows(lapply(dta, oos_evals, seas_fun = seas_naive), .id = "series")
+# write_csv(oos_naive, "script/data/oos_naive.csv")
