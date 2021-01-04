@@ -164,10 +164,20 @@ summarize(overview, across(-series, function(e) mean(abs(e))))
 #           <dbl>      <dbl>   <dbl> <dbl> <dbl>
 # 1         0.250      0.253   0.214 0.297 0.408
 
+
+# If we look at MRSE, it is beaten by dsa only
+# # A tibble: 1 x 5
+#   daily_tweaked daily_orig prophet   dsa naive
+#           <dbl>      <dbl>   <dbl> <dbl> <dbl>
+# 1         4859.      4838.   5110. 4523. 5952.
+
+
 # discussion
 #
 # - tweaks to not have a major impact on performance, but may make it more
 #   robust towards longer and shorter series (not in the sample)
+# - daily_seas is similarly good as the good methods (dsa, prophet). All of them
+#   are substantially better than naive or other methods (see overview paper)
 
 
 
