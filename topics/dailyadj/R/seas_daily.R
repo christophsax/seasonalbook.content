@@ -6,10 +6,11 @@
 seas_daily <- function(x,
   h = 35,
   holiday_df = NULL,
+  span_scale = scale_factor(x),
   span_trend = 0.25,
   span_week = 0.3,
   span_month = 0.7,
-  span_intrayear =  0.02
+  span_within_year =  0.02
   ) {
 
   if (is.null(holiday_df)) {
@@ -18,6 +19,13 @@ seas_daily <- function(x,
       holidays()
     )
   }
+
+  span_trend = span_trend / span_scale
+  span_week = span_trend / span_scale
+  span_month = span_month / span_scale
+  span_within_year = span_within_year / span_scale
+
+  # span_within_year should not be scaled, it is independent of series length
 
   validate_seas_input(x)
   stopifnot(nrow(filter(x, is.na(value))) == 0)
@@ -105,7 +113,7 @@ x_trend_week_month_year <-
     group_by(yday) %>%
     mutate(seas_y = mean(irreg, na.rm = TRUE)) %>%
     ungroup() %>%
-    mutate(seas_y = smooth_and_forecast2(seas_y, span = span_intrayear)) %>%
+    mutate(seas_y = smooth_and_forecast2(seas_y, span = span_within_year)) %>%
     group_by(yday) %>%
     mutate(seas_y = mean(seas_y, na.rm = TRUE)) %>%
     ungroup() %>%
