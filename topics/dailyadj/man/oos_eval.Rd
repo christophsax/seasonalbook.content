@@ -4,7 +4,7 @@
 \alias{oos_eval}
 \title{Evalutate OOS forecast error}
 \usage{
-oos_eval(x, seas_fun)
+oos_eval(x, seas_fun, ...)
 }
 \description{
 This should work with every \code{seas_} function in the package. Typically, the

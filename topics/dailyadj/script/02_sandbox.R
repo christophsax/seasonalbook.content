@@ -49,7 +49,7 @@ summary_oos_evals(filter(oos_daily, series == "casualties"))
 # - look at components
 plot_components(filter(ans_dsa, series == "casualties"))
 plot_components(filter(ans_daily, series == "casualties"))
-plot_components(filter(ans_dsa, series == "casualties"))
+plot_components(filter(ans_prophet, series == "casualties"))
 
 
 

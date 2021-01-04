@@ -4,7 +4,7 @@
 \alias{oos_evals}
 \title{Evalutate OOS forecast errors over multiple periods}
 \usage{
-oos_evals(x, seas_fun)
+oos_evals(x, seas_fun, ...)
 }
 \description{
 Evalutate OOS forecast errors over multiple periods
