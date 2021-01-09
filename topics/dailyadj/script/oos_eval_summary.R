@@ -14,10 +14,14 @@ oos_evals_all <- function(x) {
   )
 }
 
+# intra year start does not work (yet)
+nzimmigration_arr <- ts_span(select(ts_pick(nzimmigration, "arr"), -id), 1998)
+nzimmigration_dep <- ts_span(select(ts_pick(nzimmigration, "dep"), -id), 1998)
 
+z_nzimmigration_arr <- oos_evals_all(nzimmigration_arr)
+z_nzimmigration_dep <- oos_evals_all(nzimmigration_dep)
 
 z_casualties <- oos_evals_all(casualties)
 z_transact <- oos_evals_all(transact)
 
-save(z_casualties, z_transact, file = "script/oos_eval_summary_ans.RData")
-
+save(z_casualties, z_transact, z_nzimmigration_arr, z_nzimmigration_dep, file = "script/oos_eval_summary_ans.RData")
