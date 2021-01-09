@@ -22,6 +22,7 @@ oos_evals <- function(x, seas_fun, ...) {
 
 }
 
+#' @export
 summary_oos_evals <- function(x){
   # also allow period to be of class Date
   if (inherits(x$period, "Date")) x$period <- as.character(x$period)
@@ -47,6 +48,7 @@ summary_oos_evals <- function(x){
 
 }
 
+#' @export
 plot_oos_evals <- function(x) {
   ggplot(x, aes(x = time, y = value)) +
   geom_line(aes(color = id)) +

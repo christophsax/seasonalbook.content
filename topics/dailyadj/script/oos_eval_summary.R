@@ -25,3 +25,12 @@ z_casualties <- oos_evals_all(casualties)
 z_transact <- oos_evals_all(transact)
 
 save(z_casualties, z_transact, z_nzimmigration_arr, z_nzimmigration_dep, file = "script/oos_eval_summary_ans.RData")
+
+
+
+oo <- oos_evals(nzimmigration_dep, seas_daily)
+summary_oos_evals(oo)
+
+
+oo1 <- oos_evals(nzimmigration_dep, seas_naive)
+summary_oos_evals(oo1)

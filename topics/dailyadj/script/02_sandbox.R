@@ -53,7 +53,7 @@ plot_components(filter(ans_prophet, series == "casualties"))
 
 
 
-# Tweak Parameters: Causalities ------------------------------------------------
+# Tweak Parameters: Casualties ------------------------------------------------
 
 ans <- seas_daily(
   casualties,

@@ -36,7 +36,7 @@ preamble: |
 
 # per R journal requirement, the bib filename should be the same as the output
 # tex file. Don't forget to rename the bib file and change this example value.
-bibliography: RJreferences.bib
+bibliography: overview.bib
 
 output: rticles::rjournal_article
 ---
@@ -53,7 +53,6 @@ library(tsbox)
 library(tidyverse)
 
 ```
-
 ## Introduction
 
 Automated data processing and the Internet have brought an enormous increase in data that is processed on a high frequency, e.g., at a daily, hourly or even higher frequency.
@@ -69,11 +68,10 @@ The focus is both on the usage and on the methodology. We try to give usage exam
 We first give a short methodologial overview ob daily seasonal adjustment and disuss some specifi problems that come with high frequency seasonal adjustment. We then discuss various R packages that can be used to perform high frequency seasonal adjustment. In the 'Evaluation' chapter, we compare the results of these packages, and give some advice on the selction of an optimal method.
 Further topics of high frequency seasonal adjustment are discussed in the final chapter.
 
-
 ## Overview
 
 
-### Problems of High Frequency Adjustments
+## Problems of High Frequency Adjustments
 
 Daily seasonal adjustment comes with a few challenges that are not present in lower frequency data.
 Let's focus on daily traffic casualties.
@@ -88,12 +86,11 @@ Third, higher frequency series are generally more volatile and prone to outliers
 Fourth, the effect of individual holiday is challenging to estimate. Often, economic effects of holidays may occur before or after a holiday, thus lagging or leading them is crucial.
 
 
-### Parametric versus Non-parametric Models
+## Parametric versus Non-parametric Models
 
 Various attempts to seasonly adjust data can be broadly distinguished into parametric and non-parametric approaches.
 Non-parametric approaches seem to be the more obvious candidates to use with the irregular structure of daily data. Parametric models require the time units to be regularly spaced.
 Non-parametric estimation is also what is used in the X-11 method of X-13.
-
 
 ## R Packages
 
@@ -122,7 +119,7 @@ ts_plot(casualties)
 ```
 
 
-### ARIMA + Month, Weekday / Holiday Dummies
+## ARIMA + Month, Weekday / Holiday Dummies
 
 Perhaps the simplest way to seasonally adjust a high frequency time series is to use dummies to control for month or weekday effects. As we will see, these models have some considerable drawbacks, but their discussing may be helpful nevertheless.
 Also, these kinds of adjustments are frequently found in the literature. E.g., timmermans 18, [lengwiler 20](https://sjes.springeropen.com/articles/10.1186/s41937-020-00052-y).
@@ -182,7 +179,7 @@ We see that, on average, traffic casualties are lower on Sunday and peak on Frid
 
 
 
-### STL
+## STL
 
 While dummy models are easy to estimate and iterprete, they have a substantial drawback: Their effects are typically *time-invariant*, which is rarely a good assumption. Where we look at weekday or month effects, these effects are likely to change over time.
 
@@ -207,7 +204,7 @@ casualties %>%
 
 ```
 
-### dsa
+## dsa
 
 In a very similar spirit, the dsa packages implements a version of STL.
 It is computationally much more intensive, as it performs extensive outlier adjustments.
@@ -223,7 +220,7 @@ plot(z, dy = FALSE)
 
 ```
 
-### prophet
+## prophet
 
 The *prophet* packages promises an automated approach to forecasting and decomposing high frequency time series. Like the procedures above, it does not require the data to be equispaced.
 (Taylor SJ, Letham B. 2017)
@@ -268,7 +265,7 @@ forecast %>%
   ts_plot()
 ```
 
-### TBATS
+## TBATS
 
 The previous models did not require the data to be equispaced.
 However, modelling techniques have been developed in the context of monthly or quarterly data. They often assume that each low frequency period must include the exact same number of high frequency periods.
@@ -293,7 +290,6 @@ adj <- fit$fitted
 ts_plot(casualties, adj)
 ```
 
-
 ## Evaluation
 
 
@@ -302,7 +298,7 @@ Which method should you choose? Various criterions could be applied. A seasonal 
 Also, a seasonally adjusted series can be compared ot established methods of seasonal adjustment for monthly and quarterly data. In a second excercise, we compare monthly values of adjusted series to adjustments of X-13, using the X-11 method.
 
 
-### Out-of-sample forecast
+## Out-of-sample forecast
 
 As in (Timmermans 18), the following produces OOS forecasts for the twelve last months for UK traffic deaths. We apply `dailyseas::eval_oos()` to perform an OOS forecast evaluation for all models.
 
@@ -332,11 +328,16 @@ summary_per_series <- function(x) {
 bind_rows(lapply(as.list(env), summary_per_series), .id = "series") %>%
   mutate(series = gsub("z_", "", series)) %>%
   pivot_wider(names_from = "series", values_from = "mpce") %>%
-  kable(format = "latex")
+  kable(
+    format = "latex",
+    digits = 2,
+    booktabs = TRUE,
+    linesep = ""
+  )
 
 ```
 
-### Comparison to X-13
+## Comparison to X-13
 
 For the methods and series above, we:
 
@@ -350,7 +351,7 @@ For the methods and series above, we:
 there is a literature on this (montly GDP vs quarterly). If a monthly adjustment seems good but produces a bad quarterly adjustemnt, it is probably not a good adjustment. [James, perhaps elaborate?]
 
 
-### Computation time
+## Computation time
 
 Finally, for practial purposes, speed may be an important consideration, too.
 Differences in computational speed between the methods are large, ranging from less than a second to serveral minutes.
@@ -363,7 +364,7 @@ dsa:        145.553
 ```
 
 
-### Conclusions
+## Conclusions
 
 *prophet*, *dsa*, and the simple stl procedure all work relatively well. Working with equispaced data is much harder.
 
@@ -373,46 +374,46 @@ Grateful for a TBATS example that produces something meaningful]
 
 
 
-## Other challenges
+# Other challenges
 
 
 [Discuss some other challenges of daily seas adj]
 
 
-### Short series
+## Short series
 
 Many daily time series are short. What does it mean with respect to the discussion above. If I have only 3 years of data, which methods still work?
 
 
-### Calendar effects
+## Calendar effects
 
 [Will try to improve my method on that, prophet and dsa do something about it.
 Could provide an example, OOS comparison]
 
 
-### Cross Seasonal Effects
+## Cross Seasonal Effects
 
 If month effects (e.g., salary payment at the end of a month) collide with week effects (e.g., weekend), we can get some patterns that are very hard to model. How relevant is the problem? What should you be done about it?
 
 
-### Series specific effects
+## Series specific effects
 
 Transaction series have an end of months effect (Timmermans 18), but we don't find it in other data. How to deal with such things?
 
 
-### Weekly seasonality
+## Weekly seasonality
 
 One solution would be to disaggregate, perform daily seasonal adjustment and aggregate again. Could provide an example.
 
 Compare to weekly methods?
 
 
-## Conclusions
+# Conclusions
 
 
 
 
-## Literature
+# Literature
 
 Cleveland, R. B., Cleveland, W. S., McRae, J. E., & Terpenning, I. J. (1990). STL: A seasonal-trend decomposition procedure based on loess. Journal of Official Statistics, 6(1), 3–33.
 
@@ -423,4 +424,68 @@ Taylor SJ, Letham B. 2017. Forecasting at scale. PeerJ Preprints 5:e3190v2 https
 De Livera, A. M., Hyndman, R. J., & Snyder, R. D. (2011). Forecasting time series with complex seasonal patterns using exponential smoothing. J American Statistical Association, 106(496), 1513–1527. https://robjhyndman.com/publications/complex-seasonality/
 
 Timmermans, Monique, Ronald Heijmans, and Hennie Daniels. "Cyclical patterns in risk indicators based on financial market infrastructure transaction data." (2017).
+
+
+
+# Appendix
+
+
+### Components Plots
+
+```{r, include = FALSE}
+oos_prophet <- read_csv(here::here("script/data/oos_prophet.csv"), col_types = cols())
+ans_prophet <- read_csv(here::here("script/data/ans_prophet.csv"), col_types = cols())
+
+oos_daily <- read_csv(here::here("script/data/oos_daily.csv"), col_types = cols())
+ans_daily <- read_csv(here::here("script/data/ans_daily.csv"), col_types = cols())
+
+oos_dsa <- read_csv(here::here("script/data/oos_dsa.csv"), col_types = cols())
+ans_dsa <- read_csv(here::here("script/data/ans_dsa.csv"), col_types = cols())
+
+```
+
+
+#### Casualties, Prophet
+
+```{r, echo = FALSE, messages = FALSE}
+plot_components(filter(ans_prophet, series == "casualties"))
+```
+
+#### Casualties, DSA
+
+```{r, echo = FALSE, messages = FALSE}
+plot_components(filter(ans_dsa, series == "casualties"))
+```
+#### Casualties, STL
+
+```{r, echo = FALSE, messages = FALSE}
+plot_components(filter(ans_daily, series == "casualties"))
+```
+
+
+
+### OOS Forecast plots
+
+
+#### Casualties, Prophet
+
+
+```{r, echo = FALSE, messages = FALSE}
+plot_oos_evals(filter(oos_prophet, series == "casualties"))
+```
+
+
+#### Casualties, DSA
+
+
+```{r, echo = FALSE, messages = FALSE}
+plot_oos_evals(filter(oos_dsa, series == "casualties"))
+```
+
+#### Casualties, STL
+
+
+```{r, echo = FALSE, messages = FALSE}
+plot_oos_evals(filter(oos_daily, series == "casualties"))
+```
 

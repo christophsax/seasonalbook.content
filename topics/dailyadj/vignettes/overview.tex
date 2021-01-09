@@ -53,7 +53,7 @@ frequency seasonal adjustment are discussed in the final chapter.
 \subsection{Overview}\label{overview}}
 
 \hypertarget{problems-of-high-frequency-adjustments}{%
-\subsubsection{Problems of High Frequency
+\subsection{Problems of High Frequency
 Adjustments}\label{problems-of-high-frequency-adjustments}}
 
 Daily seasonal adjustment comes with a few challenges that are not
@@ -80,7 +80,7 @@ Often, economic effects of holidays may occur before or after a holiday,
 thus lagging or leading them is crucial.
 
 \hypertarget{parametric-versus-non-parametric-models}{%
-\subsubsection{Parametric versus Non-parametric
+\subsection{Parametric versus Non-parametric
 Models}\label{parametric-versus-non-parametric-models}}
 
 Various attempts to seasonly adjust data can be broadly distinguished
@@ -150,7 +150,7 @@ ts_plot(casualties)
 \includegraphics[width=1\linewidth]{overview_files/figure-latex/unnamed-chunk-2-1} \end{Schunk}
 
 \hypertarget{arima-month-weekday-holiday-dummies}{%
-\subsubsection{ARIMA + Month, Weekday / Holiday
+\subsection{ARIMA + Month, Weekday / Holiday
 Dummies}\label{arima-month-weekday-holiday-dummies}}
 
 Perhaps the simplest way to seasonally adjust a high frequency time
@@ -246,7 +246,7 @@ on Friday. We also see that, on average, casualties are sligthly lower
 in early autumn.
 
 \hypertarget{stl}{%
-\subsubsection{STL}\label{stl}}
+\subsection{STL}\label{stl}}
 
 While dummy models are easy to estimate and iterprete, they have a
 substantial drawback: Their effects are typically \emph{time-invariant},
@@ -288,7 +288,7 @@ casualties %>%
 \includegraphics[width=1\linewidth]{overview_files/figure-latex/stl-1} \end{Schunk}
 
 \hypertarget{dsa}{%
-\subsubsection{dsa}\label{dsa}}
+\subsection{dsa}\label{dsa}}
 
 In a very similar spirit, the dsa packages implements a version of STL.
 It is computationally much more intensive, as it performs extensive
@@ -312,7 +312,7 @@ plot(z, dy = FALSE)
 \includegraphics[width=1\linewidth]{overview_files/figure-latex/dsa-1} \end{Schunk}
 
 \hypertarget{prophet}{%
-\subsubsection{prophet}\label{prophet}}
+\subsection{prophet}\label{prophet}}
 
 The \emph{prophet} packages promises an automated approach to
 forecasting and decomposing high frequency time series. Like the
@@ -371,7 +371,7 @@ forecast %>%
 \includegraphics[width=1\linewidth]{overview_files/figure-latex/prophet-components-1} \end{Schunk}
 
 \hypertarget{tbats}{%
-\subsubsection{TBATS}\label{tbats}}
+\subsection{TBATS}\label{tbats}}
 
 The previous models did not require the data to be equispaced. However,
 modelling techniques have been developed in the context of monthly or
@@ -427,7 +427,7 @@ second excercise, we compare monthly values of adjusted series to
 adjustments of X-13, using the X-11 method.
 
 \hypertarget{out-of-sample-forecast}{%
-\subsubsection{Out-of-sample forecast}\label{out-of-sample-forecast}}
+\subsection{Out-of-sample forecast}\label{out-of-sample-forecast}}
 
 As in (Timmermans 18), the following produces OOS forecasts for the
 twelve last months for UK traffic deaths. We apply
@@ -444,30 +444,24 @@ Here is the table for two series, showing the mean percentage deviation:
 
 \begin{Schunk}
 
-\begin{tabular}{l|r|r|r|r}
-\hline
+\begin{tabular}{lrrrr}
+\toprule
 model & casualties & nzimmigration\_dep & transact & nzimmigration\_arr\\
-\hline
-dummy & 0.1564534 & 0.1588066 & 0.1554219 & 0.2100923\\
-\hline
-daily & 0.1106591 & 0.1853071 & 0.1105100 & 0.1771529\\
-\hline
-dsa & 0.0976475 & 0.1225965 & 0.1016794 & 0.1639907\\
-\hline
-prophet & 0.1049195 & 0.1338138 & 0.1165156 & 0.1393448\\
-\hline
-harmon & 0.1234707 & 0.1647413 & 0.1542884 & 0.2055786\\
-\hline
-tbats & 0.1314058 & 0.2203225 & 0.1306881 & 0.2771999\\
-\hline
-naive & 0.1402331 & 0.1885460 & 0.1710234 & 0.1842106\\
-\hline
+\midrule
+dummy & 0.16 & 0.16 & 0.16 & 0.21\\
+daily & 0.11 & 0.19 & 0.11 & 0.18\\
+dsa & 0.10 & 0.12 & 0.10 & 0.16\\
+prophet & 0.10 & 0.13 & 0.12 & 0.14\\
+harmon & 0.12 & 0.16 & 0.15 & 0.21\\
+tbats & 0.13 & 0.22 & 0.13 & 0.28\\
+naive & 0.14 & 0.19 & 0.17 & 0.18\\
+\bottomrule
 \end{tabular}
 
 \end{Schunk}
 
 \hypertarget{comparison-to-x-13}{%
-\subsubsection{Comparison to X-13}\label{comparison-to-x-13}}
+\subsection{Comparison to X-13}\label{comparison-to-x-13}}
 
 For the methods and series above, we:
 
@@ -490,7 +484,7 @@ adjustment seems good but produces a bad quarterly adjustemnt, it is
 probably not a good adjustment. {[}James, perhaps elaborate?{]}
 
 \hypertarget{computation-time}{%
-\subsubsection{Computation time}\label{computation-time}}
+\subsection{Computation time}\label{computation-time}}
 
 Finally, for practial purposes, speed may be an important consideration,
 too. Differences in computational speed between the methods are large,
@@ -504,7 +498,7 @@ dsa:        145.553
 \end{verbatim}
 
 \hypertarget{conclusions}{%
-\subsubsection{Conclusions}\label{conclusions}}
+\subsection{Conclusions}\label{conclusions}}
 
 \emph{prophet}, \emph{dsa}, and the simple stl procedure all work
 relatively well. Working with equispaced data is much harder.
@@ -514,25 +508,25 @@ Feb.~29? Grateful for a TBATS example that produces something
 meaningful{]}
 
 \hypertarget{other-challenges}{%
-\subsection{Other challenges}\label{other-challenges}}
+\section{Other challenges}\label{other-challenges}}
 
 {[}Discuss some other challenges of daily seas adj{]}
 
 \hypertarget{short-series}{%
-\subsubsection{Short series}\label{short-series}}
+\subsection{Short series}\label{short-series}}
 
 Many daily time series are short. What does it mean with respect to the
 discussion above. If I have only 3 years of data, which methods still
 work?
 
 \hypertarget{calendar-effects}{%
-\subsubsection{Calendar effects}\label{calendar-effects}}
+\subsection{Calendar effects}\label{calendar-effects}}
 
 {[}Will try to improve my method on that, prophet and dsa do something
 about it. Could provide an example, OOS comparison{]}
 
 \hypertarget{cross-seasonal-effects}{%
-\subsubsection{Cross Seasonal Effects}\label{cross-seasonal-effects}}
+\subsection{Cross Seasonal Effects}\label{cross-seasonal-effects}}
 
 If month effects (e.g., salary payment at the end of a month) collide
 with week effects (e.g., weekend), we can get some patterns that are
@@ -540,13 +534,13 @@ very hard to model. How relevant is the problem? What should you be done
 about it?
 
 \hypertarget{series-specific-effects}{%
-\subsubsection{Series specific effects}\label{series-specific-effects}}
+\subsection{Series specific effects}\label{series-specific-effects}}
 
 Transaction series have an end of months effect (Timmermans 18), but we
 don't find it in other data. How to deal with such things?
 
 \hypertarget{weekly-seasonality}{%
-\subsubsection{Weekly seasonality}\label{weekly-seasonality}}
+\subsection{Weekly seasonality}\label{weekly-seasonality}}
 
 One solution would be to disaggregate, perform daily seasonal adjustment
 and aggregate again. Could provide an example.
@@ -554,10 +548,10 @@ and aggregate again. Could provide an example.
 Compare to weekly methods?
 
 \hypertarget{conclusions-1}{%
-\subsection{Conclusions}\label{conclusions-1}}
+\section{Conclusions}\label{conclusions-1}}
 
 \hypertarget{literature}{%
-\subsection{Literature}\label{literature}}
+\section{Literature}\label{literature}}
 
 Cleveland, R. B., Cleveland, W. S., McRae, J. E., \& Terpenning, I. J.
 (1990). STL: A seasonal-trend decomposition procedure based on loess.
@@ -578,7 +572,67 @@ Timmermans, Monique, Ronald Heijmans, and Hennie Daniels. ``Cyclical
 patterns in risk indicators based on financial market infrastructure
 transaction data.'' (2017).
 
-\bibliography{RJreferences.bib}
+\hypertarget{appendix}{%
+\section{Appendix}\label{appendix}}
+
+\hypertarget{components-plots}{%
+\subsubsection{Components Plots}\label{components-plots}}
+
+\hypertarget{casualties-prophet}{%
+\paragraph{Casualties, Prophet}\label{casualties-prophet}}
+
+\begin{Schunk}
+\begin{Soutput}
+#> Warning: Removed 31 row(s) containing missing values (geom_path).
+\end{Soutput}
+
+\includegraphics[width=1\linewidth]{overview_files/figure-latex/unnamed-chunk-5-1} \end{Schunk}
+
+\hypertarget{casualties-dsa}{%
+\paragraph{Casualties, DSA}\label{casualties-dsa}}
+
+\begin{Schunk}
+\begin{Soutput}
+#> Warning: Removed 40 row(s) containing missing values (geom_path).
+\end{Soutput}
+
+\includegraphics[width=1\linewidth]{overview_files/figure-latex/unnamed-chunk-6-1} \end{Schunk}
+
+\hypertarget{casualties-stl}{%
+\paragraph{Casualties, STL}\label{casualties-stl}}
+
+\begin{Schunk}
+\begin{Soutput}
+#> Warning: Removed 35 row(s) containing missing values (geom_path).
+\end{Soutput}
+
+\includegraphics[width=1\linewidth]{overview_files/figure-latex/unnamed-chunk-7-1} \end{Schunk}
+
+\hypertarget{oos-forecast-plots}{%
+\subsubsection{OOS Forecast plots}\label{oos-forecast-plots}}
+
+\hypertarget{casualties-prophet-1}{%
+\paragraph{Casualties, Prophet}\label{casualties-prophet-1}}
+
+\begin{Schunk}
+
+\includegraphics[width=1\linewidth]{overview_files/figure-latex/unnamed-chunk-8-1} \end{Schunk}
+
+\hypertarget{casualties-dsa-1}{%
+\paragraph{Casualties, DSA}\label{casualties-dsa-1}}
+
+\begin{Schunk}
+
+\includegraphics[width=1\linewidth]{overview_files/figure-latex/unnamed-chunk-9-1} \end{Schunk}
+
+\hypertarget{casualties-stl-1}{%
+\paragraph{Casualties, STL}\label{casualties-stl-1}}
+
+\begin{Schunk}
+
+\includegraphics[width=1\linewidth]{overview_files/figure-latex/unnamed-chunk-10-1} \end{Schunk}
+
+\bibliography{overview.bib}
 
 \address{%
 Christoph Sax\\
