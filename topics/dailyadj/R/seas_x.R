@@ -65,7 +65,7 @@ significant_vars <- function(x) {
 
 holidays <- function(country = "CH") {
   as_tibble(prophet::generated_holidays) %>%
-  filter(country == "CH") %>%
+  filter(country == !! country) %>%
   mutate(time = as.Date(as.character(ds)), .keep = "unused") %>%
   mutate(holiday = as.character(holiday)) %>%
   select(-year, -country)
