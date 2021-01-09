@@ -1,130 +1,33 @@
-% Options for packages loaded elsewhere
-\PassOptionsToPackage{unicode}{hyperref}
-\PassOptionsToPackage{hyphens}{url}
-%
-\documentclass[
-]{article}
-\usepackage{lmodern}
-\usepackage{amssymb,amsmath}
-\usepackage{ifxetex,ifluatex}
-\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
-  \usepackage[T1]{fontenc}
-  \usepackage[utf8]{inputenc}
-  \usepackage{textcomp} % provide euro and other symbols
-\else % if luatex or xetex
-  \usepackage{unicode-math}
-  \defaultfontfeatures{Scale=MatchLowercase}
-  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
-\fi
-% Use upquote if available, for straight quotes in verbatim environments
-\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
-\IfFileExists{microtype.sty}{% use microtype if available
-  \usepackage[]{microtype}
-  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
-}{}
-\makeatletter
-\@ifundefined{KOMAClassName}{% if non-KOMA class
-  \IfFileExists{parskip.sty}{%
-    \usepackage{parskip}
-  }{% else
-    \setlength{\parindent}{0pt}
-    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
-}{% if KOMA class
-  \KOMAoptions{parskip=half}}
-\makeatother
-\usepackage{xcolor}
-\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
-\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
-\hypersetup{
-  hidelinks,
-  pdfcreator={LaTeX via pandoc}}
-\urlstyle{same} % disable monospaced font for URLs
-\usepackage[margin=1in]{geometry}
-\usepackage{color}
-\usepackage{fancyvrb}
-\newcommand{\VerbBar}{|}
-\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
-\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
-% Add ',fontsize=\small' for more characters per line
-\usepackage{framed}
-\definecolor{shadecolor}{RGB}{248,248,248}
-\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
-\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
-\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
-\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
-\newcommand{\BuiltInTok}[1]{#1}
-\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
-\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
-\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
-\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
-\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
-\newcommand{\ExtensionTok}[1]{#1}
-\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
-\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-\newcommand{\ImportTok}[1]{#1}
-\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
-\newcommand{\NormalTok}[1]{#1}
-\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
-\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
-\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
-\newcommand{\RegionMarkerTok}[1]{#1}
-\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\usepackage{longtable,booktabs}
-% Correct order of tables after \paragraph or \subparagraph
-\usepackage{etoolbox}
-\makeatletter
-\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
-\makeatother
-% Allow footnotes in longtable head/foot
-\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
-\makesavenoteenv{longtable}
-\usepackage{graphicx,grffile}
-\makeatletter
-\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
-\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
-\makeatother
-% Scale images if necessary, so that they will not overflow the page
-% margins by default, and it is still possible to overwrite the defaults
-% using explicit options in \includegraphics[width, height, ...]{}
-\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
-% Set default figure placement to htbp
-\makeatletter
-\def\fps@figure{htbp}
-\makeatother
-\setlength{\emergencystretch}{3em} % prevent overfull lines
-\providecommand{\tightlist}{%
-  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
-\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+% !TeX root = RJwrapper.tex
+\title{Seasonal Adjustment of Daily Time Series in R: An Overview}
+\author{by Christoph Sax, Author Two, and Author Three}
 
-\author{}
-\date{\vspace{-2.5em}}
+\maketitle
 
-\begin{document}
+\abstract{%
+This {[}article/chapter/post{]} discusses available methods for high
+frequency seasonal adjustment in R. It focuses on the adjustment of
+daily data, but also includes examples of weekly data. We discuss the
+literature and provide an overview of the available methods, including
+user examples. The methods are evaluated in two different ways: First we
+perform an out-of-sample forecast evaluation. Second, we compare the
+adjusted series with the results of X13, an established method for
+seasonal adjustment of monthly data. Finally, we discuss some specific
+problems of seasonal adjustment.
+}
 
-\hypertarget{seasonal-adjustment-of-daily-time-series-in-r-an-overview}{%
-\section{Seasonal adjustment of daily time series in R: An
-overview}\label{seasonal-adjustment-of-daily-time-series-in-r-an-overview}}
+\hypertarget{introduction}{%
+\subsection{Introduction}\label{introduction}}
 
 Automated data processing and the Internet have brought an enormous
 increase in data that is processed on a high frequency, e.g., at a
 daily, hourly or even higher frequency. While some higher frequency
 series have been used in the past (e.g., Fisher 1923, cited by Ladiray
 2018) these series are much more abundant now. X-13ARIMA-SEATS offers a
-well tested and time proven way of adjusting monthly, quarterly (or
+well-tested and time proven way of adjusting monthly, quarterly (or
 bi-annual) series, but it cannot deal with data at a higher frequency.
 
-This {[}article/chaper/post{]} discusses how to perform seasonal
+This {[}article/chapter/post{]} discusses how to perform seasonal
 adjustment on a higher frequency. We focus on daily data, as this is the
 most common use case, but will briefly discuss some challenges involving
 weekly or intra-day adjustments.
@@ -135,36 +38,35 @@ often involves a substantial amount of trial and error, subjective
 judgment and exploration. This {[}article/chapter/post{]} gives an
 overview of the tools that are currently (2021) available in R.
 
-\hypertarget{contribution-of-this-articlechaperpost}{%
-\subsection{Contribution of this
-{[}article/chaper/post{]}}\label{contribution-of-this-articlechaperpost}}
+The focus is both on the usage and on the methodology. We try to give
+usage example for each method and try to cover them in a unified manner.
 
-\begin{itemize}
-\tightlist
-\item
-  Discuss literature on daily seasonal adjustment
-\item
-  Overview of available methods in R (including examples)
-\item
-  OOS forecast evaluation of available methods in R
-\item
-  Discuss specific problems
-\end{itemize}
+We first give a short methodologial overview ob daily seasonal
+adjustment and disuss some specifi problems that come with high
+frequency seasonal adjustment. We then discuss various R packages that
+can be used to perform high frequency seasonal adjustment. In the
+`Evaluation' chapter, we compare the results of these packages, and give
+some advice on the selction of an optimal method. Further topics of high
+frequency seasonal adjustment are discussed in the final chapter.
 
-\hypertarget{problems}{%
-\subsection{Problems}\label{problems}}
+\hypertarget{overview}{%
+\subsection{Overview}\label{overview}}
+
+\hypertarget{problems-of-high-frequency-adjustments}{%
+\subsubsection{Problems of High Frequency
+Adjustments}\label{problems-of-high-frequency-adjustments}}
 
 Daily seasonal adjustment comes with a few challenges that are not
 present in lower frequency data. Let's focus on daily traffic
 casualties.
 
 First, daily data comes at multiple periodicities: There is an annual
-periodicity, such as the effect of weather condiditions or holiday
-patterns. Then there is a weekly periodicity. Casualities may be higher
+periodicity, such as the effect of weather conditions or holiday
+patterns. Then there is a weekly periodicity. Casualties may be higher
 during the weekdays, due to increased work traffic. For some series,
-there may be also a monthly periodicity. If people are get their
-salaries by the end of the month, they may be more likely to perform
-certain investments.
+there may be also a monthly periodicity. If people get their salaries by
+the end of the month, they may be more likely to perform certain
+investments.
 
 Second, many daily data series are available for a few years only.
 Whily, e.g., the SEATS adjustment requires a minimal series length of XX
@@ -178,7 +80,7 @@ Often, economic effects of holidays may occur before or after a holiday,
 thus lagging or leading them is crucial.
 
 \hypertarget{parametric-versus-non-parametric-models}{%
-\subsection{Parametric versus Non-parametric
+\subsubsection{Parametric versus Non-parametric
 Models}\label{parametric-versus-non-parametric-models}}
 
 Various attempts to seasonly adjust data can be broadly distinguished
@@ -197,279 +99,332 @@ possibilities to adjust series in R. We focus on a single time series,
 and describe the concrete steps that are required to perform an
 adjustment.
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{library}\NormalTok{(dailyadj)}
-\KeywordTok{library}\NormalTok{(tsbox)}
+\emph{dailyadj} is an R package to accompany this article. It can can be
+donloaded from GitHub {[}needs to be published.{]}. It contains various
+daily example series. In the following, we focus on UK traffik
+casualities from 2005 to 2016.
 
-\NormalTok{x <-}\StringTok{ }\NormalTok{casualties}
+\begin{Schunk}
+\begin{Sinput}
+library(dailyadj)
+library(tsbox)
+library(tidyverse)
 
-\KeywordTok{ts_plot}\NormalTok{(x)}
-\end{Highlighting}
-\end{Shaded}
+casualties
+\end{Sinput}
+\begin{Soutput}
+#> # A tibble: 4,383 x 2
+#>    time       value
+#>    <date>     <dbl>
+#>  1 2005-01-01   452
+#>  2 2005-01-02   468
+#>  3 2005-01-03   418
+#>  4 2005-01-04   599
+#>  5 2005-01-05   686
+#>  6 2005-01-06   710
+#>  7 2005-01-07   656
+#>  8 2005-01-08   601
+#>  9 2005-01-09   520
+#> 10 2005-01-10   688
+#> # ... with 4,373 more rows
+\end{Soutput}
+\end{Schunk}
 
-\includegraphics{overview_files/figure-latex/unnamed-chunk-1-1.pdf}
+We store high frequency time series in an R data frame, specifically in
+a \emph{tibble}. This data frame has a \texttt{time} and a
+\texttt{value} column. This has two major advantages to other classes,
+such as \texttt{ts}. First, it does not force the data into any kind of
+regularity. February 29 data, if it orrucs, can be stored without
+problems. Second, R has offers a pleotora of tools to perform fantastic
+stuff with data frames, while we have less tools available for other
+classes. Here, and throughtout the article, we use \emph{tsbox} and
+\emph{tidyverse} to simplify the data manipulation. \texttt{ts\_plot()}
+offers a convenient way to plot this tabular data (or any other time
+series data):
+
+\begin{Schunk}
+\begin{Sinput}
+ts_plot(casualties)
+\end{Sinput}
+
+\includegraphics[width=1\linewidth]{overview_files/figure-latex/unnamed-chunk-2-1} \end{Schunk}
 
 \hypertarget{arima-month-weekday-holiday-dummies}{%
 \subsubsection{ARIMA + Month, Weekday / Holiday
 Dummies}\label{arima-month-weekday-holiday-dummies}}
 
-Let's start with a simple model.
+Perhaps the simplest way to seasonally adjust a high frequency time
+series is to use dummies to control for month or weekday effects. As we
+will see, these models have some considerable drawbacks, but their
+discussing may be helpful nevertheless. Also, these kinds of adjustments
+are frequently found in the literature. E.g., timmermans 18,
+\href{https://sjes.springeropen.com/articles/10.1186/s41937-020-00052-y}{lengwiler
+20}.
 
-Perhaps because of their simplicity, these kind of adjustments are
-frequently found in the literature. E.g., timmermans 18, lengwiler,
-(forthcoming, ask Ronald)
-
-We start by constructing a dummy variables with weekday and monthly
+We start by constructing a dummy variable with weekday and monthly
 effects:
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{dums <-}
-\StringTok{  }\NormalTok{x }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{wday =}\NormalTok{ lubridate}\OperatorTok{::}\KeywordTok{wday}\NormalTok{(time, }\DataTypeTok{label =} \OtherTok{TRUE}\NormalTok{)) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{month =}\NormalTok{ lubridate}\OperatorTok{::}\KeywordTok{month}\NormalTok{(time, }\DataTypeTok{label =} \OtherTok{TRUE}\NormalTok{)) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{select}\NormalTok{(time, wday, month) }\OperatorTok{%>%}
-\StringTok{  }\NormalTok{fastDummies}\OperatorTok{::}\KeywordTok{dummy_cols}\NormalTok{(}\StringTok{"wday"}\NormalTok{, }\DataTypeTok{remove_selected_columns =} \OtherTok{TRUE}\NormalTok{) }\OperatorTok{%>%}
-\StringTok{  }\NormalTok{fastDummies}\OperatorTok{::}\KeywordTok{dummy_cols}\NormalTok{(}\StringTok{"month"}\NormalTok{, }\DataTypeTok{remove_selected_columns =} \OtherTok{TRUE}\NormalTok{) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{select}\NormalTok{(}\OperatorTok{-}\NormalTok{wday_Mon, }\OperatorTok{-}\NormalTok{month_Jan)}
+\begin{Schunk}
+\begin{Sinput}
+dums <-
+  casualties %>%
+  mutate(wday = lubridate::wday(time, label = TRUE)) %>%
+  mutate(month = lubridate::month(time, label = TRUE)) %>%
+  select(time, wday, month) %>%
+  fastDummies::dummy_cols("wday", remove_selected_columns = TRUE) %>%
+  fastDummies::dummy_cols("month", remove_selected_columns = TRUE) %>%
+  select(-wday_Mon, -month_Jan)
 
-\NormalTok{dums}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## # A tibble: 4,383 x 18
-##    time       wday_Sun wday_Tue wday_Wed wday_Thu wday_Fri wday_Sat month_Feb
-##    <date>        <int>    <int>    <int>    <int>    <int>    <int>     <int>
-##  1 2005-01-01        0        0        0        0        0        1         0
-##  2 2005-01-02        1        0        0        0        0        0         0
-##  3 2005-01-03        0        0        0        0        0        0         0
-##  4 2005-01-04        0        1        0        0        0        0         0
-##  5 2005-01-05        0        0        1        0        0        0         0
-##  6 2005-01-06        0        0        0        1        0        0         0
-##  7 2005-01-07        0        0        0        0        1        0         0
-##  8 2005-01-08        0        0        0        0        0        1         0
-##  9 2005-01-09        1        0        0        0        0        0         0
-## 10 2005-01-10        0        0        0        0        0        0         0
-## # ... with 4,373 more rows, and 10 more variables: month_Mar <int>,
-## #   month_Apr <int>, month_May <int>, month_Jun <int>, month_Jul <int>,
-## #   month_Aug <int>, month_Sep <int>, month_Oct <int>, month_Nov <int>,
-## #   month_Dec <int>
-\end{verbatim}
+dums
+\end{Sinput}
+\begin{Soutput}
+#> # A tibble: 4,383 x 18
+#>    time       wday_Sun wday_Tue wday_Wed wday_Thu wday_Fri wday_Sat month_Feb
+#>    <date>        <int>    <int>    <int>    <int>    <int>    <int>     <int>
+#>  1 2005-01-01        0        0        0        0        0        1         0
+#>  2 2005-01-02        1        0        0        0        0        0         0
+#>  3 2005-01-03        0        0        0        0        0        0         0
+#>  4 2005-01-04        0        1        0        0        0        0         0
+#>  5 2005-01-05        0        0        1        0        0        0         0
+#>  6 2005-01-06        0        0        0        1        0        0         0
+#>  7 2005-01-07        0        0        0        0        1        0         0
+#>  8 2005-01-08        0        0        0        0        0        1         0
+#>  9 2005-01-09        1        0        0        0        0        0         0
+#> 10 2005-01-10        0        0        0        0        0        0         0
+#> # ... with 4,373 more rows, and 10 more variables: month_Mar <int>,
+#> #   month_Apr <int>, month_May <int>, month_Jun <int>, month_Jul <int>,
+#> #   month_Aug <int>, month_Sep <int>, month_Oct <int>, month_Nov <int>,
+#> #   month_Dec <int>
+\end{Soutput}
+\end{Schunk}
 
 These variables can be used as exogenous variables in a ARIMA model. We
-use \texttt{forecat::auto.arima()} to determine the ARMA order. Note
+use \texttt{forecast::auto.arima()} to determine the ARMA order. Note
 that we do not want to use the seasonal part of the model, since we use
 dummies for this purpose.
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{fit <-}\StringTok{ }\KeywordTok{auto.arima}\NormalTok{(x}\OperatorTok{$}\NormalTok{value, }\DataTypeTok{seasonal =} \OtherTok{FALSE}\NormalTok{, }\DataTypeTok{xreg =} \KeywordTok{as.matrix}\NormalTok{(dums[, }\DecValTok{-1}\NormalTok{]))}
+\begin{Schunk}
+\begin{Sinput}
+fit <- auto.arima(casualties$value, seasonal = FALSE, xreg = as.matrix(dums[, -1]))
+adj <- casualties
+adj$value <- as.numeric(fit$fitted)
 
-\NormalTok{adj <-}\StringTok{ }\NormalTok{x}
-\NormalTok{adj}\OperatorTok{$}\NormalTok{value <-}\StringTok{ }\KeywordTok{as.numeric}\NormalTok{(fit}\OperatorTok{$}\NormalTok{fitted)}
+ts_plot(casualties, adj)
+\end{Sinput}
 
-\KeywordTok{ts_plot}\NormalTok{(x, adj)}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{overview_files/figure-latex/arimax-1.pdf}
+\includegraphics[width=1\linewidth]{overview_files/figure-latex/arimax-1} \end{Schunk}
 
 The nice think about the dummy model is that its seasonal effects are
 very easy to interprete. By construction, they are constant over time,
 and can be visualized as follows:
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{enframe}\NormalTok{(}\KeywordTok{coef}\NormalTok{(fit)) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{filter}\NormalTok{(}\KeywordTok{grepl}\NormalTok{(}\StringTok{"wday"}\NormalTok{, name)) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{name =} \KeywordTok{gsub}\NormalTok{(}\StringTok{"wday_"}\NormalTok{, }\StringTok{""}\NormalTok{, name)) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{name =} \KeywordTok{factor}\NormalTok{(name, }\DataTypeTok{levels =} \KeywordTok{unique}\NormalTok{(name))) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ name, }\DataTypeTok{y =}\NormalTok{ value)) }\OperatorTok{+}
-\StringTok{    }\KeywordTok{geom_col}\NormalTok{() }\OperatorTok{+}
-\StringTok{    }\KeywordTok{ggtitle}\NormalTok{(}\StringTok{"Weekday effects"}\NormalTok{, }\DataTypeTok{subtitle =} \StringTok{"Baseline: Monday"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
+\begin{Schunk}
+\begin{Sinput}
+enframe(coef(fit)) %>%
+  filter(grepl("wday", name)) %>%
+  mutate(name = gsub("wday_", "", name)) %>%
+  mutate(name = factor(name, levels = unique(name))) %>%
+  ggplot(aes(x = name, y = value)) +
+    geom_col() +
+    ggtitle("Weekday effects", subtitle = "Baseline: Monday")
+\end{Sinput}
 
-\includegraphics{overview_files/figure-latex/coeff-plots-1.pdf}
+\includegraphics[width=1\linewidth]{overview_files/figure-latex/coeff-plots-1} \begin{Sinput}
+enframe(coef(fit)) %>%
+  filter(grepl("month", name)) %>%
+  mutate(name = gsub("month_", "", name)) %>%
+  mutate(name = factor(name, levels = unique(name))) %>%
+  ggplot(aes(x = name, y = value)) +
+    geom_col() +
+    ggtitle("Month effects", subtitle = "Baseline: January")
+\end{Sinput}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{enframe}\NormalTok{(}\KeywordTok{coef}\NormalTok{(fit)) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{filter}\NormalTok{(}\KeywordTok{grepl}\NormalTok{(}\StringTok{"month"}\NormalTok{, name)) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{name =} \KeywordTok{gsub}\NormalTok{(}\StringTok{"month_"}\NormalTok{, }\StringTok{""}\NormalTok{, name)) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{name =} \KeywordTok{factor}\NormalTok{(name, }\DataTypeTok{levels =} \KeywordTok{unique}\NormalTok{(name))) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ name, }\DataTypeTok{y =}\NormalTok{ value)) }\OperatorTok{+}
-\StringTok{    }\KeywordTok{geom_col}\NormalTok{() }\OperatorTok{+}
-\StringTok{    }\KeywordTok{ggtitle}\NormalTok{(}\StringTok{"Month effects"}\NormalTok{, }\DataTypeTok{subtitle =} \StringTok{"Baseline: January"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
+\includegraphics[width=1\linewidth]{overview_files/figure-latex/coeff-plots-2} \end{Schunk}
 
-\includegraphics{overview_files/figure-latex/coeff-plots-2.pdf}
-
-We see that, on average, transcations are lower on Sunday and peak on
-Friday. We also see that, on average, transactions are sligthly lower in
-early autumn.
+We see that, on average, traffic casualties are lower on Sunday and peak
+on Friday. We also see that, on average, casualties are sligthly lower
+in early autumn.
 
 \hypertarget{stl}{%
 \subsubsection{STL}\label{stl}}
 
-This package contains a very simple implementation of STL that works in
-many circumstances.
+While dummy models are easy to estimate and iterprete, they have a
+substantial drawback: Their effects are typically \emph{time-invariant},
+which is rarely a good assumption. Where we look at weekday or month
+effects, these effects are likely to change over time.
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{seas_daily}\NormalTok{(x) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{ts_pick}\NormalTok{(}\StringTok{"orig"}\NormalTok{, }\StringTok{"adj"}\NormalTok{) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{ts_plot}\NormalTok{()}
-\end{Highlighting}
-\end{Shaded}
+A straigthforward solution is to estimate these effects
+non-parametrically. Fundamentally, this uses the same idea as the
+ubiquitous X-11 method, wich is used by X13, the seasonal adjustment
+method by the US Census bureau.
 
-\includegraphics{overview_files/figure-latex/stl-1.pdf}
+STL (Cleveland et al, 1990, seasonal-trend decomposition procedure based
+on loess) follows a similar idea but uses local regressions to estimate
+seasonal effects that may change over time. R base has a function
+\texttt{stl()} that performs this decompostion, but it requires the data
+to be equispaced. Models with an equispace requirement will be discusses
+later on.
+
+However, STL can be applied to irregular data as well. The basic idea is
+to align all weekdays and draw a smoothed line through these data
+points. This is you initial estimation of a \emph{weekday} effect, which
+will be substracted from a detrended series. Secondly, the days of a
+month or a year may be aligned, leading an estimation of a monthly or
+yearly effect. Once all effects are estimated, the procedure may be
+repeated, with an iteratively improved trend estimation.
+
+\emph{dailyseas} contains a simple implementation of STL that works in
+many circumstances. See the source code of \texttt{seas\_daily()}, which
+uses relatively simple dplyr manipulations.
+
+\begin{Schunk}
+\begin{Sinput}
+casualties %>%
+  seas_daily() %>%
+  ts_pick("orig", "adj") %>%
+  ts_plot()
+\end{Sinput}
+
+\includegraphics[width=1\linewidth]{overview_files/figure-latex/stl-1} \end{Schunk}
 
 \hypertarget{dsa}{%
 \subsubsection{dsa}\label{dsa}}
 
-Similarly in spirit, the dsa packages implements a version of STL that
-works well in many circumstances, but is computationally slow. The
-following code automatlically decomposes \texttt{casulties}.
+In a very similar spirit, the dsa packages implements a version of STL.
+It is computationally much more intensive, as it performs extensive
+outlier adjustments.
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{library}\NormalTok{(dsa)}
-\NormalTok{z <-}\StringTok{ }\NormalTok{dsa}\OperatorTok{::}\KeywordTok{dsa}\NormalTok{(}\KeywordTok{ts_xts}\NormalTok{(x))}
-\end{Highlighting}
-\end{Shaded}
+The following code autmatically decomposes \texttt{casulties}, using the
+\emph{dsa} package:
 
-\begin{verbatim}
-##   |                                                                              |                                                                      |   0%  |                                                                              |===                                                                   |   5%  |                                                                              |=======                                                               |  10%  |                                                                              |====================                                                  |  29%  |                                                                              |===========================                                           |  38%  |                                                                              |===============================================                       |  67%  |                                                                              |==================================================                    |  71%  |                                                                              |=====================================================                 |  76%  |                                                                              |===============================================================       |  90%  |                                                                              |======================================================================| 100%
-\end{verbatim}
+\begin{Schunk}
+\begin{Sinput}
+library(dsa)
+z <- dsa::dsa(ts_xts(casualties))
+\end{Sinput}
+\begin{Soutput}
+#>   |                                                                              |                                                                      |   0%  |                                                                              |===                                                                   |   5%  |                                                                              |=======                                                               |  10%  |                                                                              |====================                                                  |  29%  |                                                                              |===========================                                           |  38%  |                                                                              |===============================================                       |  67%  |                                                                              |==================================================                    |  71%  |                                                                              |=====================================================                 |  76%  |                                                                              |===============================================================       |  90%  |                                                                              |======================================================================| 100%
+\end{Soutput}
+\begin{Sinput}
+plot(z, dy = FALSE)
+\end{Sinput}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{plot}\NormalTok{(z, }\DataTypeTok{dy =} \OtherTok{FALSE}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{overview_files/figure-latex/dsa-1.pdf}
+\includegraphics[width=1\linewidth]{overview_files/figure-latex/dsa-1} \end{Schunk}
 
 \hypertarget{prophet}{%
 \subsubsection{prophet}\label{prophet}}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{library}\NormalTok{(prophet)}
-\end{Highlighting}
-\end{Shaded}
+The \emph{prophet} packages promises an automated approach to
+forecasting and decomposing high frequency time series. Like the
+procedures above, it does not require the data to be equispaced. (Taylor
+SJ, Letham B. 2017)
 
-\begin{verbatim}
-## Loading required package: Rcpp
-\end{verbatim}
+At its core, the Prophet procedure is an additive regression model with
+four main components:
 
-\begin{verbatim}
-## Loading required package: rlang
-\end{verbatim}
+A trend, a yearly seasonal component, a weekly weekly seasonal component
+and a user-provided list of important holidays. This is fundamentally no
+different to the STL methods above. However, for trend estimation,
+prophet uses a piecewise linear or logistic growth curve trend, for
+yearl effect, is ueses Fourier series. As the dummy model in the
+beginning, it uses dummy variables to estimate the trend.
 
-\begin{verbatim}
-## 
-## Attaching package: 'rlang'
-\end{verbatim}
+In order to prepare the data, column names need be changed to
+\emph{prophet}'s defaults. Estimation is specified using
+\texttt{prophet()}. Country specific holiday effects can be added.
+Acutal fitting is done by \texttt{fit.prophet()}:
 
-\begin{verbatim}
-## The following objects are masked from 'package:purrr':
-## 
-##     %@%, as_function, flatten, flatten_chr, flatten_dbl, flatten_int,
-##     flatten_lgl, flatten_raw, invoke, list_along, modify, prepend,
-##     splice
-\end{verbatim}
+\begin{Schunk}
+\begin{Sinput}
+library(prophet)
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{df <-}\StringTok{ }\KeywordTok{rename}\NormalTok{(x, }\DataTypeTok{ds =}\NormalTok{ time, }\DataTypeTok{y =}\NormalTok{ value)}
-\NormalTok{m <-}
-\StringTok{  }\KeywordTok{prophet}\NormalTok{(}\DataTypeTok{daily.seasonality =} \OtherTok{FALSE}\NormalTok{) }\OperatorTok{%>%}
-\StringTok{  }\CommentTok{# including swiss holidays, which seems to have no effect}
-\StringTok{  }\KeywordTok{add_country_holidays}\NormalTok{(}\DataTypeTok{country_name =} \StringTok{'CH'}\NormalTok{) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{fit.prophet}\NormalTok{(df)}
+df <- rename(casualties, ds = time, y = value)
+m <-
+  prophet(daily.seasonality = FALSE) %>%
+  add_country_holidays(country_name = 'UK') %>%
+  fit.prophet(df)
+\end{Sinput}
+\end{Schunk}
 
-\CommentTok{# not strictly needed, but will include forecast too}
-\NormalTok{future <-}\StringTok{ }\KeywordTok{make_future_dataframe}\NormalTok{(m, }\DataTypeTok{periods =} \DecValTok{31}\NormalTok{)}
-\NormalTok{forecast <-}\StringTok{ }\KeywordTok{as_tibble}\NormalTok{(}\KeywordTok{predict}\NormalTok{(m, future))}
+The seasonally decomposed series (and a forecast) can be extracted as
+follows:
 
-\NormalTok{forecast }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{transmute}\NormalTok{(}
-    \DataTypeTok{time =} \KeywordTok{as.Date}\NormalTok{(ds),}
-\NormalTok{    additive_terms,}
-\NormalTok{    yhat}
-\NormalTok{  ) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{left_join}\NormalTok{(x, }\DataTypeTok{by =} \StringTok{"time"}\NormalTok{) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{adj =}\NormalTok{ value }\OperatorTok{-}\StringTok{ }\NormalTok{additive_terms) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{select}\NormalTok{(time, value, adj) }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{ts_long}\NormalTok{() }\OperatorTok{%>%}
-\StringTok{  }\KeywordTok{ts_plot}\NormalTok{()}
-\end{Highlighting}
-\end{Shaded}
+\begin{Schunk}
+\begin{Sinput}
+# not strictly needed, but will include forecast too
+future <- make_future_dataframe(m, periods = 31)
+forecast <- as_tibble(predict(m, future))
 
-\includegraphics{overview_files/figure-latex/prophet-1.pdf}
+forecast %>%
+  transmute(
+    time = as.Date(ds),
+    additive_terms,
+    yhat
+  ) %>%
+  left_join(casualties, by = "time") %>%
+  mutate(adj = value - additive_terms) %>%
+  select(time, value, adj) %>%
+  ts_long() %>%
+  ts_plot()
+\end{Sinput}
 
-\hypertarget{stlf}{%
-\subsubsection{stlf}\label{stlf}}
-
-Some models require the data to be equispaced. I.e., each low frequency
-period must include the same number of high frequency periods.
-\texttt{ts\_ts} from the tsbox package offers an easy way to convert
-daily data into regular \texttt{"ts"} objects with a frequency of
-365.2425. Thus, days are slightly offset in each year.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{x_ts <-}\StringTok{ }\KeywordTok{ts_ts}\NormalTok{(x)}
-\KeywordTok{head}\NormalTok{(x_ts)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## Time Series:
-## Start = 2005 
-## End = 2005.01368953503 
-## Frequency = 365.2425 
-## [1] 452 468 418 599 686 710
-\end{verbatim}
-
-{[}Probably don't show everything. This one is useless{]}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{m <-}\StringTok{ }\KeywordTok{stlf}\NormalTok{(x_ts)}
-\NormalTok{fct <-}\StringTok{ }\KeywordTok{ts_tbl}\NormalTok{(m}\OperatorTok{$}\NormalTok{mean)}
-\NormalTok{adj <-}\StringTok{ }\NormalTok{m}\OperatorTok{$}\NormalTok{fitted}
-\KeywordTok{ts_plot}\NormalTok{(x, adj)}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{overview_files/figure-latex/stlf-1.pdf}
+\includegraphics[width=1\linewidth]{overview_files/figure-latex/prophet-components-1} \end{Schunk}
 
 \hypertarget{tbats}{%
 \subsubsection{TBATS}\label{tbats}}
 
-Other models require the data to be equispaced and without missing
-values. Imputation offers an easy way out.
+The previous models did not require the data to be equispaced. However,
+modelling techniques have been developed in the context of monthly or
+quarterly data. They often assume that each low frequency period must
+include the exact same number of high frequency periods.
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{fit <-}\StringTok{ }\KeywordTok{tbats}\NormalTok{(imputeTS}\OperatorTok{::}\KeywordTok{na_interpolation}\NormalTok{(x_ts))}
-\NormalTok{adj <-}\StringTok{ }\NormalTok{fit}\OperatorTok{$}\NormalTok{fitted}
-\KeywordTok{ts_plot}\NormalTok{(x, adj)}
-\end{Highlighting}
-\end{Shaded}
+With daily data (or much worse, weekly data, which will be discussed
+below), this is not the case. A year may have 365 or 366 days, and it is
+not always clear how the February 29 problem should be handled.
 
-\includegraphics{overview_files/figure-latex/tbats-1.pdf}
+\texttt{ts\_ts} from the tsbox package offers an easy way to convert
+daily data into regular \texttt{"ts"} objects with a frequency of
+365.2425. Thus, days are slightly offset in each year.
+
+\begin{Schunk}
+\begin{Sinput}
+x_ts <- ts_ts(casualties)
+head(x_ts)
+\end{Sinput}
+\begin{Soutput}
+#> Time Series:
+#> Start = 2005 
+#> End = 2005.01368953503 
+#> Frequency = 365.2425 
+#> [1] 452 468 418 599 686 710
+\end{Soutput}
+\end{Schunk}
+
+TBATS Models (De Livera, Hyndman, \& Snyder, 2011) require the data to
+be equispaced.
+
+\begin{Schunk}
+\begin{Sinput}
+fit <- tbats(x_ts)
+adj <- fit$fitted
+ts_plot(casualties, adj)
+\end{Sinput}
+
+\includegraphics[width=1\linewidth]{overview_files/figure-latex/tbats-1} \end{Schunk}
 
 \hypertarget{evaluation}{%
 \subsection{Evaluation}\label{evaluation}}
 
-Which method should you choose? {[}discuss criterions{]}
+Which method should you choose? Various criterions could be applied. A
+seasonal decomposition model can be used to perform forecasts as well.
+The forecasting capability can be used for a pseudo out-of-sampe
+forcasting exercise. For all the methods discussed and for a number of
+time series, we perform such an exercise.
+
+Also, a seasonally adjusted series can be compared ot established
+methods of seasonal adjustment for monthly and quarterly data. In a
+second excercise, we compare monthly values of adjusted series to
+adjustments of X-13, using the X-11 method.
 
 \hypertarget{out-of-sample-forecast}{%
 \subsubsection{Out-of-sample forecast}\label{out-of-sample-forecast}}
@@ -487,43 +442,59 @@ you what a method `gets' and what it does not.{]}
 
 Here is the table for two series, showing the mean percentage deviation:
 
-\begin{longtable}[]{@{}lrr@{}}
-\toprule
-model & casualties & transact\tabularnewline
-\midrule
-\endhead
-dummy & 0.1564534 & 0.1554219\tabularnewline
-daily & 0.1101139 & 0.1105550\tabularnewline
-dsa & 0.0976475 & 0.1016794\tabularnewline
-prophet & 0.1049195 & 0.1165156\tabularnewline
-harmon & 0.1234707 & 0.1542884\tabularnewline
-tbats & 0.1314058 & 0.1306881\tabularnewline
-naive & 0.1402331 & 0.1710234\tabularnewline
-\bottomrule
-\end{longtable}
+\begin{Schunk}
 
-{[}The framework is now quite clean, so it is easy to include new
-methods and series, or show other statistics{]}
+\begin{tabular}{l|r|r}
+\hline
+model & casualties & transact\\
+\hline
+dummy & 0.1564534 & 0.1554219\\
+\hline
+daily & 0.1101139 & 0.1105550\\
+\hline
+dsa & 0.0976475 & 0.1016794\\
+\hline
+prophet & 0.1049195 & 0.1165156\\
+\hline
+harmon & 0.1234707 & 0.1542884\\
+\hline
+tbats & 0.1314058 & 0.1306881\\
+\hline
+naive & 0.1402331 & 0.1710234\\
+\hline
+\end{tabular}
 
-prophet, dsa, and my stl work realatively good, the other methods are
-not working very well.
+\end{Schunk}
 
-\hypertarget{other-criteria}{%
-\subsubsection{Other Criteria}\label{other-criteria}}
+\hypertarget{comparison-to-x-13}{%
+\subsubsection{Comparison to X-13}\label{comparison-to-x-13}}
 
-What other criteria could we look at?
+For the methods and series above, we:
 
 \begin{itemize}
+\tightlist
 \item
-  Variance?
+  compute adjusted series
 \item
-  Tests for remaining seasonality?
+  aggregate them to monthly
 \item
-  ???
+  compare them X13 Series
+\item
+  compute mpce between the two and tabluate
 \end{itemize}
+
+{[}perhaps also look at \texttt{qs()}?{]}
+
+there is a literature on this (montly GDP vs quarterly). If a monthly
+adjustment seems good but produces a bad quarterly adjustemnt, it is
+probably not a good adjustment. {[}James, perhaps elaborate?{]}
 
 \hypertarget{computation-time}{%
 \subsubsection{Computation time}\label{computation-time}}
+
+Finally, for practial purposes, speed may be an important consideration,
+too. Differences in computational speed between the methods are large,
+ranging from less than a second to serveral minutes.
 
 \begin{verbatim}
 stl (my one): 0.639
@@ -531,6 +502,16 @@ seas_dummy:   2.319
 prophet:     10.181
 dsa:        145.553
 \end{verbatim}
+
+\hypertarget{conclusions}{%
+\subsubsection{Conclusions}\label{conclusions}}
+
+\emph{prophet}, \emph{dsa}, and the simple stl procedure all work
+relatively well. Working with equispaced data is much harder.
+
+{[}Is this because I don't use the correctly? Should I just remove
+Feb.~29? Grateful for a TBATS example that produces something
+meaningful{]}
 
 \hypertarget{other-challenges}{%
 \subsection{Other challenges}\label{other-challenges}}
@@ -547,7 +528,7 @@ work?
 \hypertarget{calendar-effects}{%
 \subsubsection{Calendar effects}\label{calendar-effects}}
 
-{[}Will try to improve my method on that, prophet and dsa do somehting
+{[}Will try to improve my method on that, prophet and dsa do something
 about it. Could provide an example, OOS comparison{]}
 
 \hypertarget{cross-seasonal-effects}{%
@@ -572,7 +553,62 @@ and aggregate again. Could provide an example.
 
 Compare to weekly methods?
 
-\hypertarget{conclusions}{%
-\subsection{Conclusions}\label{conclusions}}
+\hypertarget{conclusions-1}{%
+\subsection{Conclusions}\label{conclusions-1}}
 
-\end{document}
+\hypertarget{literature}{%
+\subsection{Literature}\label{literature}}
+
+Cleveland, R. B., Cleveland, W. S., McRae, J. E., \& Terpenning, I. J.
+(1990). STL: A seasonal-trend decomposition procedure based on loess.
+Journal of Official Statistics, 6(1), 3--33.
+
+Lengwiler, Y. Blacking out. Swiss J Economics Statistics 156, 7 (2020).
+\url{https://doi.org/10.1186/s41937-020-00052-y}
+
+Taylor SJ, Letham B. 2017. Forecasting at scale. PeerJ Preprints
+5:e3190v2 \url{https://doi.org/10.7287/peerj.preprints.3190v2}
+
+De Livera, A. M., Hyndman, R. J., \& Snyder, R. D. (2011). Forecasting
+time series with complex seasonal patterns using exponential smoothing.
+J American Statistical Association, 106(496), 1513--1527.
+\url{https://robjhyndman.com/publications/complex-seasonality/}
+
+Timmermans, Monique, Ronald Heijmans, and Hennie Daniels. ``Cyclical
+patterns in risk indicators based on financial market infrastructure
+transaction data.'' (2017).
+
+\bibliography{RJreferences.bib}
+
+\address{%
+Christoph Sax\\
+University of Base\\%
+line 1\\ line 2\\
+%
+\url{https://journal.r-project.org}%
+\\\textit{ORCiD: \href{https://orcid.org/0000-0002-9079-593X}{0000-0002-9079-593X}}%
+\\\href{mailto:author1@work}{\nolinkurl{author1@work}}
+}
+
+\address{%
+Author Two\\
+Affiliation 1\\%
+line 1 affiliation 1\\ line 2 affiliation 1\\
+Affiliation 2\\%
+line 1 affiliation 2\\ line 2 affiliation 2\\
+%
+\url{https://journal.r-project.org}%
+\\\textit{ORCiD: \href{https://orcid.org/0000-0002-9079-593X}{0000-0002-9079-593X}}%
+\\\href{mailto:author2@work}{\nolinkurl{author2@work}}
+}
+
+\address{%
+Author Three\\
+Affiliation\\%
+line 1 affiliation\\ line 2 affiliation\\
+%
+\url{https://journal.r-project.org}%
+%
+\\\href{mailto:author3@work}{\nolinkurl{author3@work}}
+}
+

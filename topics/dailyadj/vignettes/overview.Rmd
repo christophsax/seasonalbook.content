@@ -1,27 +1,58 @@
 ---
-output:
-  - github_document
-  - pdf_document
+title: "Seasonal Adjustment of Daily Time Series in R: An Overview"
+author:
+  # see ?rjournal_article for more information
+  - name: Christoph Sax
+    affiliation: University of Base
+    address:
+    - line 1
+    - line 2
+    url: https://journal.r-project.org
+    orcid: 0000-0002-9079-593X
+    email:  author1@work
+  - name: Author Two
+    url: https://journal.r-project.org
+    email: author2@work
+    orcid: 0000-0002-9079-593X
+    affiliation: Affiliation 1
+    address:
+    - line 1 affiliation 1
+    - line 2 affiliation 1
+    affiliation2: Affiliation 2
+    address2:
+    - line 1 affiliation 2
+    - line 2 affiliation 2
+  - name: Author Three
+    url: https://journal.r-project.org
+    email: author3@work
+    affiliation: Affiliation
+    address:
+    - line 1 affiliation
+    - line 2 affiliation
+abstract: >
+  This [article/chapter/post] discusses available methods for high frequency seasonal adjustment in R. It focuses on the adjustment of daily data, but also includes examples of weekly data. We discuss the literature and provide an overview of the available methods, including user examples. The methods are evaluated in two different ways: First we perform an out-of-sample forecast evaluation. Second, we compare the adjusted series with the results of X13, an established method for seasonal adjustment of monthly data. Finally, we discuss some specific problems of seasonal adjustment.
+preamble: |
+  % Any extra LaTeX you need in the preamble
+
+# per R journal requirement, the bib filename should be the same as the output
+# tex file. Don't forget to rename the bib file and change this example value.
+bibliography: RJreferences.bib
+
+output: rticles::rjournal_article
 ---
 
 
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  out.width = "100%"
+)
+library(dailyadj)
+library(tsbox)
+library(tidyverse)
 
-
-
-
-# Seasonal adjustment of daily time series in R: An overview
-
-
-## Abstract
-
-Contribution of this [article/chaper/post]
-
-- Discuss literature on daily seasonal adjustment
-- Overview of available methods in R (including examples)
-- OOS forecast evaluation of available methods in R
-- Discuss specific problems
-
+```
 
 ## Introduction
 
@@ -29,7 +60,7 @@ Automated data processing and the Internet have brought an enormous increase in 
 While some higher frequency series have been used in the past (e.g., Fisher 1923, cited by Ladiray 2018) these series are much more abundant now.
 X-13ARIMA-SEATS offers a well-tested and time proven way of adjusting monthly, quarterly (or bi-annual) series, but it cannot deal with data at a higher frequency.
 
-This [article/chaper/post] discusses how to perform seasonal adjustment on a higher frequency. We focus on daily data, as this is the most common use case, but will briefly discuss some challenges involving weekly or intra-day adjustments.
+This [article/chapter/post] discusses how to perform seasonal adjustment on a higher frequency. We focus on daily data, as this is the most common use case, but will briefly discuss some challenges involving weekly or intra-day adjustments.
 
 Despite the large interest, there is not much consensus on the appropriate adjustment method for daily series. Adjusting daily series often involves a substantial amount of trial and error, subjective judgment and exploration. This [article/chapter/post] gives an overview of the tools that are currently (2021) available in R.
 
@@ -73,11 +104,7 @@ We focus on a single time series, and describe the concrete steps that are requi
 *dailyadj* is an R package to accompany this article. It can can be donloaded from GitHub [needs to be published.]. It contains various daily example series.
 In the following, we focus on UK traffik casualities from 2005 to 2016.
 
-```{r, include = FALSE}
-library(dailyadj)
-library(tsbox)
-library(tidyverse)
-```
+
 
 ```{r}
 library(dailyadj)
@@ -305,7 +332,7 @@ summary_per_series <- function(x) {
 bind_rows(lapply(as.list(env), summary_per_series), .id = "series") %>%
   mutate(series = gsub("z_", "", series)) %>%
   pivot_wider(names_from = "series", values_from = "mpce") %>%
-  kable()
+  kable(format = "latex")
 
 ```
 
