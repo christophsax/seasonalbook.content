@@ -543,9 +543,64 @@ don't find it in other data. How to deal with such things?
 \subsection{Weekly seasonality}\label{weekly-seasonality}}
 
 One solution would be to disaggregate, perform daily seasonal adjustment
-and aggregate again. Could provide an example.
+and aggregate again. Here is an example:
 
-Compare to weekly methods?
+\begin{Schunk}
+\begin{Sinput}
+# weekly example series
+casualties_weekly <- ts_span(ts_frequency_week(casualties, sum), 2005)
+
+
+ts_plot(casualties_weekly)
+\end{Sinput}
+
+\includegraphics[width=1\linewidth]{overview_files/figure-latex/weekly-1} \begin{Sinput}
+library(tempdisagg)
+# 1. disaggregate to daily
+
+# fast means faster than the other methods, but week to day is still slow.
+m_daily <- td(casualties_weekly ~ 1, to = "day", method = "fast")
+casualties_daily <- predict(m_daily)
+
+# series are roughly the same
+ts_frequency_week(casualties_daily, sum) %ts-% casualties_weekly
+\end{Sinput}
+\begin{Soutput}
+#> # A tibble: 626 x 2
+#>    time          value
+#>    <date>        <dbl>
+#>  1 2005-01-02  2.68e-8
+#>  2 2005-01-09 -6.07e-8
+#>  3 2005-01-16 -5.81e-8
+#>  4 2005-01-23  3.71e-8
+#>  5 2005-01-30  5.63e-8
+#>  6 2005-02-06 -1.13e-8
+#>  7 2005-02-13  3.74e-8
+#>  8 2005-02-20  3.13e-8
+#>  9 2005-02-27 -1.55e-8
+#> 10 2005-03-06  8.58e-9
+#> # ... with 616 more rows
+\end{Soutput}
+\begin{Sinput}
+# 2. Seasonally adjust artificial daily data
+casualties_daily_sa <- seas_daily(casualties_daily)
+
+
+# 3. Aggregate back to weekly
+
+casualties_weekly_sa <-
+  casualties_daily_sa %>%
+  ts_pick("adj") %>%
+  select(-id) %>%
+  ts_frequency_week(sum)
+
+
+ts_plot(casualties_weekly, casualties_weekly_sa)
+\end{Sinput}
+
+\includegraphics[width=1\linewidth]{overview_files/figure-latex/weekly-2} \end{Schunk}
+
+The main advantage of this is that the weeks are correctly aligned.
 
 \hypertarget{conclusions-1}{%
 \section{Conclusions}\label{conclusions-1}}
@@ -583,30 +638,42 @@ transaction data.'' (2017).
 
 \begin{Schunk}
 \begin{Soutput}
-#> Warning: Removed 31 row(s) containing missing values (geom_path).
+#> Warning in as_grob.default(plot): Cannot convert object of class
+#> spec_tbl_dftbl_dftbldata.frame into a grob.
 \end{Soutput}
-
-\includegraphics[width=1\linewidth]{overview_files/figure-latex/unnamed-chunk-5-1} \end{Schunk}
+\begin{Soutput}
+#> [[1]]
+#> null[GRID.null.5920]
+\end{Soutput}
+\end{Schunk}
 
 \hypertarget{casualties-dsa}{%
 \paragraph{Casualties, DSA}\label{casualties-dsa}}
 
 \begin{Schunk}
 \begin{Soutput}
-#> Warning: Removed 40 row(s) containing missing values (geom_path).
+#> Warning in as_grob.default(plot): Cannot convert object of class
+#> spec_tbl_dftbl_dftbldata.frame into a grob.
 \end{Soutput}
-
-\includegraphics[width=1\linewidth]{overview_files/figure-latex/unnamed-chunk-6-1} \end{Schunk}
+\begin{Soutput}
+#> [[1]]
+#> null[GRID.null.5922]
+\end{Soutput}
+\end{Schunk}
 
 \hypertarget{casualties-stl}{%
 \paragraph{Casualties, STL}\label{casualties-stl}}
 
 \begin{Schunk}
 \begin{Soutput}
-#> Warning: Removed 35 row(s) containing missing values (geom_path).
+#> Warning in as_grob.default(plot): Cannot convert object of class
+#> spec_tbl_dftbl_dftbldata.frame into a grob.
 \end{Soutput}
-
-\includegraphics[width=1\linewidth]{overview_files/figure-latex/unnamed-chunk-7-1} \end{Schunk}
+\begin{Soutput}
+#> [[1]]
+#> null[GRID.null.5924]
+\end{Soutput}
+\end{Schunk}
 
 \hypertarget{oos-forecast-plots}{%
 \subsubsection{OOS Forecast plots}\label{oos-forecast-plots}}

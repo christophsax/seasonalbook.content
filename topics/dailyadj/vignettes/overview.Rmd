@@ -403,9 +403,77 @@ Transaction series have an end of months effect (Timmermans 18), but we don't fi
 
 ## Weekly seasonality
 
-One solution would be to disaggregate, perform daily seasonal adjustment and aggregate again. Could provide an example.
+One solution would be to disaggregate, perform daily seasonal adjustment and aggregate again. Here is an example:
 
-Compare to weekly methods?
+
+```{r ts_frequency_week, include = FALSE, cache = TRUE}
+
+
+# Temporary: tsbox should be able to do `ts_frequency(x, "week")
+# https://github.com/christophsax/tsbox/issues/183
+
+first_of_week <- function(time) {
+  by = "7 days"
+  first_day <- time[data.table::wday(time) == 1][1]
+  first_day_minus_1 <- seq(first_day, length.out = 2, by = paste0("-", by))[2]
+  first_days <-  seq(first_day_minus_1, time[length(time)], by = by)
+  all_days <- seq(first_day_minus_1, time[length(time)], by = "day")
+  time_first <- data.table::data.table(time = first_days, first = first_days)[data.table::data.table(time = all_days), on = "time", roll = TRUE]
+  z <- data.table:::merge.data.table(data.table::data.table(time = time), time_first, by = "time", all.x = TRUE)$first
+  stopifnot(length(z) == length(time))
+  z
+}
+
+ts_frequency_week <- function(x, fun = function(e) mean(e, na.rm = TRUE)) {
+  library(dplyr)
+  x <- ts_default(ts_tbl(x))
+  x %>%
+    group_by(time = first_of_week(time)) %>%
+    summarize(value = fun(value), .groups = "drop")
+}
+
+```
+
+
+
+```{r weekly, cache = TRUE}
+# weekly example series
+casualties_weekly <- ts_span(ts_frequency_week(casualties, sum), 2005)
+
+
+ts_plot(casualties_weekly)
+
+library(tempdisagg)
+# 1. disaggregate to daily
+
+# fast means faster than the other methods, but week to day is still slow.
+m_daily <- td(casualties_weekly ~ 1, to = "day", method = "fast")
+casualties_daily <- predict(m_daily)
+
+# series are roughly the same
+ts_frequency_week(casualties_daily, sum) %ts-% casualties_weekly
+
+
+# 2. Seasonally adjust artificial daily data
+casualties_daily_sa <- seas_daily(casualties_daily)
+
+
+# 3. Aggregate back to weekly
+
+casualties_weekly_sa <-
+  casualties_daily_sa %>%
+  ts_pick("adj") %>%
+  select(-id) %>%
+  ts_frequency_week(sum)
+
+
+ts_plot(casualties_weekly, casualties_weekly_sa)
+
+
+```
+
+The main advantage of this is that the weeks are correctly aligned.
+
 
 
 # Conclusions
