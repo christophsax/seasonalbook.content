@@ -12,27 +12,38 @@ dta <- read_csv(here::here("data/seco.csv")) %>%
   select(id, time, value)
 
 
-wwa <-
+sbb_nettotonnenkm <-
   dta %>%
-  ts_pick("SECO-WWA unadjusted") %>%
+  ts_pick("sbb_nettotonnenkm") %>%
   select(-id) %>%
-  ts_regular()  # NAs for missing dates
+  ts_regular()
 
 
-# fill in two NAs
+wwa_ntkm <-
+  dta %>%
+  ts_pick("wwa_ntkm") %>%
+  select(-id) %>%
+  ts_regular()
+
+
+
+# fill in NAs
 ts_na_interpolation <- ts_(function(x, ...) imputeTS::na_interpolation(x, ...))
-wwa_interpol <- wwa %>%
+wwa_ntkm_interpol <- wwa_ntkm %>%
   ts_na_interpolation()
+wwa_ntkm$value[is.na(wwa_ntkm$value)] <- wwa_ntkm_interpol$value[is.na(wwa_ntkm$value)]
 
-wwa$value[is.na(wwa$value)] <- wwa_interpol$value[is.na(wwa$value)]
 
 
-library(tempdisagg)
-# 1. disaggregate to daily
+# filter(wwa_ntkm, is.na(value))
 
-# fast means faster than the other methods, but week to day is still slow.
-m_daily <- td(wwa ~ 1, to = "day", method = "fast")
-wwa_daily <- predict(m_daily)
+
+# library(tempdisagg)
+# # 1. disaggregate to daily
+
+# # fast means faster than the other methods, but week to day is still slow.
+# m_daily <- td(sbb ~ 1, to = "day", method = "fast")
+# sbb_nettotonnenkm <- predict(m_daily)
 
 
 
@@ -61,26 +72,43 @@ ts_frequency_week <- function(x, fun = function(e) mean(e, na.rm = TRUE)) {
 }
 
 # series are the same (week starts one day off)
-ts_frequency_week(ts_lag(wwa_daily, -1), sum) %>%
+sbb_nettotonnenkm_nsa <-
+  ts_frequency_week(ts_lag(sbb_nettotonnenkm, -1), sum) %>%
   mutate(time = tsbox:::time_shift(time, "1 day"))
 
 
 # 2. Seasonally adjust artificial daily data
-wwa_daily_sa <- seas_daily(wwa_daily, span_month = 20, span_trend = 0.4)
+sbb_nettotonnenkm_sa_raw <- seas_daily(sbb_nettotonnenkm)
 
-plot_components(wwa_daily_sa)
+plot_components(sbb_nettotonnenkm_sa_raw)
 
 # 3. Aggregate back to weekly
-wwa_sa <-
-  wwa_daily_sa %>%
+sbb_nettotonnenkm_sa <-
+  sbb_nettotonnenkm_sa_raw %>%
   ts_pick("adj") %>%
   select(-id) %>%
-  ts_lag(-1) %>%
-  ts_frequency_week(sum) %>%
-  mutate(time = tsbox:::time_shift(time, "1 day"))
+  # ts_pcy() %>%
+  # ts_na_omit() %>%
+  # ts_lag(-1) %>%
+  ts_frequency_week(sum)
 
-ts_plot(wwa, wwa_sa)
+ts_plot(sbb_nettotonnenkm_nsa, sbb_nettotonnenkm_sa)
 
+
+
+ts_plot(wwa_ntkm)
+
+ts_plot(sbb_nettotonnenkm_sa)
+
+ts_plot(sbb_nettotonnenkm_nsa)
+
+
+ts_scale(ts_c(
+ts_frequency(wwa_ntkm, "year"),
+ts_frequency(sbb_nettotonnenkm_nsa, "year"),
+ts_frequency(sbb_nettotonnenkm_sa, "year")
+)) %>%
+ts_plot()
 
 
 
