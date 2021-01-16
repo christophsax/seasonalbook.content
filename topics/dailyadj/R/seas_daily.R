@@ -27,15 +27,13 @@ NULL
 
 #' @export
 seas_daily <- function(x,
-  h = 35,
-  holiday_df = NULL,
-  span_scale = scale_factor(x),
-  span_trend = 0.25,
-  span_week = 0.3,
-  span_month = 0.7,
-  span_within_year =  0.02
-  ) {
-
+                       h = 35,
+                       holiday_df = NULL,
+                       span_scale = scale_factor(x),
+                       span_trend = 0.25,
+                       span_week = 0.3,
+                       span_month = 0.7,
+                       span_within_year = 0.02) {
   if (is.null(holiday_df)) {
     holiday_df <- bind_rows(
       mutate(holidays(), holiday = paste(holiday, "-1"), time = time - 1),
@@ -43,10 +41,10 @@ seas_daily <- function(x,
     )
   }
 
-  span_trend = span_trend / span_scale
-  span_week = span_trend / span_scale
-  span_month = span_month / span_scale
-  span_within_year = span_within_year / span_scale
+  span_trend <- span_trend / span_scale
+  span_week <- span_trend / span_scale
+  span_month <- span_month / span_scale
+  span_within_year <- span_within_year / span_scale
 
   # span_within_year should not be scaled, it is independent of series length
 
@@ -58,10 +56,10 @@ seas_daily <- function(x,
     add_days(n = h) %>%
     rename(orig = value) %>%
     mutate(
-    wday = data.table::wday(time),
-    mday = data.table::mday(time),
-    yday = yday_leap(time),
-    year = data.table::year(time)
+      wday = data.table::wday(time),
+      mday = data.table::mday(time),
+      yday = yday_leap(time),
+      year = data.table::year(time)
     ) %>%
     group_by(year) %>%
     mutate(yday = seq_along(yday)) %>%
@@ -99,10 +97,10 @@ seas_daily <- function(x,
     group_by(mday) %>%
     # removing intra-month effect
     mutate(seas_m = smooth_and_forecast2(irreg, span = span_month)) %>%
-    ungroup()  %>%
+    ungroup() %>%
     mutate(irreg = irreg - seas_m)
 
-x_trend_week_month_year <-
+  x_trend_week_month_year <-
     x_trend_week_month %>%
     group_by(yday) %>%
     mutate(seas_y = mean(irreg, na.rm = TRUE)) %>%
@@ -115,23 +113,23 @@ x_trend_week_month_year <-
     # re-add trend
     mutate(adj = irreg + trend)
 
-z_wide <- x_trend_week_month_year %>%
-  # mutate(seas_x = 0) %>%
-  select(-wday,-mday,-yday,-year) %>%
-  select(time,orig,adj,everything()) %>%
-  mutate(seas = seas_w + seas_m + seas_y + seas_x) %>%
-  # tail()
-  # select(-seas_w,-seas_m,-seas_y) %>%
-  mutate(irreg_fct = irreg_forecast(irreg)) %>%
-  mutate(irreg = if_else(is.na(irreg),irreg_fct,irreg)) %>%
-  select(-irreg_fct) %>%
-  mutate(fct = trend + irreg + seas) %>%
-  select(-irreg) %>%
-  select(time,!! .exp_cols_comp)
+  z_wide <- x_trend_week_month_year %>%
+    # mutate(seas_x = 0) %>%
+    select(-wday, -mday, -yday, -year) %>%
+    select(time, orig, adj, everything()) %>%
+    mutate(seas = seas_w + seas_m + seas_y + seas_x) %>%
+    # tail()
+    # select(-seas_w,-seas_m,-seas_y) %>%
+    mutate(irreg_fct = irreg_forecast(irreg)) %>%
+    mutate(irreg = if_else(is.na(irreg), irreg_fct, irreg)) %>%
+    select(-irreg_fct) %>%
+    mutate(fct = trend + irreg + seas) %>%
+    select(-irreg) %>%
+    select(time, !!.exp_cols_comp)
 
-z <- ts_long(z_wide)
+  z <- ts_long(z_wide)
 
-validate_seas_output(z)
+  validate_seas_output(z)
 }
 
 
@@ -144,7 +142,9 @@ seas_daily_iteration <- function(x, h = 35) {
 }
 
 add_days <- function(x, n = 10) {
-  if (n == 0) return(x)
+  if (n == 0) {
+    return(x)
+  }
   last_day <- utils::tail(x$time, 1)
   future_days <- seq(last_day, length.out = ceiling(n * 1.5), by = "day")[-1]
   stopifnot(length(future_days) >= n)
@@ -152,24 +152,24 @@ add_days <- function(x, n = 10) {
 }
 
 irreg_forecast <- function(x) {
-  x_hist <- zoo::na.trim(x,sides = "right")
+  x_hist <- zoo::na.trim(x, sides = "right")
   x[is.na(x)] <- mean(tail(x_hist, 30))
   x
 }
 
 # y <- c(mdeaths,NA,NA)
-smooth_and_forecast2 <- function(y,span = 0.5) {
-# use mean for short series
+smooth_and_forecast2 <- function(y, span = 0.5) {
+  # use mean for short series
   if ((length(y)) < 10) {
-  ans <- y
-  ans[] <- mean(y,na.rm = TRUE)
-  return(ans)
+    ans <- y
+    ans[] <- mean(y, na.rm = TRUE)
+    return(ans)
   }
-  y_hist <- zoo::na.trim(y,sides = "right")
+  y_hist <- zoo::na.trim(y, sides = "right")
 
-  h <- length(y) - length(y_hist )
+  h <- length(y) - length(y_hist)
   if (h > 0) {
-    y_fct <- c(y_hist,forecast(ets(y_hist),h = h)$mean)
+    y_fct <- c(y_hist, forecast(ets(y_hist), h = h)$mean)
   } else {
     y_fct <- y_hist
   }
@@ -177,31 +177,35 @@ smooth_and_forecast2 <- function(y,span = 0.5) {
   x <- seq_along(y_fct)
 
   x_hist <- seq_along(y_hist)
-  m <- loess(y_fct ~ x,surface = "direct",span = span)
-  y_smooth <- predict(m,newdata = x)
-  if (h == 0) return(y_smooth)
+  m <- loess(y_fct ~ x, surface = "direct", span = span)
+  y_smooth <- predict(m, newdata = x)
+  if (h == 0) {
+    return(y_smooth)
+  }
   y_smooth
 }
 
 # y <- c(mdeaths, NA, NA)
 # plot(y); lines(smooth_and_forecast(y, span = 0.5))
 smooth_and_forecast <- function(y, ...) {
-    # use mean for short series
-    if ((length(y)) < 10) {
-        ans <- y
-        ans[] <- mean(y, na.rm = TRUE)
-        return(ans)
-    }
-    y_hist <- zoo::na.trim(y, sides = "right")
-    h <- length(y) - length(y_hist )
-    # message(h)
-    x <- seq_along(y)
-    x_hist <- seq_along(y_hist)
-    m <- loess(y_hist ~ x_hist, surface = "direct", ...)
-    y_smooth <- predict(m, newdata = x_hist)
-    if (h == 0) return(y_smooth)
-    y_fct <- forecast(ets(y_smooth), h = h)$mean
-    c(y_smooth, as.numeric(y_fct))
+  # use mean for short series
+  if ((length(y)) < 10) {
+    ans <- y
+    ans[] <- mean(y, na.rm = TRUE)
+    return(ans)
+  }
+  y_hist <- zoo::na.trim(y, sides = "right")
+  h <- length(y) - length(y_hist)
+  # message(h)
+  x <- seq_along(y)
+  x_hist <- seq_along(y_hist)
+  m <- loess(y_hist ~ x_hist, surface = "direct", ...)
+  y_smooth <- predict(m, newdata = x_hist)
+  if (h == 0) {
+    return(y_smooth)
+  }
+  y_fct <- forecast(ets(y_smooth), h = h)$mean
+  c(y_smooth, as.numeric(y_fct))
 }
 
 # scale_factor(casualties)
@@ -211,29 +215,6 @@ scale_factor <- function(x) {
   no_of_years <- lubridate::year(tss$end) - lubridate::year(tss$start)
   no_of_years / 10
 }
-
-# add_weekdays <- function(x, n = 10) {
-#     if (n == 0) return(x)
-#     last_day <- utils::tail(x$time, 1)
-#     future_days <- seq(last_day, length.out = ceiling(n * 1.5), by = "day")[-1]
-#     future_weekdays <- future_days[data.table::wday(future_days) %in% 2:6]  # only monday to friday
-#     # FIXME use SIC calendar
-#     stopifnot(length(future_weekdays) >= n)
-#     bind_rows(arrange(x, time), tibble(time = future_weekdays[1:n], value = NA_real_))
-# }
-
-# add_months_qrts <- function(x, n = 10) {
-#     ts_bind(x, rep(NA_real_, n))
-# }
-
-# return 28 at feb 29
-# mday_leap(x)
-# mday_leap <- function(x) {
-#   # is_feb29 <- (data.table::month(x) == 2) & (data.table::mday(x) == 29)
-#   z <- data.table::mday(x)
-#   # z[is_feb29] <- 28
-#   z
-# }
 
 # return 28 at feb 29
 # yday_leap(x)
@@ -280,14 +261,14 @@ seas_x <- function(x, df) {
     left_join(xreg, by = "time")
 
   # estimate a few times and only keep significant vars
-  m_ols <- lm(value ~ ., data = dta_m[,-1])
-  m_ols <- lm(value ~ ., data = select(dta_m[,-1], !!significant_vars(m_ols)$term, value))
-  m_ols <- lm(value ~ ., data = select(dta_m[,-1], !!significant_vars(m_ols)$term, value), na.action = na.exclude)
+  m_ols <- lm(value ~ ., data = dta_m[, -1])
+  m_ols <- lm(value ~ ., data = select(dta_m[, -1], !!significant_vars(m_ols)$term, value))
+  m_ols <- lm(value ~ ., data = select(dta_m[, -1], !!significant_vars(m_ols)$term, value), na.action = na.exclude)
 
   # prediction, based on final model
   dta_m %>%
     select(time) %>%
-    mutate(seas_x = unname(predict(m_ols, newdata = dta_m[,-1])) - coef(m_ols)['(Intercept)'])
+    mutate(seas_x = unname(predict(m_ols, newdata = dta_m[, -1])) - coef(m_ols)["(Intercept)"])
 }
 
 genhol_daily <- function(x) {
@@ -302,19 +283,19 @@ genhol_daily <- function(x) {
 
 significant_vars <- function(x) {
   broom::tidy(x) %>%
-  filter(p.value < 0.05) %>%
-  select(term, estimate) %>%
-  mutate(term = gsub("TRUE", "", term)) %>%
-  filter(term != "(Intercept)") %>%
-  mutate(term = gsub("\\`", "", term))
+    filter(p.value < 0.05) %>%
+    select(term, estimate) %>%
+    mutate(term = gsub("TRUE", "", term)) %>%
+    filter(term != "(Intercept)") %>%
+    mutate(term = gsub("\\`", "", term))
 }
 
 holidays <- function(country = "CH") {
   as_tibble(prophet::generated_holidays) %>%
-  filter(country == !! country) %>%
-  mutate(time = as.Date(as.character(ds)), .keep = "unused") %>%
-  mutate(holiday = as.character(holiday)) %>%
-  select(-year, -country)
+    filter(country == !!country) %>%
+    mutate(time = as.Date(as.character(ds)), .keep = "unused") %>%
+    mutate(holiday = as.character(holiday)) %>%
+    select(-year, -country)
 }
 
 
@@ -322,62 +303,61 @@ holidays <- function(country = "CH") {
 
 plot_pattern_trend <- function(z) {
   ts_pick(z, "trend") %>%
-  ggplot(aes(x = time, y = value, color)) +
-  geom_line() +
-  theme_cowplot()
+    ggplot(aes(x = time, y = value, color)) +
+    geom_line() +
+    theme_cowplot()
 }
 
 plot_pattern_w <- function(z) {
   ts_pick(z, "seas_w") %>%
-  add_effects() %>%
-  group_by(year = as.factor(year), wday) %>%
-  summarize(value = mean(value)) %>%
-  ungroup() %>%
-  ggplot(aes(x = wday, y = value, color = year)) +
-  geom_line() +
-  theme_cowplot()
+    add_effects() %>%
+    group_by(year = as.factor(year), wday) %>%
+    summarize(value = mean(value)) %>%
+    ungroup() %>%
+    ggplot(aes(x = wday, y = value, color = year)) +
+    geom_line() +
+    theme_cowplot()
 }
 
 plot_pattern_m <- function(z) {
   ts_pick(z, "seas_m") %>%
-  add_effects() %>%
-  group_by(year = as.factor(year), mday) %>%
-  summarize(value = mean(value)) %>%
-  ungroup() %>%
-  ggplot(aes(x = mday, y = value, color = year)) +
-  geom_line() +
-  theme_cowplot()
+    add_effects() %>%
+    group_by(year = as.factor(year), mday) %>%
+    summarize(value = mean(value)) %>%
+    ungroup() %>%
+    ggplot(aes(x = mday, y = value, color = year)) +
+    geom_line() +
+    theme_cowplot()
 }
 
 plot_pattern_y <- function(z) {
   ts_pick(z, "seas_y") %>%
-  add_effects() %>%
-  group_by(year = as.factor(year), yday) %>%
-  summarize(value = mean(value)) %>%
-  ungroup() %>%
-  ggplot(aes(x = yday, y = value, color = year)) +
-  geom_line() +
-  theme_cowplot()
+    add_effects() %>%
+    group_by(year = as.factor(year), yday) %>%
+    summarize(value = mean(value)) %>%
+    ungroup() %>%
+    ggplot(aes(x = yday, y = value, color = year)) +
+    geom_line() +
+    theme_cowplot()
 }
 
 plot_pattern_x <- function(z) {
   ts_pick(z, "seas_x") %>%
-  ggplot(aes(x = time, y = value, color)) +
-  geom_line() +
-  theme_cowplot()
+    ggplot(aes(x = time, y = value, color)) +
+    geom_line() +
+    theme_cowplot()
 }
 
 plot_pattern_i <- function(z) {
   ts_wide(z) %>%
-  transmute(time, value = orig - trend - seas) %>%
-  ggplot(aes(x = time, y = value, color)) +
-  geom_line() +
-  theme_cowplot()
+    transmute(time, value = orig - trend - seas) %>%
+    ggplot(aes(x = time, y = value, color)) +
+    geom_line() +
+    theme_cowplot()
 }
 
 #' @export
 seas_components <- function(z) {
-
   if ("series" %in% colnames(z)) {
     # still dont know how to use title in plot_grid...
     title <- unique(z$series)
@@ -392,7 +372,7 @@ seas_components <- function(z) {
     plot_pattern_w(z),
     plot_pattern_x(z),
     plot_pattern_i(z),
-    labels = c('T', 'Y', 'M', 'W', "H", "I"),
+    labels = c("T", "Y", "M", "W", "H", "I"),
     ncol = 2
   )
 }
@@ -424,8 +404,7 @@ seas_dygraph <- function(z, main = deparse(substitute(z))) {
 #' oos_evals(transact, seas_daily)
 #' @export
 oos_evals <- function(x, seas_fun, ...) {
-
-  by = "-1 month"
+  by <- "-1 month"
   # noramlize
   x <- ts_tbl(ts_default(x))
 
@@ -438,11 +417,10 @@ oos_evals <- function(x, seas_fun, ...) {
 
   bind_rows(z, .id = "period") %>%
     ts_regular()
-
 }
 
 #' @export
-summary_oos_evals <- function(x){
+summary_oos_evals <- function(x) {
   # also allow period to be of class Date
   if (inherits(x$period, "Date")) x$period <- as.character(x$period)
 
@@ -464,14 +442,13 @@ summary_oos_evals <- function(x){
     z,
     add_column(summarize_at(z, vars(-period), mean), period = "Mean", .before = 1)
   )
-
 }
 
 #' @export
 plot_oos_evals <- function(x) {
   ggplot(x, aes(x = time, y = value)) +
-  geom_line(aes(color = id)) +
-  facet_wrap(vars(period), scales = "free_x")
+    geom_line(aes(color = id)) +
+    facet_wrap(vars(period), scales = "free_x")
 }
 
 #' Evalutate OOS forecast error
@@ -485,8 +462,7 @@ plot_oos_evals <- function(x) {
 #' oos_eval(transact, seas_daily)
 #' @export
 oos_eval <- function(x, seas_fun, ...) {
-
-  end_short = tsbox:::time_shift(tsbox:::time_shift(ts_summary(x)$end, "1 day"), "-1 month") - 1
+  end_short <- tsbox:::time_shift(tsbox:::time_shift(ts_summary(x)$end, "1 day"), "-1 month") - 1
 
   x_short <- ts_span(x, end = end_short)
 
@@ -500,10 +476,9 @@ oos_eval <- function(x, seas_fun, ...) {
     ts_long() %>%
     ts_span(tsbox:::time_shift(end_short, "1 day")) %>%
     ts_span(end = ts_summary(x)$end)
-
 }
 
-summary_oos_eval <- function(x){
+summary_oos_eval <- function(x) {
   x %>%
     ts_wide() %>%
     mutate(diff = abs(fct - x)) %>%
