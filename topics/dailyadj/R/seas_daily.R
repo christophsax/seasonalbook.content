@@ -25,7 +25,25 @@ NULL
 
 # main function ----------------------------------------------------------------
 
+#' Seasonal adjustment, using LOESS
+#'
+#' A simple daily seasonal adjustment procedure, using LOESS. It is optimized
+#' for Speed *and* accuracy, and should work for a wast range of daily series.
+#'
+#' Currently defaults to CH holidays, but these should be usable in other places
+#' as well. Maybe optimized in the future.
+#'
+#' @param x ts-boxable time series, an object of class ts, xts, zoo, data.frame, data.table, tbl, tbl_ts, tbl_time, tis, irts or timeSeries.
+#' @param h forecast horizon.
+#'
+#' @author Christoph Sax
+#'
 #' @export
+#' @examples
+#'
+#' x <- transact
+#' seas_daily(x)
+#'
 seas_daily <- function(x,
                        h = 35,
                        holiday_df = NULL,
