@@ -41,12 +41,14 @@ seas_daily <- function(x,
     )
   }
 
+
+
+  x <- tsbox::ts_default(x)
+
   span_trend <- span_trend / span_scale
   span_week <- span_trend / span_scale
   span_month <- span_month / span_scale
   span_within_year <- span_within_year / span_scale
-
-  # span_within_year should not be scaled, it is independent of series length
 
   validate_seas_input(x)
   stopifnot(nrow(filter(x, is.na(value))) == 0)
@@ -250,9 +252,10 @@ yday_leap <- function(x) {
 seas_x <- function(x, df) {
   xreg <-
     df %>%
-    group_by(holiday) %>%
-    summarize(genhol_daily(time)) %>%
-    ungroup() %>%
+    nest(data = c(time)) %>%
+    mutate(ans = map(data, function(e) genhol_daily(e$time))) %>%
+    select(-data) %>%
+    unnest(ans) %>%
     ts_wide()
 
   dta_m <-
