@@ -51,15 +51,17 @@ seas_daily <- function(x,
                        span_trend = 0.25,
                        span_week = 0.3,
                        span_month = 0.7,
-                       span_within_year = 0.02) {
+                       span_within_year = 0.02,
+                       transform = c("none", "log")
+                       ) {
+
   if (is.null(holiday_df)) {
     holiday_df <- bind_rows(
       mutate(holidays(), holiday = paste(holiday, "-1"), time = time - 1),
       holidays()
     )
   }
-
-
+  transform <- match.arg(transform, c("none", "log"))
 
   x <- tsbox::ts_default(x)
 
@@ -70,6 +72,10 @@ seas_daily <- function(x,
 
   validate_seas_input(x)
   stopifnot(nrow(filter(x, is.na(value))) == 0)
+
+  if (transform == "log") {
+    x$value <- log(x$value)
+  }
 
   x_effects <-
     x %>%
@@ -148,6 +154,10 @@ seas_daily <- function(x,
     select(time, !!.exp_cols_comp)
 
   z <- ts_long(z_wide)
+
+  if (transform == "log") {
+    z$value <- exp(z$value)
+  }
 
   validate_seas_output(z)
 }

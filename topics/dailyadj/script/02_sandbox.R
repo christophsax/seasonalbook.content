@@ -47,9 +47,48 @@ summary_oos_evals(filter(oos_prophet, series == "casualties"))
 summary_oos_evals(filter(oos_daily, series == "casualties"))
 
 # - look at components
-plot_components(filter(ans_dsa, series == "casualties"))
-plot_components(filter(ans_daily, series == "casualties"))
-plot_components(filter(ans_prophet, series == "casualties"))
+seas_components(filter(ans_dsa, series == "casualties"))
+seas_components(filter(ans_daily, series == "casualties"))
+seas_components(filter(ans_prophet, series == "casualties"))
+
+
+# Additive vs Multiplicate -----------------------------------------------------
+
+ans0 <- seas_daily(casualties)
+seas_components(ans0)
+
+ans <- seas_daily(
+  casualties,
+  transform = "log"
+)
+seas_components(ans)
+
+oos0 <- oos_evals(casualties, seas_daily)
+summary_oos_evals(oos0)
+plot_oos_evals(oos0)
+
+oos <- oos_evals(casualties, seas_daily, transform = "log")
+summary_oos_evals(oos)
+plot_oos_evals(oos)
+
+
+
+ans0 <- seas_daily(transact_retail)
+seas_components(ans0)
+
+ans <- seas_daily(transact_retail, transform = "log")
+seas_components(ans)
+
+oos0 <- oos_evals(transact_retail, seas_daily)
+summary_oos_evals(oos0)
+plot_oos_evals(oos0)
+
+oos <- oos_evals(transact_retail, seas_daily, transform = "log")
+summary_oos_evals(oos)
+plot_oos_evals(oos)
+
+
+
 
 
 
@@ -62,7 +101,7 @@ ans <- seas_daily(
   span_month = 2,
   span_within_year =  0.008
 )
-plot_components(ans)
+seas_components(ans)
 
 oos <- oos_evals(casualties, seas_daily,
   span_trend = 0.4,
@@ -92,8 +131,8 @@ ans_short <- seas_daily(
   span_month = 2,
   span_within_year =  0.008
 )
-plot_components(ans_short)
-plot_components(ans)
+seas_components(ans_short)
+seas_components(ans)
 
 
 # How do the tweaked parameters work for other series --------------------------
