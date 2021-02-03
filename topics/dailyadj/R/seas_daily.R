@@ -52,7 +52,8 @@ seas_daily <- function(x,
                        span_week = 0.3,
                        span_month = 0.7,
                        span_within_year = 0.02,
-                       transform = c("none", "log")
+                       transform = c("none", "log"),
+                       force_positive = FALSE
                        ) {
 
   if (is.null(holiday_df)) {
@@ -74,6 +75,9 @@ seas_daily <- function(x,
   stopifnot(nrow(filter(x, is.na(value))) == 0)
 
   if (transform == "log") {
+    if (any(x$value < 0)) {
+      stop('series contains negative values, use `transform = "none"`')
+    }
     x$value <- log(x$value)
   }
 
@@ -157,7 +161,19 @@ seas_daily <- function(x,
 
   if (transform == "log") {
     z$value <- exp(z$value)
+  } else {
+    # for transform = "none", set to 0
+    if (force_positive) {
+      z <- z %>%
+        mutate(value = if_else(
+          id %in% c("fct", "adj"),
+          pmax(value, 0),
+          value)
+        )
+    }
   }
+
+
 
   validate_seas_output(z)
 }
