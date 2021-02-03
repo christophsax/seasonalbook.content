@@ -66,6 +66,10 @@ seas_daily <- function(x,
 
   x <- tsbox::ts_default(x)
 
+  # treat short series differently
+  tss <- ts_summary(x)
+  if (as.integer(tss$end - tss$start) < 1000) return(seas_short(x))
+
   span_trend <- span_trend / span_scale
   span_week <- span_trend / span_scale
   span_month <- span_month / span_scale
@@ -744,3 +748,25 @@ holidays <- function(country = "CH") {
   #   select(-year, -country)
 }
 
+# seas_short -------------------------------------------------------------------
+
+# treat short series differently (currenty, no treatment at all)
+seas_short <- function(x) {
+  z <- x %>%
+    mutate(
+      trend = 0,
+      seas = 0,
+      fct = NA,
+      orig = value,
+      adj = value,
+      seas = 0,
+      seas_w = 0,
+      seas_m = 0,
+      seas_y = 0,
+      seas_x = 0
+    ) %>%
+    select(-value) %>%
+    ts_long()
+
+  validate_seas_output(z)
+}
