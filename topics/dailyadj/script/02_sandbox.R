@@ -89,8 +89,12 @@ plot_oos_evals(oos)
 
 
 
+# Kurze Reihen -----------------------------------------------------------------
 
+x <- casualties %>%
+  ts_span(end = "2005-09-01")
 
+m <- seas_daily(x)
 
 # Tweak Parameters: Casualties ------------------------------------------------
 
