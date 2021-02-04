@@ -71,7 +71,7 @@ seas_daily <- function(x,
   if (as.integer(tss$end - tss$start) < 1000) return(seas_short(x))
 
   span_trend <- span_trend / span_scale
-  span_week <- span_trend / span_scale
+  span_week <- span_week / span_scale
   span_month <- span_month / span_scale
   span_within_year <- span_within_year / span_scale
 
@@ -99,12 +99,23 @@ seas_daily <- function(x,
     mutate(yday = seq_along(yday)) %>%
     ungroup()
 
+  if (is.na(span_trend)) {
+    span_trend <- optimal_span(x$value, "span_trend", span_scale = span_scale)
+  }
+
   x_trend <-
     x_effects %>%
     left_join(x, by = "time") %>%
     # removing trend  0.15
-    mutate(trend = smooth_and_forecast(value, span = span_trend)) %>%
+    mutate(trend = smooth_and_forecast2(value, span = span_trend)) %>%
     mutate(irreg = orig - trend)
+
+  if (is.na(span_week)) {
+    # pick a particular day
+    # (better would be to do this for every day, and average, but this takes more time)
+    one_day <- filter(x_trend, wday == unique(wday)[1], !is.na(value))$value
+    span_week <- optimal_span(one_day, "span_week", span_scale = span_scale)
+  }
 
   x_trend_week <-
     x_trend %>%
@@ -125,6 +136,11 @@ seas_daily <- function(x,
     x_trend_week %>%
     left_join(seas_x, by = "time") %>%
     mutate(irreg = irreg - seas_x)
+
+  if (is.na(span_month)) {
+    one_day <- filter(x_trend, mday == unique(mday)[1], !is.na(value))$value
+    span_month <- optimal_span(one_day, "span_month", span_scale = span_scale)
+  }
 
   x_trend_week_month <-
     x_trend_week_x %>%
@@ -235,28 +251,28 @@ smooth_and_forecast2 <- function(y, span = 0.5) {
   y_smooth
 }
 
-# y <- c(mdeaths, NA, NA)
-# plot(y); lines(smooth_and_forecast(y, span = 0.5))
-smooth_and_forecast <- function(y, ...) {
-  # use mean for short series
-  if ((length(y)) < 10) {
-    ans <- y
-    ans[] <- mean(y, na.rm = TRUE)
-    return(ans)
-  }
-  y_hist <- zoo::na.trim(y, sides = "right")
-  h <- length(y) - length(y_hist)
-  # message(h)
-  x <- seq_along(y)
-  x_hist <- seq_along(y_hist)
-  m <- loess(y_hist ~ x_hist, surface = "direct", ...)
-  y_smooth <- predict(m, newdata = x_hist)
-  if (h == 0) {
-    return(y_smooth)
-  }
-  y_fct <- forecast(ets(y_smooth), h = h)$mean
-  c(y_smooth, as.numeric(y_fct))
-}
+# # y <- c(mdeaths, NA, NA)
+# # plot(y); lines(smooth_and_forecast(y, span = 0.5))
+# smooth_and_forecast <- function(y, ...) {
+#   # use mean for short series
+#   if ((length(y)) < 10) {
+#     ans <- y
+#     ans[] <- mean(y, na.rm = TRUE)
+#     return(ans)
+#   }
+#   y_hist <- zoo::na.trim(y, sides = "right")
+#   h <- length(y) - length(y_hist)
+#   # message(h)
+#   x <- seq_along(y)
+#   x_hist <- seq_along(y_hist)
+#   m <- loess(y_hist ~ x_hist, surface = "direct", span = span)
+#   y_smooth <- predict(m, newdata = x_hist)
+#   if (h == 0) {
+#     return(y_smooth)
+#   }
+#   y_fct <- forecast(ets(y_smooth), h = h)$mean
+#   c(y_smooth, as.numeric(y_fct))
+# }
 
 # scale_factor(casualties)
 #' @export
@@ -770,3 +786,30 @@ seas_short <- function(x) {
 
   validate_seas_output(z)
 }
+
+
+# automatically find loess span ------------------------------------------------
+
+# Hurvich, C.M., Simonoff, J.S., and Tsai, C.L. (1998), Smoothing Parameter Selection in Nonparametric Regression Using an Improved Akaike Information Criterion. Journal of the Royal Statistical Society B. 60, 271–293.
+# https://doi.org/10.1111/1467-9868.00125
+aicc_loess <- function(fit) {
+  n <- fit$n
+  trace <- fit$trace.hat
+  sigma2 <- sum(resid(fit) ^ 2) / (n - 1)
+  return(log(sigma2) + 1 + (2 * (trace + 1)) / (n - trace - 2))
+}
+
+# x <- transact$value
+optimal_span <- function(x, name = NULL, span_scale = 1) {
+  span = c(0.02, 0.95)
+  stopifnot(inherits(x, "numeric"))
+  idx <- seq_along(x)
+  m <- loess(x ~ idx, surface = "direct", span = 0.2)
+  f <- function(span) aicc_loess(update(m, span = span))
+  span_opt <- optimize(f, interval = c(0.02, 0.95))$minimum
+  if (!is.null(name)) {
+    message("using: ", name, " = ", round(span_opt * span_scale, 3))
+  }
+  span_opt
+}
+

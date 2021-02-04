@@ -89,6 +89,57 @@ plot_oos_evals(oos)
 
 
 
+# Auto-Span --------------------------------------------------------------------
+
+# 1. For any series (vector?), determine the optimal smoothing factor.
+# Optionally return a useuful message.
+#
+# Using:
+# Smoothing Parameter Selection in Nonparametric Regression Using an Improved Akaike Information Criterion
+# 2. Use optimal_span to determine the optimal span for each available span
+
+
+ans0 <- seas_daily(transact)
+
+ans1 <- seas_daily(
+  transact,
+  span_trend = NA,
+  span_week = NA,
+  span_month = NA
+)
+
+ans2 <- seas_daily(
+  transact,
+  span_week = NA,
+  span_month = NA
+)
+
+seas_components(ans0)
+seas_components(ans1)
+seas_components(ans2)
+
+
+
+oos0 <- oos_evals(transact, seas_daily)
+
+oos1 <- oos_evals(transact, seas_daily,
+  span_trend = NA,
+  span_week = NA,
+  span_month = NA
+)
+
+oos2 <- oos_evals(transact, seas_daily,
+  span_week = NA,
+  span_month = NA
+)
+
+summary_oos_evals(oos0)  # mean mpce: 0.111
+summary_oos_evals(oos1)  # mean mpce: 0.124
+summary_oos_evals(oos2)
+
+# => generall
+
+
 # Kurze Reihen -----------------------------------------------------------------
 
 x <- casualties %>%
