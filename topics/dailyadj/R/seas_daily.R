@@ -25,16 +25,43 @@ NULL
 
 # main function ----------------------------------------------------------------
 
-#' Seasonal adjustment, using LOESS
+#' Simple Seasonal Adjustment, using LOESS
 #'
 #' A simple daily seasonal adjustment procedure, using LOESS. It is optimized
-#' for Speed *and* accuracy, and should work for a wast range of daily series.
+#' for speed *and* accuracy, and should work for a wast range of daily series.
 #'
-#' Currently defaults to CH holidays, but these should be usable in other places
-#' as well. Maybe optimized in the future.
+#' The basic goes as follows:
+#'
+#' 1. Align all weekdays and draw a smoothed line through these
+#' data points. This is you initial estimation of a *weekday* effect, which will be
+#' substracted from a detrended series.
+#' 2. Following Olech (2018), holiday effects are estimated on the base of the trend and weekday adjusted series.
+#' 3. As in the first step, the days of the months are aligned, leading an estimation of the effect of each day in the month.
+#' 4. The days of the years are aligned, leading an estimation of the effect of each day in the year. Due to the low number of observations, this is done by simple averaging.
+#' 5. The effects within a year are smoothed, using LOESS.
+#' 6. If \eqn{Y = T + S_x + S_w + S_m + S_y + I}, the final seasonlly adjustment series is \eqn{Y^* = T + I}.
+#'
+#' Time variant, non-parametric esitimation of seasonal effects is a straigtforward and robust way for seasonal adjustment and forecasting.
+#' Fundamentally, the idea is the same as in the X-11 method, wich is used by X13, the seasonal adjustment method by the US Census bureau.
+#'
+#' STL (Cleveland et al, 1990) follows a similar idea but uses local regressions to estimate seasonal
+#' effects that may change over time. R base has a function `stl()` that performs
+#' this decompostion, but it requires the data to be equispaced. `seas_daily()`, on the other hand, can be applied to irregular data as well.
 #'
 #' @param x ts-boxable time series, an object of class ts, xts, zoo, data.frame, data.table, tbl, tbl_ts, tbl_time, tis, irts or timeSeries.
-#' @param h forecast horizon.
+#' @param h forecast horizon, how many days to forecast
+#' @param holiday_df a data frame with holiday dates. If set to `NULL`, it defaults to Swiss holidays.
+#' @param span_scale scaling all `span_` parameters. By default, parameters are scaled using `scale_factor(x)`, which scales series longer or shorter than 10 years.
+#' @param span_trend trend smoothing parameter. A higher value leads to a smoother trend.
+#' @param span_week week smoothing parameter. A higher value leads make the weekly seasonality less volatile.
+#' @param span_month month smoothing parameter. A higher value leads make the monthly seasonality less volatile.
+#' @param span_within_year within year smoothing parameter. A higher value leads make the within-year seasonality less volatile.
+#' @param transform should an additive or a multiplicative model be used.
+#' @param force_positive if `transform = "none"`, set all negative values to 0.
+#'
+#' @references
+#' Cleveland, R. B., Cleveland, W. S., McRae, J. E., & Terpenning, I. J. (1990). STL: A seasonal-trend decomposition procedure based on loess. Journal of Official Statistics, 6(1), 3–33.
+#' Ollech, Daniel, 2018. "Seasonal adjustment of daily time series," Discussion Papers 41/2018, Deutsche Bundesbank.
 #'
 #' @author Christoph Sax
 #'
@@ -515,6 +542,10 @@ plot_oos_evals <- function(x) {
 #' This should work with every `seas_` function in the package. Typically, the
 #' series is shortened by one month. The series is then forecasted and can be
 #' compared to the actual values.
+#'
+#' @param x
+#' @param seas_fun a function
+#' @param ... additional arguments, passed to `seas_fun`
 #'
 #' @examples
 #' oos_eval(casualities, seas_daily)
