@@ -20,30 +20,30 @@ seas_daily(
 \arguments{
 \item{x}{ts-boxable time series, an object of class ts, xts, zoo, data.frame, data.table, tbl, tbl_ts, tbl_time, tis, irts or timeSeries.}
 
-\item{h}{forecast horizon, how many days to forecast}
+\item{h}{integer. Forecast horizon, how many days to forecast}
 
 \item{holiday_df}{a data frame with holiday dates. If set to \code{NULL}, it defaults to Swiss holidays.}
 
-\item{span_scale}{scaling all \code{span_} parameters. By default, parameters are scaled using \code{scale_factor(x)}, which scales series longer or shorter than 10 years.}
+\item{span_scale}{scalar. scaling all \code{span_} parameters. By default, parameters are scaled using \code{scale_factor(x)}, which scales series longer or shorter than 10 years.}
 
-\item{span_trend}{trend smoothing parameter. A higher value leads to a smoother trend.}
+\item{span_trend}{scalar, or \code{"auto"}. Trend smoothing parameter: A higher value leads to a smoother trend.}
 
-\item{span_week}{week smoothing parameter. A higher value leads make the weekly seasonality less volatile.}
+\item{span_week}{scalar, or \code{"auto"}.  Week smoothing parameter: A higher value leads make the weekly seasonality less volatile.}
 
-\item{span_month}{month smoothing parameter. A higher value leads make the monthly seasonality less volatile.}
+\item{span_month}{scalar, or \code{"auto"}.  Month smoothing parameter: A higher value leads make the monthly seasonality less volatile.}
 
-\item{span_within_year}{within year smoothing parameter. A higher value leads make the within-year seasonality less volatile.}
+\item{span_within_year}{scalar, or \code{"auto"}.  Within-year smoothing parameter: A higher value leads make the within-year seasonality less volatile.}
 
-\item{transform}{should an additive or a multiplicative model be used.}
+\item{transform}{logical. Should an additive or a multiplicative model be used.}
 
-\item{force_positive}{if \code{transform = "none"}, set all negative values to 0.}
+\item{force_positive}{logical. If \code{transform = "none"}, set all negative values to 0.}
 }
 \description{
 A simple daily seasonal adjustment procedure, using LOESS. It is optimized
 for speed \emph{and} accuracy, and should work for a wast range of daily series.
 }
 \details{
-If \code{span_} parameters are set to \code{NA}, they will be automatically chosen by
+If \code{span_} parameters are set to \code{"auto"}, they will be automatically chosen by
 AICc minimization (Hurvich et al, 1998). However, our trials have shown that
 these values tend to be too small, leading to volatile seasonal factors.  The
 default values lead to more stable and robuts seasonal components, that

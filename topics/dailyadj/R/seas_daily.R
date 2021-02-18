@@ -30,7 +30,7 @@ NULL
 #' A simple daily seasonal adjustment procedure, using LOESS. It is optimized
 #' for speed *and* accuracy, and should work for a wast range of daily series.
 #'
-#' If `span_` parameters are set to `NA`, they will be automatically chosen by
+#' If `span_` parameters are set to `"auto"`, they will be automatically chosen by
 #' AICc minimization (Hurvich et al, 1998). However, our trials have shown that
 #' these values tend to be too small, leading to volatile seasonal factors.  The
 #' default values lead to more stable and robuts seasonal components, that
@@ -54,15 +54,15 @@ NULL
 #' this decompostion, but it requires the data to be equispaced. `seas_daily()`, on the other hand, can be applied to irregular data as well.
 #'
 #' @param x ts-boxable time series, an object of class ts, xts, zoo, data.frame, data.table, tbl, tbl_ts, tbl_time, tis, irts or timeSeries.
-#' @param h forecast horizon, how many days to forecast
+#' @param h integer. Forecast horizon, how many days to forecast
 #' @param holiday_df a data frame with holiday dates. If set to `NULL`, it defaults to Swiss holidays.
-#' @param span_scale scaling all `span_` parameters. By default, parameters are scaled using `scale_factor(x)`, which scales series longer or shorter than 10 years.
-#' @param span_trend trend smoothing parameter. A higher value leads to a smoother trend.
-#' @param span_week week smoothing parameter. A higher value leads make the weekly seasonality less volatile.
-#' @param span_month month smoothing parameter. A higher value leads make the monthly seasonality less volatile.
-#' @param span_within_year within year smoothing parameter. A higher value leads make the within-year seasonality less volatile.
-#' @param transform should an additive or a multiplicative model be used.
-#' @param force_positive if `transform = "none"`, set all negative values to 0.
+#' @param span_scale scalar. scaling all `span_` parameters. By default, parameters are scaled using `scale_factor(x)`, which scales series longer or shorter than 10 years.
+#' @param span_trend scalar, or `"auto"`. Trend smoothing parameter: A higher value leads to a smoother trend.
+#' @param span_week scalar, or `"auto"`.  Week smoothing parameter: A higher value leads make the weekly seasonality less volatile.
+#' @param span_month scalar, or `"auto"`.  Month smoothing parameter: A higher value leads make the monthly seasonality less volatile.
+#' @param span_within_year scalar, or `"auto"`.  Within-year smoothing parameter: A higher value leads make the within-year seasonality less volatile.
+#' @param transform logical. Should an additive or a multiplicative model be used.
+#' @param force_positive logical. If `transform = "none"`, set all negative values to 0.
 #'
 #' @references
 #' Cleveland, R. B., Cleveland, W. S., McRae, J. E., & Terpenning, I. J. (1990). STL: A seasonal-trend decomposition procedure based on loess. Journal of Official Statistics, 6(1), 3–33.
