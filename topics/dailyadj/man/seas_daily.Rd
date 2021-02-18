@@ -2,7 +2,7 @@
 % Please edit documentation in R/seas_daily.R
 \name{seas_daily}
 \alias{seas_daily}
-\title{Seasonal adjustment, using LOESS}
+\title{Simple Seasonal Adjustment, using LOESS}
 \usage{
 seas_daily(
   x,
@@ -20,21 +20,66 @@ seas_daily(
 \arguments{
 \item{x}{ts-boxable time series, an object of class ts, xts, zoo, data.frame, data.table, tbl, tbl_ts, tbl_time, tis, irts or timeSeries.}
 
-\item{h}{forecast horizon.}
+\item{h}{forecast horizon, how many days to forecast}
+
+\item{holiday_df}{a data frame with holiday dates. If set to \code{NULL}, it defaults to Swiss holidays.}
+
+\item{span_scale}{scaling all \code{span_} parameters. By default, parameters are scaled using \code{scale_factor(x)}, which scales series longer or shorter than 10 years.}
+
+\item{span_trend}{trend smoothing parameter. A higher value leads to a smoother trend.}
+
+\item{span_week}{week smoothing parameter. A higher value leads make the weekly seasonality less volatile.}
+
+\item{span_month}{month smoothing parameter. A higher value leads make the monthly seasonality less volatile.}
+
+\item{span_within_year}{within year smoothing parameter. A higher value leads make the within-year seasonality less volatile.}
+
+\item{transform}{should an additive or a multiplicative model be used.}
+
+\item{force_positive}{if \code{transform = "none"}, set all negative values to 0.}
 }
 \description{
 A simple daily seasonal adjustment procedure, using LOESS. It is optimized
-for Speed \emph{and} accuracy, and should work for a wast range of daily series.
+for speed \emph{and} accuracy, and should work for a wast range of daily series.
 }
 \details{
-Currently defaults to CH holidays, but these should be usable in other places
-as well. Maybe optimized in the future.
+If \code{span_} parameters are set to \code{NA}, they will be automatically chosen by
+AICc minimization (Hurvich et al, 1998). However, our trials have shown that
+these values tend to be too small, leading to volatile seasonal factors.  The
+default values lead to more stable and robuts seasonal components, that
+generally improve the forecast accuracy.
+
+This is a varaint of STL (Cleveland et al, 1990). It performs the following steps:
+\enumerate{
+\item Align all weekdays and draw a smoothed line through these
+data points. This is you initial estimation of a \emph{weekday} effect, which will be
+substracted from a detrended series.
+\item Following Olech (2018), holiday effects are estimated on the base of the trend and weekday adjusted series.
+\item As in the first step, the days of the months are aligned, leading an estimation of the effect of each day in the month.
+\item The days of the years are aligned, leading an estimation of the effect of each day in the year. Due to the low number of observations, this is done by simple averaging.
+\item The effects within a year are smoothed, using LOESS.
+\item If \eqn{Y = T + S_x + S_w + S_m + S_y + I}, the final seasonlly adjustment series is \eqn{Y^* = T + I}.
+}
+
+Time variant, non-parametric esitimation of seasonal effects is a straigtforward and robust way for seasonal adjustment and forecasting.
+Fundamentally, the idea is the same as in the X-11 method, wich is used by X13, the seasonal adjustment method by the US Census bureau.
+
+R base has a function \code{stl()} that performs
+this decompostion, but it requires the data to be equispaced. \code{seas_daily()}, on the other hand, can be applied to irregular data as well.
 }
 \examples{
 
 x <- transact
 seas_daily(x)
+seas_daily(x, span_week = "auto")
 
+}
+\references{
+Cleveland, R. B., Cleveland, W. S., McRae, J. E., & Terpenning, I. J. (1990). STL: A seasonal-trend decomposition procedure based on loess. Journal of Official Statistics, 6(1), 3–33.
+
+Hurvich, C.M., Simonoff, J.S., and Tsai, C.L. (1998), Smoothing Parameter Selection in Nonparametric Regression Using an Improved Akaike Information Criterion. Journal of the Royal Statistical Society B. 60, 271–293.
+
+Ollech, Daniel, 2018. "Seasonal adjustment of daily time series," Discussion Papers 41/2018, Deutsche Bundesbank.
 }
 \author{
 Christoph Sax

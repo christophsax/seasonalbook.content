@@ -30,7 +30,13 @@ NULL
 #' A simple daily seasonal adjustment procedure, using LOESS. It is optimized
 #' for speed *and* accuracy, and should work for a wast range of daily series.
 #'
-#' The basic goes as follows:
+#' If `span_` parameters are set to `NA`, they will be automatically chosen by
+#' AICc minimization (Hurvich et al, 1998). However, our trials have shown that
+#' these values tend to be too small, leading to volatile seasonal factors.  The
+#' default values lead to more stable and robuts seasonal components, that
+#' generally improve the forecast accuracy.
+#'
+#' This is a varaint of STL (Cleveland et al, 1990). It performs the following steps:
 #'
 #' 1. Align all weekdays and draw a smoothed line through these
 #' data points. This is you initial estimation of a *weekday* effect, which will be
@@ -44,8 +50,7 @@ NULL
 #' Time variant, non-parametric esitimation of seasonal effects is a straigtforward and robust way for seasonal adjustment and forecasting.
 #' Fundamentally, the idea is the same as in the X-11 method, wich is used by X13, the seasonal adjustment method by the US Census bureau.
 #'
-#' STL (Cleveland et al, 1990) follows a similar idea but uses local regressions to estimate seasonal
-#' effects that may change over time. R base has a function `stl()` that performs
+#' R base has a function `stl()` that performs
 #' this decompostion, but it requires the data to be equispaced. `seas_daily()`, on the other hand, can be applied to irregular data as well.
 #'
 #' @param x ts-boxable time series, an object of class ts, xts, zoo, data.frame, data.table, tbl, tbl_ts, tbl_time, tis, irts or timeSeries.
@@ -61,7 +66,11 @@ NULL
 #'
 #' @references
 #' Cleveland, R. B., Cleveland, W. S., McRae, J. E., & Terpenning, I. J. (1990). STL: A seasonal-trend decomposition procedure based on loess. Journal of Official Statistics, 6(1), 3–33.
+#'
+#' Hurvich, C.M., Simonoff, J.S., and Tsai, C.L. (1998), Smoothing Parameter Selection in Nonparametric Regression Using an Improved Akaike Information Criterion. Journal of the Royal Statistical Society B. 60, 271–293.
+#'
 #' Ollech, Daniel, 2018. "Seasonal adjustment of daily time series," Discussion Papers 41/2018, Deutsche Bundesbank.
+#'
 #'
 #' @author Christoph Sax
 #'
@@ -70,6 +79,7 @@ NULL
 #'
 #' x <- transact
 #' seas_daily(x)
+#' seas_daily(x, span_week = "auto")
 #'
 seas_daily <- function(x,
                        h = 35,
@@ -97,10 +107,19 @@ seas_daily <- function(x,
   tss <- ts_summary(x)
   if (as.integer(tss$end - tss$start) < 1000) return(seas_short(x))
 
-  span_trend <- span_trend / span_scale
-  span_week <- span_week / span_scale
-  span_month <- span_month / span_scale
-  span_within_year <- span_within_year / span_scale
+  is_auto <- function(span) {
+    isTRUE(span == "auto")
+  }
+
+  scale_adjust <- function(span, span_scale) {
+    if (is_auto(span)) return(span)
+    span / span_scale
+  }
+
+  span_trend <- scale_adjust(span_trend, span_scale)
+  span_week <- scale_adjust(span_week, span_scale)
+  span_month <- scale_adjust(span_month, span_scale)
+  span_within_year <- scale_adjust(span_within_year, span_scale)
 
   validate_seas_input(x)
   stopifnot(nrow(filter(x, is.na(value))) == 0)
@@ -126,7 +145,7 @@ seas_daily <- function(x,
     mutate(yday = seq_along(yday)) %>%
     ungroup()
 
-  if (is.na(span_trend)) {
+  if (is_auto(span_trend)) {
     span_trend <- optimal_span(x$value, "span_trend", span_scale = span_scale)
   }
 
@@ -137,7 +156,7 @@ seas_daily <- function(x,
     mutate(trend = smooth_and_forecast2(value, span = span_trend)) %>%
     mutate(irreg = orig - trend)
 
-  if (is.na(span_week)) {
+  if (is_auto(span_week)) {
     # pick a particular day
     # (better would be to do this for every day, and average, but this takes more time)
     one_day <- filter(x_trend, wday == unique(wday)[1], !is.na(value))$value
@@ -164,7 +183,7 @@ seas_daily <- function(x,
     left_join(seas_x, by = "time") %>%
     mutate(irreg = irreg - seas_x)
 
-  if (is.na(span_month)) {
+  if (is_auto(span_month)) {
     one_day <- filter(x_trend, mday == unique(mday)[1], !is.na(value))$value
     span_month <- optimal_span(one_day, "span_month", span_scale = span_scale)
   }

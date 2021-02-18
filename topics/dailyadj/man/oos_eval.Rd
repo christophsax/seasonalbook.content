@@ -6,6 +6,11 @@
 \usage{
 oos_eval(x, seas_fun, ...)
 }
+\arguments{
+\item{seas_fun}{a function}
+
+\item{...}{additional arguments, passed to \code{seas_fun}}
+}
 \description{
 This should work with every \code{seas_} function in the package. Typically, the
 series is shortened by one month. The series is then forecasted and can be
