@@ -1,9 +1,16 @@
-#' Prophet
+#' Daily Seasonal Adjustment, Using prophet
 #'
-#' Seasonal adjustment of daily time series, using prophet
+#' Seasonal adjustment of daily time series, using the prophet package from Facebook.
+#' The functions uses the same syntax as `seas_daily()` but does not support multiple time series.
 #'
 #' @export
-#' @examples seas_prophet(transact)
+#' @examples
+#'
+#' data(casualties)
+#' ans <- seas_prophet(casualties)
+#' seas_components(ans)
+#'
+#'
 seas_prophet <- function(x) {
 
   library(prophet)

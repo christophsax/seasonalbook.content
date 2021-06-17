@@ -14,18 +14,11 @@
 NULL
 
 
-# example ----------------------------------------------------------------------
-
-# load("data/casualties.rda")
-# seas_daily(casualties)
-# z <-  oos_evals(casualties, seas_daily)
-# summary_oos_evals(z)
-# plot_oos_evals(z)
 
 
 # main function ----------------------------------------------------------------
 
-#' Simple Seasonal Adjustment, using LOESS
+#' Simple Daily Seasonal Adjustment, using LOESS
 #'
 #' A simple daily seasonal adjustment procedure, using LOESS. It is optimized
 #' for speed *and* accuracy, and should work for a wast range of daily series.
@@ -53,8 +46,8 @@ NULL
 #' R base has a function `stl()` that performs
 #' this decompostion, but it requires the data to be equispaced. `seas_daily()`, on the other hand, can be applied to irregular data as well.
 #'
-#' @param x ts-boxable time series, an object of class ts, xts, zoo, data.frame, data.table, tbl, tbl_ts, tbl_time, tis, irts or timeSeries.
-#' @param h integer. Forecast horizon, how many days to forecast
+#' @param x ts-boxable time series, an object of class ts, xts, zoo, data.frame, data.table, tbl, tbl_ts, tbl_time, tis, irts or timeSeries. Multiple series are allowed. See [tsbox](https://www.tsbox.help/articles/tsbox.html#time-series-in-data-frames) for how to store multiple time series in a data frame.
+#' @param h integer. Forecast horizon, how many days to forecast.
 #' @param holiday_df a data frame with holiday dates. If set to `NULL`, it defaults to Swiss holidays.
 #' @param span_scale scalar. scaling all `span_` parameters. By default, parameters are scaled using `scale_factor(x)`, which scales series longer or shorter than 10 years.
 #' @param span_trend scalar, or `"auto"`. Trend smoothing parameter: A higher value leads to a smoother trend.
@@ -63,6 +56,7 @@ NULL
 #' @param span_within_year scalar, or `"auto"`.  Within-year smoothing parameter: A higher value leads make the within-year seasonality less volatile.
 #' @param transform logical. Should an additive or a multiplicative model be used.
 #' @param force_positive logical. If `transform = "none"`, set all negative values to 0.
+#' @param rm_factual_na logical. If `rm_factual_na = TRUE (default), the last value is omitted if it is smaller than any other value. This is frequently the case in transaction data.
 #'
 #' @references
 #' Cleveland, R. B., Cleveland, W. S., McRae, J. E., & Terpenning, I. J. (1990). STL: A seasonal-trend decomposition procedure based on loess. Journal of Official Statistics, 6(1), 3–33.
@@ -73,14 +67,24 @@ NULL
 #'
 #'
 #' @author Christoph Sax
+#' @seealso `seas_prophet()`
+#' @seealso `seas_dsa()`
 #'
 #' @export
 #' @examples
+#' data(casualties)
+#' seas_daily(casualties)
+#' seas_daily(casualties, span_week = "auto")
 #'
-#' x <- transact
-#' seas_daily(x)
-#' seas_daily(x, span_week = "auto")
+#' ans <- seas_daily(casualties)
 #'
+#' # plot seasonal components
+#' seas_components(ans)
+#'
+#' # out-of-sample forecast evaluation (runs seas_daily 12 times)
+#' oos <-  oos_evals(casualties, seas_daily)
+#' summary_oos_evals(oos)
+#' plot_oos_evals(oos)
 seas_daily <- function(x,
                        h = 35,
                        holiday_df = NULL,
@@ -90,7 +94,8 @@ seas_daily <- function(x,
                        span_month = 0.7,
                        span_within_year = 0.02,
                        transform = c("none", "log"),
-                       force_positive = FALSE
+                       force_positive = FALSE,
+                       rm_factual_na = TRUE
                        ) {
 
   if (is.null(holiday_df)) {
@@ -101,11 +106,42 @@ seas_daily <- function(x,
   }
   transform <- match.arg(transform, c("none", "log"))
 
-  x <- tsbox::ts_default(x)
+  x <-
+    tsbox::ts_default(x) %>%
+    tsbox::ts_tbl() %>%
+    arrange(time)
+
+  id_cols <- setdiff(names(x), c("time", "value"))
+  if (length(id_cols) > 0) {
+    message("iterating over id cols: ", paste(id_cols, collapse = ", "))
+    seas_daily_w_args <- function(x) {
+      seas_daily(
+        x,
+        h = h,
+        holiday_df = holiday_df,
+        span_scale = scale_factor(x),
+        span_trend = span_trend,
+        span_week = span_week,
+        span_month = span_month,
+        span_within_year = span_within_year,
+        transform = transform,
+        force_positive = force_positive
+      )
+    }
+    return(ts_apply(x, seas_daily_w_args))
+  }
+
+  if (rm_factual_na) {
+    x <- rm_factual_na_at_end(x)
+  }
+
 
   # treat short series differently
   tss <- ts_summary(x)
-  if (as.integer(tss$end - tss$start) < 1000) return(seas_short(x))
+  if (as.integer(tss$end - tss$start) < 1000) {
+    message("series shorter than 1000 days: no adjustment applied")
+    return(seas_short(x))
+  }
 
   is_auto <- function(span) {
     isTRUE(span == "auto")
@@ -125,8 +161,11 @@ seas_daily <- function(x,
   stopifnot(nrow(filter(x, is.na(value))) == 0)
 
   if (transform == "log") {
-    if (any(x$value < 0)) {
-      stop('series contains negative values, use `transform = "none"`')
+    if (any(x$value <= 0)) {
+      stop('series contains negative or 0 values, use `transform = "none"`')
+    }
+    if (any(x$value <= 5)) {
+      message('series contains small values (< 5), consider using `transform = "none"`')
     }
     x$value <- log(x$value)
   }
@@ -149,12 +188,21 @@ seas_daily <- function(x,
     span_trend <- optimal_span(x$value, "span_trend", span_scale = span_scale)
   }
 
-  x_trend <-
-    x_effects %>%
-    left_join(x, by = "time") %>%
-    # removing trend  0.15
-    mutate(trend = smooth_and_forecast2(value, span = span_trend)) %>%
-    mutate(irreg = orig - trend)
+  if (transform == "none") {
+    x_trend <-
+      x_effects %>%
+      left_join(x, by = "time") %>%
+      # removing trend  0.15
+      mutate(trend = smooth_and_forecast2(value, span = span_trend)) %>%
+      mutate(irreg = orig - trend)
+  } else {
+    # if transform = "log", do not estimate trend on logs, as this introduces a downard bias
+    x_trend <-
+      x_effects %>%
+      left_join(x, by = "time") %>%
+      mutate(trend = log(smooth_and_forecast2(exp(value), span = span_trend))) %>%
+      mutate(irreg = orig - trend)
+  }
 
   if (is_auto(span_week)) {
     # pick a particular day
@@ -247,6 +295,17 @@ seas_daily <- function(x,
 
 # helper function --------------------------------------------------------------
 
+# if last value is the lowest in the whole series, remove it
+rm_factual_na_at_end <- function(x) {
+    stopifnot(tsbox::ts_boxable(x))
+    x <- ts_na_omit(ts_default(ts_tbl(x)))
+    last_value <- x$value[length(x$value)]
+    if (last_value < min(x$value[-length(x$value)])) {
+        x$value[length(x$value)] <- NA_real_
+    }
+    ts_na_omit(x)
+}
+
 seas_daily_iteration <- function(x, h = 35) {
   z0 <- seas_daily(x, h = h)
   x1 <- seas_daily(x, h = h, adj0 = select(ts_pick(z0, "adj"), -id))
@@ -271,6 +330,8 @@ irreg_forecast <- function(x) {
 
 # y <- c(mdeaths,NA,NA)
 smooth_and_forecast2 <- function(y, span = 0.5) {
+  library(forecast)
+
   # use mean for short series
   if ((length(y)) < 10) {
     ans <- y
@@ -296,29 +357,6 @@ smooth_and_forecast2 <- function(y, span = 0.5) {
   }
   y_smooth
 }
-
-# # y <- c(mdeaths, NA, NA)
-# # plot(y); lines(smooth_and_forecast(y, span = 0.5))
-# smooth_and_forecast <- function(y, ...) {
-#   # use mean for short series
-#   if ((length(y)) < 10) {
-#     ans <- y
-#     ans[] <- mean(y, na.rm = TRUE)
-#     return(ans)
-#   }
-#   y_hist <- zoo::na.trim(y, sides = "right")
-#   h <- length(y) - length(y_hist)
-#   # message(h)
-#   x <- seq_along(y)
-#   x_hist <- seq_along(y_hist)
-#   m <- loess(y_hist ~ x_hist, surface = "direct", span = span)
-#   y_smooth <- predict(m, newdata = x_hist)
-#   if (h == 0) {
-#     return(y_smooth)
-#   }
-#   y_fct <- forecast(ets(y_smooth), h = h)$mean
-#   c(y_smooth, as.numeric(y_fct))
-# }
 
 # scale_factor(casualties)
 #' @export
@@ -363,7 +401,7 @@ seas_x <- function(x, df) {
   xreg <-
     df %>%
     nest(data = c(time)) %>%
-    mutate(ans = map(data, function(e) genhol_daily(e$time))) %>%
+    mutate(ans = purrr::map(data, function(e) genhol_daily(e$time))) %>%
     select(-data) %>%
     unnest(ans) %>%
     ts_wide()
@@ -473,8 +511,8 @@ seas_components <- function(z) {
   plot_grid(
     plot_pattern_trend(z),
     plot_pattern_y(z),
-    plot_pattern_m(z),
-    plot_pattern_w(z),
+    plot_pattern_m(z) + theme(legend.position = "none"),
+    plot_pattern_w(z) + theme(legend.position = "none"),
     plot_pattern_x(z),
     plot_pattern_i(z),
     labels = c("T", "Y", "M", "W", "H", "I"),
@@ -504,9 +542,20 @@ seas_dygraph <- function(z, main = deparse(substitute(z))) {
 
 #' Evalutate OOS forecast errors over multiple periods
 #'
+#' @param x ts-boxable time series, an object of class ts, xts, zoo, data.frame, data.table, tbl, tbl_ts, tbl_time, tis, irts or timeSeries. Multiple series are allowed. See [tsbox](https://www.tsbox.help/articles/tsbox.html#time-series-in-data-frames) for how to store multiple time series in a data frame.
+#' @param seas_fun seasonal adjustment function. One of `seas_daily`, `seas_prophet`, `seas_dsa`.
 #' @examples
-#' oos_evals(casualities, seas_daily)
-#' oos_evals(transact, seas_daily)
+#' data(casualties)
+#'
+#' # takes a few seconds for seas_daily
+#' oos <- oos_evals(casualties, seas_daily)
+#'
+#' summary_oos_evals(oos)
+#' plot_oos_evals(oos)
+#'
+#' # but minutes or hours for the slower methods - use carefully
+#' oos_evals(casualties, seas_dsa)
+#' oos_evals(casualties, seas_prophet)
 #' @export
 oos_evals <- function(x, seas_fun, ...) {
   by <- "-1 month"
@@ -545,7 +594,7 @@ summary_oos_evals <- function(x) {
 
   bind_rows(
     z,
-    add_column(summarize_at(z, vars(-period), mean), period = "Mean", .before = 1)
+    tibble::add_column(summarize_at(z, vars(-period), mean), period = "Mean", .before = 1)
   )
 }
 
@@ -562,8 +611,8 @@ plot_oos_evals <- function(x) {
 #' series is shortened by one month. The series is then forecasted and can be
 #' compared to the actual values.
 #'
-#' @param x
-#' @param seas_fun a function
+#' @param x ts-boxable time series, an object of class ts, xts, zoo, data.frame, data.table, tbl, tbl_ts, tbl_time, tis, irts or timeSeries. Multiple series are allowed. See [tsbox](https://www.tsbox.help/articles/tsbox.html#time-series-in-data-frames) for how to store multiple time series in a data frame.
+#' @param seas_fun seasonal adjustment function. One of `seas_daily`, `seas_prophet`, `seas_dsa`.
 #' @param ... additional arguments, passed to `seas_fun`
 #'
 #' @examples
