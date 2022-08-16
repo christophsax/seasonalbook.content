@@ -2,7 +2,7 @@
 
 - Idea of regARIMA
 
-The most fundamental proceedure involved in X-13 is applying moving average filters.
+The most fundamental procedure involved in X-13 is applying moving average filters.
 When symmetric filters are used we "lose" observations at the end of the series. Consider the simple moving average filter 
 $$ Y_t = \frac{1}{5} X_{t-2} + \frac{1}{5} X_{t-1} + \frac{1}{5} X_{t} + \frac{1}{5} X_{t+1} + \frac{1}{5} X_{t+2}. $$
 ```{r}
