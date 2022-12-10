@@ -5,7 +5,7 @@
 <meta name="generator" content="quarto-1.2.269">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="James Livsey and Christoph Sax">
-<title>Seasonal Adjustment in R - 4&nbsp; Transform</title>
+<title>Seasonal Adjustment in R - 1&nbsp; Introduction</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -90,8 +90,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./23-seats.html" rel="next">
-<link href="./21-history.html" rel="prev">
+<link href="./12-how-to-use.html" rel="next">
+<link href="./10-basics.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -118,14 +118,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit"
   }
-}</script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+}</script><meta name="robots" content="noindex">
 </head>
 <body class="nav-sidebar floating">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
       <h1 class="quarto-secondary-nav-title">
-<span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Transform</span>
+<span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span>
 </h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
@@ -168,7 +168,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./11-introduction.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a>
+  <a href="./11-introduction.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -193,7 +193,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./22-transform.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Transform</span></a>
+  <a href="./22-transform.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Transform</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -297,13 +297,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
-<li><a href="#case-study" id="toc-case-study" class="nav-link active" data-scroll-target="#case-study"><span class="toc-section-number">4.0.1</span>  Case Study</a></li>
-  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook/edit/main/22-transform.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+<li><a href="#getting-started" id="toc-getting-started" class="nav-link active" data-scroll-target="#getting-started"><span class="toc-section-number">1.0.1</span>  Getting Started</a></li>
+  <li><a href="#example-series" id="toc-example-series" class="nav-link" data-scroll-target="#example-series"><span class="toc-section-number">1.0.2</span>  Example Series</a></li>
+  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook/edit/main/11-introduction.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
 <h1 class="title d-none d-lg-block">
-<span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Transform</span>
+<span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span>
 </h1>
 </div>
 
@@ -318,98 +319,90 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   
 
 </header><ul>
-<li><p>Discuss multiplicative vs additive adjustment</p></li>
-<li><p>How to use the transform spec</p></li>
-<li><p>This is our first chance to mention the idea of test first then hard-code in production</p></li>
-<li><p>Case Study idea: Decide between log vs non-log transformation</p></li>
+<li><p>What is Seasonal Adjustment?</p></li>
+<li><p>What is X-13ARIMA-SEATS (X13)?</p></li>
+<li><p>Who uses X13?</p></li>
+<li><p>Available alternatives in and outside of R (some topics are covered in chapter VI)</p></li>
+<li><p>Case Study: A use cases outside of official statistics: seasonal adjustment of business data</p></li>
 </ul>
-<p>One of the first choices to make when modeling a time series is whether or not it needs to be transformed prior to modeling. There are two types of transformation types that typically occur within X13. The first is a prior modification. A prior modification scales each observation for known fixed effects. These effects can be well known and established such as length of a month/quarter and leap-year or more subjective such as a modification for a workers strike. We can think of prior modification factors of events or corrections made to your data that are fixed throughout the adjustment proeess. Additionally, these prior modification factors can be permanent (defualt) or temporary. The difference between permanent and temporary is wheither or not the effect is included back in the final seasonally adjusted series or not; permanent factors are excluded from the final seasonal adjustment while temporary are removed while calculating seasonal factors but then added back to the seasonally adjusted series. The second type is a nonlinear transformation applied to the observations. This is typically a choice between logarithmic transform and no transformation but for modeling can be any power of the Box-Cox transformation CITE.</p>
-<p>X-13A-S has a built in statisitcal test to decide between log and no transformatin. This is done with an information criteria based statistical test. The choice is made by comparing the AICC value CITE of an Airline model fit, or user specified ARIMA model, to the log transformed series and the original series. For all practical purposes this is an effective choice and can be left to the program to decide. Note, if your series has negative values it can not be log transformed and no transform is automatically selected by X-13 when automatic transformation is asked for. Other restrictions on the allowed transformtions exisit and can be found in CITE but these situations are rare. We can see the results of the transformation tests by looking at specific inputs to the UDG file.</p>
+<p>Many time series exhibit a regular seasonal pattern over the year. US unemployment, for example, is usually higher from January to March, and again in June and July. Similarly, retail sales tend to peak with the Christmas season.</p>
+<p>To model the underlying structure of these series, any regular (seasonal) patterns are estimated and removed from the data. For example, to see if the economy is moving out of a recession during certain months, one wants the labor market data be free from such seasonal effects. Seasonal adjustment decomposes a time series into a trend, a seasonal and an irregular component and removes the seasonal component from the data.</p>
+<p>In official statistics, seasonal adjustment has a long tradition. The original X-11 software was developed by the US Census Bureau in the 1960s, and later improved by Statistics Canada (Dagum 1980). Subsequent software packages by the US Census Bureau were called X-12-ARIMA (Findley, Monsell, Bell, Otto, and Chen 1998) and X-13ARIMA-SEATS (or X-13, for short) (Monsell 2007). Today, X-11 is still used as a name for filter-based seasonal adjustment methods within X-13. Meanwhile, TRAMO-SEATS, developed by the Bank of Spain (Caporello, Maravall, and Sánchez 2001), offers an alternative model-based approach to seasonal adjustment.</p>
+<p>In its most recent version, X-13 offers these two seasonal adjustment methods in a single command-line tool, written in Fortran. The National Bank of Belgium has created an alter- native Java-based implementation called JDemetra+ (National Bank of Belgium, Deutsche Bundesbank, Eurostat 2017) which is also widely deployed by statistical agencies. One of either the TRAMO-SEATS or X-11 method of seasonal adjustment is used by almost all (government) statistical offices throughout the world.</p>
+<p>R (R Core Team 2017) offers several possibilities to perform seasonal adjustment in the stats package included with R. The decompose function uses filtering to split a time series into a trend, a seasonal and an irregular component. An alternative method is stl, which uses local regressions (and has some extensions offered by the stlplus package by Hafen (2016)). While both methods allow a multiplicative or an additive decomposition, these methods are somewhat limited in modeling actual data series.</p>
+<p>The programs used by statistical offices provide an extensive toolbox to deal with many advanced (and more irregular) aspects of seasonality, such as trading day adjustments, moving holiday adjustments or automated outlier detection.</p>
+<section id="getting-started" class="level3" data-number="1.0.1"><h3 data-number="1.0.1" class="anchored" data-anchor-id="getting-started">
+<span class="header-section-number">1.0.1</span> Getting Started</h3>
+<p>If you use R installing X-13ARIMA-SEATS from CRAN is as easy as installing any other R package CITE JSS:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"seasonal"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Once the package is installed it can be loaded in the usual way:</p>
 <div class="cell">
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.seasonal.website">seasonal</a></span><span class="op">)</span></span>
-<span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/udg.html">udg</a></span><span class="op">(</span><span class="va">m</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"aictest.trans.aicc.nolog"</span>, <span class="st">"aictest.trans.aicc.log"</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.seasonal.website">seasonal</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The <code>seas</code> function provides the core functionality of the package. By default, <code>seas</code> calls the automatic procedures of X-13 to perform a seasonal adjustment that works well in most circumstances:</p>
+<div class="cell">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>aictest.trans.aicc.nolog   aictest.trans.aicc.log 
-               1021.1919                 987.3845 </code></pre>
-</div>
-</div>
-<p>We see the AICC for log transformation is lower and hence selected. The summary of the seasonal object <code>summary(m)</code> tells us this with <code>Transform: log</code> displayed. The automatically selected transformation can also be found in many other places such as the HTML output with <code>out(m)</code> or the udg with agruement name <em>aictrans</em> such as <code>udg(m, "aictrans")</code>.</p>
-<p>The choice between log and none changes the type of seasonal decomposition that will occur and hence your interpretation of the seasonal factors. With no transformation, X13 will do an additive seasonal adjustment <span class="math display">\[X_t = T_t + S_t + I_t.\]</span> If a long transformation is selected, X13 will do a multiplicative adjustment <span class="math display">\[X_t = T_t \cdot S_t \cdot I_t.\]</span> This is major difference here is the way seasonal factors are interpreted and applied to the observed data to remove seasonality. For additive models the seasonal factor is subtracted from the original <span class="math inline">\(X_t - S_t\)</span>. For example, an observed value of 100 with seasonal factor of 3.2 would result in a seasonally adjusted value of <span class="math inline">\(100 - 3.2 = 96.8\)</span>. For multiplicative models the observed data is divided by the seasonal factor <span class="math inline">\(\frac{X_t}{S_t}\)</span>. For example, an observed value of 100 with seasonal factor of 1.08 would result in a seasonally adjusted value of <span class="math inline">\(100 / 1.08 = 92.59259\)</span>. Hence for multiplicative models values of <span class="math inline">\(S_t&gt;1\)</span>, decrease the observed value and <span class="math inline">\(S_t &lt; 1\)</span> increase it.</p>
-<p>The <code>transform</code> spec controls these options. Some primary options within this spec are</p>
-<table class="table">
-<colgroup>
-<col style="width: 24%">
-<col style="width: 24%">
-<col style="width: 26%">
-<col style="width: 26%">
-</colgroup>
-<thead><tr class="header">
-<th>Spec option</th>
-<th>Use</th>
-<th>Example values</th>
-<th>default</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td>function</td>
-<td>specify transform</td>
-<td>none, log, auto</td>
-<td>none</td>
-</tr>
-<tr class="even">
-<td>data or file</td>
-<td>specify prior adjustment factor</td>
-<td>(1.2, 1.1, …, .99)</td>
-<td>(1,1,…,1)</td>
-</tr>
-<tr class="odd">
-<td>aicdiff</td>
-<td>adjust tolerance of AIC test for log transform</td>
-<td>0.0 3.0 -4.5</td>
-<td>-2.0</td>
-</tr>
-</tbody>
-</table>
-<section id="case-study" class="level3" data-number="4.0.1"><h3 data-number="4.0.1" class="anchored" data-anchor-id="case-study">
-<span class="header-section-number">4.0.1</span> Case Study</h3>
-<p>Consider the situaiton where you are trying to decide on transform choices for monthly retail grocery store data.</p>
-<div class="cell">
+<pre><code>
+Call:
+seas(x = AirPassengers)
 
+Coefficients:
+          Weekday          Easter[1]         AO1951.May  MA-Nonseasonal-01  
+         -0.00295            0.01777            0.10016            0.11562  
+   MA-Seasonal-12  
+          0.49736  </code></pre>
 </div>
+</div>
+<p>The first argument of seas is a time series of class “ts”. The unemp example series measures US unemployment and is included in seasonal. The function returns an object of class “seas” that contains the necessary information on the adjustment performed on this time series.</p>
 <div class="cell">
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">grocery</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>There are several functions and methods for “seas” objects. The final function returns the adjusted series. The plot method shows a plot with the unadjusted and the adjusted series.</p>
+<div class="cell">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="22-transform_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+<p><img src="11-introduction_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>Visual inspection of the series shows no immediate reason to think we need to perform a log transform. There is possible seasonal hederoskadasity which could be mitigated by taking logs. Perform an X-11 adjustmnet with all of <code>seasonal</code> defaults.</p>
+<p>The summary method displays an overview of the model, very similar to the one produced by R’s lm function:</p>
 <div class="cell">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">grocery</span>, x11 <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/udg.html">udg</a></span><span class="op">(</span><span class="va">m</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"aictest.trans.aicc.nolog"</span>, <span class="st">"aictest.trans.aicc.log"</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>aictest.trans.aicc.nolog   aictest.trans.aicc.log 
-                4202.960                 4201.042 </code></pre>
+<pre><code>
+Call:
+seas(x = AirPassengers)
+
+Coefficients:
+                    Estimate Std. Error z value Pr(&gt;|z|)    
+Weekday           -0.0029497  0.0005232  -5.638 1.72e-08 ***
+Easter[1]          0.0177674  0.0071580   2.482   0.0131 *  
+AO1951.May         0.1001558  0.0204387   4.900 9.57e-07 ***
+MA-Nonseasonal-01  0.1156204  0.0858588   1.347   0.1781    
+MA-Seasonal-12     0.4973600  0.0774677   6.420 1.36e-10 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+SEATS adj.  ARIMA: (0 1 1)(0 1 1)  Obs.: 144  Transform: log
+AICc: 947.3, BIC: 963.9  QS (no seasonality in final):    0  
+Box-Ljung (no autocorr.): 26.65   Shapiro (normality): 0.9908  </code></pre>
 </div>
 </div>
-<p>This is interesting since the AICC for no transformation is lower than the AICC for log transform.</p>
+</section><section id="example-series" class="level3" data-number="1.0.2"><h3 data-number="1.0.2" class="anchored" data-anchor-id="example-series">
+<span class="header-section-number">1.0.2</span> Example Series</h3>
+<p>Throughout the book, we work with various example series. These sereis are included in seasonal and reflect various aspects of seseonal adjusmtent.</p>
+<p>Below is discussion of the series used in this book.</p>
+<section id="us-unemployment" class="level4" data-number="1.0.2.1"><h4 data-number="1.0.2.1" class="anchored" data-anchor-id="us-unemployment">
+<span class="header-section-number">1.0.2.1</span> US Unemployment</h4>
 <div class="cell">
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/transformfunction.html">transformfunction</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "log"</code></pre>
-</div>
-</div>
-<p>The default value for transform.aicdiff is -2 meaning the program slightly prefers log transform and the difference between the AICC values must exceed 2. In this situation we see the difference between the two AICC values is -1.917597. If you were to change this option to transform.aicdiff = 0 then the program selects no transform.</p>
-<div class="cell">
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">grocery</span>, x11 <span class="op">=</span> <span class="st">""</span>, transform.aicdiff <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/transformfunction.html">transformfunction</a></span><span class="op">(</span><span class="va">m2</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "none"</code></pre>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">unemp</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="11-introduction_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 
 
-</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+</section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
@@ -542,13 +535,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
-      <a href="./21-history.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Overview of the software</span></span>
+      <a href="./10-basics.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Getting Started</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./23-seats.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">SEATS</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./12-how-to-use.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">How to use the book</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

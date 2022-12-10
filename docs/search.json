@@ -1,0 +1,170 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Seasonal Adjustment in R",
+    "section": "",
+    "text": "Welcome\nThis is the website for the work-in-progress edition of “Seasonal Adjustment in R”, an online Book by James Livsey and Christoph Sax. This book will teach you how to do seasonal adjustment with R."
+  },
+  {
+    "objectID": "index.html#acknowledgements",
+    "href": "index.html#acknowledgements",
+    "title": "Seasonal Adjustment in R",
+    "section": "Acknowledgements",
+    "text": "Acknowledgements"
+  },
+  {
+    "objectID": "10-basics.html",
+    "href": "10-basics.html",
+    "title": "Getting Started",
+    "section": "",
+    "text": "This section focuses on explaining the basics of seasonal adjustment and gets the reader involved with a minimal working example. It keeps the technical jargon to a minimum. Finally, the layout of the book and future sections is clearly spelled out."
+  },
+  {
+    "objectID": "11-introduction.html",
+    "href": "11-introduction.html",
+    "title": "\n1  Introduction\n",
+    "section": "",
+    "text": "What is Seasonal Adjustment?\nWhat is X-13ARIMA-SEATS (X13)?\nWho uses X13?\nAvailable alternatives in and outside of R (some topics are covered in chapter VI)\nCase Study: A use cases outside of official statistics: seasonal adjustment of business data\n\nMany time series exhibit a regular seasonal pattern over the year. US unemployment, for example, is usually higher from January to March, and again in June and July. Similarly, retail sales tend to peak with the Christmas season.\nTo model the underlying structure of these series, any regular (seasonal) patterns are estimated and removed from the data. For example, to see if the economy is moving out of a recession during certain months, one wants the labor market data be free from such seasonal effects. Seasonal adjustment decomposes a time series into a trend, a seasonal and an irregular component and removes the seasonal component from the data.\nIn official statistics, seasonal adjustment has a long tradition. The original X-11 software was developed by the US Census Bureau in the 1960s, and later improved by Statistics Canada (Dagum 1980). Subsequent software packages by the US Census Bureau were called X-12-ARIMA (Findley, Monsell, Bell, Otto, and Chen 1998) and X-13ARIMA-SEATS (or X-13, for short) (Monsell 2007). Today, X-11 is still used as a name for filter-based seasonal adjustment methods within X-13. Meanwhile, TRAMO-SEATS, developed by the Bank of Spain (Caporello, Maravall, and Sánchez 2001), offers an alternative model-based approach to seasonal adjustment.\nIn its most recent version, X-13 offers these two seasonal adjustment methods in a single command-line tool, written in Fortran. The National Bank of Belgium has created an alter- native Java-based implementation called JDemetra+ (National Bank of Belgium, Deutsche Bundesbank, Eurostat 2017) which is also widely deployed by statistical agencies. One of either the TRAMO-SEATS or X-11 method of seasonal adjustment is used by almost all (government) statistical offices throughout the world.\nR (R Core Team 2017) offers several possibilities to perform seasonal adjustment in the stats package included with R. The decompose function uses filtering to split a time series into a trend, a seasonal and an irregular component. An alternative method is stl, which uses local regressions (and has some extensions offered by the stlplus package by Hafen (2016)). While both methods allow a multiplicative or an additive decomposition, these methods are somewhat limited in modeling actual data series.\nThe programs used by statistical offices provide an extensive toolbox to deal with many advanced (and more irregular) aspects of seasonality, such as trading day adjustments, moving holiday adjustments or automated outlier detection.\n\n1.0.1 Getting Started\nIf you use R installing X-13ARIMA-SEATS from CRAN is as easy as installing any other R package CITE JSS:\ninstall.packages(\"seasonal\")\nOnce the package is installed it can be loaded in the usual way:\n\nlibrary(seasonal)\n\nThe seas function provides the core functionality of the package. By default, seas calls the automatic procedures of X-13 to perform a seasonal adjustment that works well in most circumstances:\n\nseas(AirPassengers)\n\n\nCall:\nseas(x = AirPassengers)\n\nCoefficients:\n          Weekday          Easter[1]         AO1951.May  MA-Nonseasonal-01  \n         -0.00295            0.01777            0.10016            0.11562  \n   MA-Seasonal-12  \n          0.49736  \n\n\nThe first argument of seas is a time series of class “ts”. The unemp example series measures US unemployment and is included in seasonal. The function returns an object of class “seas” that contains the necessary information on the adjustment performed on this time series.\n\nm <- seas(AirPassengers)\n\nThere are several functions and methods for “seas” objects. The final function returns the adjusted series. The plot method shows a plot with the unadjusted and the adjusted series.\n\nplot(m)\n\n\n\n\nThe summary method displays an overview of the model, very similar to the one produced by R’s lm function:\n\nsummary(m)\n\n\nCall:\nseas(x = AirPassengers)\n\nCoefficients:\n                    Estimate Std. Error z value Pr(>|z|)    \nWeekday           -0.0029497  0.0005232  -5.638 1.72e-08 ***\nEaster[1]          0.0177674  0.0071580   2.482   0.0131 *  \nAO1951.May         0.1001558  0.0204387   4.900 9.57e-07 ***\nMA-Nonseasonal-01  0.1156204  0.0858588   1.347   0.1781    \nMA-Seasonal-12     0.4973600  0.0774677   6.420 1.36e-10 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nSEATS adj.  ARIMA: (0 1 1)(0 1 1)  Obs.: 144  Transform: log\nAICc: 947.3, BIC: 963.9  QS (no seasonality in final):    0  \nBox-Ljung (no autocorr.): 26.65   Shapiro (normality): 0.9908  \n\n\n\n1.0.2 Example Series\nThroughout the book, we work with various example series. These sereis are included in seasonal and reflect various aspects of seseonal adjusmtent.\nBelow is discussion of the series used in this book.\n\n1.0.2.1 US Unemployment\n\nplot(unemp)"
+  },
+  {
+    "objectID": "12-how-to-use.html",
+    "href": "12-how-to-use.html",
+    "title": "2  How to use the book",
+    "section": "",
+    "text": "Overview of the book\nThe Book wants to give concrete advise in case of a problem.\nIdeally we want to have a quick check list that gives readers a starting point where to look for further advice. That could be something like a Cheat Sheet (https://www.rstudio.com/resources/cheatsheets/) with quick advise and chapter references.\nFor each section, we want to provide a concrete and informative case study. Some examples are provided in the outline."
+  },
+  {
+    "objectID": "20-overview.html",
+    "href": "20-overview.html",
+    "title": "X-13ARIMA-SEATS",
+    "section": "",
+    "text": "This section gets readers familiar with X-13ARIMA-SEATS. It begins by explaining the history and pedagogy of the software. This leads directly into discussing the principal elements of X-13ARIMA-SEATS."
+  },
+  {
+    "objectID": "21-history.html",
+    "href": "21-history.html",
+    "title": "3  Overview of the software",
+    "section": "",
+    "text": "History of the software\nElements of the software\nOverview of main choices a user needs to make"
+  },
+  {
+    "objectID": "22-transform.html",
+    "href": "22-transform.html",
+    "title": "\n4  Transform\n",
+    "section": "",
+    "text": "Discuss multiplicative vs additive adjustment\nHow to use the transform spec\nThis is our first chance to mention the idea of test first then hard-code in production\nCase Study idea: Decide between log vs non-log transformation\n\nOne of the first choices to make when modeling a time series is whether or not it needs to be transformed prior to modeling. There are two types of transformation types that typically occur within X13. The first is a prior modification. A prior modification scales each observation for known fixed effects. These effects can be well known and established such as length of a month/quarter and leap-year or more subjective such as a modification for a workers strike. We can think of prior modification factors of events or corrections made to your data that are fixed throughout the adjustment proeess. Additionally, these prior modification factors can be permanent (defualt) or temporary. The difference between permanent and temporary is wheither or not the effect is included back in the final seasonally adjusted series or not; permanent factors are excluded from the final seasonal adjustment while temporary are removed while calculating seasonal factors but then added back to the seasonally adjusted series. The second type is a nonlinear transformation applied to the observations. This is typically a choice between logarithmic transform and no transformation but for modeling can be any power of the Box-Cox transformation CITE.\nX-13A-S has a built in statisitcal test to decide between log and no transformatin. This is done with an information criteria based statistical test. The choice is made by comparing the AICC value CITE of an Airline model fit, or user specified ARIMA model, to the log transformed series and the original series. For all practical purposes this is an effective choice and can be left to the program to decide. Note, if your series has negative values it can not be log transformed and no transform is automatically selected by X-13 when automatic transformation is asked for. Other restrictions on the allowed transformtions exisit and can be found in CITE but these situations are rare. We can see the results of the transformation tests by looking at specific inputs to the UDG file.\n\nlibrary(seasonal)\nm <- seas(AirPassengers)\nudg(m, c(\"aictest.trans.aicc.nolog\", \"aictest.trans.aicc.log\"))\n\naictest.trans.aicc.nolog   aictest.trans.aicc.log \n               1021.1919                 987.3845 \n\n\nWe see the AICC for log transformation is lower and hence selected. The summary of the seasonal object summary(m) tells us this with Transform: log displayed. The automatically selected transformation can also be found in many other places such as the HTML output with out(m) or the udg with agruement name aictrans such as udg(m, \"aictrans\").\nThe choice between log and none changes the type of seasonal decomposition that will occur and hence your interpretation of the seasonal factors. With no transformation, X13 will do an additive seasonal adjustment \\[X_t = T_t + S_t + I_t.\\] If a long transformation is selected, X13 will do a multiplicative adjustment \\[X_t = T_t \\cdot S_t \\cdot I_t.\\] This is major difference here is the way seasonal factors are interpreted and applied to the observed data to remove seasonality. For additive models the seasonal factor is subtracted from the original \\(X_t - S_t\\). For example, an observed value of 100 with seasonal factor of 3.2 would result in a seasonally adjusted value of \\(100 - 3.2 = 96.8\\). For multiplicative models the observed data is divided by the seasonal factor \\(\\frac{X_t}{S_t}\\). For example, an observed value of 100 with seasonal factor of 1.08 would result in a seasonally adjusted value of \\(100 / 1.08 = 92.59259\\). Hence for multiplicative models values of \\(S_t>1\\), decrease the observed value and \\(S_t < 1\\) increase it.\nThe transform spec controls these options. Some primary options within this spec are\n\n\n\n\n\n\n\n\nSpec option\nUse\nExample values\ndefault\n\n\n\nfunction\nspecify transform\nnone, log, auto\nnone\n\n\ndata or file\nspecify prior adjustment factor\n(1.2, 1.1, …, .99)\n(1,1,…,1)\n\n\naicdiff\nadjust tolerance of AIC test for log transform\n0.0 3.0 -4.5\n-2.0\n\n\n\n\n4.0.1 Case Study\nConsider the situaiton where you are trying to decide on transform choices for monthly retail grocery store data.\n\n\n\n\nplot(grocery)\n\n\n\n\nVisual inspection of the series shows no immediate reason to think we need to perform a log transform. There is possible seasonal hederoskadasity which could be mitigated by taking logs. Perform an X-11 adjustmnet with all of seasonal defaults.\n\nm <- seas(grocery, x11 = \"\")\nudg(m, c(\"aictest.trans.aicc.nolog\", \"aictest.trans.aicc.log\"))\n\naictest.trans.aicc.nolog   aictest.trans.aicc.log \n                4202.960                 4201.042 \n\n\nThis is interesting since the AICC for no transformation is lower than the AICC for log transform.\n\ntransformfunction(m)\n\n[1] \"log\"\n\n\nThe default value for transform.aicdiff is -2 meaning the program slightly prefers log transform and the difference between the AICC values must exceed 2. In this situation we see the difference between the two AICC values is -1.917597. If you were to change this option to transform.aicdiff = 0 then the program selects no transform.\n\nm2 <- seas(grocery, x11 = \"\", transform.aicdiff = 2)\ntransformfunction(m2)\n\n[1] \"none\""
+  },
+  {
+    "objectID": "23-seats.html",
+    "href": "23-seats.html",
+    "title": "5  SEATS",
+    "section": "",
+    "text": "How to use the SEATS spec\nSEATS vs X11\nCase Study:\n\nFor SEATS, can be quite challenging since it relies heavily on seasonal ARIMA modeling."
+  },
+  {
+    "objectID": "24-x11.html",
+    "href": "24-x11.html",
+    "title": "\n6  X11\n",
+    "section": "",
+    "text": "One of the two main methods available in X-13ARIMA-SEATS to extract trend and seasonal components is the ``X-11’’ method. This is a nonparametric procedure that works by passing moving-average filters over the data to extract intended components. In order to use symetric moving average filters at the end of the time series (current value), a regARIMA model is used to forecast extend the series. This RegARIMA model is where users can test for or specify outliers, trading day and moving holiday regressors in their adjustment. The forecast extended series is then used to filter. Additionally, X-11 has a built in extreme value procedure included. This procedure identifies extremes and replaces. This results in a robust procedure that can automatically choose filters and identify extreme values without much user intervention. All that needs to be evoked beyond the default ‘seas()’ call is to turn on the X11 spec option.\n\nlibrary(seasonal)\nm <- seas(AirPassengers, x11 = \"\")\n\nBefore further discussion about the details of the X-11 process, let us see what happened during this modeling run…\nWhen using the x11 spec you can change the length of the filter used for the trend and seasonal components with the trendma and seasonalma arguments respectively. Additionally, sigmalim will control the amount of extreme value adjustment that is done during the seasonal adjustment.\nThe X-13ARIMA-SEATS development was highly motivated to study economic time series. As such, the default seasonal adjustment mode is multiplicative due to most seasonal economic time series displaying seasonal fluctuations that increase and decrease along with the level of the time series.\nIf your series does not have this feature then additive adjustment might be more appropriate. This can be changed in the mode argument of the x11 spec. For example, seas(x, x11.mode = 'add') will perform an additive x11 run. There exist two other models for decomposition, pseudo-additive and log additive. These are less common than additive and multiplicative models and are not the focus of this text. If your series has some extremely small values in certain months (quarters) then pseudo-additive models could be worth further investigation. It has been observed that when multiplicative seasonal adjustment produces more extreme values in conjunction with small seasonal factors then pseudo-additive adjustment should be explored. NEED TO SHOW USERS HOW TO VIEW THEIR EXTREME VALUES - D8.B TABLE DESIGNATIONS NEXT TO OBSERVATIONS. A good reference on the subject is Baxter (1994).\nThe X11 spec also allows users to control the length of the trend and seasonal moving average filters used during the adjustment. Generally speaking, longer filters imply a more stable seasonal component and shorter filters a more changing seasonal pattern. Of course, a longer filter will use more data for the caluclation of components at each time point. This is an important observation and understanding it might help a user decide on a short or long filter. Since longer filters use more data there tend to be smaller revisions when a new data point is added. However, there will be revisions to data values further back. A shorter filter is just the opposite, they tend to produce smaller revisions but they do not extend as far back into the series. If a filter is not choosen by the user then automatic filter selection is used. To understand the length of a filter let’s look at the (finite) number of choice available in during an x11 adjustment. There are different filters used for the seasonal component and the trend component.\n\n\n\n\n\n\nSeasonal Filter\nDescription\n\n\n\ns3x1\n3x1 moving average\n\n\ns3x3\n3×3 moving average.\n\n\ns3x5\n3×5 moving average\n\n\ns3x9\n3×9 moving average\n\n\ns3x15\n3×15 moving average\n\n\nstable\nStable seasonal filter. A single seasonal factor for each calendar month or quarter is generated by calculating the simple average of all the values for each month or quarter (taken after detrending and outlier adjustment).\n\n\nx11default\nA 3×3 moving average is used to calculate the initial seasonal factors in each iteration, and a 3×5 moving average to calculate the final seasonal factors.\n\n\n\n\nHow to use the X11 spec\nCase Study: Changing the length of trend and/or seasonal filter"
+  },
+  {
+    "objectID": "25-regARIMA.html",
+    "href": "25-regARIMA.html",
+    "title": "\n7  regARIMA Model\n",
+    "section": "",
+    "text": "Idea of regARIMA\n\nThe most fundamental procedure involved in X-13 is applying moving average filters. When symmetric filters are used we “lose” observations at the end of the series. Consider the simple moving average filter \\[ Y_t = \\frac{1}{5} X_{t-2} + \\frac{1}{5} X_{t-1} + \\frac{1}{5} X_{t} + \\frac{1}{5} X_{t+1} + \\frac{1}{5} X_{t+2}. \\]\n\nlibrary(seasonal)\n\nx <- window(AirPassengers, start = c(1959, 1), end = c(1960, 12))\ny = filter(x, filter = rep(1/5, 5), sides = 2)\ntsbox::ts_plot(cbind(x, y))\n\n\n\n\nThe output of the filter \\(Y_t\\) is shorter than \\(X_t\\) by 4 total observations. Two at the beginning and two at the end.\nThis is one of the primary reasons we consider regARIMA models when discussing seasonal adjustment; the observed time series is forecast extended to allow for symmetric moving average filters to be used all the way to the end of the series. Another reason for regARIMA modeling is to include exogenous regression variables in our analysis. These include, but are not limited to, moving holiday effects, trading day, outliers and level-shifts. The regARIMA take the form \\[ f\\left(\\frac{Y_t}{D_t} \\right) = \\boldsymbol{\\beta}^\\prime {\\bf X}_t + Z_t .\\] Here \\(Y_t\\) is the observed time series. The function \\(f\\) represents a transformation, most commonly used is the log transform ie \\(f(x) = \\log(x)\\). The regression variables appear in the columns of the design matrix \\({\\bf X}_t\\) and \\(Z_t\\) is an ARIMA process. This last assumption on \\(Z_t\\) is what distinguished a regARIMA model from more classic linear models and multiple linear regression where error terms are assumed uncorrelated. In order to achieve a suitable seasonal adjustment it is important to get the regARIMA model correct. For most dataset the built in automatic modeling features of the X13 program will be suitable to detect a reasonable model. This can be used as a starting point for more rigorous regARIMA model development or used as the final regARIMA modeling choice for your seasonal adjustment needs. We evoke automatic model identification through the XXX spec. The default behavior of the R seasonal package is XXX which includes automatic model identification. As an aside, the general rule is to not use automatic modeling `in production''. This mean, if you are going to include seasonal adjustment as part of a large scale data processing that occurs regularly (say monthly), then it is not advisable to have automatic model identification run every month.  Instead, an alternative process, is to run automodel once and then fix the model choice in the XXX spec file.  This does not need to be done manually since thestatic()` function from the seasonal package can do this for you. For example, consider the default seasonal adjustment\n\nm <- seas(AirPassengers, x11 = \"\")\nprint(m$spc$automdl)\n\n$print\n[1] \"bestfivemdl\"\n\nprint(m$spc$arima)\n\nNULL\n\n\nNotice the value NULL indicates no ARIMA model is specified and the returned arguments for the automdl spec indicate it is active during the X13 run.\n\nudg(m, \"automdl\")\n\n         automdl \n\"(0 1 1)(0 1 1)\" \n\n\nIndicates that automatic modeling identified the (0 1 1)(0 1 1) model as the best choice. If we want to hardcode this model for subsequent runs, and turn off automatic model identification, this can be done via\n\nm_call <- static(m)\n\nseas(\n  x = AirPassengers,\n  x11 = \"\",\n  regression.variables = c(\"td1coef\", \"easter[1]\", \"ao1951.May\"),\n  arima.model = \"(0 1 1)(0 1 1)\",\n  regression.aictest = NULL,\n  outlier = NULL,\n  transform.function = \"log\"\n)\n\nm2 <- eval(m_call)\n\n\nHow to use the regression spec\nTable of all Regression effects available in X13 (steal from CR slides)\nCase studies: Decide if you should include AO in May 2014. Construct a simple user defined regressor to handle specific issue."
+  },
+  {
+    "objectID": "30-data-problems.html",
+    "href": "30-data-problems.html",
+    "title": "Data Problems",
+    "section": "",
+    "text": "In part III we look at more in-depth at practical issues with seasonal adjustment. The focus is on concrete solutions to each situation presented. Each subsection will prominently feature a case study dedicated to each problem."
+  },
+  {
+    "objectID": "31-holidays.html",
+    "href": "31-holidays.html",
+    "title": "8  Irregular holidays",
+    "section": "",
+    "text": "Why should we adjust for holiday effects\nEaster adjustment\nUser defined adjustments (Chinese New Year, Diwali)\nCase Study: How to adjust for Ramadan (which is connected with some additional challenges)"
+  },
+  {
+    "objectID": "32-trading-days.html",
+    "href": "32-trading-days.html",
+    "title": "9  Trading days",
+    "section": "",
+    "text": "Why should we adjust for trading day effects\nSeven or two coefficient trading day\nUsing country specific calendars\nCase Study: Movie tickets (or another series with very clear trading day effects)"
+  },
+  {
+    "objectID": "33-outliers.html",
+    "href": "33-outliers.html",
+    "title": "10  Outliers",
+    "section": "",
+    "text": "Why care about outliers?\nAdditive outliers, level shifts, temporary changes"
+  },
+  {
+    "objectID": "34-seasonal-breaks.html",
+    "href": "34-seasonal-breaks.html",
+    "title": "11  Seasonal breaks",
+    "section": "",
+    "text": "Why to care about seasonal breaks?\nDetection of seasonal breaks\nCorrection for seasonal breaks"
+  },
+  {
+    "objectID": "40-other-issues.html",
+    "href": "40-other-issues.html",
+    "title": "Other Issues",
+    "section": "",
+    "text": "Part IV investigates more holistic issues that practitioners face. The main focus is to give classical methodology to answer their problems. Since these types of issues can be highly specialized, we concentrate on known solutions to the topics."
+  },
+  {
+    "objectID": "41-presence-of-seasonality.html",
+    "href": "41-presence-of-seasonality.html",
+    "title": "12  Should a series be seasonally adjusted at all?",
+    "section": "",
+    "text": "X-13AS removes seasonality from series, even if a series is not seasonal from the beginneing. If a series is not seasonal, the resulting series may be bad.\nFortunatly, X-13 contains a few tests that help users to decide if a series is is seasnal or not.\nBefore appying X-13AS ist may be necessary to descide if the series is seasonal.\n\n12.0.1 Avalabele Tests\nX13 offers has several formal checks:\n\nqs test\nids\nm7\n\nThe ids test is closely connected to m7, but the QS test is quite different. Which tests are preferrable, and how should a user descide if the tests are not aligned?\n\n\n12.0.2 ids test\nhttp://www.ons.gov.uk/ons/guide-method/method-quality/general-methodology/time-series-analysis/guide-to-seasonal-adjustment.pdf\n\nFrom ONS 18.2 A general criterion for existence of seasonality\nEmpirical research showed that the most appropriate test for seasonality is the “Combined test for the presence of identifiable seasonality”, given after table D8 of the output. In particular, one of the following statements will always appear:\n\nIDENTIFIABLE SEASONALITY PRESENT\nIDENTIFIABLE SEASONALITY PROBABLY NOT PRESEN\nIDENTIFIABLE SEASONALITY NOT PRESENT\n\nIt is recommended that a series is adjusted in the first two cases and not adjusted in the last one. However there are two cases where one might need to deviate from this practice:\n\nThis is the ids test shown below\n\n\n12.0.3 Case Study"
+  },
+  {
+    "objectID": "42-annual-constraining.html",
+    "href": "42-annual-constraining.html",
+    "title": "13  Annual constraining",
+    "section": "",
+    "text": "Should the annual values be restrained?\nHow to use the force spec"
+  },
+  {
+    "objectID": "43-indirect-vs-direct.html",
+    "href": "43-indirect-vs-direct.html",
+    "title": "14  Indirect vs direct adjustment",
+    "section": "",
+    "text": "Should the subcomponents of a series be adjusted separately?"
+  },
+  {
+    "objectID": "50-quality-assessment.html",
+    "href": "50-quality-assessment.html",
+    "title": "Quality assessment",
+    "section": "",
+    "text": "This section focuses on diagnostic tools for seasonal adjustment. This will be written as a stand-alone section as well as a continuance of prior sections. The idea here is that many readers may be interested in checking the quality of their adjustments but not need help performing it."
+  },
+  {
+    "objectID": "51-quality-measures.html",
+    "href": "51-quality-measures.html",
+    "title": "15  Quality measures",
+    "section": "",
+    "text": "What is a good seasonal adjustment?\nM statistics\nOther statistics available in X13"
+  },
+  {
+    "objectID": "52-revisions.html",
+    "href": "52-revisions.html",
+    "title": "16  Revisions",
+    "section": "",
+    "text": "How to measure revisions?\nShould a model be re-estimated each period?\nHow to use the slidingspan and history spec"
+  },
+  {
+    "objectID": "60-future.html",
+    "href": "60-future.html",
+    "title": "The future of seasonal adjustment",
+    "section": "",
+    "text": "This short section outlines the future projects in the seasonal adjustment field. Daily or multiple seasonal adjustment plays a major role here. Ideally, examples of how to solve these problems are given.\n\nDaily adjustment\nMultivariate seasonal adjustment\nOther methods"
+  }
+]

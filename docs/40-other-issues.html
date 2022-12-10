@@ -8,7 +8,7 @@
 
 <meta name="author" content="James Livsey and Christoph Sax">
 
-<title>Seasonal Adjustment in R - 8&nbsp; Irregular holidays</title>
+<title>Seasonal Adjustment in R - Other Issues</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -31,8 +31,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./32-trading-days.html" rel="next">
-<link href="./30-data-problems.html" rel="prev">
+<link href="./41-presence-of-seasonality.html" rel="next">
+<link href="./34-seasonal-breaks.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -61,6 +61,7 @@ ul.task-list li input[type="checkbox"] {
     "search-submit-button-title": "Submit"
   }
 }</script>
+<meta name="robots" content="noindex">
 
 
 </head>
@@ -71,7 +72,7 @@ ul.task-list li input[type="checkbox"] {
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Irregular holidays</span></h1>
+      <h1 class="quarto-secondary-nav-title">Other Issues</h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -172,7 +173,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./31-holidays.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Irregular holidays</span></a>
+  <a href="./31-holidays.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Irregular holidays</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -194,7 +195,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./40-other-issues.html" class="sidebar-item-text sidebar-link">Other Issues</a>
+            <a href="./40-other-issues.html" class="sidebar-item-text sidebar-link active">Other Issues</a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -252,7 +253,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Irregular holidays</span></h1>
+<h1 class="title d-none d-lg-block">Other Issues</h1>
 </div>
 
 
@@ -267,12 +268,7 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<ul>
-<li><p>Why should we adjust for holiday effects</p></li>
-<li><p>Easter adjustment</p></li>
-<li><p>User defined adjustments (Chinese New Year, Diwali)</p></li>
-<li><p>Case Study: How to adjust for Ramadan (which is connected with some additional challenges)</p></li>
-</ul>
+<p>Part IV investigates more holistic issues that practitioners face. The main focus is to give classical methodology to answer their problems. Since these types of issues can be highly specialized, we concentrate on known solutions to the topics.</p>
 
 
 
@@ -412,13 +408,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./30-data-problems.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Data Problems</span>
+      <a href="./34-seasonal-breaks.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Seasonal breaks</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./32-trading-days.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Trading days</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./41-presence-of-seasonality.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Should a series be seasonally adjusted at all?</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
