@@ -1,5 +1,12 @@
 ## Revisions
 
+```{r}
+#| results: "asis"
+#| echo: false
+source("_common.R")
+status("drafting")  # drafting, polishing, complete
+```
+
 - How to measure revisions?
 
 - Should a model be re-estimated each period?

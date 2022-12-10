@@ -1,5 +1,11 @@
 ## Irregular holidays
 
+```{r}
+#| results: "asis"
+#| echo: false
+source("_common.R")
+status("drafting")  # drafting, polishing, complete
+```
 - Why should we adjust for holiday effects
 
 - Easter adjustment

@@ -1,5 +1,11 @@
 ## Should a series be seasonally adjusted at all?
 
+```{r}
+#| results: "asis"
+#| echo: false
+source("_common.R")
+status("drafting")  # drafting, polishing, complete
+```
 X-13AS removes seasonality from series, even if a series is not seasonal from the beginneing. If a series is not seasonal, the resulting series may be bad.
 
 Fortunatly, X-13 contains a few tests that help users to decide if a series is is seasnal or not.

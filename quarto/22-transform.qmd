@@ -1,5 +1,12 @@
 ## Transform
 
+```{r}
+#| results: "asis"
+#| echo: false
+source("_common.R")
+status("drafting")  # drafting, polishing, complete
+```
+
 - Discuss multiplicative vs additive adjustment
 
 - How to use the transform spec

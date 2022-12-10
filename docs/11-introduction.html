@@ -180,7 +180,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./20-overview.html" class="sidebar-item-text sidebar-link">X-13ARIMA-SEATS</a>
+            <a href="./20-overview.html" class="sidebar-item-text sidebar-link">Basics</a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -318,13 +318,37 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </div>
   
 
-</header><ul>
-<li><p>What is Seasonal Adjustment?</p></li>
-<li><p>What is X-13ARIMA-SEATS (X13)?</p></li>
-<li><p>Who uses X13?</p></li>
-<li><p>Available alternatives in and outside of R (some topics are covered in chapter VI)</p></li>
-<li><p>Case Study: A use cases outside of official statistics: seasonal adjustment of business data</p></li>
+</header><div class="status">
+<div class="callout-important callout callout-style-simple">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>You are reading an early draft of <em>Seasonal Adjustment in R</em>. This chapter is currently a dumping ground for ideas, and we don’t recommend reading it.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="callout-note callout callout-style-simple callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+In this section
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>What is Seasonal Adjustment?</li>
+<li>What is X-13ARIMA-SEATS (X13)?</li>
+<li>Who uses X13?</li>
+<li>Available alternatives in and outside of R (some topics are covered in chapter VI)</li>
+<li>Case Study: A use cases outside of official statistics: seasonal adjustment of business data</li>
 </ul>
+</div>
+</div>
 <p>Many time series exhibit a regular seasonal pattern over the year. US unemployment, for example, is usually higher from January to March, and again in June and July. Similarly, retail sales tend to peak with the Christmas season.</p>
 <p>To model the underlying structure of these series, any regular (seasonal) patterns are estimated and removed from the data. For example, to see if the economy is moving out of a recession during certain months, one wants the labor market data be free from such seasonal effects. Seasonal adjustment decomposes a time series into a trend, a seasonal and an irregular component and removes the seasonal component from the data.</p>
 <p>In official statistics, seasonal adjustment has a long tradition. The original X-11 software was developed by the US Census Bureau in the 1960s, and later improved by Statistics Canada (Dagum 1980). Subsequent software packages by the US Census Bureau were called X-12-ARIMA (Findley, Monsell, Bell, Otto, and Chen 1998) and X-13ARIMA-SEATS (or X-13, for short) (Monsell 2007). Today, X-11 is still used as a name for filter-based seasonal adjustment methods within X-13. Meanwhile, TRAMO-SEATS, developed by the Bank of Spain (Caporello, Maravall, and Sánchez 2001), offers an alternative model-based approach to seasonal adjustment.</p>
@@ -341,52 +365,48 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>The <code>seas</code> function provides the core functionality of the package. By default, <code>seas</code> calls the automatic procedures of X-13 to perform a seasonal adjustment that works well in most circumstances:</p>
 <div class="cell">
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-seas(x = AirPassengers)
-
-Coefficients:
-          Weekday          Easter[1]         AO1951.May  MA-Nonseasonal-01  
-         -0.00295            0.01777            0.10016            0.11562  
-   MA-Seasonal-12  
-          0.49736  </code></pre>
-</div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; seas(x = AirPassengers)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients:</span></span>
+<span><span class="co">#&gt;           Weekday          Easter[1]         AO1951.May  MA-Nonseasonal-01  </span></span>
+<span><span class="co">#&gt;          -0.00295            0.01777            0.10016            0.11562  </span></span>
+<span><span class="co">#&gt;    MA-Seasonal-12  </span></span>
+<span><span class="co">#&gt;           0.49736</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The first argument of seas is a time series of class “ts”. The unemp example series measures US unemployment and is included in seasonal. The function returns an object of class “seas” that contains the necessary information on the adjustment performed on this time series.</p>
 <div class="cell">
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>There are several functions and methods for “seas” objects. The final function returns the adjusted series. The plot method shows a plot with the unadjusted and the adjusted series.</p>
 <div class="cell">
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="11-introduction_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+<p><img src="11-introduction_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="576"></p>
 </div>
 </div>
 <p>The summary method displays an overview of the model, very similar to the one produced by R’s lm function:</p>
 <div class="cell">
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-seas(x = AirPassengers)
-
-Coefficients:
-                    Estimate Std. Error z value Pr(&gt;|z|)    
-Weekday           -0.0029497  0.0005232  -5.638 1.72e-08 ***
-Easter[1]          0.0177674  0.0071580   2.482   0.0131 *  
-AO1951.May         0.1001558  0.0204387   4.900 9.57e-07 ***
-MA-Nonseasonal-01  0.1156204  0.0858588   1.347   0.1781    
-MA-Seasonal-12     0.4973600  0.0774677   6.420 1.36e-10 ***
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-SEATS adj.  ARIMA: (0 1 1)(0 1 1)  Obs.: 144  Transform: log
-AICc: 947.3, BIC: 963.9  QS (no seasonality in final):    0  
-Box-Ljung (no autocorr.): 26.65   Shapiro (normality): 0.9908  </code></pre>
-</div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; seas(x = AirPassengers)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients:</span></span>
+<span><span class="co">#&gt;                     Estimate Std. Error z value Pr(&gt;|z|)    </span></span>
+<span><span class="co">#&gt; Weekday           -0.0029497  0.0005232  -5.638 1.72e-08 ***</span></span>
+<span><span class="co">#&gt; Easter[1]          0.0177674  0.0071580   2.482   0.0131 *  </span></span>
+<span><span class="co">#&gt; AO1951.May         0.1001558  0.0204387   4.900 9.57e-07 ***</span></span>
+<span><span class="co">#&gt; MA-Nonseasonal-01  0.1156204  0.0858588   1.347   0.1781    </span></span>
+<span><span class="co">#&gt; MA-Seasonal-12     0.4973600  0.0774677   6.420 1.36e-10 ***</span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; SEATS adj.  ARIMA: (0 1 1)(0 1 1)  Obs.: 144  Transform: log</span></span>
+<span><span class="co">#&gt; AICc: 947.3, BIC: 963.9  QS (no seasonality in final):    0  </span></span>
+<span><span class="co">#&gt; Box-Ljung (no autocorr.): 26.65   Shapiro (normality): 0.9908</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="example-series" class="level3" data-number="1.0.2"><h3 data-number="1.0.2" class="anchored" data-anchor-id="example-series">
 <span class="header-section-number">1.0.2</span> Example Series</h3>
@@ -395,9 +415,9 @@ Box-Ljung (no autocorr.): 26.65   Shapiro (normality): 0.9908  </code></pre>
 <section id="us-unemployment" class="level4" data-number="1.0.2.1"><h4 data-number="1.0.2.1" class="anchored" data-anchor-id="us-unemployment">
 <span class="header-section-number">1.0.2.1</span> US Unemployment</h4>
 <div class="cell">
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">unemp</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">unemp</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="11-introduction_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+<p><img src="11-introduction_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="576"></p>
 </div>
 </div>
 

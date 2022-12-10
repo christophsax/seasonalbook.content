@@ -15,7 +15,7 @@ options(
   dplyr.print_max = 6,
   stringr.view_n = 10,
   # Activate crayon output - temporarily disabled for quarto
-  # crayon.enabled = TRUE,
+  crayon.enabled = TRUE,
   pillar.bold = TRUE,
   width = 77 # 80 - 3 for #> comment
 )
@@ -42,9 +42,8 @@ status <- function(type) {
     "\n",
     ":::: status\n",
     "::: callout-", class, " \n",
-    "You are reading the work-in-progress second edition of R for Data Science. ",
-    "This chapter ", status, ". ",
-    "You can find the complete first edition at <https://r4ds.had.co.nz>.\n",
+    "You are reading an early draft of *Seasonal Adjustment in R*. ",
+    "This chapter ", status, ".\n",
     ":::\n",
     "::::\n"
   ))

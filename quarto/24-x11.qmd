@@ -1,5 +1,12 @@
 ## X11
 
+```{r}
+#| results: "asis"
+#| echo: false
+source("_common.R")
+status("drafting")  # drafting, polishing, complete
+```
+
 One of the two main methods available in X-13ARIMA-SEATS to extract trend and seasonal components is the ``X-11'' method. 
 This is a nonparametric procedure that works by passing moving-average filters over the data to extract intended components.
 In order to use symetric moving average filters at the end of the time series (current value), a regARIMA model is used to forecast extend the series.

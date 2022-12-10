@@ -1,5 +1,11 @@
 # Data Problems
 
+```{r}
+#| results: "asis"
+#| echo: false
+source("_common.R")
+status("drafting")  # drafting, polishing, complete
+```
 In part III we look at more in-depth at practical issues with seasonal adjustment.
 The focus is on concrete solutions to each situation presented.
 Each subsection will prominently feature a case study dedicated to each problem.

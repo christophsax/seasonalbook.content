@@ -1,5 +1,12 @@
 ## Annual constraining
 
+```{r}
+#| results: "asis"
+#| echo: false
+source("_common.R")
+status("drafting")  # drafting, polishing, complete
+```
+
 - Should the annual values be restrained?
 
 - How to use the force spec

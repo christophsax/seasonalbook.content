@@ -1,5 +1,12 @@
 ## Overview of the software
 
+```{r}
+#| results: "asis"
+#| echo: false
+source("_common.R")
+status("drafting")  # drafting, polishing, complete
+```
+
 - History of the software
 
 - Elements of the software

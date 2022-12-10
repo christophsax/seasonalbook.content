@@ -1,5 +1,11 @@
 ## regARIMA Model
 
+```{r}
+#| results: "asis"
+#| echo: false
+source("_common.R")
+status("drafting")  # drafting, polishing, complete
+```
 - Idea of regARIMA
 
 The most fundamental procedure involved in X-13 is applying moving average filters.

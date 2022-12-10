@@ -1,5 +1,12 @@
 ## Trading days
 
+```{r}
+#| results: "asis"
+#| echo: false
+source("_common.R")
+status("drafting")  # drafting, polishing, complete
+```
+
 - Why should we adjust for trading day effects
 
 - Seven or two coefficient trading day

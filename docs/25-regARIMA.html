@@ -314,7 +314,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </div>
   
 
-</header><ul>
+</header><div class="status">
+<div class="callout-important callout callout-style-simple">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>You are reading an early draft of <em>Seasonal Adjustment in R</em>. This chapter is currently a dumping ground for ideas, and we don’t recommend reading it.</p>
+</div>
+</div>
+</div>
+</div>
+<ul>
 <li>Idea of regARIMA</li>
 </ul>
 <p>The most fundamental procedure involved in X-13 is applying moving average filters. When symmetric filters are used we “lose” observations at the end of the series. Consider the simple moving average filter <span class="math display">\[ Y_t = \frac{1}{5} X_{t-2} + \frac{1}{5} X_{t-1} + \frac{1}{5} X_{t} + \frac{1}{5} X_{t+1} + \frac{1}{5} X_{t+2}. \]</span></p>
@@ -325,46 +337,38 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span><span class="va">y</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">x</span>, filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span>, sides <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="fu">tsbox</span><span class="fu">::</span><span class="fu"><a href="https://www.tsbox.help/reference/ts_plot.html">ts_plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="25-regARIMA_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="672"></p>
+<p><img src="25-regARIMA_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="576"></p>
 </div>
 </div>
 <p>The output of the filter <span class="math inline">\(Y_t\)</span> is shorter than <span class="math inline">\(X_t\)</span> by 4 total observations. Two at the beginning and two at the end.</p>
 <p>This is one of the primary reasons we consider regARIMA models when discussing seasonal adjustment; the observed time series is forecast extended to allow for symmetric moving average filters to be used all the way to the end of the series. Another reason for regARIMA modeling is to include exogenous regression variables in our analysis. These include, but are not limited to, moving holiday effects, trading day, outliers and level-shifts. The regARIMA take the form <span class="math display">\[ f\left(\frac{Y_t}{D_t} \right) = \boldsymbol{\beta}^\prime {\bf X}_t + Z_t .\]</span> Here <span class="math inline">\(Y_t\)</span> is the observed time series. The function <span class="math inline">\(f\)</span> represents a transformation, most commonly used is the log transform ie <span class="math inline">\(f(x) = \log(x)\)</span>. The regression variables appear in the columns of the design matrix <span class="math inline">\({\bf X}_t\)</span> and <span class="math inline">\(Z_t\)</span> is an ARIMA process. This last assumption on <span class="math inline">\(Z_t\)</span> is what distinguished a regARIMA model from more classic linear models and multiple linear regression where error terms are assumed uncorrelated. In order to achieve a suitable seasonal adjustment it is important to get the regARIMA model correct. For most dataset the built in automatic modeling features of the X13 program will be suitable to detect a reasonable model. This can be used as a starting point for more rigorous regARIMA model development or used as the final regARIMA modeling choice for your seasonal adjustment needs. We evoke automatic model identification through the XXX spec. The default behavior of the R seasonal package is XXX which includes automatic model identification. As an aside, the general rule is to not use automatic modeling `<code>in production''. This mean, if you are going to include seasonal adjustment as part of a large scale data processing that occurs regularly (say monthly), then it is not advisable to have automatic model identification run every month.  Instead, an alternative process, is to run automodel once and then fix the model choice in the XXX spec file.  This does not need to be done manually since the</code>static()` function from the seasonal package can do this for you. For example, consider the default seasonal adjustment</p>
 <div class="cell">
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">AirPassengers</span>, x11 <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">m</span><span class="op">$</span><span class="va">spc</span><span class="op">$</span><span class="va">automdl</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>$print
-[1] "bestfivemdl"</code></pre>
-</div>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">m</span><span class="op">$</span><span class="va">spc</span><span class="op">$</span><span class="va">arima</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>NULL</code></pre>
-</div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">m</span><span class="op">$</span><span class="va">spc</span><span class="op">$</span><span class="va">automdl</span><span class="op">)</span></span>
+<span><span class="co">#&gt; $print</span></span>
+<span><span class="co">#&gt; [1] "bestfivemdl"</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">m</span><span class="op">$</span><span class="va">spc</span><span class="op">$</span><span class="va">arima</span><span class="op">)</span></span>
+<span><span class="co">#&gt; NULL</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Notice the value <code>NULL</code> indicates no ARIMA model is specified and the returned arguments for the automdl spec indicate it is active during the X13 run.</p>
 <div class="cell">
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/udg.html">udg</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"automdl"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>         automdl 
-"(0 1 1)(0 1 1)" </code></pre>
-</div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/udg.html">udg</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"automdl"</span><span class="op">)</span></span>
+<span><span class="co">#&gt;          automdl </span></span>
+<span><span class="co">#&gt; "(0 1 1)(0 1 1)"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Indicates that automatic modeling identified the (0 1 1)(0 1 1) model as the best choice. If we want to hardcode this model for subsequent runs, and turn off automatic model identification, this can be done via</p>
 <div class="cell">
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_call</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/static.html">static</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>seas(
-  x = AirPassengers,
-  x11 = "",
-  regression.variables = c("td1coef", "easter[1]", "ao1951.May"),
-  arima.model = "(0 1 1)(0 1 1)",
-  regression.aictest = NULL,
-  outlier = NULL,
-  transform.function = "log"
-)</code></pre>
-</div>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/eval.html">eval</a></span><span class="op">(</span><span class="va">m_call</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_call</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/static.html">static</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
+<span><span class="co">#&gt; seas(</span></span>
+<span><span class="co">#&gt;   x = AirPassengers,</span></span>
+<span><span class="co">#&gt;   x11 = "",</span></span>
+<span><span class="co">#&gt;   regression.variables = c("td1coef", "easter[1]", "ao1951.May"),</span></span>
+<span><span class="co">#&gt;   arima.model = "(0 1 1)(0 1 1)",</span></span>
+<span><span class="co">#&gt;   regression.aictest = NULL,</span></span>
+<span><span class="co">#&gt;   outlier = NULL,</span></span>
+<span><span class="co">#&gt;   transform.function = "log"</span></span>
+<span><span class="co">#&gt; )</span></span>
+<span><span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/eval.html">eval</a></span><span class="op">(</span><span class="va">m_call</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li><p>How to use the regression spec</p></li>

@@ -1,5 +1,12 @@
 ## SEATS
 
+```{r}
+#| results: "asis"
+#| echo: false
+source("_common.R")
+status("drafting")  # drafting, polishing, complete
+```
+
 - How to use the SEATS spec
 
 - SEATS vs X11

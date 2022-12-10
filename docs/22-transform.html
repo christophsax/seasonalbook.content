@@ -318,7 +318,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </div>
   
 
-</header><ul>
+</header><div class="status">
+<div class="callout-important callout callout-style-simple">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>You are reading an early draft of <em>Seasonal Adjustment in R</em>. This chapter is currently a dumping ground for ideas, and we don’t recommend reading it.</p>
+</div>
+</div>
+</div>
+</div>
+<ul>
 <li><p>Discuss multiplicative vs additive adjustment</p></li>
 <li><p>How to use the transform spec</p></li>
 <li><p>This is our first chance to mention the idea of test first then hard-code in production</p></li>
@@ -329,11 +341,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell">
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.seasonal.website">seasonal</a></span><span class="op">)</span></span>
 <span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/udg.html">udg</a></span><span class="op">(</span><span class="va">m</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"aictest.trans.aicc.nolog"</span>, <span class="st">"aictest.trans.aicc.log"</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>aictest.trans.aicc.nolog   aictest.trans.aicc.log 
-               1021.1919                 987.3845 </code></pre>
-</div>
+<span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/udg.html">udg</a></span><span class="op">(</span><span class="va">m</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"aictest.trans.aicc.nolog"</span>, <span class="st">"aictest.trans.aicc.log"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; aictest.trans.aicc.nolog   aictest.trans.aicc.log </span></span>
+<span><span class="co">#&gt;                1021.1919                 987.3845</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We see the AICC for log transformation is lower and hence selected. The summary of the seasonal object <code>summary(m)</code> tells us this with <code>Transform: log</code> displayed. The automatically selected transformation can also be found in many other places such as the HTML output with <code>out(m)</code> or the udg with agruement name <em>aictrans</em> such as <code>udg(m, "aictrans")</code>.</p>
 <p>The choice between log and none changes the type of seasonal decomposition that will occur and hence your interpretation of the seasonal factors. With no transformation, X13 will do an additive seasonal adjustment <span class="math display">\[X_t = T_t + S_t + I_t.\]</span> If a long transformation is selected, X13 will do a multiplicative adjustment <span class="math display">\[X_t = T_t \cdot S_t \cdot I_t.\]</span> This is major difference here is the way seasonal factors are interpreted and applied to the observed data to remove seasonality. For additive models the seasonal factor is subtracted from the original <span class="math inline">\(X_t - S_t\)</span>. For example, an observed value of 100 with seasonal factor of 3.2 would result in a seasonally adjusted value of <span class="math inline">\(100 - 3.2 = 96.8\)</span>. For multiplicative models the observed data is divided by the seasonal factor <span class="math inline">\(\frac{X_t}{S_t}\)</span>. For example, an observed value of 100 with seasonal factor of 1.08 would result in a seasonally adjusted value of <span class="math inline">\(100 / 1.08 = 92.59259\)</span>. Hence for multiplicative models values of <span class="math inline">\(S_t&gt;1\)</span>, decrease the observed value and <span class="math inline">\(S_t &lt; 1\)</span> increase it.</p>
@@ -379,34 +389,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </div>
 <div class="cell">
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">grocery</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">grocery</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="22-transform_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+<p><img src="22-transform_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="576"></p>
 </div>
 </div>
 <p>Visual inspection of the series shows no immediate reason to think we need to perform a log transform. There is possible seasonal hederoskadasity which could be mitigated by taking logs. Perform an X-11 adjustmnet with all of <code>seasonal</code> defaults.</p>
 <div class="cell">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">grocery</span>, x11 <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/udg.html">udg</a></span><span class="op">(</span><span class="va">m</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"aictest.trans.aicc.nolog"</span>, <span class="st">"aictest.trans.aicc.log"</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>aictest.trans.aicc.nolog   aictest.trans.aicc.log 
-                4202.960                 4201.042 </code></pre>
-</div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">grocery</span>, x11 <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/udg.html">udg</a></span><span class="op">(</span><span class="va">m</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"aictest.trans.aicc.nolog"</span>, <span class="st">"aictest.trans.aicc.log"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; aictest.trans.aicc.nolog   aictest.trans.aicc.log </span></span>
+<span><span class="co">#&gt;                 4202.960                 4201.042</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>This is interesting since the AICC for no transformation is lower than the AICC for log transform.</p>
 <div class="cell">
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/transformfunction.html">transformfunction</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "log"</code></pre>
-</div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/transformfunction.html">transformfunction</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "log"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The default value for transform.aicdiff is -2 meaning the program slightly prefers log transform and the difference between the AICC values must exceed 2. In this situation we see the difference between the two AICC values is -1.917597. If you were to change this option to transform.aicdiff = 0 then the program selects no transform.</p>
 <div class="cell">
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">grocery</span>, x11 <span class="op">=</span> <span class="st">""</span>, transform.aicdiff <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/transformfunction.html">transformfunction</a></span><span class="op">(</span><span class="va">m2</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "none"</code></pre>
-</div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">grocery</span>, x11 <span class="op">=</span> <span class="st">""</span>, transform.aicdiff <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/transformfunction.html">transformfunction</a></span><span class="op">(</span><span class="va">m2</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "none"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 

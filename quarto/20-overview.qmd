@@ -1,4 +1,11 @@
-# X-13ARIMA-SEATS
+# Basics
+
+```{r}
+#| results: "asis"
+#| echo: false
+source("_common.R")
+status("drafting")  # drafting, polishing, complete
+```
 
 This section gets readers familiar with X-13ARIMA-SEATS.
 It begins by explaining the history and pedagogy of the software.

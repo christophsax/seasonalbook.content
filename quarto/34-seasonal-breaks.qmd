@@ -1,5 +1,12 @@
 ## Seasonal breaks
 
+```{r}
+#| results: "asis"
+#| echo: false
+source("_common.R")
+status("drafting")  # drafting, polishing, complete
+```
+
 - Why to care about seasonal breaks?
 
 - Detection of seasonal breaks
