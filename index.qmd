@@ -1,12 +1,5 @@
 # Welcome {.unnumbered}
 
-```{r}
-#| results: "asis"
-#| echo: false
-source("_common.R")
-status("polishing")  # drafting, polishing, complete
-```
-
 This is the website for the work-in-progress edition of *Seasonal Adjustment in R*, an online Book by James Livsey and Christoph Sax.
 
 

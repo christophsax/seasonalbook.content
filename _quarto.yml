@@ -64,9 +64,6 @@ format:
     author-meta: "James Livsey and Christoph Sax"
     callout-appearance: simple
 
-  pdf:
-    documentclass: scrreprt
-
 editor: visual
 
 

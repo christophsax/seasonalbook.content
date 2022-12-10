@@ -24,7 +24,7 @@ ggplot2::theme_set(ggplot2::theme_gray(12))
 
 status <- function(type) {
   status <- switch(type,
-    polishing = "should be readable but is currently undergoing final polishing",
+    polishing = "should be readable but needs more polishing",
     restructuring = "is undergoing heavy restructuring and may be confusing or incomplete",
     drafting = "is currently a dumping ground for ideas, and we don't recommend reading it",
     complete = "is largely complete and just needs final proof reading",
