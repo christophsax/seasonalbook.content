@@ -3,3 +3,4 @@ book/.DS_Store
 .Rproj.user
 quarto/*_files
 quarto/*.html
+/.quarto/

@@ -1,6 +1,5 @@
 project:
   type: book
-  output-dir: ../docs
 
 book:
   title: "Seasonal Adjustment in R"
