@@ -1,15 +1,12 @@
-# x13book
 
+<!-- README.md is generated from README.Rmd. Please edit that file -->
 
-### 2020-04-13
+# seasonalbook
 
-Jim
+<!-- badges: start -->
+<!-- badges: end -->
 
-- [ ] Upload X-11
-- [ ] Finish regArima
+An R package that supplements “Seasonal Adjustment in R”, an online Book
+by James Livsey and Christoph Sax.
 
-
-Christoph
-
-- [x] Draft Daily Stuff
-- [ ] How to knit chapters individually in RStudio
+This is an early draft.
