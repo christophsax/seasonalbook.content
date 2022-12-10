@@ -60,7 +60,7 @@ format:
     theme:
       - cosmo
     code-link: true
-
+    include-in-header: "header.html"
     author-meta: "James Livsey and Christoph Sax"
 
   pdf:
