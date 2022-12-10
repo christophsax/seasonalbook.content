@@ -1,0 +1,10 @@
+## Overview of the software
+
+- History of the software
+
+- Elements of the software
+
+- Overview of main choices a user needs to make
+
+
+

@@ -1,8 +1,5 @@
-
 book/.DS_Store
 .DS_Store
 .Rproj.user
-topics/trading-days/replicating-td-adj.md
-topics/dailyadj/script/oos_evals_cache
-topics/dailyadj/out/*
-topics/dailyadj/data/snb-data.RData
+quarto/*_files
+quarto/*.html

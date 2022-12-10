@@ -6,6 +6,8 @@ The most fundamental procedure involved in X-13 is applying moving average filte
 When symmetric filters are used we "lose" observations at the end of the series. Consider the simple moving average filter 
 $$ Y_t = \frac{1}{5} X_{t-2} + \frac{1}{5} X_{t-1} + \frac{1}{5} X_{t} + \frac{1}{5} X_{t+1} + \frac{1}{5} X_{t+2}. $$
 ```{r}
+library(seasonal)
+
 x <- window(AirPassengers, start = c(1959, 1), end = c(1960, 12))
 y = filter(x, filter = rep(1/5, 5), sides = 2)
 tsbox::ts_plot(cbind(x, y))
@@ -33,22 +35,22 @@ Instead, an alternative process, is to run automodel once and then fix the model
 This does not need to be done manually since the `static()` function from the seasonal package can do this for you. 
 For example, consider the default seasonal adjustment 
 ```{r}
-m <- seasonal::seas(AirPassengers, x11 = "")
+m <- seas(AirPassengers, x11 = "")
 print(m$spc$automdl)
 print(m$spc$arima)
 ```
 Notice the value `NULL` indicates no ARIMA model is specified and the returned arguments for the automdl spec indicate it is active during the X13 run. 
 
 ```{r}
-seasonal::udg(m, "automdl")
+udg(m, "automdl")
 ```
 
 Indicates that automatic modeling identified the (0 1 1)(0 1 1) model as the best choice. 
 If we want to hardcode this model for subsequent runs, and turn off automatic model identification, this can be done via
 
 ```{r}
-m_call <- seasonal::static(m)
-m2 <- seasonal::eval(m_call)
+m_call <- static(m)
+m2 <- eval(m_call)
 ```
 
 

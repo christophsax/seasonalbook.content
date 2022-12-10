@@ -1,0 +1,8 @@
+# Welcome {.unnumbered}
+
+
+This is the website for the work-in-progress edition of **"Seasonal Adjustment in R"**, an online Book by James Livsey and Christoph Sax.
+This book will teach you how to do seasonal adjustment with R.
+
+## Acknowledgements {.unnumbered}
+

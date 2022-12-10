@@ -1,0 +1,72 @@
+project:
+  type: book
+  output-dir: _book
+
+book:
+  title: "Seasonal Adjustment in R"
+  reader-mode: true
+
+  page-footer:
+    left: |
+      by James Livsey and Christoph Sax
+    right: |
+      Seasonal Adjustment in R
+  # cover-image: cover.png
+  # favicon: cover.png
+  site-url: https://github.com/christophsax/seasonalbook
+  repo-url: https://github.com/christophsax/seasonalbook
+  repo-branch: main
+  repo-actions: [edit, issue]
+  chapters:
+    - index.qmd
+
+    - part: 10-basics.qmd
+      chapters:
+        - 11-introduction.qmd
+        - 12-how-to-use.qmd
+
+    - part: 20-overview.qmd
+      chapters:
+        - 21-history.qmd
+        - 22-transform.qmd
+        - 23-seats.qmd
+        - 24-x11.qmd
+        - 25-regARIMA.qmd
+
+    - part: 30-data-problems.qmd
+      chapters:
+        - 31-holidays.qmd
+        - 32-trading-days.qmd
+        - 33-outliers.qmd
+        - 34-seasonal-breaks.qmd
+
+    - part: 40-other-issues.qmd
+      chapters:
+        - 41-presence-of-seasonality.qmd
+        - 42-annual-constraining.qmd
+        - 43-indirect-vs-direct.qmd
+
+    - part: 50-quality-assessment.qmd
+      chapters:
+        - 51-quality-measures.qmd
+        - 52-revisions.qmd
+
+    - part: 60-future.qmd
+
+bibliography: references.bib
+
+format:
+  html:
+    theme:
+      - cosmo
+    code-link: true
+
+    author-meta: "James Livsey and Christoph Sax"
+
+  pdf:
+    documentclass: scrreprt
+
+editor: visual
+
+
+

@@ -1,9 +1,3 @@
-# Other Issues
-
-Part IV investigates more holistic issues that practitioners face.
-The main focus is to give classical methodology to answer their problems.
-Since these types of issues can be highly specialized, we concentrate on known solutions to the topics.
-
 ## Should a series be seasonally adjusted at all?
 
 X-13AS removes seasonality from series, even if a series is not seasonal from the beginneing. If a series is not seasonal, the resulting series may be bad.
