@@ -13,8 +13,8 @@ book:
       Seasonal Adjustment in R
   # cover-image: cover.png
   # favicon: cover.png
-  site-url: https://github.com/christophsax/seasonalbook
-  repo-url: https://github.com/christophsax/seasonalbook
+  site-url: https://christophsax.github.io/seasonalbook.content
+  repo-url: https://github.com/christophsax/seasonalbook.content
   repo-branch: main
   repo-actions: [edit, issue]
   chapters:

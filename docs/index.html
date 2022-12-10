@@ -71,7 +71,7 @@ ul.task-list li input[type="checkbox"] {
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Seasonal Adjustment in R</a> 
         <div class="sidebar-tools-main">
-    <a href="https://github.com/christophsax/seasonalbook" title="Source Code" class="sidebar-tool px-1"><i class="bi bi-github"></i></a>
+    <a href="https://github.com/christophsax/seasonalbook.content/quarto" title="Source Code" class="sidebar-tool px-1"><i class="bi bi-github"></i></a>
   <a href="" class="quarto-reader-toggle sidebar-tool" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
   <div class="quarto-reader-toggle-btn">
   <i class="bi"></i>
@@ -94,7 +94,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./10-basics.html" class="sidebar-item-text sidebar-link">Getting Started</a>
+            <a href="./10-basics.html" class="sidebar-item-text sidebar-link">Introduction</a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -102,7 +102,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./11-introduction.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a>
+  <a href="./11-introduction.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">A minimal example</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -234,10 +234,12 @@ ul.task-list li input[type="checkbox"] {
 <li>
 <a href="#welcome" id="toc-welcome" class="nav-link active" data-scroll-target="#welcome">Welcome</a>
   <ul class="collapse">
-<li><a href="#acknowledgements" id="toc-acknowledgements" class="nav-link" data-scroll-target="#acknowledgements">Acknowledgements</a></li>
+<li><a href="#about-the-book" id="toc-about-the-book" class="nav-link" data-scroll-target="#about-the-book">About the book</a></li>
+  <li><a href="#key-features-of-the-book" id="toc-key-features-of-the-book" class="nav-link" data-scroll-target="#key-features-of-the-book">Key features of the book</a></li>
+  <li><a href="#acknowledgements" id="toc-acknowledgements" class="nav-link" data-scroll-target="#acknowledgements">Acknowledgements</a></li>
   </ul>
 </li>
-  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook/edit/main/index.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/quarto/edit/main/index.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/quarto/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
@@ -256,19 +258,30 @@ ul.task-list li input[type="checkbox"] {
 
 </header><section id="welcome" class="level1 unnumbered"><h1 class="unnumbered">Welcome</h1>
 <div class="status">
-<div class="callout-important callout callout-style-simple">
+<div class="callout-note callout callout-style-simple">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-body-container">
-<p>You are reading an early draft of <em>Seasonal Adjustment in R</em>. This chapter is currently a dumping ground for ideas, and we don’t recommend reading it.</p>
+<p>You are reading an early draft of <em>Seasonal Adjustment in R</em>. This chapter should be readable but is currently undergoing final polishing.</p>
 </div>
 </div>
 </div>
 </div>
-<p>This is the website for the work-in-progress edition of <strong>“Seasonal Adjustment in R”</strong>, an online Book by James Livsey and Christoph Sax. This book will teach you how to do seasonal adjustment with R.</p>
-<section id="acknowledgements" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="acknowledgements">Acknowledgements</h2>
+<p>This is the website for the work-in-progress edition of <em>Seasonal Adjustment in R</em>, an online Book by James Livsey and Christoph Sax.</p>
+<section id="about-the-book" class="level2"><h2 class="anchored" data-anchor-id="about-the-book">About the book</h2>
+<p>This book will teach you how to do seasonal adjustment in R, using X13-ARIMA-SEATS.</p>
+<p>Specifically, the audience will be both R users who want to learn about seasonal adjustment as well as seasonal adjustment practitioners, who are interested in using R. The book will be tailored to the practical applications of seasonal adjustment within R. It presents background material and references for the theoretically minded reader. The main focus, however, is on concrete problems and examples.</p>
+<p>We will showcase methods through detailed examples with associated code. This presentation allows the academic level to be quite broad; understood by undergraduates all the way through advanced Ph.D.&nbsp;students.</p>
+</section><section id="key-features-of-the-book" class="level2"><h2 class="anchored" data-anchor-id="key-features-of-the-book">Key features of the book</h2>
+<ul>
+<li><p>Each chapter include a concrete practical problem and shows how X-13 can be used to address it</p></li>
+<li><p>Teach-by-example format</p></li>
+<li><p>Continuous connection of X-13ARIMA-SEATS input with R input and vice-versa</p></li>
+<li><p>Fundamental theoretical material is referenced throughout (mainly as an option)</p></li>
+<li><p>For each example given the book will give answers, code and provide data</p></li>
+</ul></section><section id="acknowledgements" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="acknowledgements">Acknowledgements</h2>
 
 
 </section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
@@ -407,7 +420,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
   <div class="nav-page nav-page-next">
       <a href="./10-basics.html" class="pagination-link">
-        <span class="nav-page-text">Getting Started</span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text">Introduction</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

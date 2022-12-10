@@ -1,47 +1,40 @@
-## Introduction
+# A minimal example
 
 ```{r}
 #| results: "asis"
 #| echo: false
 source("_common.R")
-status("drafting")  # drafting, polishing, complete
+status("polishing")  # drafting, polishing, complete
 ```
 
 
 
-
-::: {.callout-note}
-## In this section
-
+<!--
 - What is Seasonal Adjustment?
 - What is X-13ARIMA-SEATS (X13)?
 - Who uses X13?
 - Available alternatives in and outside of R (some topics are covered in chapter VI)
 - Case Study: A use cases outside of official statistics: seasonal adjustment of business data
 
-:::
-
+ -->
 
 Many time series exhibit a regular seasonal pattern over the year. US unemployment, for example, is usually higher from January to March, and again in June and July. Similarly, retail sales tend to peak with the Christmas season.
 
 To model the underlying structure of these series, any regular (seasonal) patterns are estimated and removed from the data. For example, to see if the economy is moving out of a recession during certain months, one wants the labor market data be free from such seasonal effects. Seasonal adjustment decomposes a time series into a trend, a seasonal and an irregular component and removes the seasonal component from the data.
 
-In official statistics, seasonal adjustment has a long tradition. The original X-11 software was developed by the US Census Bureau in the 1960s, and later improved by Statistics Canada (Dagum 1980). Subsequent software packages by the US Census Bureau were called X-12-ARIMA (Findley, Monsell, Bell, Otto, and Chen 1998) and X-13ARIMA-SEATS (or X-13, for short) (Monsell 2007). Today, X-11 is still used as a name for filter-based seasonal adjustment methods within X-13. Meanwhile, TRAMO-SEATS, developed by the Bank of Spain (Caporello, Maravall, and Sánchez 2001), offers an alternative model-based approach to seasonal adjustment.
 
-In its most recent version, X-13 offers these two seasonal adjustment methods in a single command-line tool, written in Fortran. The National Bank of Belgium has created an alter- native Java-based implementation called JDemetra+ (National Bank of Belgium, Deutsche Bundesbank, Eurostat 2017) which is also widely deployed by statistical agencies. One of either the TRAMO-SEATS or X-11 method of seasonal adjustment is used by almost all (government) statistical offices throughout the world.
 
-R (R Core Team 2017) offers several possibilities to perform seasonal adjustment in the stats package included with R. The decompose function uses filtering to split a time series into a trend, a seasonal and an irregular component. An alternative method is stl, which uses local regressions (and has some extensions offered by the stlplus package by Hafen (2016)). While both methods allow a multiplicative or an additive decomposition, these methods are somewhat limited in modeling actual data series.
-
-The programs used by statistical offices provide an extensive toolbox to deal with many advanced (and more irregular) aspects of seasonality, such as trading day adjustments, moving holiday adjustments or automated outlier detection.
-
-### Getting  Started
+## Installation
 
 If you use R installing X-13ARIMA-SEATS from CRAN is
-as easy as installing any other R package CITE JSS:
+as easy as installing any other R package [@jss]:
 
 ```r
 install.packages("seasonal")
 ```
+
+## A minimal example
+
 
 Once the package is installed it can be loaded in the usual way:
 
@@ -49,19 +42,19 @@ Once the package is installed it can be loaded in the usual way:
 library(seasonal)
 ```
 
-The `seas` function provides the core functionality of the
+The `seas()` function provides the core functionality of the
 package. By default, `seas` calls the automatic procedures of
 X-13 to perform a seasonal adjustment that works well in most
 circumstances:
 
 ```{r}
-seas(AirPassengers)
+seas(unemp)
 ```
 
 The first argument of seas is a time series of class "ts". The unemp example series measures US unemployment and is included in seasonal. The function returns an object of class "seas" that contains the necessary information on the adjustment performed on this time series.
 
 ```{r}
-m <- seas(AirPassengers)
+m <- seas(unemp)
 ```
 
 There are several functions and methods for "seas" objects. The final function returns the adjusted series. The plot method shows a plot with the unadjusted and the adjusted series.
@@ -77,17 +70,5 @@ The summary method displays an overview of the model, very similar to the one pr
 summary(m)
 ```
 
-
-### Example Series
-
-Throughout the book, we work with various example series. These sereis are included in seasonal and reflect various aspects of seseonal adjusmtent.
-
-Below is discussion of the series used in this book.
-
-#### US Unemployment
-
-```{r}
-plot(unemp)
-```
 
 

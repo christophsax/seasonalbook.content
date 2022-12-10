@@ -5,7 +5,7 @@
 <meta name="generator" content="quarto-1.2.269">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="James Livsey and Christoph Sax">
-<title>Seasonal Adjustment in R - 1&nbsp; Introduction</title>
+<title>Seasonal Adjustment in R - 1&nbsp; A minimal example</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -81,6 +81,25 @@ code span.st { color: #4070a0; } /* String */
 code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
 </style>
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -125,7 +144,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
       <h1 class="quarto-secondary-nav-title">
-<span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span>
+<span class="chapter-number">1</span>&nbsp; <span class="chapter-title">A minimal example</span>
 </h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
@@ -160,7 +179,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./10-basics.html" class="sidebar-item-text sidebar-link">Getting Started</a>
+            <a href="./10-basics.html" class="sidebar-item-text sidebar-link">Introduction</a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -168,7 +187,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./11-introduction.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a>
+  <a href="./11-introduction.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">A minimal example</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -297,14 +316,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
-<li><a href="#getting-started" id="toc-getting-started" class="nav-link active" data-scroll-target="#getting-started"><span class="toc-section-number">1.0.1</span>  Getting Started</a></li>
-  <li><a href="#example-series" id="toc-example-series" class="nav-link" data-scroll-target="#example-series"><span class="toc-section-number">1.0.2</span>  Example Series</a></li>
+<li><a href="#installation" id="toc-installation" class="nav-link active" data-scroll-target="#installation"><span class="toc-section-number">1.1</span>  Installation</a></li>
+  <li><a href="#a-minimal-example" id="toc-a-minimal-example" class="nav-link" data-scroll-target="#a-minimal-example"><span class="toc-section-number">1.2</span>  A minimal example</a></li>
   </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook/edit/main/11-introduction.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
 <h1 class="title d-none d-lg-block">
-<span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span>
+<span class="chapter-number">1</span>&nbsp; <span class="chapter-title">A minimal example</span>
 </h1>
 </div>
 
@@ -319,66 +338,51 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   
 
 </header><div class="status">
-<div class="callout-important callout callout-style-simple">
+<div class="callout-note callout callout-style-simple">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-body-container">
-<p>You are reading an early draft of <em>Seasonal Adjustment in R</em>. This chapter is currently a dumping ground for ideas, and we don’t recommend reading it.</p>
+<p>You are reading an early draft of <em>Seasonal Adjustment in R</em>. This chapter should be readable but is currently undergoing final polishing.</p>
 </div>
 </div>
 </div>
 </div>
-<div class="callout-note callout callout-style-simple callout-captioned">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-caption-container flex-fill">
-In this section
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<ul>
-<li>What is Seasonal Adjustment?</li>
-<li>What is X-13ARIMA-SEATS (X13)?</li>
-<li>Who uses X13?</li>
-<li>Available alternatives in and outside of R (some topics are covered in chapter VI)</li>
-<li>Case Study: A use cases outside of official statistics: seasonal adjustment of business data</li>
-</ul>
-</div>
-</div>
+<!--
+- What is Seasonal Adjustment?
+- What is X-13ARIMA-SEATS (X13)?
+- Who uses X13?
+- Available alternatives in and outside of R (some topics are covered in chapter VI)
+- Case Study: A use cases outside of official statistics: seasonal adjustment of business data
+
+ -->
 <p>Many time series exhibit a regular seasonal pattern over the year. US unemployment, for example, is usually higher from January to March, and again in June and July. Similarly, retail sales tend to peak with the Christmas season.</p>
 <p>To model the underlying structure of these series, any regular (seasonal) patterns are estimated and removed from the data. For example, to see if the economy is moving out of a recession during certain months, one wants the labor market data be free from such seasonal effects. Seasonal adjustment decomposes a time series into a trend, a seasonal and an irregular component and removes the seasonal component from the data.</p>
-<p>In official statistics, seasonal adjustment has a long tradition. The original X-11 software was developed by the US Census Bureau in the 1960s, and later improved by Statistics Canada (Dagum 1980). Subsequent software packages by the US Census Bureau were called X-12-ARIMA (Findley, Monsell, Bell, Otto, and Chen 1998) and X-13ARIMA-SEATS (or X-13, for short) (Monsell 2007). Today, X-11 is still used as a name for filter-based seasonal adjustment methods within X-13. Meanwhile, TRAMO-SEATS, developed by the Bank of Spain (Caporello, Maravall, and Sánchez 2001), offers an alternative model-based approach to seasonal adjustment.</p>
-<p>In its most recent version, X-13 offers these two seasonal adjustment methods in a single command-line tool, written in Fortran. The National Bank of Belgium has created an alter- native Java-based implementation called JDemetra+ (National Bank of Belgium, Deutsche Bundesbank, Eurostat 2017) which is also widely deployed by statistical agencies. One of either the TRAMO-SEATS or X-11 method of seasonal adjustment is used by almost all (government) statistical offices throughout the world.</p>
-<p>R (R Core Team 2017) offers several possibilities to perform seasonal adjustment in the stats package included with R. The decompose function uses filtering to split a time series into a trend, a seasonal and an irregular component. An alternative method is stl, which uses local regressions (and has some extensions offered by the stlplus package by Hafen (2016)). While both methods allow a multiplicative or an additive decomposition, these methods are somewhat limited in modeling actual data series.</p>
-<p>The programs used by statistical offices provide an extensive toolbox to deal with many advanced (and more irregular) aspects of seasonality, such as trading day adjustments, moving holiday adjustments or automated outlier detection.</p>
-<section id="getting-started" class="level3" data-number="1.0.1"><h3 data-number="1.0.1" class="anchored" data-anchor-id="getting-started">
-<span class="header-section-number">1.0.1</span> Getting Started</h3>
-<p>If you use R installing X-13ARIMA-SEATS from CRAN is as easy as installing any other R package CITE JSS:</p>
+<section id="installation" class="level2" data-number="1.1"><h2 data-number="1.1" class="anchored" data-anchor-id="installation">
+<span class="header-section-number">1.1</span> Installation</h2>
+<p>If you use R installing X-13ARIMA-SEATS from CRAN is as easy as installing any other R package <span class="citation" data-cites="jss">(<a href="#ref-jss" role="doc-biblioref">Sax and Eddelbuettel 2018</a>)</span>:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"seasonal"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section><section id="a-minimal-example" class="level2" data-number="1.2"><h2 data-number="1.2" class="anchored" data-anchor-id="a-minimal-example">
+<span class="header-section-number">1.2</span> A minimal example</h2>
 <p>Once the package is installed it can be loaded in the usual way:</p>
 <div class="cell">
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.seasonal.website">seasonal</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The <code>seas</code> function provides the core functionality of the package. By default, <code>seas</code> calls the automatic procedures of X-13 to perform a seasonal adjustment that works well in most circumstances:</p>
+<p>The <code><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas()</a></code> function provides the core functionality of the package. By default, <code>seas</code> calls the automatic procedures of X-13 to perform a seasonal adjustment that works well in most circumstances:</p>
 <div class="cell">
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">unemp</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Call:</span></span>
-<span><span class="co">#&gt; seas(x = AirPassengers)</span></span>
+<span><span class="co">#&gt; seas(x = unemp)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Coefficients:</span></span>
-<span><span class="co">#&gt;           Weekday          Easter[1]         AO1951.May  MA-Nonseasonal-01  </span></span>
-<span><span class="co">#&gt;          -0.00295            0.01777            0.10016            0.11562  </span></span>
-<span><span class="co">#&gt;    MA-Seasonal-12  </span></span>
-<span><span class="co">#&gt;           0.49736</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">#&gt; AR-Nonseasonal-01  MA-Nonseasonal-01     MA-Seasonal-12  </span></span>
+<span><span class="co">#&gt;            0.9436             0.8254             0.8507</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The first argument of seas is a time series of class “ts”. The unemp example series measures US unemployment and is included in seasonal. The function returns an object of class “seas” that contains the necessary information on the adjustment performed on this time series.</p>
 <div class="cell">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">unemp</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>There are several functions and methods for “seas” objects. The final function returns the adjusted series. The plot method shows a plot with the unadjusted and the adjusted series.</p>
 <div class="cell">
@@ -392,37 +396,28 @@ In this section
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Call:</span></span>
-<span><span class="co">#&gt; seas(x = AirPassengers)</span></span>
+<span><span class="co">#&gt; seas(x = unemp)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Coefficients:</span></span>
-<span><span class="co">#&gt;                     Estimate Std. Error z value Pr(&gt;|z|)    </span></span>
-<span><span class="co">#&gt; Weekday           -0.0029497  0.0005232  -5.638 1.72e-08 ***</span></span>
-<span><span class="co">#&gt; Easter[1]          0.0177674  0.0071580   2.482   0.0131 *  </span></span>
-<span><span class="co">#&gt; AO1951.May         0.1001558  0.0204387   4.900 9.57e-07 ***</span></span>
-<span><span class="co">#&gt; MA-Nonseasonal-01  0.1156204  0.0858588   1.347   0.1781    </span></span>
-<span><span class="co">#&gt; MA-Seasonal-12     0.4973600  0.0774677   6.420 1.36e-10 ***</span></span>
+<span><span class="co">#&gt;                   Estimate Std. Error z value Pr(&gt;|z|)    </span></span>
+<span><span class="co">#&gt; AR-Nonseasonal-01  0.94360    0.03441   27.43   &lt;2e-16 ***</span></span>
+<span><span class="co">#&gt; MA-Nonseasonal-01  0.82540    0.05654   14.60   &lt;2e-16 ***</span></span>
+<span><span class="co">#&gt; MA-Seasonal-12     0.85071    0.03362   25.30   &lt;2e-16 ***</span></span>
 <span><span class="co">#&gt; ---</span></span>
 <span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; SEATS adj.  ARIMA: (0 1 1)(0 1 1)  Obs.: 144  Transform: log</span></span>
-<span><span class="co">#&gt; AICc: 947.3, BIC: 963.9  QS (no seasonality in final):    0  </span></span>
-<span><span class="co">#&gt; Box-Ljung (no autocorr.): 26.65   Shapiro (normality): 0.9908</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section><section id="example-series" class="level3" data-number="1.0.2"><h3 data-number="1.0.2" class="anchored" data-anchor-id="example-series">
-<span class="header-section-number">1.0.2</span> Example Series</h3>
-<p>Throughout the book, we work with various example series. These sereis are included in seasonal and reflect various aspects of seseonal adjusmtent.</p>
-<p>Below is discussion of the series used in this book.</p>
-<section id="us-unemployment" class="level4" data-number="1.0.2.1"><h4 data-number="1.0.2.1" class="anchored" data-anchor-id="us-unemployment">
-<span class="header-section-number">1.0.2.1</span> US Unemployment</h4>
-<div class="cell">
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">unemp</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="11-introduction_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="576"></p>
-</div>
+<span><span class="co">#&gt; SEATS adj.  ARIMA: (1 1 1)(0 1 1)  Obs.: 323  Transform: none</span></span>
+<span><span class="co">#&gt; AICc:  4324, BIC:  4339  QS (no seasonality in final):    0  </span></span>
+<span><span class="co">#&gt; Box-Ljung (no autocorr.): 22.04   Shapiro (normality): 0.9946</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 
-</section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-jss" class="csl-entry" role="doc-biblioentry">
+Sax, Christoph, and Dirk Eddelbuettel. 2018. <span>“Seasonal Adjustment by <span>X-13ARIMA-SEATS</span> in <span>R</span>.”</span> <em>Journal of Statistical Software</em> 87 (11): 1–17. <a href="https://doi.org/10.18637/jss.v087.i11">https://doi.org/10.18637/jss.v087.i11</a>.
+</div>
+</div>
+</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
@@ -556,7 +551,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
       <a href="./10-basics.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Getting Started</span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Introduction</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

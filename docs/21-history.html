@@ -18,6 +18,25 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1.6em;
   vertical-align: middle;
 }
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
 </style>
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -97,7 +116,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./10-basics.html" class="sidebar-item-text sidebar-link">Getting Started</a>
+            <a href="./10-basics.html" class="sidebar-item-text sidebar-link">Introduction</a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -105,7 +124,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./11-introduction.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a>
+  <a href="./11-introduction.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">A minimal example</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -117,7 +136,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./20-overview.html" class="sidebar-item-text sidebar-link">X-13ARIMA-SEATS</a>
+            <a href="./20-overview.html" class="sidebar-item-text sidebar-link">Basics</a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -267,8 +286,32 @@ ul.task-list li input[type="checkbox"] {
 <li><p>Elements of the software</p></li>
 <li><p>Overview of main choices a user needs to make</p></li>
 </ul>
+<p>In official statistics, seasonal adjustment has a long tradition. The original X-11 software was developed by the US Census Bureau in the 1960s, and later improved by Statistics Canada <span class="citation" data-cites="dagum80">(<a href="#ref-dagum80" role="doc-biblioref">Dagum 1980</a>)</span>. Subsequent software packages by the US Census Bureau were called X-12-ARIMA <span class="citation" data-cites="findley98">(<a href="#ref-findley98" role="doc-biblioref">Findley et al. 1998</a>)</span> and X-13ARIMA-SEATS (or X-13, for short) <span class="citation" data-cites="monsell07">(<a href="#ref-monsell07" role="doc-biblioref">Monsell 2007</a>)</span>. Today, X-11 is still used as a name for filter-based seasonal adjustment methods within X. Meanwhile, TRAMO-SEATS, developed by the Bank of Spain <span class="citation" data-cites="caporello01">(<a href="#ref-caporello01" role="doc-biblioref">Caporello, Maravall, and Sánchez 2001</a>)</span>, offers an alternative model-based approach to seasonal adjustment.</p>
+<p>In its most recent version, X-13 offers these two seasonal adjustment methods in a single command-line tool, written in Fortran. The National Bank of Belgium has created an alter- native Java-based implementation called JDemetra+ <span class="citation" data-cites="eurostat17">(<a href="#ref-eurostat17" role="doc-biblioref">National Bank of Belgium, Deutsche Bundesbank, Eurostat 2017</a>)</span> which is also widely deployed by statistical agencies. One of either the TRAMO-SEATS or X-11 method of seasonal adjustment is used by almost all (government) statistical offices throughout the world.</p>
+<p>R (R Core Team 2017) offers several possibilities to perform seasonal adjustment in the stats package included with R. The decompose function uses filtering to split a time series into a trend, a seasonal and an irregular component. An alternative method is stl, which uses local regressions (and has some extensions offered by the stlplus package by <span class="citation" data-cites="hafen16">(<a href="#ref-hafen16" role="doc-biblioref">Hafen 2016</a>)</span>. While both methods allow a multiplicative or an additive decomposition, these methods are somewhat limited in modeling actual data series.</p>
+<p>The programs used by statistical offices provide an extensive toolbox to deal with many advanced (and more irregular) aspects of seasonality, such as trading day adjustments, moving holiday adjustments or automated outlier detection.</p>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-caporello01" class="csl-entry" role="doc-biblioentry">
+Caporello, Gianluca, Agustin Maravall, and Fernando J Sánchez. 2001. <span>“<span>Program TSW Reference Manual</span>.”</span> 0112. Banco de Espa<span>ñ</span>a Madrid. <a href="https://ideas.repec.org/p/bde/wpaper/0112.html">https://ideas.repec.org/p/bde/wpaper/0112.html</a>.
+</div>
+<div id="ref-dagum80" class="csl-entry" role="doc-biblioentry">
+Dagum, Estela Bee. 1980. <em>The x-11-ARIMA Seasonal Adjustment Method</em>. Statistics Canada, Seasonal Adjustment; Time Series Staff.
+</div>
+<div id="ref-findley98" class="csl-entry" role="doc-biblioentry">
+Findley, David F, Brian C Monsell, William R Bell, Mark C Otto, and Bor-Chung Chen. 1998. <span>“New Capabilities and Methods of the x-12-ARIMA Seasonal-Adjustment Program.”</span> <em>Journal of Business &amp; Economic Statistics</em> 16 (2): 127–52.
+</div>
+<div id="ref-hafen16" class="csl-entry" role="doc-biblioentry">
+Hafen, Ryan. 2016. <em><span class="nocase">: Enhanced Seasonal Decomposition of Time Series by Loess</span></em>. <a href="https://CRAN.R-project.org/package=stlplus">https://CRAN.R-project.org/package=stlplus</a>.
+</div>
+<div id="ref-monsell07" class="csl-entry" role="doc-biblioentry">
+Monsell, B. 2007. <span>“The x-13A-s Seasonal Adjustment Program.”</span> In <em>Proceedings of the 2007 Federal Committee on Statistical Methodology Research Conference</em>. <a href="http://www.fcsm.gov/07papers/Monsell.II-B.pdf">http://www.fcsm.gov/07papers/Monsell.II-B.pdf</a>.
+</div>
+<div id="ref-eurostat17" class="csl-entry" role="doc-biblioentry">
+National Bank of Belgium, Deutsche Bundesbank, Eurostat. 2017. <em>JDemetra+: Econometric Software for Seasonal Adjustment and Other Time Series Methods</em>. Eurostat. <a href="https://ec.europa.eu/eurostat/cros/content/download">https://ec.europa.eu/eurostat/cros/content/download</a>.
+</div>
+</div>
 
 </main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
@@ -404,7 +447,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
       <a href="./20-overview.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">X-13ARIMA-SEATS</span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Basics</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

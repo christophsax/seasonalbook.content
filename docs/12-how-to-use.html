@@ -98,7 +98,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./10-basics.html" class="sidebar-item-text sidebar-link">Getting Started</a>
+            <a href="./10-basics.html" class="sidebar-item-text sidebar-link">Introduction</a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -106,7 +106,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./11-introduction.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a>
+  <a href="./11-introduction.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">A minimal example</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -232,7 +232,12 @@ ul.task-list li input[type="checkbox"] {
     </ul>
 </div>
 </nav><!-- margin-sidebar --><div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+<li><a href="#supplementary-material" id="toc-supplementary-material" class="nav-link active" data-scroll-target="#supplementary-material"><span class="toc-section-number">2.1</span>  Supplementary material</a></li>
+  <li><a href="#for-whom" id="toc-for-whom" class="nav-link" data-scroll-target="#for-whom"><span class="toc-section-number">2.2</span>  For whom?</a></li>
+  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook/edit/main/12-how-to-use.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
@@ -269,6 +274,28 @@ ul.task-list li input[type="checkbox"] {
 <li><p>Ideally we want to have a quick check list that gives readers a starting point where to look for further advice. That could be something like a Cheat Sheet (https://www.rstudio.com/resources/cheatsheets/) with quick advise and chapter references.</p></li>
 <li><p>For each section, we want to provide a concrete and informative case study. Some examples are provided in the outline.</p></li>
 </ul>
+<p>This text will focus on seasonal adjustment and its implementation in R.</p>
+<p>Specifically, the audience will be both R users who want to learn about seasonal adjustment as well as seasonal adjustment practitioners, who are interested in using R. The book will be tailored to the practical applications of seasonal adjustment within R. It presents background material and references for the theoretically minded reader. The main focus, however, is on concrete problems and examples.</p>
+<p>We will showcase methods through detailed examples with associated code. This presentation allows the academic level to be quite broad; understood by undergraduates all the way through advanced Ph.D.&nbsp;students.</p>
+<p>X-13ARIMA-SEATS is one of, if not the most, widely used seasonal adjustment software within federal and statistical agencies. Moreover, there is a movement in statistical agencies toward the use of R and open-source products. This text is motivated to unify these two positions. Additionally, it and also serve the following:</p>
+<ol type="1">
+<li><p>Guide to professional seasonal adjustment with R To make the entry to the world of seasonal adjustment more accessible for those with an understanding of R. We leverage the users R knowledge to more easily understand the input/output of the X-13ARIMA-SEATS program. We also will give an overview of other possibilities of seasonal adjustment in R (e.g. stl, JDemetra).</p></li>
+<li><p>Focus on practitioner’s problem To bridge an important gap in the training for many seasonal adjustment practitioners. The book addresses practical problems and shows how they can be addressed in X-13ARIMA-SEATS. The use of R allows them to have reproducible examples at hand.</p></li>
+</ol>
+<p>Some Examples: Chinese New Year, structural breaks, direct or indirect seasonal adjustment, SEATS or X-11.</p>
+<section id="supplementary-material" class="level2" data-number="2.1"><h2 data-number="2.1" class="anchored" data-anchor-id="supplementary-material">
+<span class="header-section-number">2.1</span> Supplementary material</h2>
+<p>All material from the text will be made available to the reader. This includes but is not limited to:</p>
+<ul>
+<li>R Package to accompany the book, containing all data and examples</li>
+<li>Interactive website, on which the examples can be run (similar to www.seasonal.website)</li>
+</ul></section><section id="for-whom" class="level2" data-number="2.2"><h2 data-number="2.2" class="anchored" data-anchor-id="for-whom">
+<span class="header-section-number">2.2</span> For whom?</h2>
+<p>There are two primary audiences:</p>
+<ol type="1">
+<li><p>Current practitioners of seasonal adjustment who are interested in learning how to implement in R. This audience includes researchers from statistical agencies who want to include the scripting language features of R to evaluate properties of their seasonal adjustments.</p></li>
+<li><p>Current R users who want to learn seasonal adjustment. We are able to leverage the readers knowledge of R to make learning seasonal adjustment easier. We will feature interesting applications outside of official statistics, such as the seasonal adjustment of business data.</p></li>
+</ol>
 <div class="cell">
 <div class="cell-output-display">
 <div>
@@ -289,8 +316,7 @@ ul.task-list li input[type="checkbox"] {
 </div>
 
 
-
-</main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
@@ -424,7 +450,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
       <a href="./11-introduction.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">A minimal example</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
