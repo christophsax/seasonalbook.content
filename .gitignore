@@ -4,3 +4,5 @@ book/.DS_Store
 quarto/*_files
 quarto/*.html
 /.quarto/
+/_book/
+README.html

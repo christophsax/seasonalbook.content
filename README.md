@@ -14,7 +14,14 @@ This is an early draft.
 To preview the quarto book, run:
 
 ``` sh
-quarto preview quarto
+quarto preview
 ```
 
 It watches for changes and live-previews in the browser.
+
+To publish on <https://christophsax.github.io/seasonalbook.content/>,
+run:
+
+``` sh
+quarto preview quarto
+```
