@@ -23,5 +23,5 @@ To publish on <https://christophsax.github.io/seasonalbook.content/>,
 run:
 
 ``` sh
-quarto preview quarto
+quarto publish gh-pages
 ```
