@@ -4,9 +4,10 @@
 #| results: "asis"
 #| echo: false
 source("_common.R")
-status("drafting", "2022-12-21", section = "Transform")  # drafting, polishing, complete
+status("polishing", "2022-12-21", section = "Transform")  # drafting, polishing, complete
 ```
 
+<!--
 -   Discuss multiplicative vs additive adjustment
 
 -   How to use the transform spec
@@ -14,7 +15,7 @@ status("drafting", "2022-12-21", section = "Transform")  # drafting, polishing, 
 -   This is our first chance to mention the idea of test first then hard-code in production
 
 -   Case Study idea: Decide between log vs non-log transformation
-
+ -->
 One of the first choices to make when modeling a time series is whether or not it needs to be transformed prior to modeling.
 There are two types of transformation types that typically occur within X13.
 The first is a prior modification.
