@@ -74,28 +74,35 @@
     "href": "20-part-basics.html",
     "title": "Basics",
     "section": "",
-    "text": "You are reading an early draft of Seasonal Adjustment in R. This chapter is currently a dumping ground for ideas, and we don’t recommend reading it.\n\n\n\n\nThis section gets readers familiar with X-13ARIMA-SEATS. It begins by explaining the history and pedagogy of the software. This leads directly into discussing the principal elements of X-13ARIMA-SEATS."
+    "text": "You are reading an early draft of Seasonal Adjustment in R. This chapter is currently a dumping ground for ideas, and we don’t recommend reading it.\n\n\n\n\nThis section gets readers familiar with X-13ARIMA-SEATS. It begins by explaining the history and pedagogy of the software (Chapter 3). This leads directly into discussing the principal elements of X-13ARIMA-SEATS."
   },
   {
     "objectID": "21-overview.html#history",
     "href": "21-overview.html#history",
-    "title": "\n3  Overview of the software\n",
+    "title": "3  Overview of the software",
     "section": "\n3.1 History",
     "text": "3.1 History\nIn official statistics, seasonal adjustment has a long tradition. The original X-11 software was developed by the US Census Bureau in the 1960s, and later improved by Statistics Canada (Dagum 1980). Subsequent software packages by the US Census Bureau were called X-12-ARIMA (Findley et al. 1998) and X-13ARIMA-SEATS (or X-13, for short) (Monsell 2007). Today, X-11 is still used as a name for filter-based seasonal adjustment methods within X. Meanwhile, TRAMO-SEATS, developed by the Bank of Spain (Caporello, Maravall, and Sánchez 2001), offers an alternative model-based approach to seasonal adjustment.\nIn its most recent version, X-13 offers these two seasonal adjustment methods in a single command-line tool, written in Fortran. The National Bank of Belgium has created an alternative Java-based implementation called JDemetra+ (National Bank of Belgium, Deutsche Bundesbank, Eurostat 2017) which is also widely deployed by statistical agencies. One of either the TRAMO-SEATS or X-11 method of seasonal adjustment is used by almost all (government) statistical offices throughout the world."
   },
   {
     "objectID": "21-overview.html#elements-of-x13",
     "href": "21-overview.html#elements-of-x13",
-    "title": "\n3  Overview of the software\n",
+    "title": "3  Overview of the software",
     "section": "\n3.2 Elements of X13",
-    "text": "3.2 Elements of X13\n\n\n\n\n\n\nflowchart LR\n  A[transform] --> B(regARIMA)\n  B --> C{Model choice}\n  C --> D[X11]\n  C --> E[SEATS]\n  style C fill: #fff"
+    "text": "3.2 Elements of X13\n\n\n\n\n\n\nflowchart LR\n  A[transform] --> B(regARIMA)\n  B --> C{Model choice}\n  C --> D[X11]\n  C --> E[SEATS]\n  style C fill:#56B4E9,color:#fff"
   },
   {
     "objectID": "21-overview.html#main-user-choices",
     "href": "21-overview.html#main-user-choices",
-    "title": "\n3  Overview of the software\n",
+    "title": "3  Overview of the software",
     "section": "\n3.3 Main user choices",
-    "text": "3.3 Main user choices\n\n3.3.1 Model\n\n3.3.2 Transform\n\n\n\n\nCaporello, Gianluca, Agustin Maravall, and Fernando J Sánchez. 2001. “Program TSW Reference Manual.” 0112. Banco de España Madrid. https://ideas.repec.org/p/bde/wpaper/0112.html.\n\n\nDagum, Estela Bee. 1980. The x-11-ARIMA Seasonal Adjustment Method. Statistics Canada, Seasonal Adjustment; Time Series Staff.\n\n\nFindley, David F, Brian C Monsell, William R Bell, Mark C Otto, and Bor-Chung Chen. 1998. “New Capabilities and Methods of the x-12-ARIMA Seasonal-Adjustment Program.” Journal of Business & Economic Statistics 16 (2): 127–52.\n\n\nMonsell, B. 2007. “The x-13A-s Seasonal Adjustment Program.” In Proceedings of the 2007 Federal Committee on Statistical Methodology Research Conference. http://www.fcsm.gov/07papers/Monsell.II-B.pdf.\n\n\nNational Bank of Belgium, Deutsche Bundesbank, Eurostat. 2017. JDemetra+: Econometric Software for Seasonal Adjustment and Other Time Series Methods. Eurostat. https://ec.europa.eu/eurostat/cros/content/download."
+    "text": "3.3 Main user choices\n\n3.3.1 Model\n\n3.3.2 Transform"
+  },
+  {
+    "objectID": "21-overview.html#references",
+    "href": "21-overview.html#references",
+    "title": "3  Overview of the software",
+    "section": "\n3.4 References",
+    "text": "3.4 References\n\n\n\n\nCaporello, Gianluca, Agustin Maravall, and Fernando J Sánchez. 2001. “Program TSW Reference Manual.” 0112. Banco de España Madrid. https://ideas.repec.org/p/bde/wpaper/0112.html.\n\n\nDagum, Estela Bee. 1980. The x-11-ARIMA Seasonal Adjustment Method. Statistics Canada, Seasonal Adjustment; Time Series Staff.\n\n\nFindley, David F, Brian C Monsell, William R Bell, Mark C Otto, and Bor-Chung Chen. 1998. “New Capabilities and Methods of the x-12-ARIMA Seasonal-Adjustment Program.” Journal of Business & Economic Statistics 16 (2): 127–52.\n\n\nMonsell, B. 2007. “The x-13A-s Seasonal Adjustment Program.” In Proceedings of the 2007 Federal Committee on Statistical Methodology Research Conference. http://www.fcsm.gov/07papers/Monsell.II-B.pdf.\n\n\nNational Bank of Belgium, Deutsche Bundesbank, Eurostat. 2017. JDemetra+: Econometric Software for Seasonal Adjustment and Other Time Series Methods. Eurostat. https://ec.europa.eu/eurostat/cros/content/download."
   },
   {
     "objectID": "22-transform.html#multiplicative-or-additive-adjustment",
@@ -126,11 +133,32 @@
     "text": "You are reading an early draft of Seasonal Adjustment in R. This chapter is currently a dumping ground for ideas, and we don’t recommend reading it.\nIt is part of the course materials intended for Dec 21, 2022.\n\n\n\n\n\nHow to use the SEATS spec\nSEATS vs X11\nCase Study:\n\nFor SEATS, can be quite challenging since it relies heavily on seasonal ARIMA modeling."
   },
   {
-    "objectID": "24-x11.html",
-    "href": "24-x11.html",
+    "objectID": "24-x11.html#additive-and-multiplicative-again",
+    "href": "24-x11.html#additive-and-multiplicative-again",
     "title": "\n6  X11\n",
-    "section": "",
-    "text": "You are reading an early draft of Seasonal Adjustment in R. This chapter should be readable but needs polishing.\nIt is part of the course materials intended for Dec 21, 2022.\n\n\n\n\n\nOne of the two main methods available in X-13ARIMA-SEATS to extract trend and seasonal components is the ``X-11’’ method. This is a nonparametric procedure that works by passing moving-average filters over the data to extract intended components. In order to use symetric moving average filters at the end of the time series (current value), a regARIMA model is used to forecast extend the series. This RegARIMA model is where users can test for or specify outliers, trading day and moving holiday regressors in their adjustment. The forecast extended series is then used to filter. Additionally, X-11 has a built in extreme value procedure included. This procedure identifies extremes and replaces. This results in a robust procedure that can automatically choose filters and identify extreme values without much user intervention. All that needs to be evoked beyond the default ‘seas()’ call is to turn on the X11 spec option.\n\nlibrary(seasonal)\nm <- seas(AirPassengers, x11 = \"\")\n\nBefore further discussion about the details of the X-11 process, let us see what happened during this modeling run…\nWhen using the x11 spec you can change the length of the filter used for the trend and seasonal components with the trendma and seasonalma arguments respectively. Additionally, sigmalim will control the amount of extreme value adjustment that is done during the seasonal adjustment.\nThe X-13ARIMA-SEATS development was highly motivated to study economic time series. As such, the default seasonal adjustment mode is multiplicative due to most seasonal economic time series displaying seasonal fluctuations that increase and decrease along with the level of the time series.\nIf your series does not have this feature then additive adjustment might be more appropriate. This can be changed in the mode argument of the x11 spec. For example, seas(x, x11.mode = 'add') will perform an additive x11 run. There exist two other models for decomposition, pseudo-additive and log additive. These are less common than additive and multiplicative models and are not the focus of this text. If your series has some extremely small values in certain months (quarters) then pseudo-additive models could be worth further investigation. It has been observed that when multiplicative seasonal adjustment produces more extreme values in conjunction with small seasonal factors then pseudo-additive adjustment should be explored. NEED TO SHOW USERS HOW TO VIEW THEIR EXTREME VALUES - D8.B TABLE DESIGNATIONS NEXT TO OBSERVATIONS. A good reference on the subject is Baxter (1994).\nThe X11 spec also allows users to control the length of the trend and seasonal moving average filters used during the adjustment. Generally speaking, longer filters imply a more stable seasonal component and shorter filters a more changing seasonal pattern. Of course, a longer filter will use more data for the caluclation of components at each time point. This is an important observation and understanding it might help a user decide on a short or long filter. Since longer filters use more data there tend to be smaller revisions when a new data point is added. However, there will be revisions to data values further back. A shorter filter is just the opposite, they tend to produce smaller revisions but they do not extend as far back into the series. If a filter is not choosen by the user then automatic filter selection is used. To understand the length of a filter let’s look at the (finite) number of choice available in during an x11 adjustment. There are different filters used for the seasonal component and the trend component.\n\n\n\n\n\n\nSeasonal Filter\nDescription\n\n\n\ns3x1\n3x1 moving average\n\n\ns3x3\n3×3 moving average.\n\n\ns3x5\n3×5 moving average\n\n\ns3x9\n3×9 moving average\n\n\ns3x15\n3×15 moving average\n\n\nstable\nStable seasonal filter. A single seasonal factor for each calendar month or quarter is generated by calculating the simple average of all the values for each month or quarter (taken after detrending and outlier adjustment).\n\n\nx11default\nA 3×3 moving average is used to calculate the initial seasonal factors in each iteration, and a 3×5 moving average to calculate the final seasonal factors."
+    "section": "\n6.1 Additive and multiplicative (again)",
+    "text": "6.1 Additive and multiplicative (again)\nThe X-13ARIMA-SEATS development was highly motivated to study economic time series. As such, the default seasonal adjustment mode is multiplicative due to most seasonal economic time series displaying seasonal fluctuations that increase and decrease along with the level of the time series.\nIf your series does not have this feature then additive adjustment might be more appropriate. This can be changed in the mode argument of the x11 spec. For example, seas(x, x11.mode = 'add') will perform an additive x11 run. There exist two other models for decomposition, pseudo-additive and log additive. These are less common than additive and multiplicative models and are not the focus of this text. If your series has some extremely small values in certain months (quarters) then pseudo-additive models could be worth further investigation. It has been observed that when multiplicative seasonal adjustment produces more extreme values in conjunction with small seasonal factors then pseudo-additive adjustment should be explored. NEED TO SHOW USERS HOW TO VIEW THEIR EXTREME VALUES - D8.B TABLE DESIGNATIONS NEXT TO OBSERVATIONS. A good reference on the subject is Baxter (1994)."
+  },
+  {
+    "objectID": "24-x11.html#filter-length",
+    "href": "24-x11.html#filter-length",
+    "title": "\n6  X11\n",
+    "section": "\n6.2 Filter length",
+    "text": "6.2 Filter length\nThe X11 spec also allows users to control the length of the trend and seasonal moving average filters used during the adjustment. Generally speaking, longer filters imply a more stable seasonal component and shorter filters a more changing seasonal pattern. Of course, a longer filter will use more data for the caluclation of components at each time point. This is an important observation and understanding it might help a user decide on a short or long filter. Since longer filters use more data there tend to be smaller revisions when a new data point is added. However, there will be revisions to data values further back.\nA shorter filter is just the opposite, they tend to produce smaller revisions but they do not extend as far back into the series. If a filter is not choosen by the user then automatic filter selection is used. To understand the length of a filter let’s look at the (finite) number of choice available in during an x11 adjustment. Table 6.1 shows the different filters available for the seasonal component and the trend component.\n\n\nTable 6.1: Filters available in X11\n\n\n\n\n\nValue\nDescription\n\n\n\ns3x1\n3×1 moving average\n\n\ns3x3\n3×3 moving average\n\n\ns3x5\n3×5 moving average\n\n\ns3x9\n3×9 moving average\n\n\ns3x15\n3×15 moving average\n\n\nstable\nStable seasonal filter. A single seasonal factor for each calendar month or quarter is generated by calculating the simple average of all the values for each month or quarter (taken after detrending and outlier adjustment).\n\n\nx11default\nA 3×3 moving average is used to calculate the initial seasonal factors in each iteration, and a 3×5 moving average to calculate the final seasonal factors."
+  },
+  {
+    "objectID": "24-x11.html#extrem-value",
+    "href": "24-x11.html#extrem-value",
+    "title": "\n6  X11\n",
+    "section": "\n6.3 Extrem value",
+    "text": "6.3 Extrem value\n\n\n\n\n\n\nRelated concept: Outlier\n\n\n\nFIXME: explain how this is related to transform."
+  },
+  {
+    "objectID": "24-x11.html#case-study",
+    "href": "24-x11.html#case-study",
+    "title": "\n6  X11\n",
+    "section": "\n6.4 Case study",
+    "text": "6.4 Case study\n\n\ntsbox::ts_plot(\n  s3x1 = predict(seas(AirPassengers, x11.seasonalma = \"s3x1\")),\n  s3x15 = predict(seas(AirPassengers, x11.seasonalma = \"s3x15\"))\n)"
   },
   {
     "objectID": "25-regARIMA.html#series-forecast",
