@@ -6,7 +6,9 @@
 source("_common.R")
 status("drafting")  # drafting, polishing, complete
 ```
-- Idea of regARIMA
+<!-- - Idea of regARIMA -->
+
+## Series forecast
 
 The most fundamental procedure involved in X-13 is applying moving average filters.
 When symmetric filters are used we "lose" observations at the end of the series. Consider the simple moving average filter 
@@ -22,6 +24,9 @@ The output of the filter $Y_t$ is shorter than $X_t$ by 4 total observations.
 Two at the beginning and two at the end. 
 
 This is one of the primary reasons we consider regARIMA models when discussing seasonal adjustment; the observed time series is forecast extended to allow for symmetric moving average filters to be used all the way to the end of the series. 
+
+## Exogenous variables
+
 Another reason for regARIMA modeling is to include exogenous regression variables in our analysis.
 These include, but are not limited to, moving holiday effects, trading day, outliers and level-shifts. 
 The regARIMA take the form
@@ -30,16 +35,27 @@ Here $Y_t$ is the observed time series.
 The function $f$ represents a transformation, most commonly used is the log transform ie $f(x) = \log(x)$.
 The regression variables appear in the columns of the design matrix ${\mathbf X}_t$ and $Z_t$ is an ARIMA process.
 This last assumption on $Z_t$ is what distinguished a regARIMA model from more classic linear models and multiple linear regression where error terms are assumed uncorrelated.
+
+## ARIMA modelling
+
 In order to achieve a suitable seasonal adjustment it is important to get the regARIMA model correct.
 For most dataset the built in automatic modeling features of the X13 program will be suitable to detect a reasonable model. 
 This can be used as a starting point for more rigorous regARIMA model development or used as the final regARIMA modeling choice for your seasonal adjustment needs.
 We evoke automatic model identification through the XXX spec. 
 The default behavior of the R seasonal package is XXX which includes automatic model identification. 
-As an aside, the general rule is to not use automatic modeling ``in production''.
-This mean, if you are going to include seasonal adjustment as part of a large scale data processing that occurs regularly (say monthly), then it is not advisable to have automatic model identification run every month. 
-Instead, an alternative process, is to run automodel once and then fix the model choice in the XXX spec file. 
-This does not need to be done manually since the `static()` function from the seasonal package can do this for you. 
-For example, consider the default seasonal adjustment 
+
+
+::: {.callout-tip}
+## Automatic and manual model choice
+
+As an aside, the general rule is to not use automatic modeling in production.
+This mean, if you are going to include seasonal adjustment as part of a large scale data processing that occurs regularly (say monthly), then it is not advisable to have automatic model identification run every month.
+Instead, an alternative process, is to run automodel once and then fix the model choice in the XXX spec file.
+This does not need to be done manually since the `static()` function from the seasonal package can do this for you.
+:::
+
+
+Consider the default seasonal adjustment:
 ```{r}
 m <- seas(AirPassengers, x11 = "")
 print(m$spc$automdl)
@@ -60,12 +76,18 @@ m2 <- eval(m_call)
 ```
 
 
+## How to use the regression spec
 
-- How to use the regression spec
+## Table of all Regression effects available
 
-- Table of all Regression effects available in X13 (steal from CR slides)
+ <!--
+  (steal from CR slides)
+
+-->
 
 
-- Case studies: Decide if you should include AO in May 2014.
+## Case study
+
+Decide if you should include AO in May 2014.
 Construct a simple user defined regressor to handle specific issue.
 
