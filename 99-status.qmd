@@ -14,6 +14,7 @@ status <-
   ungroup() |>
   select(-timestamp) |>
   arrange(date, type) |>
+  filter(!is.na(date)) |>
   rename(`section name` = section, status = type, `due date` = date)
 ```
 

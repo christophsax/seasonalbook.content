@@ -4,7 +4,7 @@
 #| results: "asis"
 #| echo: false
 source("_common.R")
-status("drafting", "2022-01-21", section = "Holidays")  # drafting, polishing, complete
+status("drafting", "2023-01-21", section = "Holidays")  # drafting, polishing, complete
 ```
 
 -   Why should we adjust for holiday effects
