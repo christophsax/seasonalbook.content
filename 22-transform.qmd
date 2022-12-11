@@ -54,7 +54,7 @@ For multiplicative models the observed data is divided by the seasonal factor $\
 For example, an observed value of 100 with seasonal factor of 1.08 would result in a seasonally adjusted value of $100 / 1.08 = 92.59259$.
 Hence for multiplicative models values of $S_t>1$, decrease the observed value and $S_t < 1$ increase it.
 
-## Tranform options
+## Transform options
 
 The `transform` spec controls these options.
 Some primary options within this spec are
