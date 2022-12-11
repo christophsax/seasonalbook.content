@@ -16,11 +16,10 @@ book:
   repo-branch: main
   repo-actions: [edit, issue]
   chapters:
-    - index.qmd
-
-    - part: 10-part-introduction.qmd
+    - part: index.qmd
       chapters:
-        - 11-introduction.qmd
+        - 10-introduction.qmd
+        - 11-minimal-example.qmd
         - 12-how-to-use.qmd
 
     - part: 20-part-basics.qmd
