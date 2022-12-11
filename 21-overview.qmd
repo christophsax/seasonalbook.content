@@ -38,7 +38,7 @@ flowchart LR
   B --> C{Model choice}
   C --> D[X11]
   C --> E[SEATS]
-  style C fill: #fff
+  style C fill:#56B4E9,color:#fff
 ```
 
 ## Main user choices
@@ -46,6 +46,5 @@ flowchart LR
 ### Model
 
 ### Transform
-
 
 ## References
