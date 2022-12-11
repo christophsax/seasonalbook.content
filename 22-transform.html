@@ -300,7 +300,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
    
   <ul>
 <li><a href="#multiplicative-or-additive-adjustment" id="toc-multiplicative-or-additive-adjustment" class="nav-link active" data-scroll-target="#multiplicative-or-additive-adjustment"><span class="toc-section-number">4.1</span>  Multiplicative or additive adjustment?</a></li>
-  <li><a href="#tranform-options" id="toc-tranform-options" class="nav-link" data-scroll-target="#tranform-options"><span class="toc-section-number">4.2</span>  Tranform options</a></li>
+  <li><a href="#transform-options" id="toc-transform-options" class="nav-link" data-scroll-target="#transform-options"><span class="toc-section-number">4.2</span>  Transform options</a></li>
   <li><a href="#case-study" id="toc-case-study" class="nav-link" data-scroll-target="#case-study"><span class="toc-section-number">4.3</span>  Case Study</a></li>
   </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/22-transform.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
@@ -352,8 +352,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>We see the AICC for log transformation is lower and hence selected. The summary of the seasonal object <code>summary(m)</code> tells us this with <code>Transform: log</code> displayed. The automatically selected transformation can also be found in many other places such as the HTML output with <code>out(m)</code> or the udg with agruement name <em>aictrans</em> such as <code>udg(m, "aictrans")</code>.</p>
 <p>The choice between log and none changes the type of seasonal decomposition that will occur and hence your interpretation of the seasonal factors. With no transformation, X13 will do an additive seasonal adjustment <span class="math display">\[X_t = T_t + S_t + I_t.\]</span> If a long transformation is selected, X13 will do a multiplicative adjustment <span class="math display">\[X_t = T_t \cdot S_t \cdot I_t.\]</span> This is major difference here is the way seasonal factors are interpreted and applied to the observed data to remove seasonality. For additive models the seasonal factor is subtracted from the original <span class="math inline">\(X_t - S_t\)</span>. For example, an observed value of 100 with seasonal factor of 3.2 would result in a seasonally adjusted value of <span class="math inline">\(100 - 3.2 = 96.8\)</span>. For multiplicative models the observed data is divided by the seasonal factor <span class="math inline">\(\frac{X_t}{S_t}\)</span>. For example, an observed value of 100 with seasonal factor of 1.08 would result in a seasonally adjusted value of <span class="math inline">\(100 / 1.08 = 92.59259\)</span>. Hence for multiplicative models values of <span class="math inline">\(S_t&gt;1\)</span>, decrease the observed value and <span class="math inline">\(S_t &lt; 1\)</span> increase it.</p>
-</section><section id="tranform-options" class="level2" data-number="4.2"><h2 data-number="4.2" class="anchored" data-anchor-id="tranform-options">
-<span class="header-section-number">4.2</span> Tranform options</h2>
+</section><section id="transform-options" class="level2" data-number="4.2"><h2 data-number="4.2" class="anchored" data-anchor-id="transform-options">
+<span class="header-section-number">4.2</span> Transform options</h2>
 <p>The <code>transform</code> spec controls these options. Some primary options within this spec are</p>
 <table class="table">
 <colgroup>
