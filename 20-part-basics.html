@@ -5,7 +5,7 @@
 <meta name="generator" content="quarto-1.2.269">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="James Livsey and Christoph Sax">
-<title>Seasonal Adjustment in R - Status of the book</title>
+<title>Seasonal Adjustment in R - Basics</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -27,7 +27,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./60-part-future.html" rel="prev">
+<link href="./21-overview.html" rel="next">
+<link href="./12-how-to-use.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -60,7 +61,7 @@ ul.task-list li input[type="checkbox"] {
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title">Status of the book</h1>
+      <h1 class="quarto-secondary-nav-title">Basics</h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -115,7 +116,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./20-part-basics.html" class="sidebar-item-text sidebar-link">Basics</a>
+            <a href="./20-part-basics.html" class="sidebar-item-text sidebar-link active">Basics</a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -233,7 +234,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./99-status.html" class="sidebar-item-text sidebar-link active">Status of the book</a>
+  <a href="./99-status.html" class="sidebar-item-text sidebar-link">Status of the book</a>
   </div>
 </li>
       </ul>
@@ -245,7 +246,7 @@ ul.task-list li input[type="checkbox"] {
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
-<h1 class="title d-none d-lg-block">Status of the book</h1>
+<h1 class="title d-none d-lg-block">Basics</h1>
 </div>
 
 
@@ -258,70 +259,20 @@ ul.task-list li input[type="checkbox"] {
   </div>
   
 
-</header><div class="cell">
-<div class="cell-output-display">
-<table class="table table-sm table-striped">
-<caption>Current status of sections </caption>
-<colgroup>
-<col style="width: 43%">
-<col style="width: 28%">
-<col style="width: 28%">
-</colgroup>
-<thead><tr class="header">
-<th style="text-align: left;">section name</th>
-<th style="text-align: left;">status</th>
-<th style="text-align: left;">due date</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">How to use the book</td>
-<td style="text-align: left;">drafting</td>
-<td style="text-align: left;">2022-12-21</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Overview</td>
-<td style="text-align: left;">drafting</td>
-<td style="text-align: left;">2022-12-21</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Overview of the software</td>
-<td style="text-align: left;">drafting</td>
-<td style="text-align: left;">2022-12-21</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">SEATS</td>
-<td style="text-align: left;">drafting</td>
-<td style="text-align: left;">2022-12-21</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Transform</td>
-<td style="text-align: left;">drafting</td>
-<td style="text-align: left;">2022-12-21</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">X11</td>
-<td style="text-align: left;">drafting</td>
-<td style="text-align: left;">2022-12-21</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">A minimal example</td>
-<td style="text-align: left;">polishing</td>
-<td style="text-align: left;">2022-12-21</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">regARIMA Model</td>
-<td style="text-align: left;">polishing</td>
-<td style="text-align: left;">2022-12-21</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Holidays</td>
-<td style="text-align: left;">drafting</td>
-<td style="text-align: left;">2023-01-21</td>
-</tr>
-</tbody>
-</table>
+</header><div class="status">
+<div class="callout-important callout callout-style-simple">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>You are reading an early draft of <em>Seasonal Adjustment in R</em>. This chapter is currently a dumping ground for ideas, and we don’t recommend reading it.</p>
+<p><strong>It is part of the course materials intended for Dec 21, 2022</strong>.</p>
 </div>
 </div>
+</div>
+</div>
+<p>This section gets readers familiar with X-13ARIMA-SEATS. It begins by explaining the history and pedagogy of the software. This leads directly into discussing the principal elements of X-13ARIMA-SEATS.</p>
 
 
 
@@ -458,11 +409,14 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
-      <a href="./60-part-future.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">The future of seasonal adjustment</span>
+      <a href="./12-how-to-use.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">How to use the book</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="./21-overview.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Overview of the software</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->

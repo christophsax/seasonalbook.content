@@ -28,8 +28,8 @@
     "text": "Acknowledgements"
   },
   {
-    "objectID": "10-basics.html",
-    "href": "10-basics.html",
+    "objectID": "10-part-introduction.html",
+    "href": "10-part-introduction.html",
     "title": "Introduction",
     "section": "",
     "text": "This chapter focuses on explaining the basics of seasonal adjustment and gets the reader involved with a minimal working example. It keeps the technical jargon to a minimum."
@@ -70,29 +70,29 @@
     "text": "2.3 For whom?\nThere are two primary audiences:\n\nCurrent practitioners of seasonal adjustment who are interested in learning how to implement in R. This audience includes researchers from statistical agencies who want to include the scripting language features of R to evaluate properties of their seasonal adjustments.\nCurrent R users who want to learn seasonal adjustment. We are able to leverage the readers knowledge of R to make learning seasonal adjustment easier. We will feature interesting applications outside of official statistics, such as the seasonal adjustment of business data."
   },
   {
-    "objectID": "20-overview.html",
-    "href": "20-overview.html",
+    "objectID": "20-part-basics.html",
+    "href": "20-part-basics.html",
     "title": "Basics",
     "section": "",
     "text": "You are reading an early draft of Seasonal Adjustment in R. This chapter is currently a dumping ground for ideas, and we don’t recommend reading it.\nIt is part of the course materials intended for Dec 21, 2022.\n\n\n\n\nThis section gets readers familiar with X-13ARIMA-SEATS. It begins by explaining the history and pedagogy of the software. This leads directly into discussing the principal elements of X-13ARIMA-SEATS."
   },
   {
-    "objectID": "21-history.html#history",
-    "href": "21-history.html#history",
+    "objectID": "21-overview.html#history",
+    "href": "21-overview.html#history",
     "title": "\n3  Overview of the software\n",
     "section": "\n3.1 History",
     "text": "3.1 History\nIn official statistics, seasonal adjustment has a long tradition. The original X-11 software was developed by the US Census Bureau in the 1960s, and later improved by Statistics Canada (Dagum 1980). Subsequent software packages by the US Census Bureau were called X-12-ARIMA (Findley et al. 1998) and X-13ARIMA-SEATS (or X-13, for short) (Monsell 2007). Today, X-11 is still used as a name for filter-based seasonal adjustment methods within X. Meanwhile, TRAMO-SEATS, developed by the Bank of Spain (Caporello, Maravall, and Sánchez 2001), offers an alternative model-based approach to seasonal adjustment.\nIn its most recent version, X-13 offers these two seasonal adjustment methods in a single command-line tool, written in Fortran. The National Bank of Belgium has created an alternative Java-based implementation called JDemetra+ (National Bank of Belgium, Deutsche Bundesbank, Eurostat 2017) which is also widely deployed by statistical agencies. One of either the TRAMO-SEATS or X-11 method of seasonal adjustment is used by almost all (government) statistical offices throughout the world."
   },
   {
-    "objectID": "21-history.html#elements-of-x13",
-    "href": "21-history.html#elements-of-x13",
+    "objectID": "21-overview.html#elements-of-x13",
+    "href": "21-overview.html#elements-of-x13",
     "title": "\n3  Overview of the software\n",
     "section": "\n3.2 Elements of X13",
     "text": "3.2 Elements of X13\n\n\n\n\n\n\nflowchart LR\n  A[transform] --> B(regARIMA)\n  B --> C{Model choice}\n  C --> D[X11]\n  C --> E[SEATS]\n  style C fill: #fff"
   },
   {
-    "objectID": "21-history.html#main-user-choices",
-    "href": "21-history.html#main-user-choices",
+    "objectID": "21-overview.html#main-user-choices",
+    "href": "21-overview.html#main-user-choices",
     "title": "\n3  Overview of the software\n",
     "section": "\n3.3 Main user choices",
     "text": "3.3 Main user choices\n\n3.3.1 Model\n\n3.3.2 Transform\n\n\n\n\nCaporello, Gianluca, Agustin Maravall, and Fernando J Sánchez. 2001. “Program TSW Reference Manual.” 0112. Banco de España Madrid. https://ideas.repec.org/p/bde/wpaper/0112.html.\n\n\nDagum, Estela Bee. 1980. The x-11-ARIMA Seasonal Adjustment Method. Statistics Canada, Seasonal Adjustment; Time Series Staff.\n\n\nFindley, David F, Brian C Monsell, William R Bell, Mark C Otto, and Bor-Chung Chen. 1998. “New Capabilities and Methods of the x-12-ARIMA Seasonal-Adjustment Program.” Journal of Business & Economic Statistics 16 (2): 127–52.\n\n\nMonsell, B. 2007. “The x-13A-s Seasonal Adjustment Program.” In Proceedings of the 2007 Federal Committee on Statistical Methodology Research Conference. http://www.fcsm.gov/07papers/Monsell.II-B.pdf.\n\n\nNational Bank of Belgium, Deutsche Bundesbank, Eurostat. 2017. JDemetra+: Econometric Software for Seasonal Adjustment and Other Time Series Methods. Eurostat. https://ec.europa.eu/eurostat/cros/content/download."
@@ -175,8 +175,8 @@
     "text": "7.6 Case study\nDecide if you should include AO in May 2014. Construct a simple user defined regressor to handle specific issue."
   },
   {
-    "objectID": "30-data-problems.html",
-    "href": "30-data-problems.html",
+    "objectID": "30-part-data-problems.html",
+    "href": "30-part-data-problems.html",
     "title": "Data Problems",
     "section": "",
     "text": "You are reading an early draft of Seasonal Adjustment in R. This chapter is currently a dumping ground for ideas, and we don’t recommend reading it.\n\n\n\n\nIn part III we look at more in-depth at practical issues with seasonal adjustment. The focus is on concrete solutions to each situation presented. Each subsection will prominently feature a case study dedicated to each problem."
@@ -210,8 +210,8 @@
     "text": "You are reading an early draft of Seasonal Adjustment in R. This chapter is currently a dumping ground for ideas, and we don’t recommend reading it.\n\n\n\n\n\nWhy to care about seasonal breaks?\nDetection of seasonal breaks\nCorrection for seasonal breaks"
   },
   {
-    "objectID": "40-other-issues.html",
-    "href": "40-other-issues.html",
+    "objectID": "40-part-other-issues.html",
+    "href": "40-part-other-issues.html",
     "title": "Other Issues",
     "section": "",
     "text": "You are reading an early draft of Seasonal Adjustment in R. This chapter is currently a dumping ground for ideas, and we don’t recommend reading it.\n\n\n\n\nPart IV investigates more holistic issues that practitioners face. The main focus is to give classical methodology to answer their problems. Since these types of issues can be highly specialized, we concentrate on known solutions to the topics."
@@ -219,9 +219,9 @@
   {
     "objectID": "41-presence-of-seasonality.html",
     "href": "41-presence-of-seasonality.html",
-    "title": "\n12  Should a series be seasonally adjusted at all?\n",
+    "title": "\n12  Presence of seasonality\n",
     "section": "",
-    "text": "You are reading an early draft of Seasonal Adjustment in R. This chapter is currently a dumping ground for ideas, and we don’t recommend reading it.\n\n\n\n\nX-13AS removes seasonality from series, even if a series is not seasonal from the beginneing. If a series is not seasonal, the resulting series may be bad.\nFortunatly, X-13 contains a few tests that help users to decide if a series is is seasnal or not.\nBefore appying X-13AS ist may be necessary to descide if the series is seasonal.\n\n12.0.1 Avalabele Tests\nX13 offers has several formal checks:\n\nqs test\nids\nm7\n\nThe ids test is closely connected to m7, but the QS test is quite different. Which tests are preferrable, and how should a user descide if the tests are not aligned?\n\n12.0.2 ids test\nhttp://www.ons.gov.uk/ons/guide-method/method-quality/general-methodology/time-series-analysis/guide-to-seasonal-adjustment.pdf\n\nFrom ONS 18.2 A general criterion for existence of seasonality\nEmpirical research showed that the most appropriate test for seasonality is the “Combined test for the presence of identifiable seasonality”, given after table D8 of the output. In particular, one of the following statements will always appear:\n\nIDENTIFIABLE SEASONALITY PRESENT\nIDENTIFIABLE SEASONALITY PROBABLY NOT PRESEN\nIDENTIFIABLE SEASONALITY NOT PRESENT\n\nIt is recommended that a series is adjusted in the first two cases and not adjusted in the last one. However there are two cases where one might need to deviate from this practice:\n\nThis is the ids test shown below\n\n12.0.3 Case Study"
+    "text": "You are reading an early draft of Seasonal Adjustment in R. This chapter is currently a dumping ground for ideas, and we don’t recommend reading it.\n\n\n\n\nShould a series be seasonally adjusted at all?\nX-13AS removes seasonality from series, even if a series is not seasonal from the beginneing. If a series is not seasonal, the resulting series may be bad.\nFortunatly, X-13 contains a few tests that help users to decide if a series is is seasnal or not.\nBefore appying X-13AS ist may be necessary to descide if the series is seasonal.\n\n12.0.1 Avalabele Tests\nX13 offers has several formal checks:\n\nqs test\nids\nm7\n\nThe ids test is closely connected to m7, but the QS test is quite different. Which tests are preferrable, and how should a user descide if the tests are not aligned?\n\n12.0.2 ids test\nhttp://www.ons.gov.uk/ons/guide-method/method-quality/general-methodology/time-series-analysis/guide-to-seasonal-adjustment.pdf\n\nFrom ONS 18.2 A general criterion for existence of seasonality\nEmpirical research showed that the most appropriate test for seasonality is the “Combined test for the presence of identifiable seasonality”, given after table D8 of the output. In particular, one of the following statements will always appear:\n\nIDENTIFIABLE SEASONALITY PRESENT\nIDENTIFIABLE SEASONALITY PROBABLY NOT PRESEN\nIDENTIFIABLE SEASONALITY NOT PRESENT\n\nIt is recommended that a series is adjusted in the first two cases and not adjusted in the last one. However there are two cases where one might need to deviate from this practice:\n\nThis is the ids test shown below\n\n12.0.3 Case Study"
   },
   {
     "objectID": "42-annual-constraining.html",
@@ -238,8 +238,8 @@
     "text": "You are reading an early draft of Seasonal Adjustment in R. This chapter is currently a dumping ground for ideas, and we don’t recommend reading it.\n\n\n\n\n\nShould the subcomponents of a series be adjusted separately?"
   },
   {
-    "objectID": "50-quality-assessment.html",
-    "href": "50-quality-assessment.html",
+    "objectID": "50-part-quality-assessment.html",
+    "href": "50-part-quality-assessment.html",
     "title": "Quality assessment",
     "section": "",
     "text": "You are reading an early draft of Seasonal Adjustment in R. This chapter is currently a dumping ground for ideas, and we don’t recommend reading it.\n\n\n\n\nThis section focuses on diagnostic tools for seasonal adjustment. This will be written as a stand-alone section as well as a continuance of prior sections. The idea here is that many readers may be interested in checking the quality of their adjustments but not need help performing it."
@@ -259,8 +259,8 @@
     "text": "You are reading an early draft of Seasonal Adjustment in R. This chapter is currently a dumping ground for ideas, and we don’t recommend reading it.\n\n\n\n\n\nHow to measure revisions?\nShould a model be re-estimated each period?\nHow to use the slidingspan and history spec"
   },
   {
-    "objectID": "60-future.html",
-    "href": "60-future.html",
+    "objectID": "60-part-future.html",
+    "href": "60-part-future.html",
     "title": "The future of seasonal adjustment",
     "section": "",
     "text": "You are reading an early draft of Seasonal Adjustment in R. This chapter is currently a dumping ground for ideas, and we don’t recommend reading it.\n\n\n\n\nThis short section outlines the future projects in the seasonal adjustment field. Daily or multiple seasonal adjustment plays a major role here. Ideally, examples of how to solve these problems are given.\n\nDaily adjustment\nMultivariate seasonal adjustment\nOther methods"
@@ -270,6 +270,6 @@
     "href": "99-status.html",
     "title": "Status of the book",
     "section": "",
-    "text": "Current status of sections \n\n\n\n\n\n\nsection name\nstatus\ndue date\n\n\n\nHistory\ndrafting\n2022-12-21\n\n\nHow to use the book\ndrafting\n2022-12-21\n\n\nOverview\ndrafting\n2022-12-21\n\n\nSEATS\ndrafting\n2022-12-21\n\n\nTransform\ndrafting\n2022-12-21\n\n\nX11\ndrafting\n2022-12-21\n\n\nA minimal example\npolishing\n2022-12-21\n\n\nregARIMA\npolishing\n2022-12-21\n\n\nHolidays\ndrafting\n2023-01-21"
+    "text": "Current status of sections \n\n\n\n\n\n\nsection name\nstatus\ndue date\n\n\n\nHow to use the book\ndrafting\n2022-12-21\n\n\nOverview\ndrafting\n2022-12-21\n\n\nOverview of the software\ndrafting\n2022-12-21\n\n\nSEATS\ndrafting\n2022-12-21\n\n\nTransform\ndrafting\n2022-12-21\n\n\nX11\ndrafting\n2022-12-21\n\n\nA minimal example\npolishing\n2022-12-21\n\n\nregARIMA Model\npolishing\n2022-12-21\n\n\nHolidays\ndrafting\n2023-01-21"
   }
 ]
