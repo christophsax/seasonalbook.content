@@ -18,38 +18,38 @@ book:
   chapters:
     - index.qmd
 
-    - part: 10-basics.qmd
+    - part: 10-part-introduction.qmd
       chapters:
         - 11-introduction.qmd
         - 12-how-to-use.qmd
 
-    - part: 20-overview.qmd
+    - part: 20-part-basics.qmd
       chapters:
-        - 21-history.qmd
+        - 21-overview.qmd
         - 22-transform.qmd
         - 23-seats.qmd
         - 24-x11.qmd
         - 25-regARIMA.qmd
 
-    - part: 30-data-problems.qmd
+    - part: 30-part-data-problems.qmd
       chapters:
         - 31-holidays.qmd
         - 32-trading-days.qmd
         - 33-outliers.qmd
         - 34-seasonal-breaks.qmd
 
-    - part: 40-other-issues.qmd
+    - part: 40-part-other-issues.qmd
       chapters:
         - 41-presence-of-seasonality.qmd
         - 42-annual-constraining.qmd
         - 43-indirect-vs-direct.qmd
 
-    - part: 50-quality-assessment.qmd
+    - part: 50-part-quality-assessment.qmd
       chapters:
         - 51-quality-measures.qmd
         - 52-revisions.qmd
 
-    - part: 60-future.qmd
+    - part: 60-part-future.qmd
       chapters:
         - 99-status.qmd
 
