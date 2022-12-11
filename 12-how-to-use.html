@@ -18,6 +18,69 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1.6em;
   vertical-align: middle;
 }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -56,7 +119,6 @@ ul.task-list li input[type="checkbox"] {
     "search-submit-button-title": "Submit"
   }
 }</script><meta name="robots" content="noindex">
-<script src="site_libs/quarto-diagram/mermaid.min.js"></script><script src="site_libs/quarto-diagram/mermaid-init.js"></script><link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 </head>
 <body class="nav-sidebar floating">
 
@@ -236,8 +298,9 @@ ul.task-list li input[type="checkbox"] {
         <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
-<li><a href="#supplementary-material" id="toc-supplementary-material" class="nav-link active" data-scroll-target="#supplementary-material"><span class="toc-section-number">2.1</span>  Supplementary material</a></li>
-  <li><a href="#for-whom" id="toc-for-whom" class="nav-link" data-scroll-target="#for-whom"><span class="toc-section-number">2.2</span>  For whom?</a></li>
+<li><a href="#overview-of-the-book" id="toc-overview-of-the-book" class="nav-link active" data-scroll-target="#overview-of-the-book"><span class="toc-section-number">2.1</span>  Overview of the book</a></li>
+  <li><a href="#the-seasonalbook-package" id="toc-the-seasonalbook-package" class="nav-link" data-scroll-target="#the-seasonalbook-package"><span class="toc-section-number">2.2</span>  The seasonalbook package</a></li>
+  <li><a href="#for-whom" id="toc-for-whom" class="nav-link" data-scroll-target="#for-whom"><span class="toc-section-number">2.3</span>  For whom?</a></li>
   </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/12-how-to-use.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
@@ -283,38 +346,29 @@ ul.task-list li input[type="checkbox"] {
 <li><p>Guide to professional seasonal adjustment with R To make the entry to the world of seasonal adjustment more accessible for those with an understanding of R. We leverage the users R knowledge to more easily understand the input/output of the X-13ARIMA-SEATS program. We also will give an overview of other possibilities of seasonal adjustment in R (e.g.&nbsp;stl, JDemetra).</p></li>
 <li><p>Focus on practitioner’s problem To bridge an important gap in the training for many seasonal adjustment practitioners. The book addresses practical problems and shows how they can be addressed in X-13ARIMA-SEATS. The use of R allows them to have reproducible examples at hand.</p></li>
 </ol>
+<section id="overview-of-the-book" class="level2" data-number="2.1"><h2 data-number="2.1" class="anchored" data-anchor-id="overview-of-the-book">
+<span class="header-section-number">2.1</span> Overview of the book</h2>
+</section><section id="the-seasonalbook-package" class="level2" data-number="2.2"><h2 data-number="2.2" class="anchored" data-anchor-id="the-seasonalbook-package">
+<span class="header-section-number">2.2</span> The <a href="https://github.com/christophsax/seasonalbook">seasonalbook</a> package</h2>
+<p>An R package that supplements “Seasonal Adjustment in R”, and contains all data and examples.</p>
+<p>To install:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"christophsax/seasonalbook"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Example series:</p>
+<div class="cell">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">seasonalbook</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">grocery</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="12-how-to-use_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
 <p>Some Examples: Chinese New Year, structural breaks, direct or indirect seasonal adjustment, SEATS or X-11.</p>
-<section id="supplementary-material" class="level2" data-number="2.1"><h2 data-number="2.1" class="anchored" data-anchor-id="supplementary-material">
-<span class="header-section-number">2.1</span> Supplementary material</h2>
-<p>All material from the text will be made available to the reader. This includes but is not limited to:</p>
-<ul>
-<li>R Package to accompany the book, containing all data and examples</li>
-<li>Interactive website, on which the examples can be run (similar to www.seasonal.website)</li>
-</ul></section><section id="for-whom" class="level2" data-number="2.2"><h2 data-number="2.2" class="anchored" data-anchor-id="for-whom">
-<span class="header-section-number">2.2</span> For whom?</h2>
+</section><section id="for-whom" class="level2" data-number="2.3"><h2 data-number="2.3" class="anchored" data-anchor-id="for-whom">
+<span class="header-section-number">2.3</span> For whom?</h2>
 <p>There are two primary audiences:</p>
 <ol type="1">
 <li><p>Current practitioners of seasonal adjustment who are interested in learning how to implement in R. This audience includes researchers from statistical agencies who want to include the scripting language features of R to evaluate properties of their seasonal adjustments.</p></li>
 <li><p>Current R users who want to learn seasonal adjustment. We are able to leverage the readers knowledge of R to make learning seasonal adjustment easier. We will feature interesting applications outside of official statistics, such as the seasonal adjustment of business data.</p></li>
 </ol>
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<p>
-</p>
-<pre class="mermaid mermaid-js" data-tooltip-selector="#mermaid-tooltip-1">flowchart LR
-  A[Hard edge] --&gt; B(Round edge)
-  B --&gt; C{Decision}
-  C --&gt; D[Result one]
-  C --&gt; E[Result two]
-</pre>
-<div id="mermaid-tooltip-1" class="mermaidTooltip">
-
-</div>
-
-</div>
-</div>
-</div>
 
 
 </section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">

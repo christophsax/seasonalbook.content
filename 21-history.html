@@ -75,6 +75,7 @@ div.csl-indent {
     "search-submit-button-title": "Submit"
   }
 }</script><meta name="robots" content="noindex">
+<script src="site_libs/quarto-diagram/mermaid.min.js"></script><script src="site_libs/quarto-diagram/mermaid-init.js"></script><link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 </head>
 <body class="nav-sidebar floating">
 
@@ -251,7 +252,19 @@ div.csl-indent {
     </ul>
 </div>
 </nav><!-- margin-sidebar --><div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+<li><a href="#history" id="toc-history" class="nav-link active" data-scroll-target="#history"><span class="toc-section-number">3.1</span>  History</a></li>
+  <li><a href="#elements-of-x13" id="toc-elements-of-x13" class="nav-link" data-scroll-target="#elements-of-x13"><span class="toc-section-number">3.2</span>  Elements of X13</a></li>
+  <li>
+<a href="#main-user-choices" id="toc-main-user-choices" class="nav-link" data-scroll-target="#main-user-choices"><span class="toc-section-number">3.3</span>  Main user choices</a>
+  <ul class="collapse">
+<li><a href="#model" id="toc-model" class="nav-link" data-scroll-target="#model"><span class="toc-section-number">3.3.1</span>  Model</a></li>
+  <li><a href="#transform" id="toc-transform" class="nav-link" data-scroll-target="#transform"><span class="toc-section-number">3.3.2</span>  Transform</a></li>
+  </ul>
+</li>
+  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/21-history.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
@@ -282,15 +295,45 @@ div.csl-indent {
 </div>
 </div>
 </div>
-<ul>
-<li><p>History of the software</p></li>
-<li><p>Elements of the software</p></li>
-<li><p>Overview of main choices a user needs to make</p></li>
-</ul>
+<!--
+-   History of the software
+
+-   Elements of the software
+
+-   Overview of main choices a user needs to make
+-->
+<section id="history" class="level2" data-number="3.1"><h2 data-number="3.1" class="anchored" data-anchor-id="history">
+<span class="header-section-number">3.1</span> History</h2>
 <p>In official statistics, seasonal adjustment has a long tradition. The original X-11 software was developed by the US Census Bureau in the 1960s, and later improved by Statistics Canada <span class="citation" data-cites="dagum80">(<a href="#ref-dagum80" role="doc-biblioref">Dagum 1980</a>)</span>. Subsequent software packages by the US Census Bureau were called X-12-ARIMA <span class="citation" data-cites="findley98">(<a href="#ref-findley98" role="doc-biblioref">Findley et al. 1998</a>)</span> and X-13ARIMA-SEATS (or X-13, for short) <span class="citation" data-cites="monsell07">(<a href="#ref-monsell07" role="doc-biblioref">Monsell 2007</a>)</span>. Today, X-11 is still used as a name for filter-based seasonal adjustment methods within X. Meanwhile, TRAMO-SEATS, developed by the Bank of Spain <span class="citation" data-cites="caporello01">(<a href="#ref-caporello01" role="doc-biblioref">Caporello, Maravall, and Sánchez 2001</a>)</span>, offers an alternative model-based approach to seasonal adjustment.</p>
-<p>In its most recent version, X-13 offers these two seasonal adjustment methods in a single command-line tool, written in Fortran. The National Bank of Belgium has created an alter- native Java-based implementation called JDemetra+ <span class="citation" data-cites="eurostat17">(<a href="#ref-eurostat17" role="doc-biblioref">National Bank of Belgium, Deutsche Bundesbank, Eurostat 2017</a>)</span> which is also widely deployed by statistical agencies. One of either the TRAMO-SEATS or X-11 method of seasonal adjustment is used by almost all (government) statistical offices throughout the world.</p>
-<p>R (R Core Team 2017) offers several possibilities to perform seasonal adjustment in the stats package included with R. The decompose function uses filtering to split a time series into a trend, a seasonal and an irregular component. An alternative method is stl, which uses local regressions (and has some extensions offered by the stlplus package by <span class="citation" data-cites="hafen16">(<a href="#ref-hafen16" role="doc-biblioref">Hafen 2016</a>)</span>. While both methods allow a multiplicative or an additive decomposition, these methods are somewhat limited in modeling actual data series.</p>
-<p>The programs used by statistical offices provide an extensive toolbox to deal with many advanced (and more irregular) aspects of seasonality, such as trading day adjustments, moving holiday adjustments or automated outlier detection.</p>
+<p>In its most recent version, X-13 offers these two seasonal adjustment methods in a single command-line tool, written in Fortran. The National Bank of Belgium has created an alternative Java-based implementation called JDemetra+ <span class="citation" data-cites="eurostat17">(<a href="#ref-eurostat17" role="doc-biblioref">National Bank of Belgium, Deutsche Bundesbank, Eurostat 2017</a>)</span> which is also widely deployed by statistical agencies. One of either the TRAMO-SEATS or X-11 method of seasonal adjustment is used by almost all (government) statistical offices throughout the world.</p>
+</section><section id="elements-of-x13" class="level2" data-number="3.2"><h2 data-number="3.2" class="anchored" data-anchor-id="elements-of-x13">
+<span class="header-section-number">3.2</span> Elements of X13</h2>
+<!-- https://mermaid-js.github.io/mermaid/#/flowchart?id=styling-and-classes -->
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<p>
+</p>
+<pre class="mermaid mermaid-js" data-tooltip-selector="#mermaid-tooltip-1">flowchart LR
+  A[transform] --&gt; B(regARIMA)
+  B --&gt; C{Model choice}
+  C --&gt; D[X11]
+  C --&gt; E[SEATS]
+  style C fill: #fff
+</pre>
+<div id="mermaid-tooltip-1" class="mermaidTooltip">
+
+</div>
+
+</div>
+</div>
+</div>
+</section><section id="main-user-choices" class="level2" data-number="3.3"><h2 data-number="3.3" class="anchored" data-anchor-id="main-user-choices">
+<span class="header-section-number">3.3</span> Main user choices</h2>
+<section id="model" class="level3" data-number="3.3.1"><h3 data-number="3.3.1" class="anchored" data-anchor-id="model">
+<span class="header-section-number">3.3.1</span> Model</h3>
+</section><section id="transform" class="level3" data-number="3.3.2"><h3 data-number="3.3.2" class="anchored" data-anchor-id="transform">
+<span class="header-section-number">3.3.2</span> Transform</h3>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
@@ -303,9 +346,6 @@ Dagum, Estela Bee. 1980. <em>The x-11-ARIMA Seasonal Adjustment Method</em>. Sta
 <div id="ref-findley98" class="csl-entry" role="doc-biblioentry">
 Findley, David F, Brian C Monsell, William R Bell, Mark C Otto, and Bor-Chung Chen. 1998. <span>“New Capabilities and Methods of the x-12-ARIMA Seasonal-Adjustment Program.”</span> <em>Journal of Business &amp; Economic Statistics</em> 16 (2): 127–52.
 </div>
-<div id="ref-hafen16" class="csl-entry" role="doc-biblioentry">
-Hafen, Ryan. 2016. <em><span class="nocase">stlplus: Enhanced Seasonal Decomposition of Time Series by Loess</span></em>. <a href="https://CRAN.R-project.org/package=stlplus">https://CRAN.R-project.org/package=stlplus</a>.
-</div>
 <div id="ref-monsell07" class="csl-entry" role="doc-biblioentry">
 Monsell, B. 2007. <span>“The x-13A-s Seasonal Adjustment Program.”</span> In <em>Proceedings of the 2007 Federal Committee on Statistical Methodology Research Conference</em>. <a href="http://www.fcsm.gov/07papers/Monsell.II-B.pdf">http://www.fcsm.gov/07papers/Monsell.II-B.pdf</a>.
 </div>
@@ -313,8 +353,7 @@ Monsell, B. 2007. <span>“The x-13A-s Seasonal Adjustment Program.”</span> In
 National Bank of Belgium, Deutsche Bundesbank, Eurostat. 2017. <em>JDemetra+: Econometric Software for Seasonal Adjustment and Other Time Series Methods</em>. Eurostat. <a href="https://ec.europa.eu/eurostat/cros/content/download">https://ec.europa.eu/eurostat/cros/content/download</a>.
 </div>
 </div>
-
-</main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+</section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");

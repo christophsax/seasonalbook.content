@@ -299,7 +299,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
-<li><a href="#case-study" id="toc-case-study" class="nav-link active" data-scroll-target="#case-study"><span class="toc-section-number">4.0.1</span>  Case Study</a></li>
+<li><a href="#multiplicative-or-additive-adjustment" id="toc-multiplicative-or-additive-adjustment" class="nav-link active" data-scroll-target="#multiplicative-or-additive-adjustment"><span class="toc-section-number">4.1</span>  Multiplicative or additive adjustment?</a></li>
+  <li><a href="#tranform-options" id="toc-tranform-options" class="nav-link" data-scroll-target="#tranform-options"><span class="toc-section-number">4.2</span>  Tranform options</a></li>
+  <li><a href="#case-study" id="toc-case-study" class="nav-link" data-scroll-target="#case-study"><span class="toc-section-number">4.3</span>  Case Study</a></li>
   </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/22-transform.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
@@ -338,6 +340,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><p>Case Study idea: Decide between log vs non-log transformation</p></li>
 </ul>
 <p>One of the first choices to make when modeling a time series is whether or not it needs to be transformed prior to modeling. There are two types of transformation types that typically occur within X13. The first is a prior modification. A prior modification scales each observation for known fixed effects. These effects can be well known and established such as length of a month/quarter and leap-year or more subjective such as a modification for a workers strike. We can think of prior modification factors of events or corrections made to your data that are fixed throughout the adjustment proeess. Additionally, these prior modification factors can be permanent (defualt) or temporary. The difference between permanent and temporary is wheither or not the effect is included back in the final seasonally adjusted series or not; permanent factors are excluded from the final seasonal adjustment while temporary are removed while calculating seasonal factors but then added back to the seasonally adjusted series. The second type is a nonlinear transformation applied to the observations. This is typically a choice between logarithmic transform and no transformation but for modeling can be any power of the Box-Cox transformation CITE.</p>
+<section id="multiplicative-or-additive-adjustment" class="level2" data-number="4.1"><h2 data-number="4.1" class="anchored" data-anchor-id="multiplicative-or-additive-adjustment">
+<span class="header-section-number">4.1</span> Multiplicative or additive adjustment?</h2>
 <p>X-13A-S has a built in statisitcal test to decide between log and no transformatin. This is done with an information criteria based statistical test. The choice is made by comparing the AICC value CITE of an Airline model fit, or user specified ARIMA model, to the log transformed series and the original series. For all practical purposes this is an effective choice and can be left to the program to decide. Note, if your series has negative values it can not be log transformed and no transform is automatically selected by X-13 when automatic transformation is asked for. Other restrictions on the allowed transformtions exisit and can be found in CITE but these situations are rare. We can see the results of the transformation tests by looking at specific inputs to the UDG file.</p>
 <div class="cell">
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.seasonal.website">seasonal</a></span><span class="op">)</span></span>
@@ -348,6 +352,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>We see the AICC for log transformation is lower and hence selected. The summary of the seasonal object <code>summary(m)</code> tells us this with <code>Transform: log</code> displayed. The automatically selected transformation can also be found in many other places such as the HTML output with <code>out(m)</code> or the udg with agruement name <em>aictrans</em> such as <code>udg(m, "aictrans")</code>.</p>
 <p>The choice between log and none changes the type of seasonal decomposition that will occur and hence your interpretation of the seasonal factors. With no transformation, X13 will do an additive seasonal adjustment <span class="math display">\[X_t = T_t + S_t + I_t.\]</span> If a long transformation is selected, X13 will do a multiplicative adjustment <span class="math display">\[X_t = T_t \cdot S_t \cdot I_t.\]</span> This is major difference here is the way seasonal factors are interpreted and applied to the observed data to remove seasonality. For additive models the seasonal factor is subtracted from the original <span class="math inline">\(X_t - S_t\)</span>. For example, an observed value of 100 with seasonal factor of 3.2 would result in a seasonally adjusted value of <span class="math inline">\(100 - 3.2 = 96.8\)</span>. For multiplicative models the observed data is divided by the seasonal factor <span class="math inline">\(\frac{X_t}{S_t}\)</span>. For example, an observed value of 100 with seasonal factor of 1.08 would result in a seasonally adjusted value of <span class="math inline">\(100 / 1.08 = 92.59259\)</span>. Hence for multiplicative models values of <span class="math inline">\(S_t&gt;1\)</span>, decrease the observed value and <span class="math inline">\(S_t &lt; 1\)</span> increase it.</p>
+</section><section id="tranform-options" class="level2" data-number="4.2"><h2 data-number="4.2" class="anchored" data-anchor-id="tranform-options">
+<span class="header-section-number">4.2</span> Tranform options</h2>
 <p>The <code>transform</code> spec controls these options. Some primary options within this spec are</p>
 <table class="table">
 <colgroup>
@@ -382,17 +388,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td>-2.0</td>
 </tr>
 </tbody>
-</table>
-<section id="case-study" class="level3" data-number="4.0.1"><h3 data-number="4.0.1" class="anchored" data-anchor-id="case-study">
-<span class="header-section-number">4.0.1</span> Case Study</h3>
-<p>Consider the situaiton where you are trying to decide on transform choices for monthly retail grocery store data.</p>
+</table></section><section id="case-study" class="level2" data-number="4.3"><h2 data-number="4.3" class="anchored" data-anchor-id="case-study">
+<span class="header-section-number">4.3</span> Case Study</h2>
+<p>Consider the situaiton where you are trying to decide on transform choices for monthly retail grocery store data. The series <code>grocery</code> is part of the <em>seasonalbook</em> package.</p>
 <div class="cell">
-
-</div>
-<div class="cell">
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">grocery</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">seasonalbook</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">grocery</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="22-transform_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="576"></p>
+<p><img src="22-transform_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>Visual inspection of the series shows no immediate reason to think we need to perform a log transform. There is possible seasonal hederoskadasity which could be mitigated by taking logs. Perform an X-11 adjustmnet with all of <code>seasonal</code> defaults.</p>
