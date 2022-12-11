@@ -2,7 +2,7 @@ book/.DS_Store
 .DS_Store
 .Rproj.user
 quarto/*_files
-quarto/*.html
+/*_files
 /.quarto/
 /_book/
 README.html
