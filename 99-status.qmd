@@ -1,0 +1,27 @@
+# Status of the book {.unnumbered}
+
+```{r}
+#| results: "asis"
+#| echo: false
+source("_common.R")
+status <- append_df(refresh = FALSE)
+suppressPackageStartupMessages(library(dplyr))
+status <-
+  status |>
+  arrange(desc(timestamp)) |>
+  group_by(section, date) |>
+  slice(1) |>
+  ungroup() |>
+  select(-timestamp) |>
+  arrange(date, type) |>
+  rename(`section name` = section, status = type, `due date` = date)
+```
+
+```{r}
+#| tbl-cap: "Current status of sections"
+#| tbl-colwidths: [60,40]
+#| echo: false
+
+library(knitr)
+kable(status)
+```

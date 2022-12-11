@@ -4,7 +4,7 @@
 #| results: "asis"
 #| echo: false
 source("_common.R")
-status("drafting")  # drafting, polishing, complete
+status("drafting", "2022-12-21", section = "X11")  # drafting, polishing, complete
 ```
 
 One of the two main methods available in X-13ARIMA-SEATS to extract trend and seasonal components is the \`\`X-11'' method.

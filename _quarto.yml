@@ -50,6 +50,8 @@ book:
         - 52-revisions.qmd
 
     - part: 60-future.qmd
+      chapters:
+        - 99-status.qmd
 
 bibliography: references.bib
 

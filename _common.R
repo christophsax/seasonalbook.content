@@ -23,7 +23,7 @@ options(
 ggplot2::theme_set(ggplot2::theme_gray(12))
 
 # status("drafting", Sys.Date())
-status <- function(type, date = as.Date(NA)) {
+status <- function(type, date = as.Date(NA), section = "") {
   status <- switch(type,
     polishing = "should be readable but needs polishing",
     restructuring = "is undergoing heavy restructuring and may be confusing or incomplete",
@@ -31,7 +31,6 @@ status <- function(type, date = as.Date(NA)) {
     complete = "is largely complete and just needs final proof reading",
     stop("Invalid `type`", call. = FALSE)
   )
-
   if (!is.na(date)) {
     date <- as.Date(date)
     course_info <- paste0(
@@ -43,7 +42,7 @@ status <- function(type, date = as.Date(NA)) {
     course_info <- ""
   }
 
-  # append_df(data.frame(type = type, date = date))
+  append_df(data.frame(section = section, type = type, date = date, timestamp = Sys.time()))
 
   class <- switch(type,
     polishing = "note",
@@ -64,21 +63,21 @@ status <- function(type, date = as.Date(NA)) {
   ))
 }
 
-# # Unclear what's a good way to share date between qmd. This writes a file
-# # to ~ for now.
-# # append_df(refresh = TRUE)          # delete
-# # append_df()                        # show
-# # append_df(data.frame(a = "dfsf"))  # append
-# append_df <- function(row = NULL,
-#                       name = "status",
-#                       path = fs::path("~", paste0(name, ".rds")),
-#                       refresh = FALSE) {
-#   r <- if (file.exists(path)) readr::read_rds(path) else NULL
-#   ans <- rbind(r, row)
-#   if (is.null(row)) {
-#     if (refresh && file.exists(path)) fs::file_delete(path)
-#   } else {
-#     readr::write_rds(ans, path)
-#   }
-#   ans
-# }
+# Unclear what's a good way to share date between qmd. This writes a file
+# to ~ for now.
+# append_df(refresh = TRUE)          # delete
+# append_df()                        # show
+# append_df(data.frame(a = "dfsf"))  # append
+append_df <- function(row = NULL,
+                      name = "status",
+                      path = fs::path("~", paste0(name, ".rds")),
+                      refresh = FALSE) {
+  r <- if (file.exists(path)) readr::read_rds(path) else NULL
+  ans <- rbind(r, row)
+  if (is.null(row)) {
+    if (refresh && file.exists(path)) fs::file_delete(path)
+  } else {
+    readr::write_rds(ans, path)
+  }
+  ans
+}

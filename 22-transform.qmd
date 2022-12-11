@@ -4,7 +4,7 @@
 #| results: "asis"
 #| echo: false
 source("_common.R")
-status("drafting")  # drafting, polishing, complete
+status("drafting", "2022-12-21", section = "Transform")  # drafting, polishing, complete
 ```
 
 -   Discuss multiplicative vs additive adjustment

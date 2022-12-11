@@ -4,7 +4,7 @@
 #| results: "asis"
 #| echo: false
 source("_common.R")
-status("drafting")  # drafting, polishing, complete
+status("drafting", "2022-12-21", section = "How to use the book")  # drafting, polishing, complete
 ```
 
 -   Overview of the book

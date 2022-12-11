@@ -4,7 +4,7 @@
 #| results: "asis"
 #| echo: false
 source("_common.R")
-status("drafting")  # drafting, polishing, complete
+status("polishing", "2022-12-21", section = "regARIMA")  # drafting, polishing, complete
 ```
 <!-- - Idea of regARIMA -->
 
