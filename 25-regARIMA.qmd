@@ -28,7 +28,7 @@ The regARIMA take the form
 $$ f\left(\frac{Y_t}{D_t} \right) = \boldsymbol{\beta}^\prime {\mathbf X}_t + Z_t .$$
 Here $Y_t$ is the observed time series. 
 The function $f$ represents a transformation, most commonly used is the log transform ie $f(x) = \log(x)$.
-The regression variables appear in the columns of the design matrix ${\bf X}_t$ and $Z_t$ is an ARIMA process. 
+The regression variables appear in the columns of the design matrix ${\mathbf X}_t$ and $Z_t$ is an ARIMA process.
 This last assumption on $Z_t$ is what distinguished a regARIMA model from more classic linear models and multiple linear regression where error terms are assumed uncorrelated.
 In order to achieve a suitable seasonal adjustment it is important to get the regARIMA model correct.
 For most dataset the built in automatic modeling features of the X13 program will be suitable to detect a reasonable model. 
