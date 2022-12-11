@@ -25,7 +25,7 @@ This is one of the primary reasons we consider regARIMA models when discussing s
 Another reason for regARIMA modeling is to include exogenous regression variables in our analysis.
 These include, but are not limited to, moving holiday effects, trading day, outliers and level-shifts. 
 The regARIMA take the form
-$$ f\left(\frac{Y_t}{D_t} \right) = \boldsymbol{\beta}^\prime {\bf X}_t + Z_t .$$
+$$ f\left(\frac{Y_t}{D_t} \right) = \boldsymbol{\beta}^\prime {\mathbf X}_t + Z_t .$$
 Here $Y_t$ is the observed time series. 
 The function $f$ represents a transformation, most commonly used is the log transform ie $f(x) = \log(x)$.
 The regression variables appear in the columns of the design matrix ${\bf X}_t$ and $Z_t$ is an ARIMA process. 

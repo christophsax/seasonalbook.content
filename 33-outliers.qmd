@@ -7,8 +7,6 @@ source("_common.R")
 status("drafting")  # drafting, polishing, complete
 ```
 
-- Why care about outliers?
+-   Why care about outliers?
 
-- Additive outliers, level shifts, temporary changes
-
-
+-   Additive outliers, level shifts, temporary changes

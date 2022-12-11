@@ -1,4 +1,4 @@
-## How to use the book
+# How to use the book
 
 ```{r}
 #| results: "asis"
@@ -7,66 +7,59 @@ source("_common.R")
 status("drafting")  # drafting, polishing, complete
 ```
 
-- Overview of the book
+-   Overview of the book
 
-- The Book wants to give concrete advise in case of a problem.
+-   The Book wants to give concrete advise in case of a problem.
 
-- Ideally we want to have a quick check list that gives readers a starting point where to look for further advice. That could be something like a Cheat Sheet (https://www.rstudio.com/resources/cheatsheets/) with quick advise and chapter references.
+-   Ideally we want to have a quick check list that gives readers a starting point where to look for further advice.
+    That could be something like a Cheat Sheet (https://www.rstudio.com/resources/cheatsheets/) with quick advise and chapter references.
 
-- For each section, we want to provide a concrete and informative case study. Some examples are provided in the outline.
-
+-   For each section, we want to provide a concrete and informative case study.
+    Some examples are provided in the outline.
 
 This text will focus on seasonal adjustment and its implementation in R.
 
 Specifically, the audience will be both R users who want to learn about seasonal adjustment as well as seasonal adjustment practitioners, who are interested in using R.
-The book will be tailored to the practical applications of seasonal adjustment within R. It presents background material and references for the theoretically minded reader.
+The book will be tailored to the practical applications of seasonal adjustment within R.
+It presents background material and references for the theoretically minded reader.
 The main focus, however, is on concrete problems and examples.
 
 We will showcase methods through detailed examples with associated code.
 This presentation allows the academic level to be quite broad; understood by undergraduates all the way through advanced Ph.D. students.
-
 
 X-13ARIMA-SEATS is one of, if not the most, widely used seasonal adjustment software within federal and statistical agencies.
 Moreover, there is a movement in statistical agencies toward the use of R and open-source products.
 This text is motivated to unify these two positions.
 Additionally, it and also serve the following:
 
-1. Guide to professional seasonal adjustment with R
-To make the entry to the world of seasonal adjustment more accessible for those with an understanding of R.
-We leverage the users R knowledge to more easily understand the input/output of the X-13ARIMA-SEATS program.
-We also will give an overview of other possibilities of seasonal adjustment in R (e.g.
-stl, JDemetra).
+1.  Guide to professional seasonal adjustment with R To make the entry to the world of seasonal adjustment more accessible for those with an understanding of R.
+    We leverage the users R knowledge to more easily understand the input/output of the X-13ARIMA-SEATS program.
+    We also will give an overview of other possibilities of seasonal adjustment in R (e.g. stl, JDemetra).
 
-2. Focus on practitioner’s problem
-To bridge an important gap in the training for many seasonal adjustment practitioners.
-The book addresses practical problems and shows how they can be addressed in X-13ARIMA-SEATS.
-The use of R allows them to have reproducible examples at hand.
+2.  Focus on practitioner's problem To bridge an important gap in the training for many seasonal adjustment practitioners.
+    The book addresses practical problems and shows how they can be addressed in X-13ARIMA-SEATS.
+    The use of R allows them to have reproducible examples at hand.
 
 Some Examples: Chinese New Year, structural breaks, direct or indirect seasonal adjustment, SEATS or X-11.
-
-
 
 ## Supplementary material
 
 All material from the text will be made available to the reader.
 This includes but is not limited to:
 
-- R Package to accompany the book, containing all data and examples
-- Interactive website, on which the examples can be run (similar to www.seasonal.website)
-
+-   R Package to accompany the book, containing all data and examples
+-   Interactive website, on which the examples can be run (similar to www.seasonal.website)
 
 ## For whom?
 
 There are two primary audiences:
 
-1. Current practitioners of seasonal adjustment who are interested in learning how to implement in R.
-This audience includes researchers from statistical agencies who want to include the scripting language features of R to evaluate properties of their seasonal adjustments.
+1.  Current practitioners of seasonal adjustment who are interested in learning how to implement in R.
+    This audience includes researchers from statistical agencies who want to include the scripting language features of R to evaluate properties of their seasonal adjustments.
 
-2. Current R users who want to learn seasonal adjustment.
-We are able to leverage the readers knowledge of R to make learning seasonal adjustment easier.
-We will feature interesting applications outside of official statistics, such as the seasonal adjustment of business data.
-
-
+2.  Current R users who want to learn seasonal adjustment.
+    We are able to leverage the readers knowledge of R to make learning seasonal adjustment easier.
+    We will feature interesting applications outside of official statistics, such as the seasonal adjustment of business data.
 
 ```{mermaid}
 flowchart LR
@@ -75,5 +68,3 @@ flowchart LR
   C --> D[Result one]
   C --> E[Result two]
 ```
-
-

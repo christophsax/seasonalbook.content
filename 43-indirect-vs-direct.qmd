@@ -6,4 +6,5 @@
 source("_common.R")
 status("drafting")  # drafting, polishing, complete
 ```
-- Should the subcomponents of a series be adjusted separately?
+
+-   Should the subcomponents of a series be adjusted separately?

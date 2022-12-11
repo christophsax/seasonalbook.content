@@ -7,13 +7,13 @@ source("_common.R")
 status("drafting")  # drafting, polishing, complete
 ```
 
-One of the two main methods available in X-13ARIMA-SEATS to extract trend and seasonal components is the ``X-11'' method. 
+One of the two main methods available in X-13ARIMA-SEATS to extract trend and seasonal components is the \`\`X-11'' method.
 This is a nonparametric procedure that works by passing moving-average filters over the data to extract intended components.
 In order to use symetric moving average filters at the end of the time series (current value), a regARIMA model is used to forecast extend the series.
 This RegARIMA model is where users can test for or specify outliers, trading day and moving holiday regressors in their adjustment.
 The forecast extended series is then used to filter.
 Additionally, X-11 has a built in extreme value procedure included.
-This procedure identifies extremes and replaces. 
+This procedure identifies extremes and replaces.
 This results in a robust procedure that can automatically choose filters and identify extreme values without much user intervention.
 All that needs to be evoked beyond the default 'seas()' call is to turn on the X11 spec option.
 
@@ -28,41 +28,38 @@ When using the x11 spec you can change the length of the filter used for the tre
 Additionally, `sigmalim` will control the amount of extreme value adjustment that is done during the seasonal adjustment.
 
 The X-13ARIMA-SEATS development was highly motivated to study economic time series.
-As such, the default seasonal adjustment mode is multiplicative due to most seasonal economic time series displaying seasonal fluctuations that increase and decrease along with the level of the time series.  
+As such, the default seasonal adjustment mode is multiplicative due to most seasonal economic time series displaying seasonal fluctuations that increase and decrease along with the level of the time series.\
+
 If your series does not have this feature then additive adjustment might be more appropriate.
-This can be changed in the `mode` argument of the x11 spec. 
+This can be changed in the `mode` argument of the x11 spec.
 For example, `seas(x, x11.mode = 'add')` will perform an additive x11 run.
 There exist two other models for decomposition, pseudo-additive and log additive.
 These are less common than additive and multiplicative models and are not the focus of this text.
-If your series has some extremely small values in certain months (quarters) then pseudo-additive models could be worth further investigation. 
+If your series has some extremely small values in certain months (quarters) then pseudo-additive models could be worth further investigation.
 It has been observed that when multiplicative seasonal adjustment produces more extreme values in conjunction with small seasonal factors then pseudo-additive adjustment should be explored.
-NEED TO SHOW USERS HOW TO VIEW THEIR EXTREME VALUES - D8.B TABLE DESIGNATIONS NEXT TO OBSERVATIONS.
-A good reference on the subject is Baxter (1994).
+NEED TO SHOW USERS HOW TO VIEW THEIR EXTREME VALUES - D8.B TABLE DESIGNATIONS NEXT TO OBSERVATIONS. A good reference on the subject is Baxter (1994).
 
-The X11 spec also allows users to control the length of the trend and seasonal moving average filters used during the adjustment. 
-Generally speaking, longer filters imply a more stable seasonal component and shorter filters a more changing seasonal pattern. 
+The X11 spec also allows users to control the length of the trend and seasonal moving average filters used during the adjustment.
+Generally speaking, longer filters imply a more stable seasonal component and shorter filters a more changing seasonal pattern.
 Of course, a longer filter will use more data for the caluclation of components at each time point.
-This is an important observation and understanding it might help a user decide on a short or long filter. 
+This is an important observation and understanding it might help a user decide on a short or long filter.
 Since longer filters use more data there tend to be smaller revisions when a new data point is added.
 However, there will be revisions to data values further back.
-A shorter filter is just the opposite, they tend to produce smaller revisions but they do not extend as far back into the series. 
+A shorter filter is just the opposite, they tend to produce smaller revisions but they do not extend as far back into the series.
 If a filter is not choosen by the user then automatic filter selection is used.
-To understand the length of a filter let's look at the (finite) number of choice available in during an x11 adjustment. 
+To understand the length of a filter let's look at the (finite) number of choice available in during an x11 adjustment.
 There are different filters used for the seasonal component and the trend component.
 
-| Seasonal Filter     | Description                                                                                                                                                                                                                     |
-| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| s3x1       | 3x1 moving average                                                                                                                                                                                                              |
-| s3x3       | 3×3 moving average.                                                                                                                                                                                                             |
-| s3x5       | 3×5 moving average                                                                                                                                                                                                              |
-| s3x9       | 3×9 moving average                                                                                                                                                                                                              |
-| s3x15      | 3×15 moving average                                                                                                                                                                                                             |
-| stable     | Stable seasonal filter. A single seasonal factor for each calendar month or quarter is generated by calculating the simple average of all the values for each month or quarter (taken after detrending and outlier adjustment). |
-| x11default |  A 3×3 moving average is used to calculate the initial seasonal factors in each iteration, and a 3×5 moving average to calculate the final seasonal factors.                                                                    |
+| Seasonal Filter | Description                                                                                                                                                                                                                     |
+|-----------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| s3x1            | 3x1 moving average                                                                                                                                                                                                              |
+| s3x3            | 3×3 moving average.                                                                                                                                                                                                             |
+| s3x5            | 3×5 moving average                                                                                                                                                                                                              |
+| s3x9            | 3×9 moving average                                                                                                                                                                                                              |
+| s3x15           | 3×15 moving average                                                                                                                                                                                                             |
+| stable          | Stable seasonal filter. A single seasonal factor for each calendar month or quarter is generated by calculating the simple average of all the values for each month or quarter (taken after detrending and outlier adjustment). |
+| x11default      | A 3×3 moving average is used to calculate the initial seasonal factors in each iteration, and a 3×5 moving average to calculate the final seasonal factors.                                                                     |
 
+-   How to use the X11 spec
 
-
-- How to use the X11 spec
-
-- Case Study: Changing the length of trend and/or seasonal filter
-
+-   Case Study: Changing the length of trend and/or seasonal filter

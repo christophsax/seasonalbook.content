@@ -7,8 +7,8 @@ source("_common.R")
 status("drafting")  # drafting, polishing, complete
 ```
 
-- What is a good seasonal adjustment?
+-   What is a good seasonal adjustment?
 
-- M statistics
+-   M statistics
 
-- Other statistics available in X13
+-   Other statistics available in X13

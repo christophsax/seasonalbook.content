@@ -7,9 +7,8 @@ source("_common.R")
 status("drafting")  # drafting, polishing, complete
 ```
 
-- How to measure revisions?
+-   How to measure revisions?
 
-- Should a model be re-estimated each period?
+-   Should a model be re-estimated each period?
 
-- How to use the slidingspan and history spec
-
+-   How to use the slidingspan and history spec

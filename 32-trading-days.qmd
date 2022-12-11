@@ -7,11 +7,10 @@ source("_common.R")
 status("drafting")  # drafting, polishing, complete
 ```
 
-- Why should we adjust for trading day effects
+-   Why should we adjust for trading day effects
 
-- Seven or two coefficient trading day
+-   Seven or two coefficient trading day
 
-- Using country specific calendars
+-   Using country specific calendars
 
-- Case Study: Movie tickets (or another series with very clear trading day effects)
-
+-   Case Study: Movie tickets (or another series with very clear trading day effects)

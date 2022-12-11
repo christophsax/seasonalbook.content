@@ -7,9 +7,8 @@ source("_common.R")
 status("drafting")  # drafting, polishing, complete
 ```
 
-- Why to care about seasonal breaks?
+-   Why to care about seasonal breaks?
 
-- Detection of seasonal breaks
+-   Detection of seasonal breaks
 
-- Correction for seasonal breaks
-
+-   Correction for seasonal breaks

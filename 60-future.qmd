@@ -11,8 +11,8 @@ This short section outlines the future projects in the seasonal adjustment field
 Daily or multiple seasonal adjustment plays a major role here.
 Ideally, examples of how to solve these problems are given.
 
-- Daily adjustment
+-   Daily adjustment
 
-- Multivariate seasonal adjustment
+-   Multivariate seasonal adjustment
 
-- Other methods
+-   Other methods

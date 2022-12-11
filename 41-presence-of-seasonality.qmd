@@ -6,22 +6,24 @@
 source("_common.R")
 status("drafting")  # drafting, polishing, complete
 ```
-X-13AS removes seasonality from series, even if a series is not seasonal from the beginneing. If a series is not seasonal, the resulting series may be bad.
+
+X-13AS removes seasonality from series, even if a series is not seasonal from the beginneing.
+If a series is not seasonal, the resulting series may be bad.
 
 Fortunatly, X-13 contains a few tests that help users to decide if a series is is seasnal or not.
 
 Before appying X-13AS ist may be necessary to descide if the series is seasonal.
 
-
 ### Avalabele Tests
 
 X13 offers has several formal checks:
 
-  - qs test
-  - ids
-  - m7
+-   qs test
+-   ids
+-   m7
 
-The *ids* test is closely connected to *m7*, but the *QS* test is quite different. Which tests are preferrable, and how should a user descide if the tests are not aligned?
+The *ids* test is closely connected to *m7*, but the *QS* test is quite different.
+Which tests are preferrable, and how should a user descide if the tests are not aligned?
 
 ### ids test
 
@@ -29,22 +31,16 @@ The *ids* test is closely connected to *m7*, but the *QS* test is quite differen
 
 > From ONS 18.2 A general criterion for existence of seasonality
 >
-> Empirical research showed that the most appropriate test for
-> seasonality is the “Combined test for the presence of identifiable
-> seasonality”, given after table D8 of the output. In particular, one
-> of the following statements will always appear:
+> Empirical research showed that the most appropriate test for seasonality is the "Combined test for the presence of identifiable seasonality", given after table D8 of the output.
+> In particular, one of the following statements will always appear:
 >
 > 1.  IDENTIFIABLE SEASONALITY PRESENT
 > 2.  IDENTIFIABLE SEASONALITY PROBABLY NOT PRESEN
 > 3.  IDENTIFIABLE SEASONALITY NOT PRESENT
 >
-> It is recommended that a series is adjusted in the first two cases and
-> not adjusted in the last one. However there are two cases where one
-> might need to deviate from this practice:
+> It is recommended that a series is adjusted in the first two cases and not adjusted in the last one.
+> However there are two cases where one might need to deviate from this practice:
 
 This is the ids test shown below
 
-
 ### Case Study
-
-

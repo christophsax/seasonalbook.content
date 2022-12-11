@@ -66,5 +66,8 @@ format:
 
 editor: visual
 
-
+editor_options:
+  markdown:
+    wrap: sentence
+    canonical: true
 

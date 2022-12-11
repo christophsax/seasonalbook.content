@@ -6,12 +6,11 @@
 source("_common.R")
 status("drafting")  # drafting, polishing, complete
 ```
-- Why should we adjust for holiday effects
 
-- Easter adjustment
+-   Why should we adjust for holiday effects
 
-- User defined adjustments (Chinese New Year, Diwali)
+-   Easter adjustment
 
-- Case Study: How to adjust for Ramadan (which is connected with some additional challenges)
+-   User defined adjustments (Chinese New Year, Diwali)
 
-
+-   Case Study: How to adjust for Ramadan (which is connected with some additional challenges)

@@ -7,34 +7,32 @@ source("_common.R")
 status("polishing", "2022-12-21")  # drafting, polishing, complete
 ```
 
-
-
+```{=html}
 <!--
 - What is Seasonal Adjustment?
 - What is X-13ARIMA-SEATS (X13)?
 - Who uses X13?
 - Available alternatives in and outside of R (some topics are covered in chapter VI)
 - Case Study: A use cases outside of official statistics: seasonal adjustment of business data
-
  -->
+```
+Many time series exhibit a regular seasonal pattern over the year.
+US unemployment, for example, is usually higher from January to March, and again in June and July.
+Similarly, retail sales tend to peak with the Christmas season.
 
-Many time series exhibit a regular seasonal pattern over the year. US unemployment, for example, is usually higher from January to March, and again in June and July. Similarly, retail sales tend to peak with the Christmas season.
-
-To model the underlying structure of these series, any regular (seasonal) patterns are estimated and removed from the data. For example, to see if the economy is moving out of a recession during certain months, one wants the labor market data be free from such seasonal effects. Seasonal adjustment decomposes a time series into a trend, a seasonal and an irregular component and removes the seasonal component from the data.
-
-
+To model the underlying structure of these series, any regular (seasonal) patterns are estimated and removed from the data.
+For example, to see if the economy is moving out of a recession during certain months, one wants the labor market data be free from such seasonal effects.
+Seasonal adjustment decomposes a time series into a trend, a seasonal and an irregular component and removes the seasonal component from the data.
 
 ## Installation
 
-If you use R installing X-13ARIMA-SEATS from CRAN is
-as easy as installing any other R package [@jss]:
+If you use R installing X-13ARIMA-SEATS from CRAN is as easy as installing any other R package [@jss]:
 
-```r
+``` r
 install.packages("seasonal")
 ```
 
 ## A minimal example
-
 
 Once the package is installed it can be loaded in the usual way:
 
@@ -42,33 +40,31 @@ Once the package is installed it can be loaded in the usual way:
 library(seasonal)
 ```
 
-The `seas()` function provides the core functionality of the
-package. By default, `seas` calls the automatic procedures of
-X-13 to perform a seasonal adjustment that works well in most
-circumstances:
+The `seas()` function provides the core functionality of the package.
+By default, `seas` calls the automatic procedures of X-13 to perform a seasonal adjustment that works well in most circumstances:
 
 ```{r}
 seas(unemp)
 ```
 
-The first argument of seas is a time series of class "ts". The unemp example series measures US unemployment and is included in seasonal. The function returns an object of class "seas" that contains the necessary information on the adjustment performed on this time series.
+The first argument of seas is a time series of class "ts".
+The unemp example series measures US unemployment and is included in seasonal.
+The function returns an object of class "seas" that contains the necessary information on the adjustment performed on this time series.
 
 ```{r}
 m <- seas(unemp)
 ```
 
-There are several functions and methods for "seas" objects. The final function returns the adjusted series. The plot method shows a plot with the unadjusted and the adjusted series.
+There are several functions and methods for "seas" objects.
+The final function returns the adjusted series.
+The plot method shows a plot with the unadjusted and the adjusted series.
 
 ```{r}
 plot(m)
 ```
 
-The summary method displays an overview of the model, very similar to the one produced by R’s lm function:
-
+The summary method displays an overview of the model, very similar to the one produced by R's lm function:
 
 ```{r}
 summary(m)
 ```
-
-
-

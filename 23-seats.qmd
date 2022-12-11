@@ -7,11 +7,10 @@ source("_common.R")
 status("drafting")  # drafting, polishing, complete
 ```
 
-- How to use the SEATS spec
+-   How to use the SEATS spec
 
-- SEATS vs X11
+-   SEATS vs X11
 
-- Case Study:
+-   Case Study:
 
 For SEATS, can be quite challenging since it relies heavily on seasonal ARIMA modeling.
-
