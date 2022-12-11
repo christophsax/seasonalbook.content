@@ -296,7 +296,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     </ul>
 </div>
 </nav><!-- margin-sidebar --><div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+<li><a href="#series-forecast" id="toc-series-forecast" class="nav-link active" data-scroll-target="#series-forecast"><span class="toc-section-number">7.1</span>  Series forecast</a></li>
+  <li><a href="#exogenous-variables" id="toc-exogenous-variables" class="nav-link" data-scroll-target="#exogenous-variables"><span class="toc-section-number">7.2</span>  Exogenous variables</a></li>
+  <li><a href="#arima-modelling" id="toc-arima-modelling" class="nav-link" data-scroll-target="#arima-modelling"><span class="toc-section-number">7.3</span>  ARIMA modelling</a></li>
+  <li><a href="#how-to-use-the-regression-spec" id="toc-how-to-use-the-regression-spec" class="nav-link" data-scroll-target="#how-to-use-the-regression-spec"><span class="toc-section-number">7.4</span>  How to use the regression spec</a></li>
+  <li><a href="#table-of-all-regression-effects-available" id="toc-table-of-all-regression-effects-available" class="nav-link" data-scroll-target="#table-of-all-regression-effects-available"><span class="toc-section-number">7.5</span>  Table of all Regression effects available</a></li>
+  <li><a href="#case-study" id="toc-case-study" class="nav-link" data-scroll-target="#case-study"><span class="toc-section-number">7.6</span>  Case study</a></li>
+  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/25-regARIMA.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
@@ -327,9 +336,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 </div>
-<ul>
-<li>Idea of regARIMA</li>
-</ul>
+<!-- - Idea of regARIMA -->
+<section id="series-forecast" class="level2" data-number="7.1"><h2 data-number="7.1" class="anchored" data-anchor-id="series-forecast">
+<span class="header-section-number">7.1</span> Series forecast</h2>
 <p>The most fundamental procedure involved in X-13 is applying moving average filters. When symmetric filters are used we “lose” observations at the end of the series. Consider the simple moving average filter <span class="math display">\[ Y_t = \frac{1}{5} X_{t-2} + \frac{1}{5} X_{t-1} + \frac{1}{5} X_{t} + \frac{1}{5} X_{t+1} + \frac{1}{5} X_{t+2}. \]</span></p>
 <div class="cell">
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.seasonal.website">seasonal</a></span><span class="op">)</span></span>
@@ -342,7 +351,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 <p>The output of the filter <span class="math inline">\(Y_t\)</span> is shorter than <span class="math inline">\(X_t\)</span> by 4 total observations. Two at the beginning and two at the end.</p>
-<p>This is one of the primary reasons we consider regARIMA models when discussing seasonal adjustment; the observed time series is forecast extended to allow for symmetric moving average filters to be used all the way to the end of the series. Another reason for regARIMA modeling is to include exogenous regression variables in our analysis. These include, but are not limited to, moving holiday effects, trading day, outliers and level-shifts. The regARIMA take the form <span class="math display">\[ f\left(\frac{Y_t}{D_t} \right) = \boldsymbol{\beta}^\prime {\mathbf X}_t + Z_t .\]</span> Here <span class="math inline">\(Y_t\)</span> is the observed time series. The function <span class="math inline">\(f\)</span> represents a transformation, most commonly used is the log transform ie <span class="math inline">\(f(x) = \log(x)\)</span>. The regression variables appear in the columns of the design matrix <span class="math inline">\({\mathbf X}_t\)</span> and <span class="math inline">\(Z_t\)</span> is an ARIMA process. This last assumption on <span class="math inline">\(Z_t\)</span> is what distinguished a regARIMA model from more classic linear models and multiple linear regression where error terms are assumed uncorrelated. In order to achieve a suitable seasonal adjustment it is important to get the regARIMA model correct. For most dataset the built in automatic modeling features of the X13 program will be suitable to detect a reasonable model. This can be used as a starting point for more rigorous regARIMA model development or used as the final regARIMA modeling choice for your seasonal adjustment needs. We evoke automatic model identification through the XXX spec. The default behavior of the R seasonal package is XXX which includes automatic model identification. As an aside, the general rule is to not use automatic modeling `<code>in production''. This mean, if you are going to include seasonal adjustment as part of a large scale data processing that occurs regularly (say monthly), then it is not advisable to have automatic model identification run every month.  Instead, an alternative process, is to run automodel once and then fix the model choice in the XXX spec file.  This does not need to be done manually since the</code>static()` function from the seasonal package can do this for you. For example, consider the default seasonal adjustment</p>
+<p>This is one of the primary reasons we consider regARIMA models when discussing seasonal adjustment; the observed time series is forecast extended to allow for symmetric moving average filters to be used all the way to the end of the series.</p>
+</section><section id="exogenous-variables" class="level2" data-number="7.2"><h2 data-number="7.2" class="anchored" data-anchor-id="exogenous-variables">
+<span class="header-section-number">7.2</span> Exogenous variables</h2>
+<p>Another reason for regARIMA modeling is to include exogenous regression variables in our analysis. These include, but are not limited to, moving holiday effects, trading day, outliers and level-shifts. The regARIMA take the form <span class="math display">\[ f\left(\frac{Y_t}{D_t} \right) = \boldsymbol{\beta}^\prime {\mathbf X}_t + Z_t .\]</span> Here <span class="math inline">\(Y_t\)</span> is the observed time series. The function <span class="math inline">\(f\)</span> represents a transformation, most commonly used is the log transform ie <span class="math inline">\(f(x) = \log(x)\)</span>. The regression variables appear in the columns of the design matrix <span class="math inline">\({\mathbf X}_t\)</span> and <span class="math inline">\(Z_t\)</span> is an ARIMA process. This last assumption on <span class="math inline">\(Z_t\)</span> is what distinguished a regARIMA model from more classic linear models and multiple linear regression where error terms are assumed uncorrelated.</p>
+</section><section id="arima-modelling" class="level2" data-number="7.3"><h2 data-number="7.3" class="anchored" data-anchor-id="arima-modelling">
+<span class="header-section-number">7.3</span> ARIMA modelling</h2>
+<p>In order to achieve a suitable seasonal adjustment it is important to get the regARIMA model correct. For most dataset the built in automatic modeling features of the X13 program will be suitable to detect a reasonable model. This can be used as a starting point for more rigorous regARIMA model development or used as the final regARIMA modeling choice for your seasonal adjustment needs. We evoke automatic model identification through the XXX spec. The default behavior of the R seasonal package is XXX which includes automatic model identification.</p>
+<div class="callout-tip callout callout-style-simple callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Automatic and manual model choice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>As an aside, the general rule is to not use automatic modeling in production. This mean, if you are going to include seasonal adjustment as part of a large scale data processing that occurs regularly (say monthly), then it is not advisable to have automatic model identification run every month. Instead, an alternative process, is to run automodel once and then fix the model choice in the XXX spec file. This does not need to be done manually since the <code><a href="https://rdrr.io/pkg/seasonal/man/static.html">static()</a></code> function from the seasonal package can do this for you.</p>
+</div>
+</div>
+<p>Consider the default seasonal adjustment:</p>
 <div class="cell">
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">AirPassengers</span>, x11 <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">m</span><span class="op">$</span><span class="va">spc</span><span class="op">$</span><span class="va">automdl</span><span class="op">)</span></span>
@@ -371,15 +400,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span><span class="co">#&gt; )</span></span>
 <span><span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/eval.html">eval</a></span><span class="op">(</span><span class="va">m_call</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<ul>
-<li><p>How to use the regression spec</p></li>
-<li><p>Table of all Regression effects available in X13 (steal from CR slides)</p></li>
-<li><p>Case studies: Decide if you should include AO in May 2014. Construct a simple user defined regressor to handle specific issue.</p></li>
-</ul>
+</section><section id="how-to-use-the-regression-spec" class="level2" data-number="7.4"><h2 data-number="7.4" class="anchored" data-anchor-id="how-to-use-the-regression-spec">
+<span class="header-section-number">7.4</span> How to use the regression spec</h2>
+</section><section id="table-of-all-regression-effects-available" class="level2" data-number="7.5"><h2 data-number="7.5" class="anchored" data-anchor-id="table-of-all-regression-effects-available">
+<span class="header-section-number">7.5</span> Table of all Regression effects available</h2>
+<p><!--
+  (steal from CR slides)
+
+--></p>
+</section><section id="case-study" class="level2" data-number="7.6"><h2 data-number="7.6" class="anchored" data-anchor-id="case-study">
+<span class="header-section-number">7.6</span> Case study</h2>
+<p>Decide if you should include AO in May 2014. Construct a simple user defined regressor to handle specific issue.</p>
 
 
-
-</main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
