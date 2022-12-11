@@ -8,5 +8,5 @@ status("drafting")  # drafting, polishing, complete
 ```
 
 This section gets readers familiar with X-13ARIMA-SEATS.
-It begins by explaining the history and pedagogy of the software.
+It begins by explaining the history and pedagogy of the software (@sec-overwiew).
 This leads directly into discussing the principal elements of X-13ARIMA-SEATS.
