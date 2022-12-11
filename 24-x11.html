@@ -5,7 +5,7 @@
 <meta name="generator" content="quarto-1.2.269">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="James Livsey and Christoph Sax">
-<title>Seasonal Adjustment in R - 6&nbsp; X11</title>
+<title>Seasonal Adjustment in R - 7&nbsp; X11</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -125,7 +125,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
       <h1 class="quarto-secondary-nav-title">
-<span class="chapter-number">6</span>&nbsp; <span class="chapter-title">X11</span>
+<span class="chapter-number">7</span>&nbsp; <span class="chapter-title">X11</span>
 </h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
@@ -154,14 +154,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
-<li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link">Welcome</a>
-  </div>
-</li>
-        <li class="sidebar-item sidebar-item-section">
+<li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./10-part-introduction.html" class="sidebar-item-text sidebar-link">Introduction</a>
+            <a href="./index.html" class="sidebar-item-text sidebar-link">Welcome</a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -169,12 +164,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./11-introduction.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">A minimal example</span></a>
+  <a href="./10-introduction.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./12-how-to-use.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">How to use the book</span></a>
+  <a href="./11-minimal-example.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">A minimal example</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12-how-to-use.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">How to use the book</span></a>
   </div>
 </li>
       </ul>
@@ -189,27 +189,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./21-overview.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Overview of the software</span></a>
+  <a href="./21-overview.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Overview of the software</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./22-transform.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Transform</span></a>
+  <a href="./22-transform.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Transform</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./23-seats.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">SEATS</span></a>
+  <a href="./23-seats.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">SEATS</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./24-x11.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">X11</span></a>
+  <a href="./24-x11.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">X11</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./25-regARIMA.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">regARIMA Model</span></a>
+  <a href="./25-regARIMA.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">regARIMA Model</span></a>
   </div>
 </li>
       </ul>
@@ -224,22 +224,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./31-holidays.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Irregular holidays</span></a>
+  <a href="./31-holidays.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Irregular holidays</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./32-trading-days.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Trading days</span></a>
+  <a href="./32-trading-days.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Trading days</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./33-outliers.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Outliers</span></a>
+  <a href="./33-outliers.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Outliers</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./34-seasonal-breaks.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Seasonal breaks</span></a>
+  <a href="./34-seasonal-breaks.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Seasonal breaks</span></a>
   </div>
 </li>
       </ul>
@@ -254,17 +254,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./41-presence-of-seasonality.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Presence of seasonality</span></a>
+  <a href="./41-presence-of-seasonality.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Presence of seasonality</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./42-annual-constraining.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Annual constraining</span></a>
+  <a href="./42-annual-constraining.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Annual constraining</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./43-indirect-vs-direct.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Indirect vs direct adjustment</span></a>
+  <a href="./43-indirect-vs-direct.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Indirect vs direct adjustment</span></a>
   </div>
 </li>
       </ul>
@@ -279,12 +279,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./51-quality-measures.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Quality measures</span></a>
+  <a href="./51-quality-measures.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Quality measures</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./52-revisions.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Revisions</span></a>
+  <a href="./52-revisions.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Revisions</span></a>
   </div>
 </li>
       </ul>
@@ -310,16 +310,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
-<li><a href="#additive-and-multiplicative-again" id="toc-additive-and-multiplicative-again" class="nav-link active" data-scroll-target="#additive-and-multiplicative-again"><span class="toc-section-number">6.1</span>  Additive and multiplicative (again)</a></li>
-  <li><a href="#filter-length" id="toc-filter-length" class="nav-link" data-scroll-target="#filter-length"><span class="toc-section-number">6.2</span>  Filter length</a></li>
-  <li><a href="#extrem-value" id="toc-extrem-value" class="nav-link" data-scroll-target="#extrem-value"><span class="toc-section-number">6.3</span>  Extrem value</a></li>
-  <li><a href="#case-study" id="toc-case-study" class="nav-link" data-scroll-target="#case-study"><span class="toc-section-number">6.4</span>  Case study</a></li>
+<li><a href="#additive-and-multiplicative-again" id="toc-additive-and-multiplicative-again" class="nav-link active" data-scroll-target="#additive-and-multiplicative-again"><span class="toc-section-number">7.1</span>  Additive and multiplicative (again)</a></li>
+  <li><a href="#filter-length" id="toc-filter-length" class="nav-link" data-scroll-target="#filter-length"><span class="toc-section-number">7.2</span>  Filter length</a></li>
+  <li><a href="#extrem-value" id="toc-extrem-value" class="nav-link" data-scroll-target="#extrem-value"><span class="toc-section-number">7.3</span>  Extrem value</a></li>
+  <li><a href="#case-study" id="toc-case-study" class="nav-link" data-scroll-target="#case-study"><span class="toc-section-number">7.4</span>  Case study</a></li>
   </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/24-x11.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
 <h1 class="title d-none d-lg-block">
-<span class="chapter-number">6</span>&nbsp; <span class="chapter-title">X11</span>
+<span class="chapter-number">7</span>&nbsp; <span class="chapter-title">X11</span>
 </h1>
 </div>
 
@@ -382,17 +382,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>Before further discussion about the details of the X-11 process, let us see what happened during this modeling run…</p>
 <p>When using the x11 spec you can change the length of the filter used for the trend and seasonal components with the <code>trendma</code> and <code>seasonalma</code> arguments respectively. Additionally, <code>sigmalim</code> will control the amount of extreme value adjustment that is done during the seasonal adjustment.</p>
-<section id="additive-and-multiplicative-again" class="level2" data-number="6.1"><h2 data-number="6.1" class="anchored" data-anchor-id="additive-and-multiplicative-again">
-<span class="header-section-number">6.1</span> Additive and multiplicative (again)</h2>
+<section id="additive-and-multiplicative-again" class="level2" data-number="7.1"><h2 data-number="7.1" class="anchored" data-anchor-id="additive-and-multiplicative-again">
+<span class="header-section-number">7.1</span> Additive and multiplicative (again)</h2>
 <p>The X-13ARIMA-SEATS development was highly motivated to study economic time series. As such, the default seasonal adjustment mode is multiplicative due to most seasonal economic time series displaying seasonal fluctuations that increase and decrease along with the level of the time series.<br></p>
 <p>If your series does not have this feature then additive adjustment might be more appropriate. This can be changed in the <code>mode</code> argument of the x11 spec. For example, <code>seas(x, x11.mode = 'add')</code> will perform an additive x11 run. There exist two other models for decomposition, pseudo-additive and log additive. These are less common than additive and multiplicative models and are not the focus of this text. If your series has some extremely small values in certain months (quarters) then pseudo-additive models could be worth further investigation. It has been observed that when multiplicative seasonal adjustment produces more extreme values in conjunction with small seasonal factors then pseudo-additive adjustment should be explored. NEED TO SHOW USERS HOW TO VIEW THEIR EXTREME VALUES - D8.B TABLE DESIGNATIONS NEXT TO OBSERVATIONS. A good reference on the subject is Baxter (1994).</p>
-</section><section id="filter-length" class="level2" data-number="6.2"><h2 data-number="6.2" class="anchored" data-anchor-id="filter-length">
-<span class="header-section-number">6.2</span> Filter length</h2>
+</section><section id="filter-length" class="level2" data-number="7.2"><h2 data-number="7.2" class="anchored" data-anchor-id="filter-length">
+<span class="header-section-number">7.2</span> Filter length</h2>
 <p>The X11 spec also allows users to control the length of the trend and seasonal moving average filters used during the adjustment. Generally speaking, longer filters imply a more stable seasonal component and shorter filters a more changing seasonal pattern. Of course, a longer filter will use more data for the caluclation of components at each time point. This is an important observation and understanding it might help a user decide on a short or long filter. Since longer filters use more data there tend to be smaller revisions when a new data point is added. However, there will be revisions to data values further back.</p>
-<p>A shorter filter is just the opposite, they tend to produce smaller revisions but they do not extend as far back into the series. If a filter is not choosen by the user then automatic filter selection is used. To understand the length of a filter let’s look at the (finite) number of choice available in during an x11 adjustment. <a href="#tbl-x11-filters">Table&nbsp;<span>6.1</span></a> shows the different filters available for the seasonal component and the trend component.</p>
+<p>A shorter filter is just the opposite, they tend to produce smaller revisions but they do not extend as far back into the series. If a filter is not choosen by the user then automatic filter selection is used. To understand the length of a filter let’s look at the (finite) number of choice available in during an x11 adjustment. <a href="#tbl-x11-filters">Table&nbsp;<span>7.1</span></a> shows the different filters available for the seasonal component and the trend component.</p>
 <div id="tbl-x11-filters" class="anchored">
 <table class="table">
-<caption>Table&nbsp;6.1: Filters available in X11</caption>
+<caption>Table&nbsp;7.1: Filters available in X11</caption>
 <colgroup>
 <col style="width: 30%">
 <col style="width: 70%">
@@ -433,8 +433,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tbody>
 </table>
 </div>
-</section><section id="extrem-value" class="level2" data-number="6.3"><h2 data-number="6.3" class="anchored" data-anchor-id="extrem-value">
-<span class="header-section-number">6.3</span> Extrem value</h2>
+</section><section id="extrem-value" class="level2" data-number="7.3"><h2 data-number="7.3" class="anchored" data-anchor-id="extrem-value">
+<span class="header-section-number">7.3</span> Extrem value</h2>
 <div class="callout-warning callout callout-style-simple callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -448,8 +448,8 @@ Related concept: Outlier
 <p>FIXME: explain how this is related to transform.</p>
 </div>
 </div>
-</section><section id="case-study" class="level2" data-number="6.4"><h2 data-number="6.4" class="anchored" data-anchor-id="case-study">
-<span class="header-section-number">6.4</span> Case study</h2>
+</section><section id="case-study" class="level2" data-number="7.4"><h2 data-number="7.4" class="anchored" data-anchor-id="case-study">
+<span class="header-section-number">7.4</span> Case study</h2>
 <div class="cell">
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span></span>
 <span><span class="fu">tsbox</span><span class="fu">::</span><span class="fu"><a href="https://www.tsbox.help/reference/ts_plot.html">ts_plot</a></span><span class="op">(</span></span>
@@ -596,12 +596,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
       <a href="./23-seats.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">SEATS</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">SEATS</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="./25-regARIMA.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">regARIMA Model</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">regARIMA Model</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

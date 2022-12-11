@@ -5,7 +5,7 @@
 <meta name="generator" content="quarto-1.2.269">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="James Livsey and Christoph Sax">
-<title>Seasonal Adjustment in R - 17&nbsp; Revisions</title>
+<title>Seasonal Adjustment in R - 1&nbsp; Introduction</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -27,8 +27,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./60-part-future.html" rel="next">
-<link href="./51-quality-measures.html" rel="prev">
+<link href="./11-minimal-example.html" rel="next">
+<link href="./index.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -62,7 +62,7 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
       <h1 class="quarto-secondary-nav-title">
-<span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Revisions</span>
+<span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span>
 </h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
@@ -101,7 +101,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./10-introduction.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a>
+  <a href="./10-introduction.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -221,7 +221,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./52-revisions.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Revisions</span></a>
+  <a href="./52-revisions.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Revisions</span></a>
   </div>
 </li>
       </ul>
@@ -249,7 +249,7 @@ ul.task-list li input[type="checkbox"] {
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
 <h1 class="title d-none d-lg-block">
-<span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Revisions</span>
+<span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span>
 </h1>
 </div>
 
@@ -264,22 +264,27 @@ ul.task-list li input[type="checkbox"] {
   
 
 </header><div class="status">
-<div class="callout-important callout callout-style-simple">
+<div class="callout-note callout callout-style-simple">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-body-container">
-<p>You are reading an early draft of <em>Seasonal Adjustment in R</em>. This chapter is currently a dumping ground for ideas, and we don’t recommend reading it.</p>
+<p>You are reading an early draft of <em>Seasonal Adjustment in R</em>. This chapter should be readable but needs polishing.</p>
+<p><strong>It is part of the course materials intended for Dec 21, 2022</strong>.</p>
 </div>
 </div>
 </div>
 </div>
-<ul>
-<li><p>How to measure revisions?</p></li>
-<li><p>Should a model be re-estimated each period?</p></li>
-<li><p>How to use the slidingspan and history spec</p></li>
-</ul>
+<!--
+- What is Seasonal Adjustment?
+- What is X-13ARIMA-SEATS (X13)?
+- Who uses X13?
+- Available alternatives in and outside of R (some topics are covered in chapter VI)
+- Case Study: A use cases outside of official statistics: seasonal adjustment of business data
+ -->
+<p>Many time series exhibit a regular seasonal pattern over the year. US unemployment, for example, is usually higher from January to March, and again in June and July. Similarly, retail sales tend to peak with the Christmas season.</p>
+<p>To model the underlying structure of these series, any regular (seasonal) patterns are estimated and removed from the data. For example, to see if the economy is moving out of a recession during certain months, one wants the labor market data be free from such seasonal effects. Seasonal adjustment decomposes a time series into a trend, a seasonal and an irregular component and removes the seasonal component from the data.</p>
 
 
 
@@ -416,13 +421,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
-      <a href="./51-quality-measures.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Quality measures</span></span>
+      <a href="./index.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Welcome</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./60-part-future.html" class="pagination-link">
-        <span class="nav-page-text">The future of seasonal adjustment</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./11-minimal-example.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">A minimal example</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

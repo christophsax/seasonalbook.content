@@ -5,7 +5,7 @@
 <meta name="generator" content="quarto-1.2.269">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="James Livsey and Christoph Sax">
-<title>Seasonal Adjustment in R - 4&nbsp; Transform</title>
+<title>Seasonal Adjustment in R - 5&nbsp; Transform</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -126,7 +126,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
       <h1 class="quarto-secondary-nav-title">
-<span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Transform</span>
+<span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Transform</span>
 </h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
@@ -155,14 +155,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
-<li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link">Welcome</a>
-  </div>
-</li>
-        <li class="sidebar-item sidebar-item-section">
+<li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./10-part-introduction.html" class="sidebar-item-text sidebar-link">Introduction</a>
+            <a href="./index.html" class="sidebar-item-text sidebar-link">Welcome</a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -170,12 +165,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./11-introduction.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">A minimal example</span></a>
+  <a href="./10-introduction.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./12-how-to-use.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">How to use the book</span></a>
+  <a href="./11-minimal-example.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">A minimal example</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12-how-to-use.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">How to use the book</span></a>
   </div>
 </li>
       </ul>
@@ -190,27 +190,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./21-overview.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Overview of the software</span></a>
+  <a href="./21-overview.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Overview of the software</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./22-transform.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Transform</span></a>
+  <a href="./22-transform.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Transform</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./23-seats.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">SEATS</span></a>
+  <a href="./23-seats.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">SEATS</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./24-x11.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">X11</span></a>
+  <a href="./24-x11.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">X11</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./25-regARIMA.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">regARIMA Model</span></a>
+  <a href="./25-regARIMA.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">regARIMA Model</span></a>
   </div>
 </li>
       </ul>
@@ -225,22 +225,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./31-holidays.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Irregular holidays</span></a>
+  <a href="./31-holidays.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Irregular holidays</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./32-trading-days.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Trading days</span></a>
+  <a href="./32-trading-days.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Trading days</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./33-outliers.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Outliers</span></a>
+  <a href="./33-outliers.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Outliers</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./34-seasonal-breaks.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Seasonal breaks</span></a>
+  <a href="./34-seasonal-breaks.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Seasonal breaks</span></a>
   </div>
 </li>
       </ul>
@@ -255,17 +255,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./41-presence-of-seasonality.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Presence of seasonality</span></a>
+  <a href="./41-presence-of-seasonality.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Presence of seasonality</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./42-annual-constraining.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Annual constraining</span></a>
+  <a href="./42-annual-constraining.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Annual constraining</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./43-indirect-vs-direct.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Indirect vs direct adjustment</span></a>
+  <a href="./43-indirect-vs-direct.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Indirect vs direct adjustment</span></a>
   </div>
 </li>
       </ul>
@@ -280,12 +280,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./51-quality-measures.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Quality measures</span></a>
+  <a href="./51-quality-measures.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Quality measures</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./52-revisions.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Revisions</span></a>
+  <a href="./52-revisions.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Revisions</span></a>
   </div>
 </li>
       </ul>
@@ -311,15 +311,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
-<li><a href="#multiplicative-or-additive-adjustment" id="toc-multiplicative-or-additive-adjustment" class="nav-link active" data-scroll-target="#multiplicative-or-additive-adjustment"><span class="toc-section-number">4.1</span>  Multiplicative or additive adjustment?</a></li>
-  <li><a href="#transform-options" id="toc-transform-options" class="nav-link" data-scroll-target="#transform-options"><span class="toc-section-number">4.2</span>  Transform options</a></li>
-  <li><a href="#case-study" id="toc-case-study" class="nav-link" data-scroll-target="#case-study"><span class="toc-section-number">4.3</span>  Case Study</a></li>
+<li><a href="#multiplicative-or-additive-adjustment" id="toc-multiplicative-or-additive-adjustment" class="nav-link active" data-scroll-target="#multiplicative-or-additive-adjustment"><span class="toc-section-number">5.1</span>  Multiplicative or additive adjustment?</a></li>
+  <li><a href="#transform-options" id="toc-transform-options" class="nav-link" data-scroll-target="#transform-options"><span class="toc-section-number">5.2</span>  Transform options</a></li>
+  <li><a href="#case-study" id="toc-case-study" class="nav-link" data-scroll-target="#case-study"><span class="toc-section-number">5.3</span>  Case Study</a></li>
   </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/22-transform.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
 <h1 class="title d-none d-lg-block">
-<span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Transform</span>
+<span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Transform</span>
 </h1>
 </div>
 
@@ -356,8 +356,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 -   Case Study idea: Decide between log vs non-log transformation
  -->
 <p>One of the first choices to make when modeling a time series is whether or not it needs to be transformed prior to modeling. There are two types of transformation types that typically occur within X13. The first is a prior modification. A prior modification scales each observation for known fixed effects. These effects can be well known and established such as length of a month/quarter and leap-year or more subjective such as a modification for a workers strike. We can think of prior modification factors of events or corrections made to your data that are fixed throughout the adjustment proeess. Additionally, these prior modification factors can be permanent (defualt) or temporary. The difference between permanent and temporary is wheither or not the effect is included back in the final seasonally adjusted series or not; permanent factors are excluded from the final seasonal adjustment while temporary are removed while calculating seasonal factors but then added back to the seasonally adjusted series. The second type is a nonlinear transformation applied to the observations. This is typically a choice between logarithmic transform and no transformation but for modeling can be any power of the Box-Cox transformation CITE.</p>
-<section id="multiplicative-or-additive-adjustment" class="level2" data-number="4.1"><h2 data-number="4.1" class="anchored" data-anchor-id="multiplicative-or-additive-adjustment">
-<span class="header-section-number">4.1</span> Multiplicative or additive adjustment?</h2>
+<section id="multiplicative-or-additive-adjustment" class="level2" data-number="5.1"><h2 data-number="5.1" class="anchored" data-anchor-id="multiplicative-or-additive-adjustment">
+<span class="header-section-number">5.1</span> Multiplicative or additive adjustment?</h2>
 <p>X-13A-S has a built in statisitcal test to decide between log and no transformatin. This is done with an information criteria based statistical test. The choice is made by comparing the AICC value CITE of an Airline model fit, or user specified ARIMA model, to the log transformed series and the original series. For all practical purposes this is an effective choice and can be left to the program to decide. Note, if your series has negative values it can not be log transformed and no transform is automatically selected by X-13 when automatic transformation is asked for. Other restrictions on the allowed transformtions exisit and can be found in CITE but these situations are rare. We can see the results of the transformation tests by looking at specific inputs to the UDG file.</p>
 <div class="cell">
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.seasonal.website">seasonal</a></span><span class="op">)</span></span>
@@ -368,8 +368,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>We see the AICC for log transformation is lower and hence selected. The summary of the seasonal object <code>summary(m)</code> tells us this with <code>Transform: log</code> displayed. The automatically selected transformation can also be found in many other places such as the HTML output with <code>out(m)</code> or the udg with agruement name <em>aictrans</em> such as <code>udg(m, "aictrans")</code>.</p>
 <p>The choice between log and none changes the type of seasonal decomposition that will occur and hence your interpretation of the seasonal factors. With no transformation, X13 will do an additive seasonal adjustment <span class="math display">\[X_t = T_t + S_t + I_t.\]</span> If a long transformation is selected, X13 will do a multiplicative adjustment <span class="math display">\[X_t = T_t \cdot S_t \cdot I_t.\]</span> This is major difference here is the way seasonal factors are interpreted and applied to the observed data to remove seasonality. For additive models the seasonal factor is subtracted from the original <span class="math inline">\(X_t - S_t\)</span>. For example, an observed value of 100 with seasonal factor of 3.2 would result in a seasonally adjusted value of <span class="math inline">\(100 - 3.2 = 96.8\)</span>. For multiplicative models the observed data is divided by the seasonal factor <span class="math inline">\(\frac{X_t}{S_t}\)</span>. For example, an observed value of 100 with seasonal factor of 1.08 would result in a seasonally adjusted value of <span class="math inline">\(100 / 1.08 = 92.59259\)</span>. Hence for multiplicative models values of <span class="math inline">\(S_t&gt;1\)</span>, decrease the observed value and <span class="math inline">\(S_t &lt; 1\)</span> increase it.</p>
-</section><section id="transform-options" class="level2" data-number="4.2"><h2 data-number="4.2" class="anchored" data-anchor-id="transform-options">
-<span class="header-section-number">4.2</span> Transform options</h2>
+</section><section id="transform-options" class="level2" data-number="5.2"><h2 data-number="5.2" class="anchored" data-anchor-id="transform-options">
+<span class="header-section-number">5.2</span> Transform options</h2>
 <p>The <code>transform</code> spec controls these options. Some primary options within this spec are</p>
 <table class="table">
 <colgroup>
@@ -404,8 +404,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td>-2.0</td>
 </tr>
 </tbody>
-</table></section><section id="case-study" class="level2" data-number="4.3"><h2 data-number="4.3" class="anchored" data-anchor-id="case-study">
-<span class="header-section-number">4.3</span> Case Study</h2>
+</table></section><section id="case-study" class="level2" data-number="5.3"><h2 data-number="5.3" class="anchored" data-anchor-id="case-study">
+<span class="header-section-number">5.3</span> Case Study</h2>
 <p>Consider the situaiton where you are trying to decide on transform choices for monthly retail grocery store data. The series <code>grocery</code> is part of the <em>seasonalbook</em> package.</p>
 <div class="cell">
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">seasonalbook</span><span class="op">)</span></span>
@@ -568,12 +568,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
       <a href="./21-overview.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Overview of the software</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Overview of the software</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="./23-seats.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">SEATS</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">SEATS</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

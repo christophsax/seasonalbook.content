@@ -5,7 +5,7 @@
 <meta name="generator" content="quarto-1.2.269">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="James Livsey and Christoph Sax">
-<title>Seasonal Adjustment in R - 2&nbsp; How to use the book</title>
+<title>Seasonal Adjustment in R - 3&nbsp; How to use the book</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -91,7 +91,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
 <link href="./20-part-basics.html" rel="next">
-<link href="./11-introduction.html" rel="prev">
+<link href="./11-minimal-example.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -125,7 +125,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
       <h1 class="quarto-secondary-nav-title">
-<span class="chapter-number">2</span>&nbsp; <span class="chapter-title">How to use the book</span>
+<span class="chapter-number">3</span>&nbsp; <span class="chapter-title">How to use the book</span>
 </h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
@@ -154,14 +154,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
-<li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link">Welcome</a>
-  </div>
-</li>
-        <li class="sidebar-item sidebar-item-section">
+<li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./10-part-introduction.html" class="sidebar-item-text sidebar-link">Introduction</a>
+            <a href="./index.html" class="sidebar-item-text sidebar-link">Welcome</a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -169,12 +164,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./11-introduction.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">A minimal example</span></a>
+  <a href="./10-introduction.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./12-how-to-use.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">How to use the book</span></a>
+  <a href="./11-minimal-example.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">A minimal example</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12-how-to-use.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">How to use the book</span></a>
   </div>
 </li>
       </ul>
@@ -189,27 +189,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./21-overview.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Overview of the software</span></a>
+  <a href="./21-overview.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Overview of the software</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./22-transform.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Transform</span></a>
+  <a href="./22-transform.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Transform</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./23-seats.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">SEATS</span></a>
+  <a href="./23-seats.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">SEATS</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./24-x11.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">X11</span></a>
+  <a href="./24-x11.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">X11</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./25-regARIMA.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">regARIMA Model</span></a>
+  <a href="./25-regARIMA.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">regARIMA Model</span></a>
   </div>
 </li>
       </ul>
@@ -224,22 +224,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./31-holidays.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Irregular holidays</span></a>
+  <a href="./31-holidays.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Irregular holidays</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./32-trading-days.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Trading days</span></a>
+  <a href="./32-trading-days.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Trading days</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./33-outliers.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Outliers</span></a>
+  <a href="./33-outliers.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Outliers</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./34-seasonal-breaks.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Seasonal breaks</span></a>
+  <a href="./34-seasonal-breaks.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Seasonal breaks</span></a>
   </div>
 </li>
       </ul>
@@ -254,17 +254,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./41-presence-of-seasonality.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Presence of seasonality</span></a>
+  <a href="./41-presence-of-seasonality.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Presence of seasonality</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./42-annual-constraining.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Annual constraining</span></a>
+  <a href="./42-annual-constraining.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Annual constraining</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./43-indirect-vs-direct.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Indirect vs direct adjustment</span></a>
+  <a href="./43-indirect-vs-direct.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Indirect vs direct adjustment</span></a>
   </div>
 </li>
       </ul>
@@ -279,12 +279,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./51-quality-measures.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Quality measures</span></a>
+  <a href="./51-quality-measures.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Quality measures</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./52-revisions.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Revisions</span></a>
+  <a href="./52-revisions.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Revisions</span></a>
   </div>
 </li>
       </ul>
@@ -310,15 +310,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
-<li><a href="#overview-of-the-book" id="toc-overview-of-the-book" class="nav-link active" data-scroll-target="#overview-of-the-book"><span class="toc-section-number">2.1</span>  Overview of the book</a></li>
-  <li><a href="#the-seasonalbook-package" id="toc-the-seasonalbook-package" class="nav-link" data-scroll-target="#the-seasonalbook-package"><span class="toc-section-number">2.2</span>  The seasonalbook package</a></li>
-  <li><a href="#for-whom" id="toc-for-whom" class="nav-link" data-scroll-target="#for-whom"><span class="toc-section-number">2.3</span>  For whom?</a></li>
+<li><a href="#overview-of-the-book" id="toc-overview-of-the-book" class="nav-link active" data-scroll-target="#overview-of-the-book"><span class="toc-section-number">3.1</span>  Overview of the book</a></li>
+  <li><a href="#the-seasonalbook-package" id="toc-the-seasonalbook-package" class="nav-link" data-scroll-target="#the-seasonalbook-package"><span class="toc-section-number">3.2</span>  The seasonalbook package</a></li>
+  <li><a href="#for-whom" id="toc-for-whom" class="nav-link" data-scroll-target="#for-whom"><span class="toc-section-number">3.3</span>  For whom?</a></li>
   </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/12-how-to-use.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
 <h1 class="title d-none d-lg-block">
-<span class="chapter-number">2</span>&nbsp; <span class="chapter-title">How to use the book</span>
+<span class="chapter-number">3</span>&nbsp; <span class="chapter-title">How to use the book</span>
 </h1>
 </div>
 
@@ -359,10 +359,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><p>Guide to professional seasonal adjustment with R To make the entry to the world of seasonal adjustment more accessible for those with an understanding of R. We leverage the users R knowledge to more easily understand the input/output of the X-13ARIMA-SEATS program. We also will give an overview of other possibilities of seasonal adjustment in R (e.g.&nbsp;stl, JDemetra).</p></li>
 <li><p>Focus on practitioner’s problem To bridge an important gap in the training for many seasonal adjustment practitioners. The book addresses practical problems and shows how they can be addressed in X-13ARIMA-SEATS. The use of R allows them to have reproducible examples at hand.</p></li>
 </ol>
-<section id="overview-of-the-book" class="level2" data-number="2.1"><h2 data-number="2.1" class="anchored" data-anchor-id="overview-of-the-book">
-<span class="header-section-number">2.1</span> Overview of the book</h2>
-</section><section id="the-seasonalbook-package" class="level2" data-number="2.2"><h2 data-number="2.2" class="anchored" data-anchor-id="the-seasonalbook-package">
-<span class="header-section-number">2.2</span> The <a href="https://github.com/christophsax/seasonalbook">seasonalbook</a> package</h2>
+<section id="overview-of-the-book" class="level2" data-number="3.1"><h2 data-number="3.1" class="anchored" data-anchor-id="overview-of-the-book">
+<span class="header-section-number">3.1</span> Overview of the book</h2>
+</section><section id="the-seasonalbook-package" class="level2" data-number="3.2"><h2 data-number="3.2" class="anchored" data-anchor-id="the-seasonalbook-package">
+<span class="header-section-number">3.2</span> The <a href="https://github.com/christophsax/seasonalbook">seasonalbook</a> package</h2>
 <p>An R package that supplements “Seasonal Adjustment in R”, and contains all data and examples.</p>
 <p>To install:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"christophsax/seasonalbook"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -375,8 +375,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 <p>Some Examples: Chinese New Year, structural breaks, direct or indirect seasonal adjustment, SEATS or X-11.</p>
-</section><section id="for-whom" class="level2" data-number="2.3"><h2 data-number="2.3" class="anchored" data-anchor-id="for-whom">
-<span class="header-section-number">2.3</span> For whom?</h2>
+</section><section id="for-whom" class="level2" data-number="3.3"><h2 data-number="3.3" class="anchored" data-anchor-id="for-whom">
+<span class="header-section-number">3.3</span> For whom?</h2>
 <p>There are two primary audiences:</p>
 <ol type="1">
 <li><p>Current practitioners of seasonal adjustment who are interested in learning how to implement in R. This audience includes researchers from statistical agencies who want to include the scripting language features of R to evaluate properties of their seasonal adjustments.</p></li>
@@ -517,8 +517,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
-      <a href="./11-introduction.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">A minimal example</span></span>
+      <a href="./11-minimal-example.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">A minimal example</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

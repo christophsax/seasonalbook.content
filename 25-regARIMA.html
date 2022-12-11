@@ -5,7 +5,7 @@
 <meta name="generator" content="quarto-1.2.269">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="James Livsey and Christoph Sax">
-<title>Seasonal Adjustment in R - 7&nbsp; regARIMA Model</title>
+<title>Seasonal Adjustment in R - 8&nbsp; regARIMA Model</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -126,7 +126,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
       <h1 class="quarto-secondary-nav-title">
-<span class="chapter-number">7</span>&nbsp; <span class="chapter-title">regARIMA Model</span>
+<span class="chapter-number">8</span>&nbsp; <span class="chapter-title">regARIMA Model</span>
 </h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
@@ -155,14 +155,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
-<li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link">Welcome</a>
-  </div>
-</li>
-        <li class="sidebar-item sidebar-item-section">
+<li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./10-part-introduction.html" class="sidebar-item-text sidebar-link">Introduction</a>
+            <a href="./index.html" class="sidebar-item-text sidebar-link">Welcome</a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -170,12 +165,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./11-introduction.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">A minimal example</span></a>
+  <a href="./10-introduction.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./12-how-to-use.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">How to use the book</span></a>
+  <a href="./11-minimal-example.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">A minimal example</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12-how-to-use.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">How to use the book</span></a>
   </div>
 </li>
       </ul>
@@ -190,27 +190,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./21-overview.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Overview of the software</span></a>
+  <a href="./21-overview.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Overview of the software</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./22-transform.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Transform</span></a>
+  <a href="./22-transform.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Transform</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./23-seats.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">SEATS</span></a>
+  <a href="./23-seats.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">SEATS</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./24-x11.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">X11</span></a>
+  <a href="./24-x11.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">X11</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./25-regARIMA.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">regARIMA Model</span></a>
+  <a href="./25-regARIMA.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">regARIMA Model</span></a>
   </div>
 </li>
       </ul>
@@ -225,22 +225,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./31-holidays.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Irregular holidays</span></a>
+  <a href="./31-holidays.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Irregular holidays</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./32-trading-days.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Trading days</span></a>
+  <a href="./32-trading-days.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Trading days</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./33-outliers.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Outliers</span></a>
+  <a href="./33-outliers.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Outliers</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./34-seasonal-breaks.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Seasonal breaks</span></a>
+  <a href="./34-seasonal-breaks.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Seasonal breaks</span></a>
   </div>
 </li>
       </ul>
@@ -255,17 +255,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./41-presence-of-seasonality.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Presence of seasonality</span></a>
+  <a href="./41-presence-of-seasonality.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Presence of seasonality</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./42-annual-constraining.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Annual constraining</span></a>
+  <a href="./42-annual-constraining.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Annual constraining</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./43-indirect-vs-direct.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Indirect vs direct adjustment</span></a>
+  <a href="./43-indirect-vs-direct.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Indirect vs direct adjustment</span></a>
   </div>
 </li>
       </ul>
@@ -280,12 +280,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./51-quality-measures.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Quality measures</span></a>
+  <a href="./51-quality-measures.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Quality measures</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./52-revisions.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Revisions</span></a>
+  <a href="./52-revisions.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Revisions</span></a>
   </div>
 </li>
       </ul>
@@ -311,18 +311,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
-<li><a href="#series-forecast" id="toc-series-forecast" class="nav-link active" data-scroll-target="#series-forecast"><span class="toc-section-number">7.1</span>  Series forecast</a></li>
-  <li><a href="#exogenous-variables" id="toc-exogenous-variables" class="nav-link" data-scroll-target="#exogenous-variables"><span class="toc-section-number">7.2</span>  Exogenous variables</a></li>
-  <li><a href="#arima-modelling" id="toc-arima-modelling" class="nav-link" data-scroll-target="#arima-modelling"><span class="toc-section-number">7.3</span>  ARIMA modelling</a></li>
-  <li><a href="#how-to-use-the-regression-spec" id="toc-how-to-use-the-regression-spec" class="nav-link" data-scroll-target="#how-to-use-the-regression-spec"><span class="toc-section-number">7.4</span>  How to use the regression spec</a></li>
-  <li><a href="#table-of-all-regression-effects-available" id="toc-table-of-all-regression-effects-available" class="nav-link" data-scroll-target="#table-of-all-regression-effects-available"><span class="toc-section-number">7.5</span>  Table of all Regression effects available</a></li>
-  <li><a href="#case-study" id="toc-case-study" class="nav-link" data-scroll-target="#case-study"><span class="toc-section-number">7.6</span>  Case study</a></li>
+<li><a href="#series-forecast" id="toc-series-forecast" class="nav-link active" data-scroll-target="#series-forecast"><span class="toc-section-number">8.1</span>  Series forecast</a></li>
+  <li><a href="#exogenous-variables" id="toc-exogenous-variables" class="nav-link" data-scroll-target="#exogenous-variables"><span class="toc-section-number">8.2</span>  Exogenous variables</a></li>
+  <li><a href="#arima-modelling" id="toc-arima-modelling" class="nav-link" data-scroll-target="#arima-modelling"><span class="toc-section-number">8.3</span>  ARIMA modelling</a></li>
+  <li><a href="#how-to-use-the-regression-spec" id="toc-how-to-use-the-regression-spec" class="nav-link" data-scroll-target="#how-to-use-the-regression-spec"><span class="toc-section-number">8.4</span>  How to use the regression spec</a></li>
+  <li><a href="#table-of-all-regression-effects-available" id="toc-table-of-all-regression-effects-available" class="nav-link" data-scroll-target="#table-of-all-regression-effects-available"><span class="toc-section-number">8.5</span>  Table of all Regression effects available</a></li>
+  <li><a href="#case-study" id="toc-case-study" class="nav-link" data-scroll-target="#case-study"><span class="toc-section-number">8.6</span>  Case study</a></li>
   </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/25-regARIMA.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
 <h1 class="title d-none d-lg-block">
-<span class="chapter-number">7</span>&nbsp; <span class="chapter-title">regARIMA Model</span>
+<span class="chapter-number">8</span>&nbsp; <span class="chapter-title">regARIMA Model</span>
 </h1>
 </div>
 
@@ -350,8 +350,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 <!-- - Idea of regARIMA -->
-<section id="series-forecast" class="level2" data-number="7.1"><h2 data-number="7.1" class="anchored" data-anchor-id="series-forecast">
-<span class="header-section-number">7.1</span> Series forecast</h2>
+<section id="series-forecast" class="level2" data-number="8.1"><h2 data-number="8.1" class="anchored" data-anchor-id="series-forecast">
+<span class="header-section-number">8.1</span> Series forecast</h2>
 <p>The most fundamental procedure involved in X-13 is applying moving average filters. When symmetric filters are used we “lose” observations at the end of the series. Consider the simple moving average filter <span class="math display">\[ Y_t = \frac{1}{5} X_{t-2} + \frac{1}{5} X_{t-1} + \frac{1}{5} X_{t} + \frac{1}{5} X_{t+1} + \frac{1}{5} X_{t+2}. \]</span></p>
 <div class="cell">
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.seasonal.website">seasonal</a></span><span class="op">)</span></span>
@@ -365,11 +365,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>The output of the filter <span class="math inline">\(Y_t\)</span> is shorter than <span class="math inline">\(X_t\)</span> by 4 total observations. Two at the beginning and two at the end.</p>
 <p>This is one of the primary reasons we consider regARIMA models when discussing seasonal adjustment; the observed time series is forecast extended to allow for symmetric moving average filters to be used all the way to the end of the series.</p>
-</section><section id="exogenous-variables" class="level2" data-number="7.2"><h2 data-number="7.2" class="anchored" data-anchor-id="exogenous-variables">
-<span class="header-section-number">7.2</span> Exogenous variables</h2>
+</section><section id="exogenous-variables" class="level2" data-number="8.2"><h2 data-number="8.2" class="anchored" data-anchor-id="exogenous-variables">
+<span class="header-section-number">8.2</span> Exogenous variables</h2>
 <p>Another reason for regARIMA modeling is to include exogenous regression variables in our analysis. These include, but are not limited to, moving holiday effects, trading day, outliers and level-shifts. The regARIMA take the form <span class="math display">\[ f\left(\frac{Y_t}{D_t} \right) = \boldsymbol{\beta}^\prime {\mathbf X}_t + Z_t .\]</span> Here <span class="math inline">\(Y_t\)</span> is the observed time series. The function <span class="math inline">\(f\)</span> represents a transformation, most commonly used is the log transform ie <span class="math inline">\(f(x) = \log(x)\)</span>. The regression variables appear in the columns of the design matrix <span class="math inline">\({\mathbf X}_t\)</span> and <span class="math inline">\(Z_t\)</span> is an ARIMA process. This last assumption on <span class="math inline">\(Z_t\)</span> is what distinguished a regARIMA model from more classic linear models and multiple linear regression where error terms are assumed uncorrelated.</p>
-</section><section id="arima-modelling" class="level2" data-number="7.3"><h2 data-number="7.3" class="anchored" data-anchor-id="arima-modelling">
-<span class="header-section-number">7.3</span> ARIMA modelling</h2>
+</section><section id="arima-modelling" class="level2" data-number="8.3"><h2 data-number="8.3" class="anchored" data-anchor-id="arima-modelling">
+<span class="header-section-number">8.3</span> ARIMA modelling</h2>
 <p>In order to achieve a suitable seasonal adjustment it is important to get the regARIMA model correct. For most dataset the built in automatic modeling features of the X13 program will be suitable to detect a reasonable model. This can be used as a starting point for more rigorous regARIMA model development or used as the final regARIMA modeling choice for your seasonal adjustment needs. We evoke automatic model identification through the XXX spec. The default behavior of the R seasonal package is XXX which includes automatic model identification.</p>
 <div class="callout-tip callout callout-style-simple callout-captioned">
 <div class="callout-header d-flex align-content-center">
@@ -413,16 +413,16 @@ Automatic and manual model choice
 <span><span class="co">#&gt; )</span></span>
 <span><span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/eval.html">eval</a></span><span class="op">(</span><span class="va">m_call</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section><section id="how-to-use-the-regression-spec" class="level2" data-number="7.4"><h2 data-number="7.4" class="anchored" data-anchor-id="how-to-use-the-regression-spec">
-<span class="header-section-number">7.4</span> How to use the regression spec</h2>
-</section><section id="table-of-all-regression-effects-available" class="level2" data-number="7.5"><h2 data-number="7.5" class="anchored" data-anchor-id="table-of-all-regression-effects-available">
-<span class="header-section-number">7.5</span> Table of all Regression effects available</h2>
+</section><section id="how-to-use-the-regression-spec" class="level2" data-number="8.4"><h2 data-number="8.4" class="anchored" data-anchor-id="how-to-use-the-regression-spec">
+<span class="header-section-number">8.4</span> How to use the regression spec</h2>
+</section><section id="table-of-all-regression-effects-available" class="level2" data-number="8.5"><h2 data-number="8.5" class="anchored" data-anchor-id="table-of-all-regression-effects-available">
+<span class="header-section-number">8.5</span> Table of all Regression effects available</h2>
 <p><!--
   (steal from CR slides)
 
 --></p>
-</section><section id="case-study" class="level2" data-number="7.6"><h2 data-number="7.6" class="anchored" data-anchor-id="case-study">
-<span class="header-section-number">7.6</span> Case study</h2>
+</section><section id="case-study" class="level2" data-number="8.6"><h2 data-number="8.6" class="anchored" data-anchor-id="case-study">
+<span class="header-section-number">8.6</span> Case study</h2>
 <p>Decide if you should include AO in May 2014. Construct a simple user defined regressor to handle specific issue.</p>
 
 
@@ -560,7 +560,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
       <a href="./24-x11.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">X11</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">X11</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
