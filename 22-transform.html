@@ -334,24 +334,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   
 
 </header><div class="status">
-<div class="callout-important callout callout-style-simple">
+<div class="callout-note callout callout-style-simple">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-body-container">
-<p>You are reading an early draft of <em>Seasonal Adjustment in R</em>. This chapter is currently a dumping ground for ideas, and we don’t recommend reading it.</p>
+<p>You are reading an early draft of <em>Seasonal Adjustment in R</em>. This chapter should be readable but needs polishing.</p>
 <p><strong>It is part of the course materials intended for Dec 21, 2022</strong>.</p>
 </div>
 </div>
 </div>
 </div>
-<ul>
-<li><p>Discuss multiplicative vs additive adjustment</p></li>
-<li><p>How to use the transform spec</p></li>
-<li><p>This is our first chance to mention the idea of test first then hard-code in production</p></li>
-<li><p>Case Study idea: Decide between log vs non-log transformation</p></li>
-</ul>
+<!--
+-   Discuss multiplicative vs additive adjustment
+
+-   How to use the transform spec
+
+-   This is our first chance to mention the idea of test first then hard-code in production
+
+-   Case Study idea: Decide between log vs non-log transformation
+ -->
 <p>One of the first choices to make when modeling a time series is whether or not it needs to be transformed prior to modeling. There are two types of transformation types that typically occur within X13. The first is a prior modification. A prior modification scales each observation for known fixed effects. These effects can be well known and established such as length of a month/quarter and leap-year or more subjective such as a modification for a workers strike. We can think of prior modification factors of events or corrections made to your data that are fixed throughout the adjustment proeess. Additionally, these prior modification factors can be permanent (defualt) or temporary. The difference between permanent and temporary is wheither or not the effect is included back in the final seasonally adjusted series or not; permanent factors are excluded from the final seasonal adjustment while temporary are removed while calculating seasonal factors but then added back to the seasonally adjusted series. The second type is a nonlinear transformation applied to the observations. This is typically a choice between logarithmic transform and no transformation but for modeling can be any power of the Box-Cox transformation CITE.</p>
 <section id="multiplicative-or-additive-adjustment" class="level2" data-number="4.1"><h2 data-number="4.1" class="anchored" data-anchor-id="multiplicative-or-additive-adjustment">
 <span class="header-section-number">4.1</span> Multiplicative or additive adjustment?</h2>
