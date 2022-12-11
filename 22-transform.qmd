@@ -26,6 +26,8 @@ The difference between permanent and temporary is wheither or not the effect is 
 The second type is a nonlinear transformation applied to the observations.
 This is typically a choice between logarithmic transform and no transformation but for modeling can be any power of the Box-Cox transformation CITE.
 
+## Multiplicative or additive adjustment?
+
 X-13A-S has a built in statisitcal test to decide between log and no transformatin.
 This is done with an information criteria based statistical test.
 The choice is made by comparing the AICC value CITE of an Airline model fit, or user specified ARIMA model, to the log transformed series and the original series.
@@ -52,6 +54,8 @@ For multiplicative models the observed data is divided by the seasonal factor $\
 For example, an observed value of 100 with seasonal factor of 1.08 would result in a seasonally adjusted value of $100 / 1.08 = 92.59259$.
 Hence for multiplicative models values of $S_t>1$, decrease the observed value and $S_t < 1$ increase it.
 
+## Tranform options
+
 The `transform` spec controls these options.
 Some primary options within this spec are
 
@@ -61,51 +65,14 @@ Some primary options within this spec are
 | data or file | specify prior adjustment factor                | (1.2, 1.1, ..., .99) | (1,1,...,1) |
 | aicdiff      | adjust tolerance of AIC test for log transform | 0.0 3.0 -4.5         | -2.0        |
 
-### Case Study
+## Case Study
 
 Consider the situaiton where you are trying to decide on transform choices for monthly retail grocery store data.
+The series `grocery` is part of the *seasonalbook* package.
 
-```{r, echo=FALSE}
-grocery <- 
-  structure(c(27306L, 26223L, 27235L, 27588L, 28883L, 28039L, 29479L, 
-28645L, 27475L, 28583L, 27620L, 30294L, 27571L, 25748L, 27911L, 
-28112L, 29096L, 28576L, 30067L, 28470L, 28022L, 28532L, 28081L, 
-31132L, 27889L, 26175L, 29261L, 28529L, 29402L, 29721L, 30344L, 
-29792L, 29102L, 29079L, 29077L, 32152L, 28629L, 26762L, 29708L, 
-29086L, 30388L, 30229L, 30654L, 30434L, 29378L, 29068L, 29619L, 
-32454L, 29172L, 28191L, 30245L, 29344L, 31364L, 30470L, 31377L, 
-31747L, 29495L, 30674L, 31014L, 32454L, 30534L, 27985L, 31513L, 
-29853L, 32412L, 30527L, 32232L, 32032L, 30142L, 31319L, 31032L, 
-32989L, 30679L, 27947L, 30501L, 30826L, 32456L, 31215L, 33067L, 
-32220L, 31005L, 32214L, 31377L, 34681L, 31516L, 29413L, 32451L, 
-31948L, 33727L, 32568L, 34568L, 32944L, 32624L, 32935L, 32510L, 
-37046L, 31336L, 30515L, 33216L, 33004L, 34085L, 33880L, 34517L, 
-34225L, 33324L, 33190L, 33969L, 37254L, 33236L, 31488L, 34856L, 
-33685L, 36068L, 35215L, 35418L, 35919L, 34379L, 34847L, 35308L, 
-37708L, 34533L, 32024L, 35863L, 33190L, 36478L, 34933L, 35885L, 
-36025L, 33610L, 34885L, 35649L, 36738L, 35384L, 32440L, 35265L, 
-34854L, 37057L, 35212L, 37108L, 36644L, 34697L, 35870L, 35786L, 
-37670L, 36475L, 33701L, 35892L, 35876L, 37733L, 36362L, 38170L, 
-36607L, 36360L, 37004L, 36876L, 40080L, 37176L, 34286L, 38210L, 
-36908L, 38742L, 38219L, 39289L, 38627L, 37844L, 38251L, 38354L, 
-41761L, 37489L, 35506L, 38827L, 38269L, 40341L, 39569L, 40357L, 
-40340L, 38766L, 39322L, 39989L, 42924L, 39649L, 37150L, 40815L, 
-39244L, 42207L, 41279L, 41619L, 41896L, 40191L, 40924L, 41910L, 
-44476L, 41866L, 39920L, 42596L, 40975L, 44559L, 42311L, 44073L, 
-44026L, 41395L, 42829L, 42772L, 44054L, 42966L, 38544L, 41336L, 
-41806L, 44062L, 42173L, 43868L, 43023L, 41566L, 43050L, 42537L, 
-45428L, 43017L, 40092L, 43466L, 42269L, 44643L, 42915L, 44600L, 
-43474L, 42688L, 43587L, 43780L, 46721L, 44349L, 41295L, 45143L, 
-45663L, 46397L, 45960L, 47249L, 46525L, 44947L, 45793L, 46109L, 
-48906L, 45511L, 44219L, 47453L, 45805L, 48479L, 47287L, 47561L, 
-48156L, 46178L, 47135L, 47502L, 49591L, 47340L, 44108L, 49182L, 
-45550L, 49804L, 47973L, 48989L, 49523L, 46576L, 48299L, 48847L, 
-50230L, 48871L, 44738L, 48522L, 48141L, 51084L, 48726L, 50568L, 
-50468L, 48034L, 50183L, 50178L, 52109L, 50652L, 46192L, 50329L, 
-49257L, 52290L, 50012L), .Tsp = c(1992, 2015.41666666667, 12), class = "ts")
-```
 
 ```{r}
+library(seasonalbook)
 plot(grocery)
 ```
 

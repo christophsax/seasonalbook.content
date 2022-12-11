@@ -40,15 +40,28 @@ Additionally, it and also serve the following:
     The book addresses practical problems and shows how they can be addressed in X-13ARIMA-SEATS.
     The use of R allows them to have reproducible examples at hand.
 
+## Overview of the book
+
+
+## The [seasonalbook](https://github.com/christophsax/seasonalbook) package
+
+An R package that supplements "Seasonal Adjustment in R", and contains all data and examples.
+
+To install:
+
+```r
+remotes::install_github("christophsax/seasonalbook")
+```
+
+Example series:
+
+```{r}
+library(seasonalbook)
+plot(grocery)
+```
+
 Some Examples: Chinese New Year, structural breaks, direct or indirect seasonal adjustment, SEATS or X-11.
 
-## Supplementary material
-
-All material from the text will be made available to the reader.
-This includes but is not limited to:
-
--   R Package to accompany the book, containing all data and examples
--   Interactive website, on which the examples can be run (similar to www.seasonal.website)
 
 ## For whom?
 
@@ -60,11 +73,3 @@ There are two primary audiences:
 2.  Current R users who want to learn seasonal adjustment.
     We are able to leverage the readers knowledge of R to make learning seasonal adjustment easier.
     We will feature interesting applications outside of official statistics, such as the seasonal adjustment of business data.
-
-```{mermaid}
-flowchart LR
-  A[Hard edge] --> B(Round edge)
-  B --> C{Decision}
-  C --> D[Result one]
-  C --> E[Result two]
-```

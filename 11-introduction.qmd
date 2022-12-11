@@ -7,7 +7,6 @@ source("_common.R")
 status("polishing", "2022-12-21")  # drafting, polishing, complete
 ```
 
-```{=html}
 <!--
 - What is Seasonal Adjustment?
 - What is X-13ARIMA-SEATS (X13)?
@@ -15,7 +14,7 @@ status("polishing", "2022-12-21")  # drafting, polishing, complete
 - Available alternatives in and outside of R (some topics are covered in chapter VI)
 - Case Study: A use cases outside of official statistics: seasonal adjustment of business data
  -->
-```
+
 Many time series exhibit a regular seasonal pattern over the year.
 US unemployment, for example, is usually higher from January to March, and again in June and July.
 Similarly, retail sales tend to peak with the Christmas season.

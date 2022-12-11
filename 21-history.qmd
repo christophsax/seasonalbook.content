@@ -6,12 +6,15 @@
 source("_common.R")
 status("drafting")  # drafting, polishing, complete
 ```
-
+<!--
 -   History of the software
 
 -   Elements of the software
 
 -   Overview of main choices a user needs to make
+-->
+
+## History
 
 In official statistics, seasonal adjustment has a long tradition.
 The original X-11 software was developed by the US Census Bureau in the 1960s, and later improved by Statistics Canada [@dagum80].
@@ -20,11 +23,28 @@ Today, X-11 is still used as a name for filter-based seasonal adjustment methods
 Meanwhile, TRAMO-SEATS, developed by the Bank of Spain [@caporello01], offers an alternative model-based approach to seasonal adjustment.
 
 In its most recent version, X-13 offers these two seasonal adjustment methods in a single command-line tool, written in Fortran.
-The National Bank of Belgium has created an alter- native Java-based implementation called JDemetra+ [@eurostat17] which is also widely deployed by statistical agencies.
+The National Bank of Belgium has created an alternative Java-based implementation called JDemetra+ [@eurostat17] which is also widely deployed by statistical agencies.
 One of either the TRAMO-SEATS or X-11 method of seasonal adjustment is used by almost all (government) statistical offices throughout the world.
 
-R (R Core Team 2017) offers several possibilities to perform seasonal adjustment in the stats package included with R.
-The decompose function uses filtering to split a time series into a trend, a seasonal and an irregular component.
-An alternative method is stl, which uses local regressions (and has some extensions offered by the stlplus package by [@hafen16]. While both methods allow a multiplicative or an additive decomposition, these methods are somewhat limited in modeling actual data series.
 
-The programs used by statistical offices provide an extensive toolbox to deal with many advanced (and more irregular) aspects of seasonality, such as trading day adjustments, moving holiday adjustments or automated outlier detection.
+## Elements of X13
+
+
+<!-- https://mermaid-js.github.io/mermaid/#/flowchart?id=styling-and-classes -->
+
+```{mermaid}
+flowchart LR
+  A[transform] --> B(regARIMA)
+  B --> C{Model choice}
+  C --> D[X11]
+  C --> E[SEATS]
+  style C fill: #fff
+```
+
+
+## Main user choices
+
+### Model
+
+### Transform
+
