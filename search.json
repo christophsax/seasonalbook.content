@@ -74,7 +74,7 @@
     "href": "20-part-basics.html",
     "title": "Basics",
     "section": "",
-    "text": "You are reading an early draft of Seasonal Adjustment in R. This chapter is currently a dumping ground for ideas, and we don’t recommend reading it.\nIt is part of the course materials intended for Dec 21, 2022.\n\n\n\n\nThis section gets readers familiar with X-13ARIMA-SEATS. It begins by explaining the history and pedagogy of the software. This leads directly into discussing the principal elements of X-13ARIMA-SEATS."
+    "text": "You are reading an early draft of Seasonal Adjustment in R. This chapter is currently a dumping ground for ideas, and we don’t recommend reading it.\n\n\n\n\nThis section gets readers familiar with X-13ARIMA-SEATS. It begins by explaining the history and pedagogy of the software. This leads directly into discussing the principal elements of X-13ARIMA-SEATS."
   },
   {
     "objectID": "21-overview.html#history",
@@ -270,6 +270,6 @@
     "href": "99-status.html",
     "title": "Status of the book",
     "section": "",
-    "text": "Current status of sections \n\n\n\n\n\n\nsection name\nstatus\ndue date\n\n\n\nHow to use the book\ndrafting\n2022-12-21\n\n\nOverview\ndrafting\n2022-12-21\n\n\nOverview of the software\ndrafting\n2022-12-21\n\n\nSEATS\ndrafting\n2022-12-21\n\n\nTransform\ndrafting\n2022-12-21\n\n\nX11\ndrafting\n2022-12-21\n\n\nA minimal example\npolishing\n2022-12-21\n\n\nregARIMA Model\npolishing\n2022-12-21\n\n\nHolidays\ndrafting\n2023-01-21"
+    "text": "Current status of sections \n\n\n\n\n\n\nsection name\nstatus\ndue date\n\n\n\nHow to use the book\ndrafting\n2022-12-21\n\n\nOverview of the software\ndrafting\n2022-12-21\n\n\nSEATS\ndrafting\n2022-12-21\n\n\nTransform\ndrafting\n2022-12-21\n\n\nX11\ndrafting\n2022-12-21\n\n\nA minimal example\npolishing\n2022-12-21\n\n\nregARIMA Model\npolishing\n2022-12-21\n\n\nHolidays\ndrafting\n2023-01-21"
   }
 ]
