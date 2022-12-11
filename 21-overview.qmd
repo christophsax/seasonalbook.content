@@ -6,6 +6,8 @@
 source("_common.R")
 status("drafting", "2022-12-21", section = "Overview of the software")  # drafting, polishing, complete
 ```
+
+```{=html}
 <!--
 -   History of the software
 
@@ -13,7 +15,7 @@ status("drafting", "2022-12-21", section = "Overview of the software")  # drafti
 
 -   Overview of main choices a user needs to make
 -->
-
+```
 ## History
 
 In official statistics, seasonal adjustment has a long tradition.
@@ -26,9 +28,7 @@ In its most recent version, X-13 offers these two seasonal adjustment methods in
 The National Bank of Belgium has created an alternative Java-based implementation called JDemetra+ [@eurostat17] which is also widely deployed by statistical agencies.
 One of either the TRAMO-SEATS or X-11 method of seasonal adjustment is used by almost all (government) statistical offices throughout the world.
 
-
 ## Elements of X13
-
 
 <!-- https://mermaid-js.github.io/mermaid/#/flowchart?id=styling-and-classes -->
 
@@ -41,10 +41,8 @@ flowchart LR
   style C fill: #fff
 ```
 
-
 ## Main user choices
 
 ### Model
 
 ### Transform
-

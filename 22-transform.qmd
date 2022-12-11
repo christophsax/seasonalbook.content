@@ -7,6 +7,7 @@ source("_common.R")
 status("polishing", "2022-12-21", section = "Transform")  # drafting, polishing, complete
 ```
 
+```{=html}
 <!--
 -   Discuss multiplicative vs additive adjustment
 
@@ -16,6 +17,7 @@ status("polishing", "2022-12-21", section = "Transform")  # drafting, polishing,
 
 -   Case Study idea: Decide between log vs non-log transformation
  -->
+```
 One of the first choices to make when modeling a time series is whether or not it needs to be transformed prior to modeling.
 There are two types of transformation types that typically occur within X13.
 The first is a prior modification.
@@ -70,7 +72,6 @@ Some primary options within this spec are
 
 Consider the situaiton where you are trying to decide on transform choices for monthly retail grocery store data.
 The series `grocery` is part of the *seasonalbook* package.
-
 
 ```{r}
 library(seasonalbook)

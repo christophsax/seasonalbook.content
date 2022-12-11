@@ -2,33 +2,28 @@
 
 This is the website for the work-in-progress edition of *Seasonal Adjustment in R*, an online Book by James Livsey and Christoph Sax.
 
-
 ## About the book
 
 This book will teach you how to do seasonal adjustment in R, using X13-ARIMA-SEATS.
 
 Specifically, the audience will be both R users who want to learn about seasonal adjustment as well as seasonal adjustment practitioners, who are interested in using R.
-The book will be tailored to the practical applications of seasonal adjustment within R. It presents background material and references for the theoretically minded reader.
+The book will be tailored to the practical applications of seasonal adjustment within R.
+It presents background material and references for the theoretically minded reader.
 The main focus, however, is on concrete problems and examples.
 
 We will showcase methods through detailed examples with associated code.
 This presentation allows the academic level to be quite broad; understood by undergraduates all the way through advanced Ph.D. students.
 
-
-
 ## Key features of the book
 
-- Each chapter include a concrete practical problem and shows how X-13 can be used to address it
+-   Each chapter include a concrete practical problem and shows how X-13 can be used to address it
 
-- Teach-by-example format
+-   Teach-by-example format
 
-- Continuous connection of X-13ARIMA-SEATS input with R input and vice-versa
+-   Continuous connection of X-13ARIMA-SEATS input with R input and vice-versa
 
-- Fundamental theoretical material is referenced throughout (mainly as an option)
+-   Fundamental theoretical material is referenced throughout (mainly as an option)
 
-- For each example given the book will give answers, code and provide data
-
-
+-   For each example given the book will give answers, code and provide data
 
 ## Acknowledgements {.unnumbered}
-
