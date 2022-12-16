@@ -2,102 +2,102 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://christophsax.github.io/seasonalbook.content/index.html</loc>
-    <lastmod>2022-12-11T12:55:57.825Z</lastmod>
+    <lastmod>2022-12-16T14:21:03.354Z</lastmod>
   </url>
   <url>
     <loc>https://christophsax.github.io/seasonalbook.content/10-introduction.html</loc>
-    <lastmod>2022-12-11T12:55:57.826Z</lastmod>
+    <lastmod>2022-12-16T14:21:03.355Z</lastmod>
   </url>
   <url>
     <loc>https://christophsax.github.io/seasonalbook.content/11-minimal-example.html</loc>
-    <lastmod>2022-12-11T12:55:57.827Z</lastmod>
+    <lastmod>2022-12-16T14:21:03.356Z</lastmod>
   </url>
   <url>
     <loc>https://christophsax.github.io/seasonalbook.content/12-how-to-use.html</loc>
-    <lastmod>2022-12-11T12:55:57.828Z</lastmod>
+    <lastmod>2022-12-16T14:21:03.357Z</lastmod>
   </url>
   <url>
     <loc>https://christophsax.github.io/seasonalbook.content/20-part-basics.html</loc>
-    <lastmod>2022-12-11T12:55:57.828Z</lastmod>
+    <lastmod>2022-12-16T14:21:03.359Z</lastmod>
   </url>
   <url>
     <loc>https://christophsax.github.io/seasonalbook.content/21-overview.html</loc>
-    <lastmod>2022-12-11T12:55:57.829Z</lastmod>
+    <lastmod>2022-12-16T14:21:03.360Z</lastmod>
   </url>
   <url>
     <loc>https://christophsax.github.io/seasonalbook.content/22-transform.html</loc>
-    <lastmod>2022-12-11T12:55:57.830Z</lastmod>
+    <lastmod>2022-12-16T14:21:03.361Z</lastmod>
   </url>
   <url>
     <loc>https://christophsax.github.io/seasonalbook.content/23-seats.html</loc>
-    <lastmod>2022-12-11T12:55:57.830Z</lastmod>
+    <lastmod>2022-12-16T14:21:03.362Z</lastmod>
   </url>
   <url>
     <loc>https://christophsax.github.io/seasonalbook.content/24-x11.html</loc>
-    <lastmod>2022-12-11T12:55:57.831Z</lastmod>
+    <lastmod>2022-12-16T14:21:03.363Z</lastmod>
   </url>
   <url>
     <loc>https://christophsax.github.io/seasonalbook.content/25-regARIMA.html</loc>
-    <lastmod>2022-12-11T12:55:57.832Z</lastmod>
+    <lastmod>2022-12-16T14:21:03.365Z</lastmod>
   </url>
   <url>
     <loc>https://christophsax.github.io/seasonalbook.content/30-part-data-problems.html</loc>
-    <lastmod>2022-12-11T12:55:57.832Z</lastmod>
+    <lastmod>2022-12-16T14:21:03.365Z</lastmod>
   </url>
   <url>
     <loc>https://christophsax.github.io/seasonalbook.content/31-holidays.html</loc>
-    <lastmod>2022-12-11T12:55:57.832Z</lastmod>
+    <lastmod>2022-12-16T14:21:03.366Z</lastmod>
   </url>
   <url>
     <loc>https://christophsax.github.io/seasonalbook.content/32-trading-days.html</loc>
-    <lastmod>2022-12-11T12:55:57.833Z</lastmod>
+    <lastmod>2022-12-16T14:21:03.367Z</lastmod>
   </url>
   <url>
     <loc>https://christophsax.github.io/seasonalbook.content/33-outliers.html</loc>
-    <lastmod>2022-12-11T12:55:57.833Z</lastmod>
+    <lastmod>2022-12-16T14:21:03.367Z</lastmod>
   </url>
   <url>
     <loc>https://christophsax.github.io/seasonalbook.content/34-seasonal-breaks.html</loc>
-    <lastmod>2022-12-11T12:55:57.833Z</lastmod>
+    <lastmod>2022-12-16T14:21:03.368Z</lastmod>
   </url>
   <url>
     <loc>https://christophsax.github.io/seasonalbook.content/40-part-other-issues.html</loc>
-    <lastmod>2022-12-11T12:55:57.834Z</lastmod>
+    <lastmod>2022-12-16T14:21:03.368Z</lastmod>
   </url>
   <url>
     <loc>https://christophsax.github.io/seasonalbook.content/41-presence-of-seasonality.html</loc>
-    <lastmod>2022-12-11T12:55:57.834Z</lastmod>
+    <lastmod>2022-12-16T14:21:03.369Z</lastmod>
   </url>
   <url>
     <loc>https://christophsax.github.io/seasonalbook.content/42-annual-constraining.html</loc>
-    <lastmod>2022-12-11T12:55:57.834Z</lastmod>
+    <lastmod>2022-12-16T14:21:03.370Z</lastmod>
   </url>
   <url>
     <loc>https://christophsax.github.io/seasonalbook.content/43-indirect-vs-direct.html</loc>
-    <lastmod>2022-12-11T12:55:57.835Z</lastmod>
+    <lastmod>2022-12-16T14:21:03.371Z</lastmod>
   </url>
   <url>
     <loc>https://christophsax.github.io/seasonalbook.content/50-part-quality-assessment.html</loc>
-    <lastmod>2022-12-11T12:55:57.835Z</lastmod>
+    <lastmod>2022-12-16T14:21:03.371Z</lastmod>
   </url>
   <url>
     <loc>https://christophsax.github.io/seasonalbook.content/51-quality-measures.html</loc>
-    <lastmod>2022-12-11T12:55:57.835Z</lastmod>
+    <lastmod>2022-12-16T14:21:03.372Z</lastmod>
   </url>
   <url>
     <loc>https://christophsax.github.io/seasonalbook.content/52-revisions.html</loc>
-    <lastmod>2022-12-11T12:55:57.835Z</lastmod>
+    <lastmod>2022-12-16T14:21:03.372Z</lastmod>
   </url>
   <url>
     <loc>https://christophsax.github.io/seasonalbook.content/60-part-future.html</loc>
-    <lastmod>2022-12-11T12:55:57.836Z</lastmod>
+    <lastmod>2022-12-16T14:21:03.373Z</lastmod>
   </url>
   <url>
     <loc>https://christophsax.github.io/seasonalbook.content/99-status.html</loc>
-    <lastmod>2022-12-11T12:55:57.836Z</lastmod>
+    <lastmod>2022-12-16T14:21:03.374Z</lastmod>
   </url>
   <url>
     <loc>https://christophsax.github.io/seasonalbook.content/Seasonal-Adjustment-in-R.pdf</loc>
-    <lastmod>2022-12-11T12:55:57.693Z</lastmod>
+    <lastmod>2022-12-16T14:21:02.910Z</lastmod>
   </url>
 </urlset>
