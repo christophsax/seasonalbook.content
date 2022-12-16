@@ -6,3 +6,4 @@ quarto/*_files
 /.quarto/
 /_book/
 README.html
+local-only/
