@@ -6,19 +6,49 @@
 source("_common.R")
 status("polishing", "2022-12-21", section = "regARIMA Model")  # drafting, polishing, complete
 ```
+
 <!-- - Idea of regARIMA -->
 
-Depending on if you ultimately choose to perform a SEATS or X-11 seasonal adjustmnet, your usage of a regARIMA can differ. 
-Both seasonal adjustmnet methods will use the regARIMA model to forecast the series in order to apply symmetric filters and extract components.
+An important part of the X13 procedure is regARIMA modeling.
+As the name implies, there are two components that one needs to understand when fitting a regARIMA model; namely regression and ARIMA.
+In this chapter, we try to break these two components down to the most fundamental components without an overly technical exposition.
+Essentially, providing readers with enough information about each topic to understand the rest of this book or go off and perform satisfactory seasonal adjustment.
+The interested reader is encouraged to find material devoted to each of these components separately to more fully understand them.
+
+ARIMA is an acronym describing the three parts of the modeling paridiam.
+AR = autoregressive, I = integrated (differenced), and MA = moving average.
+The prefix auto or "self", explains the AR portion perfectly.
+We model the current obervation with lagged values from the past.
+This is illustrated with the classic autoregressive model of order 1:
+
+$$ Y_t = \phi Y_{t-1} + a_t $$
+
+where $Y_t$ is the observed time series, $\phi$ is a coefficient to be estimated and $\{a_t\}$ is an uncorrelated sequence of errors similiar to that of standard linear regression. This model is notated AR(1). If instead of a single lag we used $p$ lags, the model would be and AR($p$) and have structure:
+
+$$ Y_t = \phi_1 Y_{t-1} + \phi_2 Y_{t-2} + \cdots + \phi_p Y_{t-p} + a_t $$
+
+where now we have $p$ coefficients $\phi_1, \phi_2, \ldots, \phi_p$ to be estimated. 
+
+The moving average part of ARIMA model is similar in notation and reflects the number of lagged values of the error sequence should be included. For example, an MA(1) model with coefficient parameter $\theta$ is:
+
+$$ Y_t = a_t + \theta a_{t-1} $$.
+
+Note that instead of doing self-regression we include past values of the unobserved errors in the model at time $t$. If instead of a single lag we wanted $q$ lags of the past error terms, we would have an MA($q$) model:
+
+$$ Y_t = a_t + \theta_1 a_{t-1} + \theta_2 a_{t-2} + \cdots + \theta_q a_{t-q} $$.
+
+
+Depending on if you ultimately choose to perform a SEATS or X-11 seasonal adjustment, your usage of a regARIMA can differ.
+Both seasonal adjustment methods will use the regARIMA model to forecast the series in order to apply symmetric filters and extract components.
 (but I thought SEATS was model-based? What do you mean SEATS uses filters? More on this in Chapter XXX).
 SEATS will use the ARIMA model to derive components for the trend, seasonal and irregular terms.
-The regARIMA model is also the place to include exogenous information or regressors into your seasonal adjusments.
+The regARIMA model is also the place to include exogenous information or regressors into your seasonal adjustments.
 Regressors such as holiday effects, additive outliers, levels shifts, or any user-defined effect can be included in your regARIMA model.
 This can be thought of as solely a utility to forecast extend your series or a detection method to do inference.
 In practice it is useful to use regARIMA modeling to answer questions such as, "Does my series have trading day effects?" or "Does this outlier effect my results?".
 Another reason for regARIMA modeling is to include exogenous regression variables in our analysis.
-These include, but are not limited to, moving holiday effects, trading day, outliers and level-shifts. 
-The regARIMA modeling takes place prior to seasonal and can be iterative until a final model is reached. 
+These include, but are not limited to, moving holiday effects, trading day, outliers and level-shifts.
+The regARIMA modeling takes place prior to seasonal and can be iterative until a final model is reached.
 This section will focus on the left self-loop of our seasonal adjustment flowchat:
 
 ```{mermaid}
@@ -31,27 +61,23 @@ flowchart TD
   D --> A
 ```
 
-The regARIMA take the form
-$$ f\left(\frac{Y_t}{D_t} \right) = \boldsymbol{\beta}^\prime {\mathbf X}_t + Z_t .$$
-Here $Y_t$ is the observed time series. 
+The regARIMA take the form $$ f\left(\frac{Y_t}{D_t} \right) = \boldsymbol{\beta}^\prime {\mathbf X}_t + Z_t .$$ Here $Y_t$ is the observed time series.
 The function $f$ represents a transformation, most commonly used is the log transform ie $f(x) = \log(x)$.
 $D_t$ is any intervention that has taken place prior to any transformation or modeling.
 This intervention is usually subjective and customized for individual series on an as-needed basis.
-For example, if a worker strike occured in a specific industry that effected certain economic series.
-If no transformation or intervention is needed the model form is:
-$$ Y_t = \underbrace{\boldsymbol{\beta}^\prime {\mathbf X}_t}_{\text{Regression}} + \underbrace{Z_t}_{\text{ARIMA}} .$$
+For example, if a worker strike occurred in a specific industry that effected certain economic series.
+If no transformation or intervention is needed the model form is: $$ Y_t = \underbrace{\boldsymbol{\beta}^\prime {\mathbf X}_t}_{\text{Regression}} + \underbrace{Z_t}_{\text{ARIMA}} .$$
 
 The regression variables appear in the columns of the design matrix ${\mathbf X}_t$ and $Z_t$ is an ARIMA process.
 This last assumption on $Z_t$ is what distinguished a regARIMA model from more classic linear models and multiple linear regression where error terms are assumed uncorrelated.
 
 In order to achieve a suitable seasonal adjustment it is important to get the regARIMA model correct.
-For most dataset the built in automatic modeling features of the X13 program will be suitable to detect a reasonable model. 
+For most dataset the built in automatic modeling features of the X13 program will be suitable to detect a reasonable model.
 This can be used as a starting point for more rigorous regARIMA model development or used as the final regARIMA modeling choice for your seasonal adjustment needs.
-We evoke automatic model identification through the XXX spec. 
-The default behavior of the R seasonal package is XXX which includes automatic model identification. 
+We evoke automatic model identification through the XXX spec.
+The default behavior of the R seasonal package is XXX which includes automatic model identification.
 
-
-::: {.callout-tip}
+::: callout-tip
 ## Automatic and manual model choice
 
 As an aside, the general rule is to not use automatic modeling in production.
@@ -70,29 +96,32 @@ This does not need to be done manually since the `static()` function from the se
 | Seasonal outliers (SO)      | No                             |
 
 Consider the default seasonal adjustment:
+
 ```{r}
 library(seasonal)
 m <- seasonal::seas(AirPassengers, x11 = "")
 print(m$spc$automdl)
 print(m$spc$arima)
 ```
-Notice the value `NULL` indicates no ARIMA model is specified and the returned arguments for the automdl spec indicate it is active during the X13 run. 
+
+Notice the value `NULL` indicates no ARIMA model is specified and the returned arguments for the automdl spec indicate it is active during the X13 run.
 
 ```{r}
 seasonal::udg(m, "automdl")
 ```
 
-Indicates that automatic modeling identified the (0 1 1)(0 1 1) model as the best choice. 
+Indicates that automatic modeling identified the (0 1 1)(0 1 1) model as the best choice.
 If we want to hardcode this model for subsequent runs, and turn off automatic model identification, this can be done via
 
 ```{r}
 m_call <- seasonal::static(m)
 m2 <- eval(m_call)
 ```
-## Outlier 
+
+## Outlier
 
 There are many options you can modify when searching for outliers in your series.
-Some of the most practical options to start your exploration are the *type*, *critical value* and *span* that you would like to search. 
+Some of the most practical options to start your exploration are the *type*, *critical value* and *span* that you would like to search.
 
 Here is an example of using span to limit the outlier search to the last few years of a series:
 
@@ -109,23 +138,21 @@ m_nospan <- seas(AirPassengers,
 summary(m_nospan)
 ```
 
-The default critical value is XXX. 
+The default critical value is set based on the length of the outlier span.
 Notice the MA-Nonseasonal-01 value when comparing `m_span` with `m_nospan`.
 We see the choice of span, and ultimately the choise to include an outlier in your model can have a dramatic effect on the estimated regARIMA parameters.
-
 
 ## How to use the regression spec
 
 ## Table of all Regression effects available
 
- <!--
+```{=html}
+<!--
   (steal from CR slides)
 
 -->
-
-
+```
 ## Case study
 
 Decide if you should include AO in May 2014.
 Construct a simple user defined regressor to handle specific issue.
-
