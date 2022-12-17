@@ -1,4 +1,4 @@
-# A minimal example
+# Getting started
 
 ```{r}
 #| results: "asis"
