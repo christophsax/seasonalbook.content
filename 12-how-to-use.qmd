@@ -62,14 +62,3 @@ plot(grocery)
 
 Some Examples: Chinese New Year, structural breaks, direct or indirect seasonal adjustment, SEATS or X-11.
 
-
-## For whom?
-
-There are two primary audiences:
-
-1.  Current practitioners of seasonal adjustment who are interested in learning how to implement in R.
-    This audience includes researchers from statistical agencies who want to include the scripting language features of R to evaluate properties of their seasonal adjustments.
-
-2.  Current R users who want to learn seasonal adjustment.
-    We are able to leverage the readers knowledge of R to make learning seasonal adjustment easier.
-    We will feature interesting applications outside of official statistics, such as the seasonal adjustment of business data.
