@@ -4,7 +4,7 @@
 #| results: "asis"
 #| echo: false
 source("_common.R")
-status("drafting", "2022-12-21", section = "SEATS")  # drafting, polishing, complete
+status("drafting", "2023-01-21", section = "SEATS")  # drafting, polishing, complete
 ```
 
 -   How to use the SEATS spec

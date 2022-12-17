@@ -28,6 +28,7 @@ status <- function(type, date = as.Date(NA), section = "") {
     polishing = "should be readable but needs polishing",
     restructuring = "is undergoing heavy restructuring and may be confusing or incomplete",
     drafting = "is currently a dumping ground for ideas, and we don't recommend reading it",
+    course_complete = "is complete enough as an education tool and can be used in a course. However, it still will be further improved.",
     complete = "is largely complete and just needs final proof reading",
     stop("Invalid `type`", call. = FALSE)
   )
@@ -48,6 +49,7 @@ status <- function(type, date = as.Date(NA), section = "") {
     polishing = "note",
     restructuring = "important",
     drafting = "important",
+    course_complete = "note",
     complete = "note"
   )
 
