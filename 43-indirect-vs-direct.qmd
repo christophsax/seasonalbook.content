@@ -1,4 +1,4 @@
-## Indirect vs direct adjustment
+## Indirect vs direct adjustment {#sec-indirect-vs-direct-adjustment}
 
 ```{r}
 #| results: "asis"

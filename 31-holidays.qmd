@@ -1,4 +1,4 @@
-## Irregular holidays
+## Irregular holidays {#sec-holidays}
 
 ```{r}
 #| results: "asis"

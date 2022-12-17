@@ -26,4 +26,3 @@ This presentation allows the academic level to be quite broad; understood by und
 
 -   For each example given the book will give answers, code and provide data
 
-## Acknowledgements {.unnumbered}

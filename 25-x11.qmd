@@ -1,4 +1,4 @@
-## X11
+## X11 {#sec-x11}
 
 ```{r}
 #| results: "asis"
@@ -67,7 +67,7 @@ To understand the length of a filter let's look at the (finite) number of choice
 @tbl-x11-filters shows the different filters available for the seasonal component and the trend component.
 
 | Value        | Description                                                                                                                                                                                                                     |
-|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|------------|------------------------------------------------------------|
 | `s3x1`       | 3×1 moving average                                                                                                                                                                                                              |
 | `s3x3`       | 3×3 moving average                                                                                                                                                                                                              |
 | `s3x5`       | 3×5 moving average                                                                                                                                                                                                              |

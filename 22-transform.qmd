@@ -1,4 +1,4 @@
-# Transform
+# Transform {#sec-transform}
 
 ```{r}
 #| results: "asis"
@@ -63,7 +63,7 @@ The `transform` spec controls these options.
 Some primary options within this spec are
 
 | Spec option  | Use                                            | Example values       | default     |
-|--------------|------------------------------------------------|----------------------|-------------|
+|--------------|-------------------------------|--------------|--------------|
 | function     | specify transform                              | none, log, auto      | none        |
 | data or file | specify prior adjustment factor                | (1.2, 1.1, ..., .99) | (1,1,...,1) |
 | aicdiff      | adjust tolerance of AIC test for log transform | 0.0 3.0 -4.5         | -2.0        |

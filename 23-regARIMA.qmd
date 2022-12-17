@@ -1,4 +1,4 @@
-## regARIMA Model
+## regARIMA Model {#sec-regarima}
 
 ```{r}
 #| results: "asis"
@@ -23,20 +23,23 @@ This is illustrated with the classic autoregressive model of order 1:
 
 $$ Y_t = \phi Y_{t-1} + a_t $$
 
-where $Y_t$ is the observed time series, $\phi$ is a coefficient to be estimated and $\{a_t\}$ is an uncorrelated sequence of errors similiar to that of standard linear regression. This model is notated AR(1). If instead of a single lag we used $p$ lags, the model would be and AR($p$) and have structure:
+where $Y_t$ is the observed time series, $\phi$ is a coefficient to be estimated and $\{a_t\}$ is an uncorrelated sequence of errors similiar to that of standard linear regression.
+This model is notated AR(1).
+If instead of a single lag we used $p$ lags, the model would be and AR($p$) and have structure:
 
 $$ Y_t = \phi_1 Y_{t-1} + \phi_2 Y_{t-2} + \cdots + \phi_p Y_{t-p} + a_t $$
 
-where now we have $p$ coefficients $\phi_1, \phi_2, \ldots, \phi_p$ to be estimated. 
+where now we have $p$ coefficients $\phi_1, \phi_2, \ldots, \phi_p$ to be estimated.
 
-The moving average part of ARIMA model is similar in notation and reflects the number of lagged values of the error sequence should be included. For example, an MA(1) model with coefficient parameter $\theta$ is:
+The moving average part of ARIMA model is similar in notation and reflects the number of lagged values of the error sequence should be included.
+For example, an MA(1) model with coefficient parameter $\theta$ is:
 
 $$ Y_t = a_t + \theta a_{t-1} $$.
 
-Note that instead of doing self-regression we include past values of the unobserved errors in the model at time $t$. If instead of a single lag we wanted $q$ lags of the past error terms, we would have an MA($q$) model:
+Note that instead of doing self-regression we include past values of the unobserved errors in the model at time $t$.
+If instead of a single lag we wanted $q$ lags of the past error terms, we would have an MA($q$) model:
 
 $$ Y_t = a_t + \theta_1 a_{t-1} + \theta_2 a_{t-2} + \cdots + \theta_q a_{t-q} $$.
-
 
 Depending on if you ultimately choose to perform a SEATS or X-11 seasonal adjustment, your usage of a regARIMA can differ.
 Both seasonal adjustment methods will use the regARIMA model to forecast the series in order to apply symmetric filters and extract components.

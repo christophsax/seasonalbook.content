@@ -1,4 +1,4 @@
-## Outliers
+## Outliers {#sec-outliers}
 
 ```{r}
 #| results: "asis"

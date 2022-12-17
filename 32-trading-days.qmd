@@ -1,4 +1,4 @@
-## Trading days
+## Trading days {#sec-trading-days}
 
 ```{r}
 #| results: "asis"

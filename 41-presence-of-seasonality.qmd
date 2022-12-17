@@ -1,5 +1,4 @@
-## Presence of seasonality
-
+## Presence of seasonality {#sec-presence-of-seasonality}
 
 ```{r}
 #| results: "asis"

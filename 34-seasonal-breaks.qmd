@@ -1,4 +1,4 @@
-## Seasonal breaks
+## Seasonal breaks {#sec-seasonal-breaks}
 
 ```{r}
 #| results: "asis"
