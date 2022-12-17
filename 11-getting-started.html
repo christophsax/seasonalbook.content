@@ -5,7 +5,7 @@
 <meta name="generator" content="quarto-1.2.269">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="James Livsey and Christoph Sax">
-<title>Seasonal Adjustment in R - 6&nbsp; regARIMA Model</title>
+<title>Seasonal Adjustment in R - 2&nbsp; Getting started</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -81,6 +81,25 @@ code span.st { color: #4070a0; } /* String */
 code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
 </style>
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -90,8 +109,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./24-seats.html" rel="next">
-<link href="./22-transform.html" rel="prev">
+<link href="./12-how-to-use.html" rel="next">
+<link href="./10-introduction.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -119,14 +138,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     "search-submit-button-title": "Submit"
   }
 }</script><meta name="robots" content="noindex">
-<script src="site_libs/quarto-diagram/mermaid.min.js"></script><script src="site_libs/quarto-diagram/mermaid-init.js"></script><link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 </head>
 <body class="nav-sidebar floating">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">regARIMA Model</span></h1>
+      <h1 class="quarto-secondary-nav-title">
+<span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Getting started</span>
+</h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -169,7 +188,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./11-getting-started.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Getting started</span></a>
+  <a href="./11-getting-started.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Getting started</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -199,7 +218,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./23-regARIMA.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">regARIMA Model</span></a>
+  <a href="./23-regARIMA.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">regARIMA Model</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -310,15 +329,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
-<li><a href="#outlier" id="toc-outlier" class="nav-link active" data-scroll-target="#outlier"><span class="toc-section-number">6.1</span>  Outlier</a></li>
-  <li><a href="#how-to-use-the-regression-spec" id="toc-how-to-use-the-regression-spec" class="nav-link" data-scroll-target="#how-to-use-the-regression-spec"><span class="toc-section-number">6.2</span>  How to use the regression spec</a></li>
-  <li><a href="#table-of-all-regression-effects-available" id="toc-table-of-all-regression-effects-available" class="nav-link" data-scroll-target="#table-of-all-regression-effects-available"><span class="toc-section-number">6.3</span>  Table of all Regression effects available</a></li>
-  <li><a href="#case-study" id="toc-case-study" class="nav-link" data-scroll-target="#case-study"><span class="toc-section-number">6.4</span>  Case study</a></li>
-  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/23-regARIMA.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+<li><a href="#installation" id="toc-installation" class="nav-link active" data-scroll-target="#installation"><span class="toc-section-number">2.1</span>  Installation</a></li>
+  <li><a href="#a-minimal-example" id="toc-a-minimal-example" class="nav-link" data-scroll-target="#a-minimal-example"><span class="toc-section-number">2.2</span>  A minimal example</a></li>
+  <li>
+<a href="#where-to-go-from-here" id="toc-where-to-go-from-here" class="nav-link" data-scroll-target="#where-to-go-from-here"><span class="toc-section-number">2.3</span>  Where to go from here</a>
+  <ul class="collapse">
+<li><a href="#fundamentals" id="toc-fundamentals" class="nav-link" data-scroll-target="#fundamentals"><span class="toc-section-number">2.3.1</span>  Fundamentals</a></li>
+  <li><a href="#data-issues" id="toc-data-issues" class="nav-link" data-scroll-target="#data-issues"><span class="toc-section-number">2.3.2</span>  Data issues</a></li>
+  <li><a href="#additional-issues" id="toc-additional-issues" class="nav-link" data-scroll-target="#additional-issues"><span class="toc-section-number">2.3.3</span>  Additional issues</a></li>
+  <li><a href="#quality-assessment" id="toc-quality-assessment" class="nav-link" data-scroll-target="#quality-assessment"><span class="toc-section-number">2.3.4</span>  Quality assessment</a></li>
+  </ul>
+</li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="toc-section-number">2.4</span>  References</a></li>
+  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/11-getting-started.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
-<h1 class="title"><span id="sec-regarima" class="quarto-section-identifier d-none d-lg-block"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">regARIMA Model</span></span></h1>
+<h1 class="title d-none d-lg-block">
+<span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Getting started</span>
+</h1>
 </div>
 
 
@@ -344,152 +373,48 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 </div>
-<!-- - Idea of regARIMA -->
-<p>An important part of the X13 procedure is regARIMA modeling. As the name implies, there are two components that one needs to understand when fitting a regARIMA model; namely regression and ARIMA. In this chapter, we try to break these two components down to the most fundamental components without an overly technical exposition. Essentially, providing readers with enough information about each topic to understand the rest of this book or go off and perform satisfactory seasonal adjustment. The interested reader is encouraged to find material devoted to each of these components separately to more fully understand them.</p>
-<p>ARIMA is an acronym describing the three parts of the modeling paridiam. AR = autoregressive, I = integrated (differenced), and MA = moving average. The prefix auto or “self”, explains the AR portion perfectly. We model the current obervation with lagged values from the past. This is illustrated with the classic autoregressive model of order 1:</p>
-<p><span class="math display">\[ Y_t = \phi Y_{t-1} + a_t \]</span></p>
-<p>where <span class="math inline">\(Y_t\)</span> is the observed time series, <span class="math inline">\(\phi\)</span> is a coefficient to be estimated and <span class="math inline">\(\{a_t\}\)</span> is an uncorrelated sequence of errors similiar to that of standard linear regression. This model is notated AR(1). If instead of a single lag we used <span class="math inline">\(p\)</span> lags, the model would be and AR(<span class="math inline">\(p\)</span>) and have structure:</p>
-<p><span class="math display">\[ Y_t = \phi_1 Y_{t-1} + \phi_2 Y_{t-2} + \cdots + \phi_p Y_{t-p} + a_t \]</span></p>
-<p>where now we have <span class="math inline">\(p\)</span> coefficients <span class="math inline">\(\phi_1, \phi_2, \ldots, \phi_p\)</span> to be estimated.</p>
-<p>The moving average part of ARIMA model is similar in notation and reflects the number of lagged values of the error sequence should be included. For example, an MA(1) model with coefficient parameter <span class="math inline">\(\theta\)</span> is:</p>
-<p><span class="math display">\[ Y_t = a_t + \theta a_{t-1} \]</span>.</p>
-<p>Note that instead of doing self-regression we include past values of the unobserved errors in the model at time <span class="math inline">\(t\)</span>. If instead of a single lag we wanted <span class="math inline">\(q\)</span> lags of the past error terms, we would have an MA(<span class="math inline">\(q\)</span>) model:</p>
-<p><span class="math display">\[ Y_t = a_t + \theta_1 a_{t-1} + \theta_2 a_{t-2} + \cdots + \theta_q a_{t-q} \]</span>.</p>
-<p>Depending on if you ultimately choose to perform a SEATS or X-11 seasonal adjustment, your usage of a regARIMA can differ. Both seasonal adjustment methods will use the regARIMA model to forecast the series in order to apply symmetric filters and extract components. (but I thought SEATS was model-based? What do you mean SEATS uses filters? More on this in Chapter XXX). SEATS will use the ARIMA model to derive components for the trend, seasonal and irregular terms. The regARIMA model is also the place to include exogenous information or regressors into your seasonal adjustments. Regressors such as holiday effects, additive outliers, levels shifts, or any user-defined effect can be included in your regARIMA model. This can be thought of as solely a utility to forecast extend your series or a detection method to do inference. In practice it is useful to use regARIMA modeling to answer questions such as, “Does my series have trading day effects?” or “Does this outlier effect my results?”. Another reason for regARIMA modeling is to include exogenous regression variables in our analysis. These include, but are not limited to, moving holiday effects, trading day, outliers and level-shifts. The regARIMA modeling takes place prior to seasonal and can be iterative until a final model is reached. This section will focus on the left self-loop of our seasonal adjustment flowchat:</p>
+<section id="installation" class="level2" data-number="2.1"><h2 data-number="2.1" class="anchored" data-anchor-id="installation">
+<span class="header-section-number">2.1</span> Installation</h2>
+<p>If you use R installing X-13ARIMA-SEATS from CRAN is as easy as installing any other R package <span class="citation" data-cites="jss">(<a href="#ref-jss" role="doc-biblioref">Sax and Eddelbuettel 2018</a>)</span>:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"seasonal"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section><section id="a-minimal-example" class="level2" data-number="2.2"><h2 data-number="2.2" class="anchored" data-anchor-id="a-minimal-example">
+<span class="header-section-number">2.2</span> A minimal example</h2>
+<p>Once the package is installed it can be loaded in the usual way:</p>
 <div class="cell">
-<div class="cell-output-display">
-<div>
-<p>
-</p>
-<pre class="mermaid mermaid-js" data-tooltip-selector="#mermaid-tooltip-1">flowchart TD
-  A[RegARIMA Modeling] --&gt; B(Model Comparison / Diagnostics)
-  B --&gt; A
-  A --&gt; C[Seasonal Adjustment]
-  C --&gt; D[Seasonal Adjustment Diagnostics]
-  D --&gt; C
-  D --&gt; A
-</pre>
-<div id="mermaid-tooltip-1" class="mermaidTooltip">
-
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.seasonal.website">seasonal</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-
-</div>
-</div>
-</div>
-<p>The regARIMA take the form <span class="math display">\[ f\left(\frac{Y_t}{D_t} \right) = \boldsymbol{\beta}^\prime {\mathbf X}_t + Z_t .\]</span> Here <span class="math inline">\(Y_t\)</span> is the observed time series. The function <span class="math inline">\(f\)</span> represents a transformation, most commonly used is the log transform ie <span class="math inline">\(f(x) = \log(x)\)</span>. <span class="math inline">\(D_t\)</span> is any intervention that has taken place prior to any transformation or modeling. This intervention is usually subjective and customized for individual series on an as-needed basis. For example, if a worker strike occurred in a specific industry that effected certain economic series. If no transformation or intervention is needed the model form is: <span class="math display">\[ Y_t = \underbrace{\boldsymbol{\beta}^\prime {\mathbf X}_t}_{\text{Regression}} + \underbrace{Z_t}_{\text{ARIMA}} .\]</span></p>
-<p>The regression variables appear in the columns of the design matrix <span class="math inline">\({\mathbf X}_t\)</span> and <span class="math inline">\(Z_t\)</span> is an ARIMA process. This last assumption on <span class="math inline">\(Z_t\)</span> is what distinguished a regARIMA model from more classic linear models and multiple linear regression where error terms are assumed uncorrelated.</p>
-<p>In order to achieve a suitable seasonal adjustment it is important to get the regARIMA model correct. For most dataset the built in automatic modeling features of the X13 program will be suitable to detect a reasonable model. This can be used as a starting point for more rigorous regARIMA model development or used as the final regARIMA modeling choice for your seasonal adjustment needs. We evoke automatic model identification through the XXX spec. The default behavior of the R seasonal package is XXX which includes automatic model identification.</p>
-<div class="callout-tip callout callout-style-simple callout-captioned">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-caption-container flex-fill">
-Automatic and manual model choice
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>As an aside, the general rule is to not use automatic modeling in production. This mean, if you are going to include seasonal adjustment as part of a large scale data processing that occurs regularly (say monthly), then it is not advisable to have automatic model identification run every month. Instead, an alternative process, is to run automodel once and then fix the model choice in the XXX spec file. This does not need to be done manually since the <code><a href="https://rdrr.io/pkg/seasonal/man/static.html">static()</a></code> function from the seasonal package can do this for you.</p>
-</div>
-</div>
-<table class="table">
-<thead><tr class="header">
-<th>Outlier Type</th>
-<th>Automatic Detection Available?</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td>Additive outliers (AO)</td>
-<td>Yes (default)</td>
-</tr>
-<tr class="even">
-<td>Level shifts (LS)</td>
-<td>Yes (default)</td>
-</tr>
-<tr class="odd">
-<td>Temporary level shifts (TL)</td>
-<td>Yes</td>
-</tr>
-<tr class="even">
-<td>Temporary changes (TC)</td>
-<td>No</td>
-</tr>
-<tr class="odd">
-<td>Ramps (RP, QI, QD)</td>
-<td>No</td>
-</tr>
-<tr class="even">
-<td>Seasonal outliers (SO)</td>
-<td>No</td>
-</tr>
-</tbody>
-</table>
-<p>Consider the default seasonal adjustment:</p>
+<p>The <code><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas()</a></code> function provides the core functionality of the package. By default, <code>seas</code> calls the automatic procedures of X-13 to perform a seasonal adjustment that works well in most circumstances:</p>
 <div class="cell">
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.seasonal.website">seasonal</a></span><span class="op">)</span></span>
-<span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">seasonal</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">AirPassengers</span>, x11 <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">m</span><span class="op">$</span><span class="va">spc</span><span class="op">$</span><span class="va">automdl</span><span class="op">)</span></span>
-<span><span class="co">#&gt; $print</span></span>
-<span><span class="co">#&gt; [1] "bestfivemdl"</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">m</span><span class="op">$</span><span class="va">spc</span><span class="op">$</span><span class="va">arima</span><span class="op">)</span></span>
-<span><span class="co">#&gt; NULL</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Notice the value <code>NULL</code> indicates no ARIMA model is specified and the returned arguments for the automdl spec indicate it is active during the X13 run.</p>
-<div class="cell">
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">seasonal</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/udg.html">udg</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"automdl"</span><span class="op">)</span></span>
-<span><span class="co">#&gt;          automdl </span></span>
-<span><span class="co">#&gt; "(0 1 1)(0 1 1)"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Indicates that automatic modeling identified the (0 1 1)(0 1 1) model as the best choice. If we want to hardcode this model for subsequent runs, and turn off automatic model identification, this can be done via</p>
-<div class="cell">
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_call</span> <span class="op">&lt;-</span> <span class="fu">seasonal</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/static.html">static</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
-<span><span class="co">#&gt; seas(</span></span>
-<span><span class="co">#&gt;   x = AirPassengers,</span></span>
-<span><span class="co">#&gt;   x11 = "",</span></span>
-<span><span class="co">#&gt;   regression.variables = c("td1coef", "easter[1]", "ao1951.May"),</span></span>
-<span><span class="co">#&gt;   arima.model = "(0 1 1)(0 1 1)",</span></span>
-<span><span class="co">#&gt;   regression.aictest = NULL,</span></span>
-<span><span class="co">#&gt;   outlier = NULL,</span></span>
-<span><span class="co">#&gt;   transform.function = "log"</span></span>
-<span><span class="co">#&gt; )</span></span>
-<span><span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/eval.html">eval</a></span><span class="op">(</span><span class="va">m_call</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<section id="outlier" class="level2" data-number="6.1"><h2 data-number="6.1" class="anchored" data-anchor-id="outlier">
-<span class="header-section-number">6.1</span> Outlier</h2>
-<p>There are many options you can modify when searching for outliers in your series. Some of the most practical options to start your exploration are the <em>type</em>, <em>critical value</em> and <em>span</em> that you would like to search.</p>
-<p>Here is an example of using span to limit the outlier search to the last few years of a series:</p>
-<div class="cell">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_span</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">AirPassengers</span>,</span>
-<span>  outlier.types <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ao"</span>, <span class="st">"ls"</span>, <span class="st">"tc"</span><span class="op">)</span>,</span>
-<span>  outlier.critical <span class="op">=</span> <span class="fl">4.0</span>,</span>
-<span>  outlier.span <span class="op">=</span> <span class="st">"1958.jan, "</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m_span</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Call:</span></span>
-<span><span class="co">#&gt; seas(x = AirPassengers, outlier.types = c("ao", "ls", "tc"), </span></span>
-<span><span class="co">#&gt;     outlier.critical = 4, outlier.span = "1958.jan, ")</span></span>
+<span><span class="co">#&gt; seas(x = AirPassengers)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Coefficients:</span></span>
-<span><span class="co">#&gt;                    Estimate Std. Error z value Pr(&gt;|z|)    </span></span>
-<span><span class="co">#&gt; Weekday           -0.002644   0.000604  -4.377 1.20e-05 ***</span></span>
-<span><span class="co">#&gt; Easter[1]          0.021321   0.008395   2.540  0.01110 *  </span></span>
-<span><span class="co">#&gt; MA-Nonseasonal-01  0.235404   0.083756   2.811  0.00495 ** </span></span>
-<span><span class="co">#&gt; MA-Seasonal-12     0.543743   0.074644   7.284 3.23e-13 ***</span></span>
-<span><span class="co">#&gt; ---</span></span>
-<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; SEATS adj.  ARIMA: (0 1 1)(0 1 1)  Obs.: 144  Transform: log</span></span>
-<span><span class="co">#&gt; AICc: 965.3, BIC: 979.2  QS (no seasonality in final):    0  </span></span>
-<span><span class="co">#&gt; Box-Ljung (no autocorr.): 28.26   Shapiro (normality): 0.9829 .</span></span>
-<span></span>
-<span><span class="va">m_nospan</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">AirPassengers</span>,</span>
-<span>  outlier.types <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ao"</span>, <span class="st">"ls"</span>, <span class="st">"tc"</span><span class="op">)</span>,</span>
-<span>  outlier.critical <span class="op">=</span> <span class="fl">4.0</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m_nospan</span><span class="op">)</span></span>
+<span><span class="co">#&gt;           Weekday          Easter[1]         AO1951.May  MA-Nonseasonal-01  </span></span>
+<span><span class="co">#&gt;          -0.00295            0.01777            0.10016            0.11562  </span></span>
+<span><span class="co">#&gt;    MA-Seasonal-12  </span></span>
+<span><span class="co">#&gt;           0.49736</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The first argument of seas is a time series of class <code>ts</code>. <code>ts</code> objects are frequently used in base R and are useful to store monthly, quarterly or annual data. The <code>AirPassengers</code> example series is included in base R, and shows monthly totals of international airline passengers from 1949 to 1960. <code><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas()</a></code> returns a <code>seas</code> object that contains the necessary information on the adjustment performed on this time series, we can assign it to a variable:</p>
+<div class="cell">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>There are several functions and methods for <code>"seas"</code> objects. The final function returns the adjusted series. The plot method shows a plot with the unadjusted and the adjusted series.</p>
+<div class="cell">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="11-getting-started_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>As you can see, the adjusted series is much less volatile than the original one. This is because the seasonal component was removed from the original series. But the adjusted series is not completely smooth, too. This is because it still contains the irregular component.</p>
+<p>This is an important point about seasonal adjustment: It only removed regular, predictable movements, not irregular ones. In the adjusted series, we can see that there was a decrease in airline passengers both in 1953 an between 1957 and 1958. These decreases were impossible to discover in the original series.</p>
+<p>The summary method displays an overview of the model, very similar to the one produced by R’s lm function:</p>
+<div class="cell">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Call:</span></span>
-<span><span class="co">#&gt; seas(x = AirPassengers, outlier.types = c("ao", "ls", "tc"), </span></span>
-<span><span class="co">#&gt;     outlier.critical = 4)</span></span>
+<span><span class="co">#&gt; seas(x = AirPassengers)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Coefficients:</span></span>
 <span><span class="co">#&gt;                     Estimate Std. Error z value Pr(&gt;|z|)    </span></span>
@@ -505,20 +430,85 @@ Automatic and manual model choice
 <span><span class="co">#&gt; AICc: 947.3, BIC: 963.9  QS (no seasonality in final):    0  </span></span>
 <span><span class="co">#&gt; Box-Ljung (no autocorr.): 26.65   Shapiro (normality): 0.9908</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The default critical value is set based on the length of the outlier span. Notice the MA-Nonseasonal-01 value when comparing <code>m_span</code> with <code>m_nospan</code>. We see the choice of span, and ultimately the choise to include an outlier in your model can have a dramatic effect on the estimated regARIMA parameters.</p>
-</section><section id="how-to-use-the-regression-spec" class="level2" data-number="6.2"><h2 data-number="6.2" class="anchored" data-anchor-id="how-to-use-the-regression-spec">
-<span class="header-section-number">6.2</span> How to use the regression spec</h2>
-</section><section id="table-of-all-regression-effects-available" class="level2" data-number="6.3"><h2 data-number="6.3" class="anchored" data-anchor-id="table-of-all-regression-effects-available">
-<span class="header-section-number">6.3</span> Table of all Regression effects available</h2>
-<!--
-  (steal from CR slides)
+<p>The summary gives a short overview of adjustment model, and provides a few diagnostics. This book will help you do understand it more detail. The following section discusses some of the elements and relates them to the chapters in this book.</p>
+</section><section id="where-to-go-from-here" class="level2" data-number="2.3"><h2 data-number="2.3" class="anchored" data-anchor-id="where-to-go-from-here">
+<span class="header-section-number">2.3</span> Where to go from here</h2>
+<p><code>seas(AirPassengers)</code> produces a good seasonal adjustment of the airline passengers time series. If you are very new to seasonal adjustment, the automated routines of X13 and seasonal produce an adjustment that works well in most circumstances.</p>
+<p>The command <code>seas(AirPassengers)</code> has invoked a large number of <em>specs</em> of X13. <em>spec</em> is X13 slang for a module within the software. X13 is build on top of 20 specs that are perform various subtasks of seasonal adjustment. Some specs are required most of the time (e.g., <code>regression</code>) while others are optional (e.g., <code>seats</code>) or purely technical (e.g., <code>spans</code> simply shortens the time series in use). <a href="21-overview.html"><span>Chapter&nbsp;4</span></a> discusses the available specs in more detail.</p>
+<p>This book teaches you how to use and fine-tune the individual specs, and deal with concrete data problems.</p>
+<section id="fundamentals" class="level3" data-number="2.3.1"><h3 data-number="2.3.1" class="anchored" data-anchor-id="fundamentals">
+<span class="header-section-number">2.3.1</span> Fundamentals</h3>
+<p>Specifically, the command <code>seas(unemp)</code> has invoked the following fundamental specs – they are involved in most adjustments, and are covered in the <strong>first part</strong> of the book:</p>
+<dl>
+<dt>Transform</dt>
+<dd>
+<p>A decision on initial transformation was made. The automated procedures concluded that a log-transformation was made and an multiplicative, rather than a additive seasonal adjustment model is estimated. <a href="22-transform.html"><span>Chapter&nbsp;5</span></a> discusses the choices. Since <code>transform</code> is a relatively simple spec, it is a good starting point to get familiar with the spec idea.</p>
+</dd>
+<dt>Regression</dt>
+<dd>
+<p>An automated model search concluded that <code>AirPassengers</code> is best modeled by an (0 1 1)(0 1 1) ARIMA model. <a href="23-regARIMA.html"><span>Chapter&nbsp;6</span></a> explains what that means an how such a model structure is determined and estimated.</p>
+</dd>
+<dt>SEATS / X11</dt>
+<dd>
+<p>Seasonal decomposition is performed by SEATS. SEATS is one of the two available options for decomposing a series, and discussed in more detail in <a href="24-seats.html"><span>Chapter&nbsp;7</span></a>. The alternative, X11, is discussed in <a href="25-x11.html"><span>Chapter&nbsp;8</span></a>.</p>
+</dd>
+</dl></section><section id="data-issues" class="level3" data-number="2.3.2"><h3 data-number="2.3.2" class="anchored" data-anchor-id="data-issues">
+<span class="header-section-number">2.3.2</span> Data issues</h3>
+<p>The command <code>seas(unemp)</code> has also dealt with a various of data issues, which are covered in the <strong>second part</strong> of the book:</p>
+<dl>
+<dt>Holiday</dt>
+<dd>
+<p>Significant Easter effects have been found in <code>AirPassengers</code> and were removed from the adjusted series as well. Moving holidays like Easter or Chinese New Year are an important topic in seasonal adjustment, since they may have a large impact on the behavior of many time series. For <code>AirPassengers</code>, the number of passengers is higher in months with Easter. Moving holiday effects will be discussed in <a href="31-holidays.html"><span>Chapter&nbsp;9</span></a>.</p>
+</dd>
+<dt>Weekday</dt>
+<dd>
+<p>Not every month has the same number of weekdays. Since many activities (such as air travelling) are different bitween weekends and weekdays, this constitutes another predictable component. In <code>AirPassengers</code>, there are less passengers during a weekday than during a weekend, and the automated procedures decided to remove the effect. These effects are discussed in <a href="32-trading-days.html"><span>Chapter&nbsp;10</span></a>.</p>
+</dd>
+<dt>Outliers</dt>
+<dd>
+<p>Certain data points may me well out of the ordinary. These <em>outliers</em> are a problem for the modelling and adjustment process. An automated procedure scanned the series for outliers and found an additive outlier on May 1951. This outlier is shown in the plot above, too. Outliers are discussed in <a href="33-outliers.html"><span>Chapter&nbsp;11</span></a>.</p>
+</dd>
+<dt>Seasonal Breaks</dt>
+<dd>
+<p>The seasonal pattern in <code>AirPassengers</code> looks relatively stable. Some time series, however, show abrupt changes in the seasonal pattern. <a href="34-seasonal-breaks.html"><span>Chapter&nbsp;12</span></a> discusses them an shows how to deal with seasonal breaks.</p>
+</dd>
+</dl></section><section id="additional-issues" class="level3" data-number="2.3.3"><h3 data-number="2.3.3" class="anchored" data-anchor-id="additional-issues">
+<span class="header-section-number">2.3.3</span> Additional issues</h3>
+<p>The <strong>third part</strong> of the book deals with additional issues:</p>
+<dl>
+<dt>Presence of seasonality</dt>
+<dd>
+<p>While the presence of Seasonality in <code>AirPassengers</code> is obvious, this is not always the case. If a series has no seasonal pattern, there is no need for a seasonal adjustment. It it is adjusted anyway, the process simply adds noise to the series, and should be avoided. <a href="41-presence-of-seasonality.html"><span>Chapter&nbsp;13</span></a> shows how seasonality can be detected and how to decide whether an adjustment should be made or not.</p>
+</dd>
+<dt>Annual constraining</dt>
+<dd>
+<p>Usually, seasonal adjustment may affect the annual values of a time series. In part, this is by design. The number of weekdays may differ between years, so the adjusted annual values may be different too. In part, this may an artifact of the adjustment process. X13 offers tools to enforce the annual values of the adjusted series to be the same as the original one. <a href="42-annual-constraining.html"><span>Chapter&nbsp;14</span></a> shows how to constrain annual value and whether it is a good idea to do so.</p>
+</dd>
+<dt>Indirect vs direct adjustment</dt>
+<dd>
+<p>Often, seasonal adjustment may be performed on individual series, or on an aggregate of these series. X13 offers tools that let you compare these two possibilities. <a href="43-indirect-vs-direct.html"><span>Chapter&nbsp;15</span></a> discusses the options and help you to decide which one is better.</p>
+</dd>
+</dl></section><section id="quality-assessment" class="level3" data-number="2.3.4"><h3 data-number="2.3.4" class="anchored" data-anchor-id="quality-assessment">
+<span class="header-section-number">2.3.4</span> Quality assessment</h3>
+<p>Adjusting a series with automated procedure is easy. But is the resulting series a good adjustment? The <strong>fourth part</strong> helps you to decide between competing seasonal adjustment models.</p>
+<dl>
+<dt>Quality measures</dt>
+<dd>
+<p>In the lower part, the summary of the adjustment model shows various quality measures: The AICc and BIC information criterion and the QS, the Box-Ljung and the Shapiro statistic. Non of them shows any significance (indicated by one or several stars), which is a good sign. Various quality measures and their interpretation is shown in <a href="51-quality-measures.html"><span>Chapter&nbsp;16</span></a>.</p>
+</dd>
+<dt>Revisions</dt>
+<dd>
+<p>When comparing seasonal adjustment models, the stability of the model and the series is often an important consideration. One does not want to get a very different series with a new data point. X13 offers tools to analyse revisions. <a href="52-revisions.html"><span>Chapter&nbsp;17</span></a> discusses them and helps you to decide which model to pick.</p>
+</dd>
+</dl></section></section><section id="references" class="level2" data-number="2.4"><h2 data-number="2.4" class="anchored" data-anchor-id="references">
+<span class="header-section-number">2.4</span> References</h2>
 
--->
-</section><section id="case-study" class="level2" data-number="6.4"><h2 data-number="6.4" class="anchored" data-anchor-id="case-study">
-<span class="header-section-number">6.4</span> Case study</h2>
-<p>Decide if you should include AO in May 2014. Construct a simple user defined regressor to handle specific issue.</p>
 
-
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-jss" class="csl-entry" role="doc-biblioentry">
+Sax, Christoph, and Dirk Eddelbuettel. 2018. <span>“Seasonal Adjustment by <span>X-13ARIMA-SEATS</span> in <span>R</span>.”</span> <em>Journal of Statistical Software</em> 87 (11): 1–17. <a href="https://doi.org/10.18637/jss.v087.i11">https://doi.org/10.18637/jss.v087.i11</a>.
+</div>
+</div>
 </section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -652,13 +642,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
-      <a href="./22-transform.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Transform</span></span>
+      <a href="./10-introduction.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./24-seats.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">SEATS</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./12-how-to-use.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">How to use the book</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
