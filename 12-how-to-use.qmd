@@ -42,14 +42,13 @@ Additionally, it and also serve the following:
 
 ## Overview of the book
 
-
 ## The [seasonalbook](https://github.com/christophsax/seasonalbook) package
 
 An R package that supplements "Seasonal Adjustment in R", and contains all data and examples.
 
 To install:
 
-```r
+``` r
 remotes::install_github("christophsax/seasonalbook")
 ```
 
@@ -61,4 +60,3 @@ plot(grocery)
 ```
 
 Some Examples: Chinese New Year, structural breaks, direct or indirect seasonal adjustment, SEATS or X-11.
-

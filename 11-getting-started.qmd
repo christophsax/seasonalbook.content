@@ -178,3 +178,5 @@ Revisions
     One does not want to get a very different series with a new data point.
     X13 offers tools to analyse revisions.
     @sec-revisions discusses them and helps you to decide which model to pick.
+
+## References
