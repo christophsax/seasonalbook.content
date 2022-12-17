@@ -17,10 +17,35 @@ status("polishing", "2022-12-21", section = "A minimal example")  # drafting, po
 - Case Study: A use cases outside of official statistics: seasonal adjustment of business data
  -->
 ```
+
+This is a book about seasonal adjustment.
+
 Many time series exhibit a regular seasonal pattern over the year.
 US unemployment, for example, is usually higher from January to March, and again in June and July.
 Similarly, retail sales tend to peak with the Christmas season.
 
-To model the underlying structure of these series, any regular (seasonal) patterns are estimated and removed from the data.
-For example, to see if the economy is moving out of a recession during certain months, one wants the labor market data be free from such seasonal effects.
-Seasonal adjustment decomposes a time series into a trend, a seasonal and an irregular component and removes the seasonal component from the data.
+This seasonal behavior is regualar and predictable. The goal of seasonal adjustment is to estimate and remove the seasonal component from a time series.
+
+Why do we want to do this? Seasonal data is usulally hard to interpret.
+For example, if we want to learn from the US unemployment rate if the economy is moving out of a recession during certain months, we want the labor market data be free from seasonal effects.
+
+Fundamentally, seasonal adjustment decomposes a time series into a trend, a seasonal and an irregular component and removes the seasonal component from the data.
+
+
+
+
+## History
+
+In official statistics, seasonal adjustment has a long tradition.
+The original X-11 software was developed by the US Census Bureau in the 1960s, and later improved by Statistics Canada [@dagum80].
+Subsequent software packages by the US Census Bureau were called X-12-ARIMA [@findley98] and X-13ARIMA-SEATS (or X-13, for short) [@monsell07].
+Today, X-11 is still used as a name for filter-based seasonal adjustment methods within X\nobreakdash-13.
+Meanwhile, TRAMO-SEATS, developed by the Bank of Spain [@caporello01], offers an alternative model-based approach to seasonal adjustment.
+
+In its most recent version, X-13 offers these two seasonal adjustment methods in a single command-line tool, written in Fortran.
+The National Bank of Belgium has created an alternative Java-based implementation called JDemetra+ [@eurostat17] which is also widely deployed by statistical agencies.
+One of either the TRAMO-SEATS or X-11 method of seasonal adjustment is used by almost all (government) statistical offices throughout the world.
+
+
+
+
