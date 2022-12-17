@@ -5,7 +5,7 @@
 #| echo: false
 source("_common.R")
 ans <- append_df(refresh = TRUE)
-status("polishing", "2022-12-21", section = "A minimal example")  # drafting, polishing, complete
+status("drafting", "2022-12-21", section = "A minimal example")  # drafting, polishing, complete
 ```
 
 ```{=html}

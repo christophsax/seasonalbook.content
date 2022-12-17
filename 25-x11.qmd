@@ -4,7 +4,7 @@
 #| results: "asis"
 #| echo: false
 source("_common.R")
-status("polishing", "2022-12-21", section = "X11")  # drafting, polishing, complete
+status("drafting", "2022-12-21", section = "X11")  # drafting, polishing, complete
 library(seasonal)
 ```
 
