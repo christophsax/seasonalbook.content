@@ -1,4 +1,4 @@
-# Overview of the software {#sec-overwiew}
+# The fundamentals of X-13 {#sec-overwiew}
 
 ```{r}
 #| results: "asis"
@@ -16,12 +16,12 @@ status("drafting", "2022-12-21", section = "Overview of the software")  # drafti
 -   Overview of main choices a user needs to make
 -->
 ```
-## X-13 Specs
-
 X-13ARIMA-SEATS is organized by *specs*.
 Specs are software modules that deal with a particular task that is needed in the seasonal adjustment process.
 For example, the `transform` spec deals with initial transformations of the time series.
 If a series should be adjusted in logarithms, this spec will take care of.
+
+## Main specs
 
 Some specs, like the `transform` and the `regression` spec, are used in most seasonal adjustment processes.
 Others fulfill a very specific function and are used only occasionally.
@@ -30,93 +30,205 @@ Other specs are mutually exclusive.
 You can choose `x11` or `seats` to decompose a time series, but not both.
 @tbl-main-specs lists the main specs of X-13 and describes what they do.
 
++--------------+---------------------------------------------------------------------------------------------------------------+-------------------------------------------------+
 | Spec name    | What it does                                                                                                  | Chapter                                         |
-|------------|-------------------------------------------------|------------|
++==============+===============================================================================================================+=================================================+
 | `estimate`   | Estimates the regARIMA model specified by the `regression` and `arima` specs.                                 | @sec-regarima                                   |
++--------------+---------------------------------------------------------------------------------------------------------------+-------------------------------------------------+
 | `arima`      | Specifies the ARIMA part of the regARIMA model.                                                               | @sec-regarima                                   |
++--------------+---------------------------------------------------------------------------------------------------------------+-------------------------------------------------+
 | `regression` | Specification for including regression variables in a regARIMA model.                                         | @sec-regarima, @sec-holidays, @sec-trading-days |
++--------------+---------------------------------------------------------------------------------------------------------------+-------------------------------------------------+
 | `automdl`    | Specifies the ARIMA part of the regARIMA model using an automatic procedure.                                  | @sec-regarima                                   |
++--------------+---------------------------------------------------------------------------------------------------------------+-------------------------------------------------+
 | `outlier`    | Specification to perform automatic detection of additive (point) outliers.                                    | @sec-outliers                                   |
++--------------+---------------------------------------------------------------------------------------------------------------+-------------------------------------------------+
 | `seats`      | Invoke the production of model-based signal extraction using SEATS. Default in the R seasonal package.        | @sec-seats                                      |
++--------------+---------------------------------------------------------------------------------------------------------------+-------------------------------------------------+
 | `x11`        | An optional spec for invoking seasonal adjustment by the X-11 methodology.                                    | @sec-x11                                        |
++--------------+---------------------------------------------------------------------------------------------------------------+-------------------------------------------------+
 | `forecast`   | Specification to forecast and/or backcast the time series given in the series spec using the estimated model. | @sec-regarima                                   |
++--------------+---------------------------------------------------------------------------------------------------------------+-------------------------------------------------+
 
 : Important specs that are used in most seasonal adjustment models {#tbl-main-specs}
 
 ## Interactions between specs
 
 X13 specs interact with each other.
-For example, once a series is transformed it is usually passed to the `regression` spec, which estimates an ARIMA model.
+For example, once a series is transformed it is usually passed to the `regression` and `arima` specs, which estimate an regARIMA model.
 In order to come up with a good model, it uses the `automdl` spec to automatically determine a good ARIMA model.
 In order to correct for outlier values, it collaborates with the `outlier` spec.
+Once the series is modeled, it is decomposed either by the `seats` or by the `x11` spec.
+@fig-spec-interaction shows the interaction between the main specs in a typical seasonal adjustment run.
 
 <!-- https://mermaid-js.github.io/mermaid/#/flowchart?id=styling-and-classes -->
 
 ```{mermaid}
+%%| label: fig-spec-interaction
+%%| fig-width: 9
+%%| fig-cap: |
+%%|   Interactions between X-13 specs.
 flowchart LR
-  A[transform] --> B(regARIMA)
-  B --> C{Model choice}
-  C --> D[X11]
-  C --> E[SEATS]
-  style C fill:#56B4E9,color:#fff
+    A(  transform  )-->regARIMA
+    subgraph regARIMA
+    direction LR
+    B(estimate)<-->D(regression)
+    B<-->C(automdl)
+    B<-->E(arima)
+    end
+    regARIMA --> F(seats)
+    regARIMA --> G(x11)
 ```
 
-| Spec name      | What it does                                                                                                                           |
-|-------------------------|-----------------------------------------------|
-| `history`      | Requesting a sequence of runs from a sequence of truncated versions of the time series for the purpose of creating historical records. |
-| `slidingspans` | Providing sliding spans stability analysis.                                                                                            |
-| `identify`     | Produce tables and line printer plots of sample ACFs and PACFs.                                                                        |
-| `spectrum`     | Provides a choice between two spectrum diagnostics to detect seasonality or trading day effects.                                       |
-| `check`        | Produce statistics for diagnostic checking of residuals from the estimated model.                                                      |
-
-: Diagnostic specs {#tbl-diagnosics-specs}
-
-| Spec name   | What it does                                                                                                                |
-|------------------------|-----------------------------------------------|
-| `force`     | Allow users to force yearly totals of the seasonally adjusted series to equal those of the original series for convenience. |
-| `composite` | Obtaining both indirect and direct adjustments of a composite                                                               |
-| series.     |                                                                                                                             |
-
-: Special purpose specs {#tbl-diagnosics-specs}
-
-| Spec name       | What it does                                                                                                                                    |
-|------------------------|-----------------------------------------------|
-| `x11regression` | Alternative to `regression`. Can only be used with X11.                                                                                         |
-| `pickmdl`       | Alternative to `automdl`. Can only be used with X11.                                                                                            |
-| `series`        | Provides X-13 with the data, the starting date and the frequency. In R, this is handled by seasonal and will not be covered.                    |
-| `metadata`      | Specification that allows users to insert metadata into the diagnostic summary file. In R, this is handled by seasonal and will not be covered. |
-
-: Vintage and technical specs that won't be covered in this book) {#tbl-vintage-specs}
-
-## Sepc Arguments
+## Specs Arguments
 
 Within specs, there are *arguments*.
 Spec arguments guide the behavior of the the spec.
-for example, the `function` argument in the `transform` spec can be set to
+for example, the `function` argument in the `transform` spec can be set to `"auto"`, `"none"`, `"log"`, `"sqrt"`, `"inverse"` or `"logistic`".
+The default is set to `"auto"`, which causes an automated model evaluation between `"log"` and `"none"`.
+There are many other arguments, and the X-13 Manual [@census17] is the canonical reference.
+In this book, we will list and explain the frequently used arguments, while skipping some of the more exotic ones.
 
-## Talking to specs in R
+## Addressing specs from R
 
-To talk to specs in R,
+In the R package seasonal, spec argument combinations can be directly fed to the `seas()` function.
+For example, in order to turn off the log transformation in the `AirPassengers` example fron @sec-a-minimal-example, we can specify the following:
 
-Specs are the
-
-## Elements of X13
-
-<!-- https://mermaid-js.github.io/mermaid/#/flowchart?id=styling-and-classes -->
-
-```{mermaid}
-flowchart LR
-  A[transform] --> B(regARIMA)
-  B --> C{Model choice}
-  C --> D[X11]
-  C --> E[SEATS]
-  style C fill:#56B4E9,color:#fff
+```{r}
+m_no_log <- seas(AirPassengers, transform.function = "none")
+summary(m_no_log)
 ```
+
+As you can see from the lower part of the summary, transform is now set equal to none.
+Note that the change in the `transform` argument has also affected the other specs.
+The ARIMA model is different now, and a leap year adjustment is performed.
+We will discuss the working of the transform spec in more detail in the next chapter.
+
+## Less frequently used specs
+
+While the main specs appear in most seasonal adjustment processes, other specs are less often used.
+Some of them have a diagnostic purpose.
+The `spectrum` spec, for example draws and analyses the spectrum of a time series, similar to the R base function `spectrum()`.
+Other specs are more elaborate.
+The `history` spec, for example, produces a sequence of runs from a sequence of truncated versions of the time series and allows the analysis of potential revisions.
+The `slidingspans` models various parts of the time series and has a similar purpose as `history`.
+All diagnostics specs are listed in @tbl-diagnosics-specs.
+
++----------------+----------------------------------------------------------------------------------------------------------------------------------------+----------------+
+| Spec name      | What it does                                                                                                                           | Chapter        |
++================+========================================================================================================================================+================+
+| `history`      | Requesting a sequence of runs from a sequence of truncated versions of the time series for the purpose of creating historical records. | @sec-revisions |
++----------------+----------------------------------------------------------------------------------------------------------------------------------------+----------------+
+| `slidingspans` | Providing sliding spans stability analysis.                                                                                            | @sec-revisions |
++----------------+----------------------------------------------------------------------------------------------------------------------------------------+----------------+
+| `identify`     | Produce tables and line printer plots of sample ACFs and PACFs.                                                                        |                |
++----------------+----------------------------------------------------------------------------------------------------------------------------------------+----------------+
+| `spectrum`     | Provides a choice between two spectrum diagnostics to detect seasonality or trading day effects.                                       |                |
++----------------+----------------------------------------------------------------------------------------------------------------------------------------+----------------+
+| `check`        | Produce statistics for diagnostic checking of residuals from the estimated model.                                                      |                |
++----------------+----------------------------------------------------------------------------------------------------------------------------------------+----------------+
+
+: Diagnostic specs {#tbl-diagnosics-specs}
+
+The `force` and the `composite` spec are special purpose specs.
+The former enforces the yearly totals of the seasonally adjusted series to be equal those of the original series, while the latter allows a comparison of indirect and direct seasonal adjustments.
+@tbl-diagnosics-specs gives an overview of the special purpose specs.
+
++-------------+-----------------------------------------------------------------------------------------------------------------------------+------------------------------------+
+| Spec name   | What it does                                                                                                                |                                    |
++=============+=============================================================================================================================+====================================+
+| `force`     | Allow users to force yearly totals of the seasonally adjusted series to equal those of the original series for convenience. | @sec-annual-constraining           |
++-------------+-----------------------------------------------------------------------------------------------------------------------------+------------------------------------+
+| `composite` | Obtaining both indirect and direct adjustments of a composite series.                                                       | @sec-indirect-vs-direct-adjustment |
++-------------+-----------------------------------------------------------------------------------------------------------------------------+------------------------------------+
+
+: Special purpose specs {#tbl-diagnosics-specs}
+
+Finally, a few specs are not covered in this book.
+Some of them are vintage spec that were important in earlier versions of X-13, but were superseded by other specs.
+It is now generally recommended to use `regression` instead of `x11regression` and `automdl` instead of `pickmdl`.
+Other specs have a purely technical purpose.
+The `series` spec, for example, provides X-13 with the data, the starting date and the frequency.
+In R, this is handled by seasonal and will not be covered.
+
++-----------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
+| Spec name       | What it does                                                                                                                                    |
++=================+=================================================================================================================================================+
+| `x11regression` | Alternative to `regression`. Can only be used with X11.                                                                                         |
++-----------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
+| `pickmdl`       | Alternative to `automdl`. Can only be used with X11.                                                                                            |
++-----------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
+| `series`        | Provides X-13 with the data, the starting date and the frequency. In R, this is handled by seasonal and will not be covered.                    |
++-----------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
+| `metadata`      | Specification that allows users to insert metadata into the diagnostic summary file. In R, this is handled by seasonal and will not be covered. |
++-----------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
+
+: Vintage and technical specs that won't be covered in this book) {#tbl-vintage-specs}
 
 ## Main user choices
 
-### Model
+While we will cover each spec in more detail, this section provides a few examples of frequent user choices.
+As we saw in the previous chapter, by default, seasonal uses defaults that work well in many circumstances.
+The following is a non-exhaustive list of deviations from the defaults.
+The default options of `seas()` are listed as explicit arguments and are discussed in the arguments section of the help page of
 
-### Transform
+### Using X11
+
+While `seas()` calls SEATS by default, X11 is often easier to use.
+To perform a seasonal adjustment on `AirPassengers` with X11, we simply need to activate the `x11` spec.
+
+```{r}
+m_x11 <- seas(AirPassengers, x11 = "")
+```
+
+An empty string `""` tells `seas()` to use the spec without an argument.
+Alternatively, you can also use an empty list, `list()`.
+If more than one mutually exclusive spec is included in `seas()`, specs are overwritten according the priority rules shown in @tbl-priority-rules
+
++--------------------------+----------------+
+| Procedure                | Priority rules |
++==========================+================+
+| Model selection          | 1.  `arima`    |
+|                          | 2.  `pickmdl`  |
+|                          | 3.  `automdl`  |
++--------------------------+----------------+
+| Adjustment procedure     | 1.  `x11`      |
+|                          | 2.  `seats`    |
++--------------------------+----------------+
+
+: If more than one mutually exclusive spec is included, specs are overwritten according to priority rules. {#tbl-priority-rules}
+
+This is why the default SEATS procedure in the introductory example was overwritten by the specification of `x11 = ""`.
+
+### Turning off auto modelling
+
+By default, the `automdl` spec finds a good ARIMA model.
+By specifying the `model` argument of `arima` spec, the automated modelling is deactivated.
+Instead of the automatically chosen (0 1 1)0 1 1) ARIMA model, the following estimates an (1 1 0)1 1 0) model.
+
+```{r}
+m_arima <- seas(AirPassengers, arima.model = c(1, 1, 0, 1, 1, 0))
+summary(m_arima)
+```
+
+### Turning off AIC testing and Outlier detection
+
+By default, `seas()` evaluates the presence of weekday and Easter effects, and checks for outliers in the data.
+Both can be turned off:
+
+```{r}
+m_no_auto <- seas(AirPassengers, regression.aictest = NULL, outlier = NULL)
+summary(m_no_auto)
+```
+
+In practice, many spec argument combinations can extracted via the `static()` functions, which will be demonstrated in the next chapter.
+Alternatively the seasonalview package offers a graphical user interface that allows you to click various spec argument combinations.
+
+``` r
+m <- seas(AirPassengers)
+view(m)
+```
+
+[![Manipulating spec argument combinations in the seasonalview graphical user interface](img/seasonalview.png){fig-alt="graphical user interface"}](http://www.seasonal.website)
 
 ## References

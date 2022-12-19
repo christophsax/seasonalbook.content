@@ -16,7 +16,7 @@ If you use R installing X-13ARIMA-SEATS from CRAN is as easy as installing any o
 install.packages("seasonal")
 ```
 
-## A minimal example
+## A minimal example {#sec-a-minimal-example}
 
 Once the package is installed it can be loaded in the usual way:
 

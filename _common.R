@@ -1,11 +1,14 @@
 set.seed(1014)
 
+library(seasonal)
+library(seasonalbook)
+
 knitr::opts_chunk$set(
   comment = "#>",
   collapse = TRUE,
   # cache = TRUE,
   fig.retina = 2,
-  # fig.width = 6,
+  fig.width = 9,
   fig.asp = 2/3,
   fig.show = "hold"
 )
