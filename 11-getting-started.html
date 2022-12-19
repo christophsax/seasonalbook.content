@@ -433,8 +433,8 @@ div.csl-indent {
 <p>The summary gives an overview of the adjustment model and provides diagnostics. This book will help you do understand it in more detail. The following section discusses some of the elements and relates them to the chapters in this book.</p>
 </section><section id="where-to-go-from-here" class="level2" data-number="2.3"><h2 data-number="2.3" class="anchored" data-anchor-id="where-to-go-from-here">
 <span class="header-section-number">2.3</span> Where to go from here</h2>
-<p><code>seas(AirPassengers)</code> produces a good seasonal adjustment of the airline passengers time series. If you are very new to seasonal adjustment, the automated routines of X13 and seasonal produce an adjustment that works well in most circumstances.</p>
-<p>The command <code>seas(AirPassengers)</code> has invoked a large number of <em>specs</em> of X13. <em>spec</em> is X13 slang for a module within the software. X13 is built on top of twenty specs that perform various subtasks of seasonal adjustment. Some specs are required most of the time (e.g., <code>regression</code>), while others are optional (e.g., <code>seats</code>) or purely technical (e.g., <code>spans</code> shortens the time series in use). <a href="21-overview.html"><span>Chapter&nbsp;4</span></a> discusses the available specs in more detail.</p>
+<p><code>seas(AirPassengers)</code> produces a good seasonal adjustment of the airline passengers time series. If you are very new to seasonal adjustment, the automated routines of X-13 and seasonal produce an adjustment that works well in most circumstances.</p>
+<p>The command <code>seas(AirPassengers)</code> has invoked a large number of <em>specs</em> of X-13. <em>spec</em> is X-13 slang for a module within the software. X-13 is built on top of twenty specs that perform various subtasks of seasonal adjustment. Some specs are required most of the time (e.g., <code>regression</code>), while others are optional (e.g., <code>seats</code>) or purely technical (e.g., <code>spans</code> shortens the time series in use). <a href="21-overview.html"><span>Chapter&nbsp;4</span></a> discusses the available specs in more detail.</p>
 <p>This book teaches you how to use and fine-tune the individual specs and deal with concrete data problems.</p>
 <section id="fundamentals" class="level3" data-number="2.3.1"><h3 data-number="2.3.1" class="anchored" data-anchor-id="fundamentals">
 <span class="header-section-number">2.3.1</span> Fundamentals</h3>
@@ -482,11 +482,11 @@ div.csl-indent {
 </dd>
 <dt>Annual constraining</dt>
 <dd>
-<p>Usually, a seasonal adjustment may affect the annual values of a time series. In part, this is by design. The number of weekdays may differ between years, so the adjusted annual values may be different too. In part, this may be an artifact of the adjustment process. X13 offers tools to enforce the annual values of the adjusted series to be the same as the original one. <a href="42-annual-constraining.html"><span>Chapter&nbsp;14</span></a> shows how to constrain annual value and whether it is a good idea.</p>
+<p>Usually, a seasonal adjustment may affect the annual values of a time series. In part, this is by design. The number of weekdays may differ between years, so the adjusted annual values may be different too. In part, this may be an artifact of the adjustment process. X-13 offers tools to enforce the annual values of the adjusted series to be the same as the original one. <a href="42-annual-constraining.html"><span>Chapter&nbsp;14</span></a> shows how to constrain annual value and whether it is a good idea.</p>
 </dd>
 <dt>Indirect vs.&nbsp;direct adjustment</dt>
 <dd>
-<p>Often, a seasonal adjustment may be performed on individual series or on an aggregate of multiple series. X13 offers tools that let you compare these two possibilities. <a href="43-indirect-vs-direct.html"><span>Chapter&nbsp;15</span></a> discusses the options and helps you to decide which one is better.</p>
+<p>Often, a seasonal adjustment may be performed on individual series or on an aggregate of multiple series. X-13 offers tools that let you compare these two possibilities. <a href="43-indirect-vs-direct.html"><span>Chapter&nbsp;15</span></a> discusses the options and helps you to decide which one is better.</p>
 </dd>
 </dl></section><section id="quality-assessment" class="level3" data-number="2.3.4"><h3 data-number="2.3.4" class="anchored" data-anchor-id="quality-assessment">
 <span class="header-section-number">2.3.4</span> Quality assessment</h3>
@@ -498,7 +498,7 @@ div.csl-indent {
 </dd>
 <dt>Revisions</dt>
 <dd>
-<p>When comparing seasonal adjustment models, the stability of the model and the series is often an important consideration. One does not want to get a different series with a new data point. X13 offers tools to analyze revisions. <a href="52-revisions.html"><span>Chapter&nbsp;17</span></a> discusses them and helps you to decide which model to pick.</p>
+<p>When comparing seasonal adjustment models, the stability of the model and the series is often an important consideration. One does not want to get a different series with a new data point. X-13 offers tools to analyze revisions. <a href="52-revisions.html"><span>Chapter&nbsp;17</span></a> discusses them and helps you to decide which model to pick.</p>
 </dd>
 </dl></section></section><section id="references" class="level2" data-number="2.4"><h2 data-number="2.4" class="anchored" data-anchor-id="references">
 <span class="header-section-number">2.4</span> References</h2>
