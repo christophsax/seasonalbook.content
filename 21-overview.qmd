@@ -45,7 +45,7 @@ You can choose `x11` or `seats` to decompose a time series, but not both.
 
 ## Interactions between specs
 
-X13 specs interact with each other.
+X-13 specs interact with each other.
 For example, once a series is transformed, it is usually passed to the `regression` and `arima` specs, which estimate a regARIMA model.
 To come up with a good model, it uses the `automdl` spec to determine a good ARIMA model automatically.
 To correct outlier values, it collaborates with the `outlier` spec.

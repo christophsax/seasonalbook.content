@@ -68,11 +68,11 @@ The following section discusses some of the elements and relates them to the cha
 ## Where to go from here
 
 `seas(AirPassengers)` produces a good seasonal adjustment of the airline passengers time series.
-If you are very new to seasonal adjustment, the automated routines of X13 and seasonal produce an adjustment that works well in most circumstances.
+If you are very new to seasonal adjustment, the automated routines of X-13 and seasonal produce an adjustment that works well in most circumstances.
 
-The command `seas(AirPassengers)` has invoked a large number of *specs* of X13.
-*spec* is X13 slang for a module within the software.
-X13 is built on top of twenty specs that perform various subtasks of seasonal adjustment.
+The command `seas(AirPassengers)` has invoked a large number of *specs* of X-13.
+*spec* is X-13 slang for a module within the software.
+X-13 is built on top of twenty specs that perform various subtasks of seasonal adjustment.
 Some specs are required most of the time (e.g., `regression`), while others are optional (e.g., `seats`) or purely technical (e.g., `spans` shortens the time series in use).
 @sec-overwiew discusses the available specs in more detail.
 
@@ -149,13 +149,13 @@ Annual constraining
     In part, this is by design.
     The number of weekdays may differ between years, so the adjusted annual values may be different too.
     In part, this may be an artifact of the adjustment process.
-    X13 offers tools to enforce the annual values of the adjusted series to be the same as the original one.
+    X-13 offers tools to enforce the annual values of the adjusted series to be the same as the original one.
     @sec-annual-constraining shows how to constrain annual value and whether it is a good idea.
 
 Indirect vs. direct adjustment
 
 :   Often, a seasonal adjustment may be performed on individual series or on an aggregate of multiple series.
-    X13 offers tools that let you compare these two possibilities.
+    X-13 offers tools that let you compare these two possibilities.
     @sec-indirect-vs-direct-adjustment discusses the options and helps you to decide which one is better.
 
 ### Quality assessment
@@ -174,7 +174,7 @@ Revisions
 
 :   When comparing seasonal adjustment models, the stability of the model and the series is often an important consideration.
     One does not want to get a different series with a new data point.
-    X13 offers tools to analyze revisions.
+    X-13 offers tools to analyze revisions.
     @sec-revisions discusses them and helps you to decide which model to pick.
 
 ## References
