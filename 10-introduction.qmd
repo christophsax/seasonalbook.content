@@ -5,7 +5,7 @@
 #| echo: false
 source("_common.R")
 ans <- append_df(refresh = TRUE)
-status("drafting", "2022-12-21", section = "A minimal example")  # drafting, polishing, complete
+status("polishing", "2022-12-21", section = "A minimal example")  # drafting, polishing, complete
 ```
 
 ```{=html}
@@ -17,68 +17,67 @@ status("drafting", "2022-12-21", section = "A minimal example")  # drafting, pol
 - Case Study: A use cases outside of official statistics: seasonal adjustment of business data
  -->
 ```
-This book will teach you how to do seasonal adjustment in R, using X13-ARIMA-SEATS.
-The audience will be both R users who want to learn about seasonal adjustment as well as seasonal adjustment practitioners, who are interested in using R.
+This book will teach you how to do seasonal adjustment in R using X13-ARIMA-SEATS.
+The audience will be both R users who want to learn about seasonal adjustment and seasonal adjustment practitioners who are interested in using R.
 The book will be tailored to the practical applications of seasonal adjustment within R.
 
 ## Seasonal Adjustment {.unnumbered}
 
 Many time series exhibit a regular seasonal pattern over the year.
-US unemployment, for example, is usually higher from January to March, and again in June and July.
-Similarly, retail sales tend to peak with the Christmas season.
-This seasonal behavior is regualar and predictable.
+US unemployment, for example, is usually higher from January to March and again in June and July.
+Similarly, retail sales tend to peak during the Christmas season.
+This seasonal behavior is regular and predictable.
 The goal of seasonal adjustment is to estimate and remove the seasonal component from a time series.
 
 Why do we want to do this?
-Seasonal data is usulally hard to interpret.
-For example, if we want to learn from the US unemployment rate if the economy is moving out of a recession during certain months, we want the labor market data be free from seasonal effects.
+Seasonal data is usually hard to interpret.
+For example, if we want to learn from the US unemployment rate if the economy is moving out of a recession during certain months, we want the labor market data to be free from seasonal effects.
 
 ## X13-ARIMA-SEATS {.unnumbered}
 
-Fundamentally, seasonal adjustment decomposes a time series into a **trend**, a **seasonal** and an **irregular** component and removes the seasonal component from the data.
+Fundamentally, seasonal adjustment decomposes a time series into a **trend**, a **seasonal**, and an **irregular** component and removes the seasonal component from the data.
 There are many ways to perform this decomposition.
-This book focuses on a particular one, X13-ARIMA-SEATS (X13, for short), the seasonal adjustment software developed by the United States Census Bureau.
+This book focuses on a particular one, X-13ARIMA-SEATS (X-13, for short), the seasonal adjustment software developed by the United States Census Bureau.
 X13 offers an elaborate toolkit to perform the most advanced seasonal adjustment.
 
 ## R {.unnumbered}
 
-This book will teach you how to use X13 in R, through the *seasonal* package, which offers access to all features of X13, with a ususally much simpler syntax.
-The required X-13 binaries are provided by the *x13binary* package, and automatically included in *seasonal*.
+This book will teach you how to use X13 in R through the *seasonal* package, which offers access to all features of X13 with a usually much simpler syntax.
+The required X-13 binaries are provided by the *x13binary* package and automatically included in *seasonal*.
 The next chapter provides a minimal example to get you started in less than five minutes.
 
 ## Target audience {.unnumbered}
 
 We write this book for two primary audiences: The first focus is on current practitioners of seasonal adjustment who are interested in learning how to implement in R.
-This audience includes researchers from statistical agencies who want to include the scripting language features of R to evaluate properties of their seasonal adjustments.
+This audience includes researchers from statistical agencies who want to use features of R to evaluate the properties of their seasonal adjustments.
 
 The second focus is on current R users who want to learn seasonal adjustment.
-We are able to leverage the readers knowledge of R to make learning seasonal adjustment easier.
-We will feature interesting applications outside of official statistics, such as the seasonal adjustment of business data.
+We are able to leverage the reader's knowledge of R to make learning seasonal adjustment easier.
+We will feature exciting applications outside official statistics, such as the seasonal adjustment of business data.
 
-The book tries to be as practical as possilbe.
-It usually starts with a practical problems, and shows how to solve it in a cookbook style.
-Formal derviations are usually avoided.
-Each chapeter ends with a case study that discusses a real-live example of the topic.
+The book tries to be as practical as possible.
+It usually starts with a practical problem and shows how to solve it in a cookbook style.
+Formal derivations are usually avoided.
+Each chapter ends with a case study that discusses a real-life example of the topic.
 
 ## History of X13 {.unnumbered}
 
 In official statistics, seasonal adjustment has a long tradition.
-The original X-11 software was developed by the US Census Bureau in the 1960s, and later improved by Statistics Canada [@dagum80].
-Subsequent software packages by the US Census Bureau were called X-12-ARIMA [@findley98] and X-13ARIMA-SEATS (or X-13, for short) [@monsell07].
-Today, X-11 is still used as a name for filter-based seasonal adjustment methods within X-13.
+The US Census Bureau developed the original X-11 software in the 1960s, Statistics Canada [@dagum80] continued the development afterward.
+The following software packages by the US Census Bureau were called X-12-ARIMA [@findley98] and X-13ARIMA-SEATS (or X-13, for short) [@monsell07].
+X-11 is still used as a name for filter-based seasonal adjustment methods within X-13.
 Meanwhile, TRAMO-SEATS, developed by the Bank of Spain [@caporello01], offers an alternative model-based approach to seasonal adjustment.
 
-In its most recent version, X-13 offers these two seasonal adjustment methods in a single command-line tool, written in Fortran.
-The National Bank of Belgium has created an alternative Java-based implementation called JDemetra+ [@eurostat17] which is also widely deployed by statistical agencies.
-One of either the TRAMO-SEATS or X-11 method of seasonal adjustment is used by almost all (government) statistical offices throughout the world.
+In its most recent version, X-13 offers these two seasonal adjustment methods in a single command-line tool written in Fortran.
+The National Bank of Belgium has created an alternative Java-based implementation called JDemetra+ [@eurostat17], also widely deployed by statistical agencies.
 
 ## Acknowledgements {.unnumbered}
 
-We are indebted to the the United States Census Bureau, for X-13ARIMA-SEATS and support for research around the software.
-Help and support by Brian Monsell is particularily acknowledged.
+We are indebted to the United States Census Bureau for X-13ARIMA-SEATS and support for research around the software.
+Help and support by Brian Monsell are especially acknowledged.
 
 seasonal was originally developed for use at the Swiss State Secretariat of Economic Affairs.
-It has been greatly improved over time thanks to suggestions and support from Matthias Bannert, Freya Beamish, Vidur Dhanda, Alain Galli, Ronald Indergand, Preetha Kalambaden, Stefan Leist, James Livsey, Pinaki Mukherjee, Bruno Parnisari and many others.
-The related work on the x13binary package facilitated (automated) deployment thanks to the R package system, CRAN as well as GitHub for the x13prebuilt repository.
+It has been dramatically improved thanks to suggestions and support from Matthias Bannert, Freya Beamish, Vidur Dhanda, Alain Galli, Ronald Indergand, Preetha Kalambaden, Stefan Leist, James Livsey, Pinaki Mukherjee, Bruno Parnisari and many others.
+The related work on the x13binary package facilitated (automated) deployment thanks to the R package system, CRAN, and GitHub for the x13prebuilt repository.
 
 ## References {.unnumbered}
