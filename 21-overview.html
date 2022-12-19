@@ -5,7 +5,7 @@
 <meta name="generator" content="quarto-1.2.269">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="James Livsey and Christoph Sax">
-<title>Seasonal Adjustment in R - 4&nbsp; Overview of the software</title>
+<title>Seasonal Adjustment in R - 4&nbsp; The fundamentals of X-13</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -17,6 +17,88 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1.6em;
   vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
 }
 </style>
 
@@ -62,7 +144,7 @@ ul.task-list li input[type="checkbox"] {
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Overview of the software</span></h1>
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">The fundamentals of X-13</span></h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -125,7 +207,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./21-overview.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Overview of the software</span></a>
+  <a href="./21-overview.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">The fundamentals of X-13</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -246,20 +328,25 @@ ul.task-list li input[type="checkbox"] {
         <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
-<li><a href="#elements-of-x13" id="toc-elements-of-x13" class="nav-link active" data-scroll-target="#elements-of-x13"><span class="toc-section-number">4.1</span>  Elements of X13</a></li>
+<li><a href="#main-specs" id="toc-main-specs" class="nav-link active" data-scroll-target="#main-specs"><span class="toc-section-number">4.1</span>  Main specs</a></li>
+  <li><a href="#interactions-between-specs" id="toc-interactions-between-specs" class="nav-link" data-scroll-target="#interactions-between-specs"><span class="toc-section-number">4.2</span>  Interactions between specs</a></li>
+  <li><a href="#specs-arguments" id="toc-specs-arguments" class="nav-link" data-scroll-target="#specs-arguments"><span class="toc-section-number">4.3</span>  Specs Arguments</a></li>
+  <li><a href="#addressing-specs-from-r" id="toc-addressing-specs-from-r" class="nav-link" data-scroll-target="#addressing-specs-from-r"><span class="toc-section-number">4.4</span>  Addressing specs from R</a></li>
+  <li><a href="#less-frequently-used-specs" id="toc-less-frequently-used-specs" class="nav-link" data-scroll-target="#less-frequently-used-specs"><span class="toc-section-number">4.5</span>  Less frequently used specs</a></li>
   <li>
-<a href="#main-user-choices" id="toc-main-user-choices" class="nav-link" data-scroll-target="#main-user-choices"><span class="toc-section-number">4.2</span>  Main user choices</a>
+<a href="#main-user-choices" id="toc-main-user-choices" class="nav-link" data-scroll-target="#main-user-choices"><span class="toc-section-number">4.6</span>  Main user choices</a>
   <ul class="collapse">
-<li><a href="#model" id="toc-model" class="nav-link" data-scroll-target="#model"><span class="toc-section-number">4.2.1</span>  Model</a></li>
-  <li><a href="#transform" id="toc-transform" class="nav-link" data-scroll-target="#transform"><span class="toc-section-number">4.2.2</span>  Transform</a></li>
+<li><a href="#using-x11" id="toc-using-x11" class="nav-link" data-scroll-target="#using-x11"><span class="toc-section-number">4.6.1</span>  Using X11</a></li>
+  <li><a href="#turning-off-auto-modeling" id="toc-turning-off-auto-modeling" class="nav-link" data-scroll-target="#turning-off-auto-modeling"><span class="toc-section-number">4.6.2</span>  Turning off auto modeling</a></li>
+  <li><a href="#turning-off-aic-testing-and-outlier-detection" id="toc-turning-off-aic-testing-and-outlier-detection" class="nav-link" data-scroll-target="#turning-off-aic-testing-and-outlier-detection"><span class="toc-section-number">4.6.3</span>  Turning off AIC testing and Outlier detection</a></li>
   </ul>
 </li>
-  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="toc-section-number">4.3</span>  References</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="toc-section-number">4.7</span>  References</a></li>
   </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/21-overview.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
-<h1 class="title"><span id="sec-overwiew" class="quarto-section-identifier d-none d-lg-block"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Overview of the software</span></span></h1>
+<h1 class="title"><span id="sec-overwiew" class="quarto-section-identifier d-none d-lg-block"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">The fundamentals of X-13</span></span></h1>
 </div>
 
 
@@ -273,13 +360,13 @@ ul.task-list li input[type="checkbox"] {
   
 
 </header><div class="status">
-<div class="callout-important callout callout-style-simple">
+<div class="callout-note callout callout-style-simple">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-body-container">
-<p>You are reading an early draft of <em>Seasonal Adjustment in R</em>. This chapter is currently a dumping ground for ideas, and we don’t recommend reading it.</p>
+<p>You are reading an early draft of <em>Seasonal Adjustment in R</em>. This chapter should be readable but needs polishing.</p>
 <p><strong>It is part of the course materials intended for Dec 21, 2022</strong>.</p>
 </div>
 </div>
@@ -292,38 +379,338 @@ ul.task-list li input[type="checkbox"] {
 
 -   Overview of main choices a user needs to make
 -->
-<section id="elements-of-x13" class="level2" data-number="4.1"><h2 data-number="4.1" class="anchored" data-anchor-id="elements-of-x13">
-<span class="header-section-number">4.1</span> Elements of X13</h2>
+<p>X-13ARIMA-SEATS is organized by <em>specs</em>. Specs are software modules that deal with a particular task needed in the seasonal adjustment process. For example, the <code>transform</code> spec deals with the initial transformations of the time series. This spec will take care of if a series should be adjusted in logarithms.</p>
+<section id="main-specs" class="level2" data-number="4.1"><h2 data-number="4.1" class="anchored" data-anchor-id="main-specs">
+<span class="header-section-number">4.1</span> Main specs</h2>
+<p>Some specs, like the <code>transform</code> and the <code>regression</code> spec, are used in most seasonal adjustment processes. Others fulfill a particular function and are used only occasionally. For example, the <code>history</code> spec allows an analysis of the revision history and is only called for diagnostical purposes. Other specs are mutually exclusive. You can choose <code>x11</code> or <code>seats</code> to decompose a time series, but not both. <a href="#tbl-main-specs">Table&nbsp;<span>4.1</span></a> lists the main specs of X-13 and describes what they do.</p>
+<div id="tbl-main-specs" class="anchored">
+<table class="table">
+<caption>Table&nbsp;4.1: Important specs that are used in most seasonal adjustment models</caption>
+<colgroup>
+<col style="width: 8%">
+<col style="width: 63%">
+<col style="width: 28%">
+</colgroup>
+<thead><tr class="header">
+<th>Spec name</th>
+<th>What it does</th>
+<th>Chapter</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code>estimate</code></td>
+<td>Estimates the regARIMA model specified by the <code>regression</code> and <code>arima</code> specs.</td>
+<td><a href="23-regARIMA.html"><span>Chapter&nbsp;6</span></a></td>
+</tr>
+<tr class="even">
+<td><code>arima</code></td>
+<td>Specifies the ARIMA part of the regARIMA model.</td>
+<td><a href="23-regARIMA.html"><span>Chapter&nbsp;6</span></a></td>
+</tr>
+<tr class="odd">
+<td><code>regression</code></td>
+<td>Specification for including regression variables in a regARIMA model.</td>
+<td>
+<a href="23-regARIMA.html"><span>Chapter&nbsp;6</span></a>, <a href="31-holidays.html"><span>Chapter&nbsp;9</span></a>, <a href="32-trading-days.html"><span>Chapter&nbsp;10</span></a>
+</td>
+</tr>
+<tr class="even">
+<td><code>automdl</code></td>
+<td>Specifies the ARIMA part of the regARIMA model using an automatic procedure.</td>
+<td><a href="23-regARIMA.html"><span>Chapter&nbsp;6</span></a></td>
+</tr>
+<tr class="odd">
+<td><code>outlier</code></td>
+<td>Specification to perform automatic detection of additive (point) outliers.</td>
+<td><a href="33-outliers.html"><span>Chapter&nbsp;11</span></a></td>
+</tr>
+<tr class="even">
+<td><code>seats</code></td>
+<td>Invoke the production of model-based signal extraction using SEATS. Default in the R seasonal package.</td>
+<td><a href="24-seats.html"><span>Chapter&nbsp;7</span></a></td>
+</tr>
+<tr class="odd">
+<td><code>x11</code></td>
+<td>An optional spec for invoking seasonal adjustment by the X-11 methodology.</td>
+<td><a href="25-x11.html"><span>Chapter&nbsp;8</span></a></td>
+</tr>
+<tr class="even">
+<td><code>forecast</code></td>
+<td>Specification to forecast and/or backcast the time series given in the series spec using the estimated model.</td>
+<td><a href="23-regARIMA.html"><span>Chapter&nbsp;6</span></a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section><section id="interactions-between-specs" class="level2" data-number="4.2"><h2 data-number="4.2" class="anchored" data-anchor-id="interactions-between-specs">
+<span class="header-section-number">4.2</span> Interactions between specs</h2>
+<p>X13 specs interact with each other. For example, once a series is transformed, it is usually passed to the <code>regression</code> and <code>arima</code> specs, which estimate a regARIMA model. To come up with a good model, it uses the <code>automdl</code> spec to determine a good ARIMA model automatically. To correct outlier values, it collaborates with the <code>outlier</code> spec. Once the series is modeled, it is decomposed either by the <code>seats</code> or the <code>x11</code> spec. <a href="#fig-spec-interaction">Figure&nbsp;<span>4.1</span></a> shows the interaction between the main specs in a typical seasonal adjustment run.</p>
 <!-- https://mermaid-js.github.io/mermaid/#/flowchart?id=styling-and-classes -->
-<div class="cell">
+<div class="cell" data-fig-width="9">
 <div class="cell-output-display">
-<div>
-<p>
+<div id="fig-spec-interaction" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure"><p>
 </p>
 <pre class="mermaid mermaid-js" data-tooltip-selector="#mermaid-tooltip-1">flowchart LR
-  A[transform] --&gt; B(regARIMA)
-  B --&gt; C{Model choice}
-  C --&gt; D[X11]
-  C --&gt; E[SEATS]
-  style C fill:#56B4E9,color:#fff
+    A(  transform  )--&gt;regARIMA
+    subgraph regARIMA
+    direction LR
+    B(estimate)&lt;--&gt;D(regression)
+    B&lt;--&gt;C(automdl)
+    B&lt;--&gt;E(arima)
+    end
+    regARIMA --&gt; F(seats)
+    regARIMA --&gt; G(x11)
 </pre>
 <div id="mermaid-tooltip-1" class="mermaidTooltip">
 
 </div>
 
+<p></p><figcaption class="figure-caption">Figure&nbsp;4.1: Interactions between X-13 specs.</figcaption><p></p>
+</figure>
 </div>
 </div>
 </div>
-</section><section id="main-user-choices" class="level2" data-number="4.2"><h2 data-number="4.2" class="anchored" data-anchor-id="main-user-choices">
-<span class="header-section-number">4.2</span> Main user choices</h2>
-<section id="model" class="level3" data-number="4.2.1"><h3 data-number="4.2.1" class="anchored" data-anchor-id="model">
-<span class="header-section-number">4.2.1</span> Model</h3>
-</section><section id="transform" class="level3" data-number="4.2.2"><h3 data-number="4.2.2" class="anchored" data-anchor-id="transform">
-<span class="header-section-number">4.2.2</span> Transform</h3>
-</section></section><section id="references" class="level2" data-number="4.3"><h2 data-number="4.3" class="anchored" data-anchor-id="references">
-<span class="header-section-number">4.3</span> References</h2>
+</section><section id="specs-arguments" class="level2" data-number="4.3"><h2 data-number="4.3" class="anchored" data-anchor-id="specs-arguments">
+<span class="header-section-number">4.3</span> Specs Arguments</h2>
+<p>Within specs, there are <em>arguments</em>. Spec arguments guide the behavior of the spec. For example, the <code>function</code> argument in the <code>transform</code> spec can be set to <code>"auto"</code>, <code>"none"</code>, <code>"log"</code>, <code>"sqrt"</code>, <code>"inverse"</code> or <code>"logistic</code>“. The default is set to <code>"auto"</code>, which causes an automated model evaluation between <code>"log"</code> and <code>"none"</code>. There are many other arguments, and the X-13 Manual <span class="citation" data-cites="census17">(<a href="#ref-census17" role="doc-biblioref">US Census Bureau 2017</a>)</span> is the canonical reference. This book will list and explain the frequently used arguments while skipping some of the more exotic ones.</p>
+</section><section id="addressing-specs-from-r" class="level2" data-number="4.4"><h2 data-number="4.4" class="anchored" data-anchor-id="addressing-specs-from-r">
+<span class="header-section-number">4.4</span> Addressing specs from R</h2>
+<p>In the R package seasonal, spec argument combinations can be directly fed to the <code>seas()</code> function. For example, to turn off the log transformation in the <code>AirPassengers</code> example from <a href="11-getting-started.html#sec-a-minimal-example"><span>Section&nbsp;2.2</span></a>, we can specify the following:</p>
+<div class="cell">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_no_log</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, transform.function <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m_no_log</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; seas(x = AirPassengers, transform.function = "none")</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients:</span></span>
+<span><span class="co">#&gt;                   Estimate Std. Error z value Pr(&gt;|z|)    </span></span>
+<span><span class="co">#&gt; Constant          30.62077    4.60956   6.643 3.08e-11 ***</span></span>
+<span><span class="co">#&gt; Leap Year         11.32104    3.43088   3.300 0.000968 ***</span></span>
+<span><span class="co">#&gt; Weekday           -0.90361    0.17787  -5.080 3.77e-07 ***</span></span>
+<span><span class="co">#&gt; Easter[1]          6.89372    1.80972   3.809 0.000139 ***</span></span>
+<span><span class="co">#&gt; AR-Nonseasonal-01  0.81929    0.04903  16.709  &lt; 2e-16 ***</span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; SEATS adj.  ARIMA: (1 0 0)(0 1 0)  Obs.: 144  Transform: none</span></span>
+<span><span class="co">#&gt; AICc: 993.4, BIC:  1010  QS (no seasonality in final):    0  </span></span>
+<span><span class="co">#&gt; Box-Ljung (no autocorr.):  29.2   Shapiro (normality): 0.984</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>As you can see from the lower part of the summary, transform is now set equal to none. Note that the change in the <code>transform</code> argument has also affected the other specs. The ARIMA model is different now, and a leap-year adjustment is performed. We will discuss the working of the transform spec in more detail in the next chapter.</p>
+</section><section id="less-frequently-used-specs" class="level2" data-number="4.5"><h2 data-number="4.5" class="anchored" data-anchor-id="less-frequently-used-specs">
+<span class="header-section-number">4.5</span> Less frequently used specs</h2>
+<p>While the main specs appear in most seasonal adjustment processes, other specs are less often used. Some of them have a diagnostic purpose. The <code>spectrum</code> spec, for example, draws and analyses the spectrum of a time series, similar to the R base function <code><a href="https://rdrr.io/r/stats/spectrum.html">spectrum()</a></code>. Other specs are more elaborate. For example, the <code>history</code> spec produces a sequence of runs from a sequence of truncated versions of the time series and allows the analysis of potential revisions. The <code>slidingspans</code> spec models various parts of the time series and has a similar purpose as <code>history</code>. All diagnostics specs are listed in <a href="#tbl-diagnosics-specs">Table&nbsp;<span>4.3</span></a>.</p>
+<div id="tbl-diagnosics-specs" class="anchored">
+<table class="table">
+<caption>Table&nbsp;4.2: Diagnostic specs</caption>
+<colgroup>
+<col style="width: 9%">
+<col style="width: 80%">
+<col style="width: 9%">
+</colgroup>
+<thead><tr class="header">
+<th>Spec name</th>
+<th>What it does</th>
+<th>Chapter</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code>history</code></td>
+<td>Requesting a sequence of runs from a sequence of truncated versions of the time series for the purpose of creating historical records.</td>
+<td><a href="52-revisions.html"><span>Chapter&nbsp;17</span></a></td>
+</tr>
+<tr class="even">
+<td><code>slidingspans</code></td>
+<td>Providing sliding spans stability analysis.</td>
+<td><a href="52-revisions.html"><span>Chapter&nbsp;17</span></a></td>
+</tr>
+<tr class="odd">
+<td><code>identify</code></td>
+<td>Produce tables and line printer plots of sample ACFs and PACFs.</td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>spectrum</code></td>
+<td>Provides a choice between two spectrum diagnostics to detect seasonality or trading day effects.</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>check</code></td>
+<td>Produce statistics for diagnostic checking of residuals from the estimated model.</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The <code>force</code> and the <code>composite</code> spec are special-purpose specs. The former enforces the yearly totals of the seasonally adjusted series to be equal to those of the original series. The latter allows a comparison of indirect and direct seasonal adjustments. <a href="#tbl-diagnosics-specs">Table&nbsp;<span>4.3</span></a> gives an overview of the special-purpose specs.</p>
+<div id="tbl-diagnosics-specs" class="anchored">
+<table class="table">
+<caption>Table&nbsp;4.3: Special purpose specs</caption>
+<colgroup>
+<col style="width: 7%">
+<col style="width: 71%">
+<col style="width: 20%">
+</colgroup>
+<thead><tr class="header">
+<th>Spec name</th>
+<th>What it does</th>
+<th></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code>force</code></td>
+<td>Allow users to force yearly totals of the seasonally adjusted series to equal those of the original series for convenience.</td>
+<td><a href="42-annual-constraining.html"><span>Chapter&nbsp;14</span></a></td>
+</tr>
+<tr class="even">
+<td><code>composite</code></td>
+<td>Obtaining both indirect and direct adjustments of a composite series.</td>
+<td><a href="43-indirect-vs-direct.html"><span>Chapter&nbsp;15</span></a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Finally, a few specs are not covered in this book. Some of them are vintage specs that were important in earlier versions of X-13 but were superseded by other specs. It is generally recommended to use <code>regression</code> instead of <code>x11regression</code> and <code>automdl</code> instead of <code>pickmdl</code>. Other specs have a purely technical purpose. For example, the <code>series</code> spec provides X-13 with the data, starting date, and frequency. In R, this is handled by seasonal and will not be covered.</p>
+<div id="tbl-vintage-specs" class="anchored">
+<table class="table">
+<caption>Table&nbsp;4.4: Vintage and technical specs that won’t be covered in this book)</caption>
+<colgroup>
+<col style="width: 10%">
+<col style="width: 89%">
+</colgroup>
+<thead><tr class="header">
+<th>Spec name</th>
+<th>What it does</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code>x11regression</code></td>
+<td>Alternative to <code>regression</code>. Can only be used with X11.</td>
+</tr>
+<tr class="even">
+<td><code>pickmdl</code></td>
+<td>Alternative to <code>automdl</code>. Can only be used with X11.</td>
+</tr>
+<tr class="odd">
+<td><code>series</code></td>
+<td>Provides X-13 with the data, the starting date and the frequency. In R, this is handled by seasonal and will not be covered.</td>
+</tr>
+<tr class="even">
+<td><code>metadata</code></td>
+<td>Specification that allows users to insert metadata into the diagnostic summary file. In R, this is handled by seasonal and will not be covered.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section><section id="main-user-choices" class="level2" data-number="4.6"><h2 data-number="4.6" class="anchored" data-anchor-id="main-user-choices">
+<span class="header-section-number">4.6</span> Main user choices</h2>
+<p>While we will cover each spec in more detail, this section provides a few examples of frequent user choices. As we saw in the previous chapter, by default, seasonal uses defaults that work well in many circumstances. The following is a non-exhaustive list of deviations from the defaults. The default options of <code>seas()</code> are listed as explicit arguments and are discussed in the arguments section of the help page of</p>
+<section id="using-x11" class="level3" data-number="4.6.1"><h3 data-number="4.6.1" class="anchored" data-anchor-id="using-x11">
+<span class="header-section-number">4.6.1</span> Using X11</h3>
+<p>While <code>seas()</code> calls SEATS by default, X11 is often easier to use. To perform a seasonal adjustment on <code>AirPassengers</code> with X11, we need to activate the <code>x11</code> spec.</p>
+<div class="cell">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_x11</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, x11 <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>An empty string <code>""</code> tells <code>seas()</code> to use the spec without an argument. Alternatively, you can also use an empty list, <code><a href="https://rdrr.io/r/base/list.html">list()</a></code>. If more than one mutually exclusive spec is included in <code>seas()</code>, specs are overwritten according to the priority rules shown in <a href="#tbl-priority-rules">Table&nbsp;<span>4.5</span></a></p>
+<div id="tbl-priority-rules" class="anchored">
+<table class="table">
+<caption>Table&nbsp;4.5: If more than one mutually exclusive spec is included, specs are overwritten according to priority rules.</caption>
+<colgroup>
+<col style="width: 31%">
+<col style="width: 23%">
+</colgroup>
+<thead><tr class="header">
+<th>Procedure</th>
+<th>Priority rules</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>Model selection</td>
+<td><ol type="1">
+<li><code>arima</code></li>
+<li><code>pickmdl</code></li>
+<li><code>automdl</code></li>
+</ol></td>
+</tr>
+<tr class="even">
+<td>Adjustment procedure</td>
+<td><ol type="1">
+<li><code>x11</code></li>
+<li><code>seats</code></li>
+</ol></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>This is why the default SEATS procedure in the introductory example was overwritten by the specification of <code>x11 = ""</code>.</p>
+</section><section id="turning-off-auto-modeling" class="level3" data-number="4.6.2"><h3 data-number="4.6.2" class="anchored" data-anchor-id="turning-off-auto-modeling">
+<span class="header-section-number">4.6.2</span> Turning off auto modeling</h3>
+<p>By default, the <code>automdl</code> spec finds a good ARIMA model. By specifying the <code>model</code> argument of the <code>arima</code> spec, the automated modeling is deactivated. Instead of the automatically chosen (0 1 1)0 1 1) ARIMA model, the following estimates an (1 1 0)1 1 0) model.</p>
+<div class="cell">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_arima</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, arima.model <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m_arima</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; seas(x = AirPassengers, arima.model = c(1, 1, 0, 1, 1, 0))</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients:</span></span>
+<span><span class="co">#&gt;                     Estimate Std. Error z value Pr(&gt;|z|)    </span></span>
+<span><span class="co">#&gt; Weekday           -0.0029124  0.0004794  -6.076 1.23e-09 ***</span></span>
+<span><span class="co">#&gt; Easter[1]          0.0167907  0.0067080   2.503   0.0123 *  </span></span>
+<span><span class="co">#&gt; AO1951.May         0.0950587  0.0194363   4.891 1.00e-06 ***</span></span>
+<span><span class="co">#&gt; AR-Nonseasonal-01 -0.1078564  0.0871940  -1.237   0.2161    </span></span>
+<span><span class="co">#&gt; AR-Seasonal-12    -0.4588948  0.0790634  -5.804 6.47e-09 ***</span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; SEATS adj.  ARIMA: (1 1 0)(1 1 0)  Obs.: 144  Transform: log</span></span>
+<span><span class="co">#&gt; AICc: 951.6, BIC: 968.1  QS (no seasonality in final):    0  </span></span>
+<span><span class="co">#&gt; Box-Ljung (no autocorr.): 35.88 . Shapiro (normality): 0.9937</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section><section id="turning-off-aic-testing-and-outlier-detection" class="level3" data-number="4.6.3"><h3 data-number="4.6.3" class="anchored" data-anchor-id="turning-off-aic-testing-and-outlier-detection">
+<span class="header-section-number">4.6.3</span> Turning off AIC testing and Outlier detection</h3>
+<p>By default, <code>seas()</code> evaluates the presence of weekday and Easter effects and checks for outliers in the data. Both can be turned off:</p>
+<div class="cell">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_no_auto</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, regression.aictest <span class="op">=</span> <span class="cn">NULL</span>, outlier <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m_no_auto</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; seas(x = AirPassengers, regression.aictest = NULL, outlier = NULL)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients:</span></span>
+<span><span class="co">#&gt;                   Estimate Std. Error z value Pr(&gt;|z|)    </span></span>
+<span><span class="co">#&gt; MA-Nonseasonal-01  0.40181    0.07887   5.095  3.5e-07 ***</span></span>
+<span><span class="co">#&gt; MA-Seasonal-12     0.55695    0.07626   7.304  2.8e-13 ***</span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; SEATS adj.  ARIMA: (0 1 1)(0 1 1)  Obs.: 144  Transform: log</span></span>
+<span><span class="co">#&gt; AICc: 987.4, BIC: 995.8  QS (no seasonality in final):    0  </span></span>
+<span><span class="co">#&gt; Box-Ljung (no autocorr.): 28.04   Shapiro (normality): 0.9886  </span></span>
+<span><span class="co">#&gt; Messages generated by X-13:</span></span>
+<span><span class="co">#&gt; Warnings:</span></span>
+<span><span class="co">#&gt; - At least one visually significant trading day peak has been</span></span>
+<span><span class="co">#&gt;   found in one or more of the estimated spectra.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In practice, many spec argument combinations can be extracted via the <code>static()</code> functions, which will be demonstrated in the next chapter. Alternatively, the seasonalview package offers a graphical user interface that allows you to click various spec argument combinations.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span></span>
+<span><span class="fu">view</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><a href="http://www.seasonal.website"><img src="img/seasonalview.png" class="img-fluid figure-img" alt="graphical user interface"></a></p>
+<p></p><figcaption class="figure-caption">Manipulating spec argument combinations in the seasonalview graphical user interface</figcaption><p></p>
+</figure>
+</div>
+</section></section><section id="references" class="level2" data-number="4.7"><h2 data-number="4.7" class="anchored" data-anchor-id="references">
+<span class="header-section-number">4.7</span> References</h2>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-census17" class="csl-entry" role="doc-biblioentry">
+US Census Bureau. 2017. <em>X-13ARIMA-SEATS Reference Manual</em>. Version 1.1. Washington, DC, USA: Time Series Research Staff, Center for Statistical Research; Methodology, US Census Bureau. <a href="http://www.census.gov/ts/x13as/docX13ASHTML.pdf">http://www.census.gov/ts/x13as/docX13ASHTML.pdf</a>.
+</div>
+</div>
 </section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

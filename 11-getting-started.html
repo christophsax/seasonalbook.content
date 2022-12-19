@@ -208,7 +208,7 @@ div.csl-indent {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./21-overview.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Overview of the software</span></a>
+  <a href="./21-overview.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">The fundamentals of X-13</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -330,7 +330,7 @@ div.csl-indent {
    
   <ul>
 <li><a href="#installation" id="toc-installation" class="nav-link active" data-scroll-target="#installation"><span class="toc-section-number">2.1</span>  Installation</a></li>
-  <li><a href="#a-minimal-example" id="toc-a-minimal-example" class="nav-link" data-scroll-target="#a-minimal-example"><span class="toc-section-number">2.2</span>  A minimal example</a></li>
+  <li><a href="#sec-a-minimal-example" id="toc-sec-a-minimal-example" class="nav-link" data-scroll-target="#sec-a-minimal-example"><span class="toc-section-number">2.2</span>  A minimal example</a></li>
   <li>
 <a href="#where-to-go-from-here" id="toc-where-to-go-from-here" class="nav-link" data-scroll-target="#where-to-go-from-here"><span class="toc-section-number">2.3</span>  Where to go from here</a>
   <ul class="collapse">
@@ -361,13 +361,13 @@ div.csl-indent {
   
 
 </header><div class="status">
-<div class="callout-important callout callout-style-simple">
+<div class="callout-note callout callout-style-simple">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-body-container">
-<p>You are reading an early draft of <em>Seasonal Adjustment in R</em>. This chapter is currently a dumping ground for ideas, and we don’t recommend reading it.</p>
+<p>You are reading an early draft of <em>Seasonal Adjustment in R</em>. This chapter should be readable but needs polishing.</p>
 <p><strong>It is part of the course materials intended for Dec 21, 2022</strong>.</p>
 </div>
 </div>
@@ -375,11 +375,11 @@ div.csl-indent {
 </div>
 <section id="installation" class="level2" data-number="2.1"><h2 data-number="2.1" class="anchored" data-anchor-id="installation">
 <span class="header-section-number">2.1</span> Installation</h2>
-<p>If you use R installing X-13ARIMA-SEATS from CRAN is as easy as installing any other R package <span class="citation" data-cites="jss">(<a href="#ref-jss" role="doc-biblioref">Sax and Eddelbuettel 2018</a>)</span>:</p>
+<p>If you use R, installing X-13ARIMA-SEATS from CRAN is as easy as installing any other R package <span class="citation" data-cites="jss">(<a href="#ref-jss" role="doc-biblioref">Sax and Eddelbuettel 2018</a>)</span>:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"seasonal"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section><section id="a-minimal-example" class="level2" data-number="2.2"><h2 data-number="2.2" class="anchored" data-anchor-id="a-minimal-example">
+</section><section id="sec-a-minimal-example" class="level2" data-number="2.2"><h2 data-number="2.2" class="anchored" data-anchor-id="sec-a-minimal-example">
 <span class="header-section-number">2.2</span> A minimal example</h2>
-<p>Once the package is installed it can be loaded in the usual way:</p>
+<p>Once the package is installed, you can load it in the usual way:</p>
 <div class="cell">
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.seasonal.website">seasonal</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -396,7 +396,7 @@ div.csl-indent {
 <span><span class="co">#&gt;    MA-Seasonal-12  </span></span>
 <span><span class="co">#&gt;           0.49736</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The first argument of seas is a time series of class <code>ts</code>. <code>ts</code> objects are frequently used in base R and are useful to store monthly, quarterly or annual data. The <code>AirPassengers</code> example series is included in base R, and shows monthly totals of international airline passengers from 1949 to 1960. <code><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas()</a></code> returns a <code>seas</code> object that contains the necessary information on the adjustment performed on this time series, we can assign it to a variable:</p>
+<p>The first argument of seas is a time series of class <code>ts</code>. <code>ts</code> objects are frequently used in base R and are useful to store monthly, quarterly, or annual data. The <code>AirPassengers</code> example series is included in base R and shows monthly totals of international airline passengers from 1949 to 1960. <code><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas()</a></code> returns a <code>seas</code> object that contains the necessary information on the adjustment performed on this time series; we can assign it to a variable:</p>
 <div class="cell">
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -404,11 +404,11 @@ div.csl-indent {
 <div class="cell">
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="11-getting-started_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+<p><img src="11-getting-started_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="864"></p>
 </div>
 </div>
-<p>As you can see, the adjusted series is much less volatile than the original one. This is because the seasonal component was removed from the original series. But the adjusted series is not completely smooth, too. This is because it still contains the irregular component.</p>
-<p>This is an important point about seasonal adjustment: It only removed regular, predictable movements, not irregular ones. In the adjusted series, we can see that there was a decrease in airline passengers both in 1953 an between 1957 and 1958. These decreases were impossible to discover in the original series.</p>
+<p>As you can see, the adjusted series is much less volatile than the original one because the seasonal component was removed from the original series. But the adjusted series is not entirely smooth, too, because it still contains the irregular component.</p>
+<p>This constitutes a crucial point about seasonal adjustment: It only removes regular, predictable movements, not irregular ones. In the adjusted series, we can see a decrease in airline passengers in 1953 and between 1957 and 1958. These decreases were impossible to discover in the original series.</p>
 <p>The summary method displays an overview of the model, very similar to the one produced by R’s lm function:</p>
 <div class="cell">
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
@@ -430,47 +430,47 @@ div.csl-indent {
 <span><span class="co">#&gt; AICc: 947.3, BIC: 963.9  QS (no seasonality in final):    0  </span></span>
 <span><span class="co">#&gt; Box-Ljung (no autocorr.): 26.65   Shapiro (normality): 0.9908</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The summary gives a short overview of adjustment model, and provides a few diagnostics. This book will help you do understand it more detail. The following section discusses some of the elements and relates them to the chapters in this book.</p>
+<p>The summary gives an overview of the adjustment model and provides diagnostics. This book will help you do understand it in more detail. The following section discusses some of the elements and relates them to the chapters in this book.</p>
 </section><section id="where-to-go-from-here" class="level2" data-number="2.3"><h2 data-number="2.3" class="anchored" data-anchor-id="where-to-go-from-here">
 <span class="header-section-number">2.3</span> Where to go from here</h2>
 <p><code>seas(AirPassengers)</code> produces a good seasonal adjustment of the airline passengers time series. If you are very new to seasonal adjustment, the automated routines of X13 and seasonal produce an adjustment that works well in most circumstances.</p>
-<p>The command <code>seas(AirPassengers)</code> has invoked a large number of <em>specs</em> of X13. <em>spec</em> is X13 slang for a module within the software. X13 is build on top of 20 specs that are perform various subtasks of seasonal adjustment. Some specs are required most of the time (e.g., <code>regression</code>) while others are optional (e.g., <code>seats</code>) or purely technical (e.g., <code>spans</code> simply shortens the time series in use). <a href="21-overview.html"><span>Chapter&nbsp;4</span></a> discusses the available specs in more detail.</p>
-<p>This book teaches you how to use and fine-tune the individual specs, and deal with concrete data problems.</p>
+<p>The command <code>seas(AirPassengers)</code> has invoked a large number of <em>specs</em> of X13. <em>spec</em> is X13 slang for a module within the software. X13 is built on top of twenty specs that perform various subtasks of seasonal adjustment. Some specs are required most of the time (e.g., <code>regression</code>), while others are optional (e.g., <code>seats</code>) or purely technical (e.g., <code>spans</code> shortens the time series in use). <a href="21-overview.html"><span>Chapter&nbsp;4</span></a> discusses the available specs in more detail.</p>
+<p>This book teaches you how to use and fine-tune the individual specs and deal with concrete data problems.</p>
 <section id="fundamentals" class="level3" data-number="2.3.1"><h3 data-number="2.3.1" class="anchored" data-anchor-id="fundamentals">
 <span class="header-section-number">2.3.1</span> Fundamentals</h3>
-<p>Specifically, the command <code>seas(unemp)</code> has invoked the following fundamental specs – they are involved in most adjustments, and are covered in the <strong>first part</strong> of the book:</p>
+<p>Specifically, the command <code>seas(unemp)</code> has invoked the following fundamental specs – they are involved in most adjustments and are covered in the <strong>first part</strong> of the book:</p>
 <dl>
 <dt>Transform</dt>
 <dd>
-<p>A decision on initial transformation was made. The automated procedures concluded that a log-transformation was made and an multiplicative, rather than a additive seasonal adjustment model is estimated. <a href="22-transform.html"><span>Chapter&nbsp;5</span></a> discusses the choices. Since <code>transform</code> is a relatively simple spec, it is a good starting point to get familiar with the spec idea.</p>
+<p>A decision on initial transformation was made. The automated procedures concluded that a log transformation was made and a multiplicative seasonal adjustment model, rather than an additive model, was estimated. <a href="22-transform.html"><span>Chapter&nbsp;5</span></a> discusses the choices. Since <code>transform</code> is a relatively simple spec, it is a good starting point to familiarize yourself with the spec idea.</p>
 </dd>
 <dt>Regression</dt>
 <dd>
-<p>An automated model search concluded that <code>AirPassengers</code> is best modeled by an (0 1 1)(0 1 1) ARIMA model. <a href="23-regARIMA.html"><span>Chapter&nbsp;6</span></a> explains what that means an how such a model structure is determined and estimated.</p>
+<p>An automated model search concluded that <code>AirPassengers</code> is best modeled by an (0 1 1)(0 1 1) ARIMA model. <a href="23-regARIMA.html"><span>Chapter&nbsp;6</span></a> explains what that means and how such a model structure is determined and estimated.</p>
 </dd>
 <dt>SEATS / X11</dt>
 <dd>
-<p>Seasonal decomposition is performed by SEATS. SEATS is one of the two available options for decomposing a series, and discussed in more detail in <a href="24-seats.html"><span>Chapter&nbsp;7</span></a>. The alternative, X11, is discussed in <a href="25-x11.html"><span>Chapter&nbsp;8</span></a>.</p>
+<p>Seasonal decomposition is performed by SEATS. SEATS is one of the two options for decomposing a series and is discussed in more detail in <a href="24-seats.html"><span>Chapter&nbsp;7</span></a>. The alternative, X11, is discussed in <a href="25-x11.html"><span>Chapter&nbsp;8</span></a>.</p>
 </dd>
 </dl></section><section id="data-issues" class="level3" data-number="2.3.2"><h3 data-number="2.3.2" class="anchored" data-anchor-id="data-issues">
 <span class="header-section-number">2.3.2</span> Data issues</h3>
-<p>The command <code>seas(unemp)</code> has also dealt with a various of data issues, which are covered in the <strong>second part</strong> of the book:</p>
+<p>The command <code>seas(AirPassengers)</code> has also dealt with various data issues, which are covered in the <strong>second part</strong> of the book:</p>
 <dl>
 <dt>Holiday</dt>
 <dd>
-<p>Significant Easter effects have been found in <code>AirPassengers</code> and were removed from the adjusted series as well. Moving holidays like Easter or Chinese New Year are an important topic in seasonal adjustment, since they may have a large impact on the behavior of many time series. For <code>AirPassengers</code>, the number of passengers is higher in months with Easter. Moving holiday effects will be discussed in <a href="31-holidays.html"><span>Chapter&nbsp;9</span></a>.</p>
+<p>Significant Easter effects have been found in <code>AirPassengers</code> and were removed from the adjusted series. Moving holidays like Easter or Chinese New Year are vital in seasonal adjustment since they may significantly impact the behavior of many time series. For <code>AirPassengers</code>, the number of passengers is higher in months with Easter. Moving holiday effects will be discussed in <a href="31-holidays.html"><span>Chapter&nbsp;9</span></a>.</p>
 </dd>
 <dt>Weekday</dt>
 <dd>
-<p>Not every month has the same number of weekdays. Since many activities (such as air travelling) are different bitween weekends and weekdays, this constitutes another predictable component. In <code>AirPassengers</code>, there are less passengers during a weekday than during a weekend, and the automated procedures decided to remove the effect. These effects are discussed in <a href="32-trading-days.html"><span>Chapter&nbsp;10</span></a>.</p>
+<p>Not every month has the same number of weekdays. Since many activities (such as air traveling) differ between weekends and weekdays, this constitutes another predictable component. In <code>AirPassengers</code>, there are fewer passengers on a weekday than during a weekend, and the automated procedures decided to remove the effect. These effects are discussed in <a href="32-trading-days.html"><span>Chapter&nbsp;10</span></a>.</p>
 </dd>
 <dt>Outliers</dt>
 <dd>
-<p>Certain data points may me well out of the ordinary. These <em>outliers</em> are a problem for the modelling and adjustment process. An automated procedure scanned the series for outliers and found an additive outlier on May 1951. This outlier is shown in the plot above, too. Outliers are discussed in <a href="33-outliers.html"><span>Chapter&nbsp;11</span></a>.</p>
+<p>Certain data points may be well out of the ordinary. These <em>outliers</em> are a problem for the modeling and adjustment process. An automated procedure scanned the series for outliers and found an additive outlier on May 1951. This outlier is shown in the plot above, too. Outliers are discussed in <a href="33-outliers.html"><span>Chapter&nbsp;11</span></a>.</p>
 </dd>
 <dt>Seasonal Breaks</dt>
 <dd>
-<p>The seasonal pattern in <code>AirPassengers</code> looks relatively stable. Some time series, however, show abrupt changes in the seasonal pattern. <a href="34-seasonal-breaks.html"><span>Chapter&nbsp;12</span></a> discusses them an shows how to deal with seasonal breaks.</p>
+<p>The seasonal pattern in <code>AirPassengers</code> looks relatively stable. Some time series, however, show abrupt changes in the seasonal pattern. <a href="34-seasonal-breaks.html"><span>Chapter&nbsp;12</span></a> discusses them and shows how to deal with seasonal breaks.</p>
 </dd>
 </dl></section><section id="additional-issues" class="level3" data-number="2.3.3"><h3 data-number="2.3.3" class="anchored" data-anchor-id="additional-issues">
 <span class="header-section-number">2.3.3</span> Additional issues</h3>
@@ -478,27 +478,27 @@ div.csl-indent {
 <dl>
 <dt>Presence of seasonality</dt>
 <dd>
-<p>While the presence of Seasonality in <code>AirPassengers</code> is obvious, this is not always the case. If a series has no seasonal pattern, there is no need for a seasonal adjustment. It it is adjusted anyway, the process simply adds noise to the series, and should be avoided. <a href="41-presence-of-seasonality.html"><span>Chapter&nbsp;13</span></a> shows how seasonality can be detected and how to decide whether an adjustment should be made or not.</p>
+<p>While the presence of seasonality in <code>AirPassengers</code> is prominent, this is not always the case. If a series has no seasonal pattern, there is no need for a seasonal adjustment. If it is adjusted anyway, the process adds noise to the series and should be avoided. <a href="41-presence-of-seasonality.html"><span>Chapter&nbsp;13</span></a> shows how seasonality can be detected and how to decide whether an adjustment should be made or not.</p>
 </dd>
 <dt>Annual constraining</dt>
 <dd>
-<p>Usually, seasonal adjustment may affect the annual values of a time series. In part, this is by design. The number of weekdays may differ between years, so the adjusted annual values may be different too. In part, this may an artifact of the adjustment process. X13 offers tools to enforce the annual values of the adjusted series to be the same as the original one. <a href="42-annual-constraining.html"><span>Chapter&nbsp;14</span></a> shows how to constrain annual value and whether it is a good idea to do so.</p>
+<p>Usually, a seasonal adjustment may affect the annual values of a time series. In part, this is by design. The number of weekdays may differ between years, so the adjusted annual values may be different too. In part, this may be an artifact of the adjustment process. X13 offers tools to enforce the annual values of the adjusted series to be the same as the original one. <a href="42-annual-constraining.html"><span>Chapter&nbsp;14</span></a> shows how to constrain annual value and whether it is a good idea.</p>
 </dd>
-<dt>Indirect vs direct adjustment</dt>
+<dt>Indirect vs.&nbsp;direct adjustment</dt>
 <dd>
-<p>Often, seasonal adjustment may be performed on individual series, or on an aggregate of these series. X13 offers tools that let you compare these two possibilities. <a href="43-indirect-vs-direct.html"><span>Chapter&nbsp;15</span></a> discusses the options and help you to decide which one is better.</p>
+<p>Often, a seasonal adjustment may be performed on individual series or on an aggregate of multiple series. X13 offers tools that let you compare these two possibilities. <a href="43-indirect-vs-direct.html"><span>Chapter&nbsp;15</span></a> discusses the options and helps you to decide which one is better.</p>
 </dd>
 </dl></section><section id="quality-assessment" class="level3" data-number="2.3.4"><h3 data-number="2.3.4" class="anchored" data-anchor-id="quality-assessment">
 <span class="header-section-number">2.3.4</span> Quality assessment</h3>
-<p>Adjusting a series with automated procedure is easy. But is the resulting series a good adjustment? The <strong>fourth part</strong> helps you to decide between competing seasonal adjustment models.</p>
+<p>Adjusting a series with the automated procedure is straightforward. But is the resulting series a reasonable adjustment? The <strong>fourth part</strong> helps you to decide between competing seasonal adjustment models.</p>
 <dl>
 <dt>Quality measures</dt>
 <dd>
-<p>In the lower part, the summary of the adjustment model shows various quality measures: The AICc and BIC information criterion and the QS, the Box-Ljung and the Shapiro statistic. Non of them shows any significance (indicated by one or several stars), which is a good sign. Various quality measures and their interpretation is shown in <a href="51-quality-measures.html"><span>Chapter&nbsp;16</span></a>.</p>
+<p>In the lower part, the summary of the adjustment model shows various quality measures: The AICc and BIC information criterion and the QS, the Box-Ljung, and the Shapiro statistic. None of them shows any significance (indicated by one or several stars), which is a good sign. Various quality measures and their interpretation is shown in <a href="51-quality-measures.html"><span>Chapter&nbsp;16</span></a>.</p>
 </dd>
 <dt>Revisions</dt>
 <dd>
-<p>When comparing seasonal adjustment models, the stability of the model and the series is often an important consideration. One does not want to get a very different series with a new data point. X13 offers tools to analyse revisions. <a href="52-revisions.html"><span>Chapter&nbsp;17</span></a> discusses them and helps you to decide which model to pick.</p>
+<p>When comparing seasonal adjustment models, the stability of the model and the series is often an important consideration. One does not want to get a different series with a new data point. X13 offers tools to analyze revisions. <a href="52-revisions.html"><span>Chapter&nbsp;17</span></a> discusses them and helps you to decide which model to pick.</p>
 </dd>
 </dl></section></section><section id="references" class="level2" data-number="2.4"><h2 data-number="2.4" class="anchored" data-anchor-id="references">
 <span class="header-section-number">2.4</span> References</h2>
