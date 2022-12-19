@@ -16,7 +16,89 @@ status("drafting", "2022-12-21", section = "Overview of the software")  # drafti
 -   Overview of main choices a user needs to make
 -->
 ```
+## X-13 Specs
 
+X-13ARIMA-SEATS is organized by *specs*.
+Specs are software modules that deal with a particular task that is needed in the seasonal adjustment process.
+For example, the `transform` spec deals with initial transformations of the time series.
+If a series should be adjusted in logarithms, this spec will take care of.
+
+Some specs, like the `transform` and the `regression` spec, are used in most seasonal adjustment processes.
+Others fulfill a very specific function and are used only occasionally.
+For example, the `history` spec allows an analysis of the revision history and is only called for diagnostical purposes.
+Other specs are mutually exclusive.
+You can choose `x11` or `seats` to decompose a time series, but not both.
+@tbl-main-specs lists the main specs of X-13 and describes what they do.
+
+| Spec name    | What it does                                                                                                  | Chapter                                         |
+|------------|-------------------------------------------------|------------|
+| `estimate`   | Estimates the regARIMA model specified by the `regression` and `arima` specs.                                 | @sec-regarima                                   |
+| `arima`      | Specifies the ARIMA part of the regARIMA model.                                                               | @sec-regarima                                   |
+| `regression` | Specification for including regression variables in a regARIMA model.                                         | @sec-regarima, @sec-holidays, @sec-trading-days |
+| `automdl`    | Specifies the ARIMA part of the regARIMA model using an automatic procedure.                                  | @sec-regarima                                   |
+| `outlier`    | Specification to perform automatic detection of additive (point) outliers.                                    | @sec-outliers                                   |
+| `seats`      | Invoke the production of model-based signal extraction using SEATS. Default in the R seasonal package.        | @sec-seats                                      |
+| `x11`        | An optional spec for invoking seasonal adjustment by the X-11 methodology.                                    | @sec-x11                                        |
+| `forecast`   | Specification to forecast and/or backcast the time series given in the series spec using the estimated model. | @sec-regarima                                   |
+
+: Important specs that are used in most seasonal adjustment models {#tbl-main-specs}
+
+## Interactions between specs
+
+X13 specs interact with each other.
+For example, once a series is transformed it is usually passed to the `regression` spec, which estimates an ARIMA model.
+In order to come up with a good model, it uses the `automdl` spec to automatically determine a good ARIMA model.
+In order to correct for outlier values, it collaborates with the `outlier` spec.
+
+<!-- https://mermaid-js.github.io/mermaid/#/flowchart?id=styling-and-classes -->
+
+```{mermaid}
+flowchart LR
+  A[transform] --> B(regARIMA)
+  B --> C{Model choice}
+  C --> D[X11]
+  C --> E[SEATS]
+  style C fill:#56B4E9,color:#fff
+```
+
+| Spec name      | What it does                                                                                                                           |
+|-------------------------|-----------------------------------------------|
+| `history`      | Requesting a sequence of runs from a sequence of truncated versions of the time series for the purpose of creating historical records. |
+| `slidingspans` | Providing sliding spans stability analysis.                                                                                            |
+| `identify`     | Produce tables and line printer plots of sample ACFs and PACFs.                                                                        |
+| `spectrum`     | Provides a choice between two spectrum diagnostics to detect seasonality or trading day effects.                                       |
+| `check`        | Produce statistics for diagnostic checking of residuals from the estimated model.                                                      |
+
+: Diagnostic specs {#tbl-diagnosics-specs}
+
+| Spec name   | What it does                                                                                                                |
+|------------------------|-----------------------------------------------|
+| `force`     | Allow users to force yearly totals of the seasonally adjusted series to equal those of the original series for convenience. |
+| `composite` | Obtaining both indirect and direct adjustments of a composite                                                               |
+| series.     |                                                                                                                             |
+
+: Special purpose specs {#tbl-diagnosics-specs}
+
+| Spec name       | What it does                                                                                                                                    |
+|------------------------|-----------------------------------------------|
+| `x11regression` | Alternative to `regression`. Can only be used with X11.                                                                                         |
+| `pickmdl`       | Alternative to `automdl`. Can only be used with X11.                                                                                            |
+| `series`        | Provides X-13 with the data, the starting date and the frequency. In R, this is handled by seasonal and will not be covered.                    |
+| `metadata`      | Specification that allows users to insert metadata into the diagnostic summary file. In R, this is handled by seasonal and will not be covered. |
+
+: Vintage and technical specs that won't be covered in this book) {#tbl-vintage-specs}
+
+## Sepc Arguments
+
+Within specs, there are *arguments*.
+Spec arguments guide the behavior of the the spec.
+for example, the `function` argument in the `transform` spec can be set to
+
+## Talking to specs in R
+
+To talk to specs in R,
+
+Specs are the
 
 ## Elements of X13
 
