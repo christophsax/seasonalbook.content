@@ -5,12 +5,12 @@
 #| echo: false
 source("_common.R")
 ans <- append_df(refresh = TRUE)
-status("drafting", "2022-12-21", section = "A minimal example")  # drafting, polishing, complete
+status("polishing", "2022-12-21", section = "A minimal example")  # drafting, polishing, complete
 ```
 
 ## Installation
 
-If you use R installing X-13ARIMA-SEATS from CRAN is as easy as installing any other R package [@jss]:
+If you use R, installing X-13ARIMA-SEATS from CRAN is as easy as installing any other R package [@jss]:
 
 ``` r
 install.packages("seasonal")
@@ -18,7 +18,7 @@ install.packages("seasonal")
 
 ## A minimal example {#sec-a-minimal-example}
 
-Once the package is installed it can be loaded in the usual way:
+Once the package is installed, you can load it in the usual way:
 
 ```{r}
 library(seasonal)
@@ -32,9 +32,9 @@ seas(AirPassengers)
 ```
 
 The first argument of seas is a time series of class `ts`.
-`ts` objects are frequently used in base R and are useful to store monthly, quarterly or annual data.
-The `AirPassengers` example series is included in base R, and shows monthly totals of international airline passengers from 1949 to 1960.
-`seas()` returns a `seas` object that contains the necessary information on the adjustment performed on this time series, we can assign it to a variable:
+`ts` objects are frequently used in base R and are useful to store monthly, quarterly, or annual data.
+The `AirPassengers` example series is included in base R and shows monthly totals of international airline passengers from 1949 to 1960.
+`seas()` returns a `seas` object that contains the necessary information on the adjustment performed on this time series; we can assign it to a variable:
 
 ```{r}
 m <- seas(AirPassengers)
@@ -48,13 +48,11 @@ The plot method shows a plot with the unadjusted and the adjusted series.
 plot(m)
 ```
 
-As you can see, the adjusted series is much less volatile than the original one.
-This is because the seasonal component was removed from the original series.
-But the adjusted series is not completely smooth, too.
-This is because it still contains the irregular component.
+As you can see, the adjusted series is much less volatile than the original one because the seasonal component was removed from the original series.
+But the adjusted series is not entirely smooth, too, because it still contains the irregular component.
 
-This is an important point about seasonal adjustment: It only removed regular, predictable movements, not irregular ones.
-In the adjusted series, we can see that there was a decrease in airline passengers both in 1953 an between 1957 and 1958.
+This constitutes a crucial point about seasonal adjustment: It only removes regular, predictable movements, not irregular ones.
+In the adjusted series, we can see a decrease in airline passengers in 1953 and between 1957 and 1958.
 These decreases were impossible to discover in the original series.
 
 The summary method displays an overview of the model, very similar to the one produced by R's lm function:
@@ -63,8 +61,8 @@ The summary method displays an overview of the model, very similar to the one pr
 summary(m)
 ```
 
-The summary gives a short overview of adjustment model, and provides a few diagnostics.
-This book will help you do understand it more detail.
+The summary gives an overview of the adjustment model and provides diagnostics.
+This book will help you do understand it in more detail.
 The following section discusses some of the elements and relates them to the chapters in this book.
 
 ## Where to go from here
@@ -74,56 +72,56 @@ If you are very new to seasonal adjustment, the automated routines of X13 and se
 
 The command `seas(AirPassengers)` has invoked a large number of *specs* of X13.
 *spec* is X13 slang for a module within the software.
-X13 is build on top of 20 specs that are perform various subtasks of seasonal adjustment.
-Some specs are required most of the time (e.g., `regression`) while others are optional (e.g., `seats`) or purely technical (e.g., `spans` simply shortens the time series in use).
+X13 is built on top of twenty specs that perform various subtasks of seasonal adjustment.
+Some specs are required most of the time (e.g., `regression`), while others are optional (e.g., `seats`) or purely technical (e.g., `spans` shortens the time series in use).
 @sec-overwiew discusses the available specs in more detail.
 
-This book teaches you how to use and fine-tune the individual specs, and deal with concrete data problems.
+This book teaches you how to use and fine-tune the individual specs and deal with concrete data problems.
 
 ### Fundamentals
 
-Specifically, the command `seas(unemp)` has invoked the following fundamental specs -- they are involved in most adjustments, and are covered in the **first part** of the book:
+Specifically, the command `seas(unemp)` has invoked the following fundamental specs -- they are involved in most adjustments and are covered in the **first part** of the book:
 
 Transform
 
 :   A decision on initial transformation was made.
-    The automated procedures concluded that a log-transformation was made and an multiplicative, rather than a additive seasonal adjustment model is estimated.
+    The automated procedures concluded that a log transformation was made and a multiplicative seasonal adjustment model, rather than an additive model, was estimated.
     @sec-transform discusses the choices.
-    Since `transform` is a relatively simple spec, it is a good starting point to get familiar with the spec idea.
+    Since `transform` is a relatively simple spec, it is a good starting point to familiarize yourself with the spec idea.
 
 Regression
 
 :   An automated model search concluded that `AirPassengers` is best modeled by an (0 1 1)(0 1 1) ARIMA model.
-    @sec-regarima explains what that means an how such a model structure is determined and estimated.
+    @sec-regarima explains what that means and how such a model structure is determined and estimated.
 
 SEATS / X11
 
 :   Seasonal decomposition is performed by SEATS.
-    SEATS is one of the two available options for decomposing a series, and discussed in more detail in @sec-seats.
+    SEATS is one of the two options for decomposing a series and is discussed in more detail in @sec-seats.
     The alternative, X11, is discussed in @sec-x11.
 
 ### Data issues
 
-The command `seas(unemp)` has also dealt with a various of data issues, which are covered in the **second part** of the book:
+The command `seas(AirPassengers)` has also dealt with various data issues, which are covered in the **second part** of the book:
 
 Holiday
 
-:   Significant Easter effects have been found in `AirPassengers` and were removed from the adjusted series as well.
-    Moving holidays like Easter or Chinese New Year are an important topic in seasonal adjustment, since they may have a large impact on the behavior of many time series.
+:   Significant Easter effects have been found in `AirPassengers` and were removed from the adjusted series.
+    Moving holidays like Easter or Chinese New Year are vital in seasonal adjustment since they may significantly impact the behavior of many time series.
     For `AirPassengers`, the number of passengers is higher in months with Easter.
     Moving holiday effects will be discussed in @sec-holidays.
 
 Weekday
 
 :   Not every month has the same number of weekdays.
-    Since many activities (such as air travelling) are different bitween weekends and weekdays, this constitutes another predictable component.
-    In `AirPassengers`, there are less passengers during a weekday than during a weekend, and the automated procedures decided to remove the effect.
+    Since many activities (such as air traveling) differ between weekends and weekdays, this constitutes another predictable component.
+    In `AirPassengers`, there are fewer passengers on a weekday than during a weekend, and the automated procedures decided to remove the effect.
     These effects are discussed in @sec-trading-days.
 
 Outliers
 
-:   Certain data points may me well out of the ordinary.
-    These *outliers* are a problem for the modelling and adjustment process.
+:   Certain data points may be well out of the ordinary.
+    These *outliers* are a problem for the modeling and adjustment process.
     An automated procedure scanned the series for outliers and found an additive outlier on May 1951.
     This outlier is shown in the plot above, too.
     Outliers are discussed in @sec-outliers.
@@ -132,7 +130,7 @@ Seasonal Breaks
 
 :   The seasonal pattern in `AirPassengers` looks relatively stable.
     Some time series, however, show abrupt changes in the seasonal pattern.
-    @sec-seasonal-breaks discusses them an shows how to deal with seasonal breaks.
+    @sec-seasonal-breaks discusses them and shows how to deal with seasonal breaks.
 
 ### Additional issues
 
@@ -140,43 +138,43 @@ The **third part** of the book deals with additional issues:
 
 Presence of seasonality
 
-:   While the presence of Seasonality in `AirPassengers` is obvious, this is not always the case.
+:   While the presence of seasonality in `AirPassengers` is prominent, this is not always the case.
     If a series has no seasonal pattern, there is no need for a seasonal adjustment.
-    It it is adjusted anyway, the process simply adds noise to the series, and should be avoided.
+    If it is adjusted anyway, the process adds noise to the series and should be avoided.
     @sec-presence-of-seasonality shows how seasonality can be detected and how to decide whether an adjustment should be made or not.
 
 Annual constraining
 
-:   Usually, seasonal adjustment may affect the annual values of a time series.
+:   Usually, a seasonal adjustment may affect the annual values of a time series.
     In part, this is by design.
     The number of weekdays may differ between years, so the adjusted annual values may be different too.
-    In part, this may an artifact of the adjustment process.
+    In part, this may be an artifact of the adjustment process.
     X13 offers tools to enforce the annual values of the adjusted series to be the same as the original one.
-    @sec-annual-constraining shows how to constrain annual value and whether it is a good idea to do so.
+    @sec-annual-constraining shows how to constrain annual value and whether it is a good idea.
 
-Indirect vs direct adjustment
+Indirect vs. direct adjustment
 
-:   Often, seasonal adjustment may be performed on individual series, or on an aggregate of these series.
+:   Often, a seasonal adjustment may be performed on individual series or on an aggregate of multiple series.
     X13 offers tools that let you compare these two possibilities.
-    @sec-indirect-vs-direct-adjustment discusses the options and help you to decide which one is better.
+    @sec-indirect-vs-direct-adjustment discusses the options and helps you to decide which one is better.
 
 ### Quality assessment
 
-Adjusting a series with automated procedure is easy.
-But is the resulting series a good adjustment?
+Adjusting a series with the automated procedure is straightforward.
+But is the resulting series a reasonable adjustment?
 The **fourth part** helps you to decide between competing seasonal adjustment models.
 
 Quality measures
 
-:   In the lower part, the summary of the adjustment model shows various quality measures: The AICc and BIC information criterion and the QS, the Box-Ljung and the Shapiro statistic.
-    Non of them shows any significance (indicated by one or several stars), which is a good sign.
+:   In the lower part, the summary of the adjustment model shows various quality measures: The AICc and BIC information criterion and the QS, the Box-Ljung, and the Shapiro statistic.
+    None of them shows any significance (indicated by one or several stars), which is a good sign.
     Various quality measures and their interpretation is shown in @sec-quality-measures.
 
 Revisions
 
 :   When comparing seasonal adjustment models, the stability of the model and the series is often an important consideration.
-    One does not want to get a very different series with a new data point.
-    X13 offers tools to analyse revisions.
+    One does not want to get a different series with a new data point.
+    X13 offers tools to analyze revisions.
     @sec-revisions discusses them and helps you to decide which model to pick.
 
 ## References
