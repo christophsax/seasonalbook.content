@@ -33,6 +33,8 @@ seas(AirPassengers)
 
 The first argument of seas is a time series of class `ts`.
 `ts` objects are frequently used in base R and are useful to store monthly, quarterly, or annual data.
+We restrict our attention to monthly and quarterly series.
+This is done for two reasons; first is these are the main frequencies handled by X-13, second, this sampling frequency make conceptual understanding of statistical methods, such as linear filters, easier to grasp.
 The `AirPassengers` example series is included in base R and shows monthly totals of international airline passengers from 1949 to 1960.
 `seas()` returns a `seas` object that contains the necessary information on the adjustment performed on this time series; we can assign it to a variable:
 
@@ -49,13 +51,14 @@ plot(m)
 ```
 
 As you can see, the adjusted series is much less volatile than the original one because the seasonal component was removed from the original series.
-But the adjusted series is not entirely smooth, too, because it still contains the irregular component.
+But the adjusted series is not entirely smooth.
+This is because it still contains the irregular component.
 
 This constitutes a crucial point about seasonal adjustment: It only removes regular, predictable movements, not irregular ones.
 In the adjusted series, we can see a decrease in airline passengers in 1953 and between 1957 and 1958.
-These decreases were impossible to discover in the original series.
+These decreases were difficult to discover in the original series.
 
-The summary method displays an overview of the model, very similar to the one produced by R's lm function:
+The summary method displays an overview of the model, very similar to the one produced by other R classes (eg `lm` or `numeric`):
 
 ```{r}
 summary(m)
