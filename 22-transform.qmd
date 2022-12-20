@@ -13,30 +13,34 @@ status("drafting", "2022-12-21", section = "Transform")  # drafting, polishing, 
 
 -   How to use the transform spec
 
+- Transform is a nice way to introduce automatic model testing. Easy to see the decision made. 
+
 -   This is our first chance to mention the idea of test first then hard-code in production
 
 -   Case Study idea: Decide between log vs non-log transformation
  -->
 ```
+
 One of the first choices to make when modeling a time series is whether or not it needs to be transformed prior to modeling.
 There are two types of transformation types that typically occur within X13.
 The first is a prior modification.
 A prior modification scales each observation for known fixed effects.
 These effects can be well known and established such as length of a month/quarter and leap-year or more subjective such as a modification for a workers strike.
-We can think of prior modification factors of events or corrections made to your data that are fixed throughout the adjustment proeess.
-Additionally, these prior modification factors can be permanent (defualt) or temporary.
+We will see how this comes into the regARIMA model in the next chapter.
+We can think of prior modification factors of events or corrections made to your data that are fixed throughout the adjustment process.
+Additionally, these prior modification factors can be permanent (default) or temporary.
 The difference between permanent and temporary is wheither or not the effect is included back in the final seasonally adjusted series or not; permanent factors are excluded from the final seasonal adjustment while temporary are removed while calculating seasonal factors but then added back to the seasonally adjusted series.
 The second type is a nonlinear transformation applied to the observations.
 This is typically a choice between logarithmic transform and no transformation but for modeling can be any power of the Box-Cox transformation CITE.
 
 ## Multiplicative or additive adjustment?
 
-X-13A-S has a built in statisitcal test to decide between log and no transformatin.
+X-13A-S has a built in statistical test to decide between log and no transformation.
 This is done with an information criteria based statistical test.
 The choice is made by comparing the AICC value CITE of an Airline model fit, or user specified ARIMA model, to the log transformed series and the original series.
 For all practical purposes this is an effective choice and can be left to the program to decide.
 Note, if your series has negative values it can not be log transformed and no transform is automatically selected by X-13 when automatic transformation is asked for.
-Other restrictions on the allowed transformtions exisit and can be found in CITE but these situations are rare.
+Other restrictions on the allowed transformations exist and can be found in CITE but these situations are rare.
 We can see the results of the transformation tests by looking at specific inputs to the UDG file.
 
 ```{r}
@@ -63,12 +67,35 @@ The `transform` spec controls these options.
 Some primary options within this spec are
 
 | Spec option  | Use                                            | Example values       | default     |
-|--------------|-------------------------------|--------------|--------------|
+|---------------|---------------------------|---------------|---------------|
 | function     | specify transform                              | none, log, auto      | none        |
 | data or file | specify prior adjustment factor                | (1.2, 1.1, ..., .99) | (1,1,...,1) |
 | aicdiff      | adjust tolerance of AIC test for log transform | 0.0 3.0 -4.5         | -2.0        |
 
-## Case Study
+Case Study: AirPassengers series
+
+We have seen the AirPassengers already it displays all classic signs of requiring a logarithmic transform such as heteroskadasticity. 
+Lets verify that the automatic transformation identifies this.
+```{r}
+library(seasonal)
+m <- seas(AirPassengers)
+transformfunction(m)
+```
+This is also a good place to get our first look at some of the seasonal factors for an additive vs multiplicative model. 
+MAYBE THIS ISN'T NEEDED BUT SHOULD IT GO SOMEWHERE?
+
+```{r}
+m <- seas(AirPassengers, 
+          x11.save = "d10")
+series(m, "d10")
+
+m <- seas(AirPassengers, 
+          transform.function = "none", 
+          x11.save = "d10")
+series(m, "d10")
+```
+
+## Case Study 2: More difficult decision
 
 Consider the situaiton where you are trying to decide on transform choices for monthly retail grocery store data.
 The series `grocery` is part of the *seasonalbook* package.
