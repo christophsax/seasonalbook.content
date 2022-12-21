@@ -7,10 +7,113 @@ source("_common.R")
 status("drafting", "2023-01-21", section = "SEATS")  # drafting, polishing, complete
 ```
 
--   How to use the SEATS spec
+SEATS = ``Signal Extraction in ARIMA Time Series''
 
--   SEATS vs X11
+Both X-11 method and SEATS assume the observed time series is a function of latent (unobserved) components.
+$$
+X_t = S_t + N_t
+$$
+where $S_t$ is a seasonal component and $N_t$ is a non-seasonal component.
 
--   Case Study:
+Usually the non-seasonal component is broken down further into trends, cycles, transitory, etc.
 
-For SEATS, can be quite challenging since it relies heavily on seasonal ARIMA modeling.
+$$
+X_t = T_t + S_t + I_t
+$$
+
+Ultimately, both X-11 and SEATS estimate the components $T_t$, $S_t$, $I_t$ by passing moving average filters over the forecast extended series.
+
+*X-11 Filters*:
+
+* finite set of empirically developed moving average filters
+*	fixed filtering seen as easier to use (less statistical machinery)
+
+*SEATS filters*:
+
+* specifies stochastic models for unobserved components
+* derives seasonal adjustment filters from these models
+* infinite number of possible filter choices
+* requires more statistical machinery 
+
+Sometimes SEATS includes a transitory component in its decomposition:
+
+$$ X_t = T_t + S_t + R_t + u_t $$
+
+The transitory component captures short, erratic behavior 
+that is not white noise, sometimes associated with awkward 
+frequencies.
+
+* The variation from the transitory component should not 
+contaminate the trend or seasonal, and removing it allows SEATS to obtain smoother, more stable trends and seasonal components.
+* In the final decomposition, the transitory and irregular 
+components are usually combined.
+* SEATS does not always estimate a transitory component
+
+
+## Quick refresher on ARIMA models and notation
+
+The remaining of the SEATS section will heavily rely on the autoregressive and moving-average operators $\phi(B)$ and $\theta(B)$ where $B X_t = X_{t-1}$.
+
+If $X_t$ follows and ARIMA($p$, $d$, $q$) model:
+$$
+\begin{align*}
+\phi(B) X_t &= \theta(B) a_t \\
+(1 - \phi_1 B - \cdots - \phi_p B^p)(1-B)^d X_t &= (1 + \theta_1 B + \cdots \theta_q B^q) a_t \\
+\end{align*}
+$$
+
+For example, in an ARIMA(2,0,1) we are modeling $X_t$ as:
+
+$$
+X_t = \phi_1 X_{t-1} + \phi_2 X_{t-2} + a_t + \theta_1 a_{t-1}
+$$
+
+and all model information is contained in $\phi(B)$ and $\theta(B)$.
+Moreover, for any specified $\phi(B)$ and $\theta(B)$ that satisfy certain causality criteria there exists a unique Wold decomposition
+$$
+\phi(B) X_t = \theta(B) a_t  
+$$
+
+$$
+X_t = \frac{\theta(B)}{\phi(B)} a_t = \Psi(B) a_t = \sum_{k=0}^{\infty} \psi_k a_{t-k}
+$$
+
+## SEATS Assumptions
+
+* The linearized series can be represented by an ARIMA model which captures the stochastic structure of the series (Linearized series = series with regression effects removed)
+* After differencing each with the ARIMA’s differencing polynomial, the components are orthogonal (uncorrelated)
+
+SEATs decomposes the autoregressive polynomial by its roots associating them with different latent components. 
+For example, roots near seasonal frequencies are associated with the seasonal component and roots near zero are associated with the trend component. 
+$$
+\phi(B) = \phi_T(B) \cdot \phi_S(B) \cdot \phi_R(B).
+$$
+
+Hence we have,
+$$
+X_t = 
+\frac{\theta(B)}{\phi(B)} a_{t} = 
+\frac{\theta_T(B)}{\phi_T(B)} a_{T,t} +
+\frac{\theta_S(B)}{\phi_S(B)} a_{S,t}  +
+\frac{\theta_R(B)}{\phi_R(B)} a_{R,t}  + u_t
+$$
+
+If the spectra of all components in non-negative the decomposition is admissible, SEATS finds admissible models for components
+$$
+\begin{align*}
+\phi_T(B) T_t &= \theta_T(B) a_{T, t} \\
+\phi_S(B) S_t &= \theta_S(B) a_{S, t} \\
+\phi_R(B) R_t &= \theta_R(B) a_{R, t} \\
+\end{align*}
+$$
+*Problem:* Infinite number of models that yield the same aggregate. The choices differ in how white noise is allocated among the components.
+*Solution:* Canonical Decomposition: SEATS uses the method of Pierce, Box-Hillmer, Tiao and Burman:
+
+* Put all the white noise into the irregular components
+* Maximize the variance of the irregular
+* Minimizes the variance of the stationary transforms of the other components
+
+This is called the *Canonical Decomposition*.
+
+
+
