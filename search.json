@@ -109,7 +109,7 @@
     "href": "20-part-basics.html",
     "title": "Basics",
     "section": "",
-    "text": "You are reading an early draft of Seasonal Adjustment in R. This chapter is complete enough as an education tool and can be used in a course. It needs additional polishing..\n\n\n\n\nThis section gets readers familiar with X-13ARIMA-SEATS. It begins by explaining the history and pedagogy of the software (Chapter 3). This leads directly into discussing the principal elements of X-13ARIMA-SEATS."
+    "text": "You are reading an early draft of Seasonal Adjustment in R. This chapter is complete enough as an education tool and can be used in a course. It needs additional polishing.\n\n\n\n\nThis section gets readers familiar with X-13ARIMA-SEATS. It begins by explaining the history and pedagogy of the software (Chapter 3). This leads directly into discussing the principal elements of X-13ARIMA-SEATS."
   },
   {
     "objectID": "21-overview.html#main-specs",
