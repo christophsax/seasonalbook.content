@@ -7,7 +7,7 @@ source("_common.R")
 status("drafting", "2023-01-21", section = "SEATS")  # drafting, polishing, complete
 ```
 
-SEATS = ``Signal Extraction in ARIMA Time Series''
+SEATS = "Signal Extraction in ARIMA Time Series"
 
 Both X-11 method and SEATS assume the observed time series is a function of latent (unobserved) components.
 $$
