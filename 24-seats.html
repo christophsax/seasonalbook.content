@@ -63,6 +63,7 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 <meta name="robots" content="noindex">
 
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 </head>
 
@@ -259,7 +260,14 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#quick-refresher-on-arima-models-and-notation" id="toc-quick-refresher-on-arima-models-and-notation" class="nav-link active" data-scroll-target="#quick-refresher-on-arima-models-and-notation"><span class="toc-section-number">7.1</span>  Quick refresher on ARIMA models and notation</a></li>
+  <li><a href="#seats-assumptions" id="toc-seats-assumptions" class="nav-link" data-scroll-target="#seats-assumptions"><span class="toc-section-number">7.2</span>  SEATS Assumptions</a></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/24-seats.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -294,14 +302,81 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </div>
+<p>SEATS = ``Signal Extraction in ARIMA Time Series’’</p>
+<p>Both X-11 method and SEATS assume the observed time series is a function of latent (unobserved) components. <span class="math display">\[
+X_t = S_t + N_t
+\]</span> where <span class="math inline">\(S_t\)</span> is a seasonal component and <span class="math inline">\(N_t\)</span> is a non-seasonal component.</p>
+<p>Usually the non-seasonal component is broken down further into trends, cycles, transitory, etc.</p>
+<p><span class="math display">\[
+X_t = T_t + S_t + I_t
+\]</span></p>
+<p>Ultimately, both X-11 and SEATS estimate the components <span class="math inline">\(T_t\)</span>, <span class="math inline">\(S_t\)</span>, <span class="math inline">\(I_t\)</span> by passing moving average filters over the forecast extended series.</p>
+<p><em>X-11 Filters</em>:</p>
 <ul>
-<li><p>How to use the SEATS spec</p></li>
-<li><p>SEATS vs X11</p></li>
-<li><p>Case Study:</p></li>
+<li>finite set of empirically developed moving average filters</li>
+<li>fixed filtering seen as easier to use (less statistical machinery)</li>
 </ul>
-<p>For SEATS, can be quite challenging since it relies heavily on seasonal ARIMA modeling.</p>
+<p><em>SEATS filters</em>:</p>
+<ul>
+<li>specifies stochastic models for unobserved components</li>
+<li>derives seasonal adjustment filters from these models</li>
+<li>infinite number of possible filter choices</li>
+<li>requires more statistical machinery</li>
+</ul>
+<p>Sometimes SEATS includes a transitory component in its decomposition:</p>
+<p><span class="math display">\[ X_t = T_t + S_t + R_t + u_t \]</span></p>
+<p>The transitory component captures short, erratic behavior that is not white noise, sometimes associated with awkward frequencies.</p>
+<ul>
+<li>The variation from the transitory component should not contaminate the trend or seasonal, and removing it allows SEATS to obtain smoother, more stable trends and seasonal components.</li>
+<li>In the final decomposition, the transitory and irregular components are usually combined.</li>
+<li>SEATS does not always estimate a transitory component</li>
+</ul>
+<section id="quick-refresher-on-arima-models-and-notation" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="quick-refresher-on-arima-models-and-notation"><span class="header-section-number">7.1</span> Quick refresher on ARIMA models and notation</h2>
+<p>The remaining of the SEATS section will heavily rely on the autoregressive and moving-average operators <span class="math inline">\(\phi(B)\)</span> and <span class="math inline">\(\theta(B)\)</span> where <span class="math inline">\(B X_t = X_{t-1}\)</span>.</p>
+<p>If <span class="math inline">\(X_t\)</span> follows and ARIMA(<span class="math inline">\(p\)</span>, <span class="math inline">\(d\)</span>, <span class="math inline">\(q\)</span>) model: <span class="math display">\[
+\phi(B) X_t = \theta(B) a_t
+\]</span></p>
+<p><span class="math display">\[
+(1 - \phi_1 B - \cdots - \phi_p B^p)(1-B)^d X_t = (1 + \theta_1 B + \cdots \theta_q B^q) a_t
+\]</span></p>
+<p>For example, in an ARIMA(2,0,1) we are modeling <span class="math inline">\(X_t\)</span> as:</p>
+<p><span class="math display">\[
+X_t = \phi_1 X_{t-1} + \phi_2 X_{t-2} + a_t + \theta_1 a_{t-1}
+\]</span></p>
+<p>and all model information is contained in <span class="math inline">\(\phi(B)\)</span> and <span class="math inline">\(\theta(B)\)</span>. Moreover, for any specified <span class="math inline">\(\phi(B)\)</span> and <span class="math inline">\(\theta(B)\)</span> that satisfy certain causality criteria there exists a unique Wold decomposition <span class="math display">\[
+\phi(B) X_t = \theta(B) a_t  
+\]</span></p>
+<p><span class="math display">\[
+X_t = \frac{\theta(B)}{\phi(B)} a_t = \Psi(B) a_t = \sum_{k=0}^{\infty} \psi_k a_{t-k}
+\]</span></p>
+</section>
+<section id="seats-assumptions" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="seats-assumptions"><span class="header-section-number">7.2</span> SEATS Assumptions</h2>
+<ul>
+<li>The linearized series can be represented by an ARIMA model which captures the stochastic structure of the series (Linearized series = series with regression effects removed)</li>
+<li>After differencing each with the ARIMA’s differencing polynomial, the components are orthogonal (uncorrelated)</li>
+</ul>
+<p>SEATs decomposes the autoregressive polynomial by its roots associating them with different latent components. For example, roots near seasonal frequencies are associated with the seasonal component and roots near zero are associated with the trend component. <span class="math display">\[
+\phi(B) = \phi_T(B) \cdot \phi_S(B) \cdot \phi_R(B).
+\]</span></p>
+<p>Hence we have, <span class="math display">\[
+X_t =
+\frac{\theta(B)}{\phi(B)} a_{t} =
+\frac{\theta_T(B)}{\phi_T(B)} a_{T,t} +
+\frac{\theta_S(B)}{\phi_S(B)} a_{S,t}  +
+\frac{\theta_R(B)}{\phi_R(B)} a_{R,t}  + u_t
+\]</span></p>
+<p>If the spectra of all components in non-negative the decomposition is admissible, SEATS finds admissible models for components <span class="math display">\[ \phi_T(B) T_t = \theta_T(B) a_{T, t} \]</span> <span class="math display">\[ \phi_S(B) S_t = \theta_S(B) a_{S, t} \]</span> <span class="math display">\[\phi_R(B) R_t = \theta_R(B) a_{R, t} \]</span> <em>Problem:</em> Infinite number of models that yield the same aggregate. The choices differ in how white noise is allocated among the components. <em>Solution:</em> Canonical Decomposition: SEATS uses the method of Pierce, Box-Hillmer, Tiao and Burman:</p>
+<ul>
+<li>Put all the white noise into the irregular components</li>
+<li>Maximize the variance of the irregular</li>
+<li>Minimizes the variance of the stationary transforms of the other components</li>
+</ul>
+<p>This is called the <em>Canonical Decomposition</em>.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

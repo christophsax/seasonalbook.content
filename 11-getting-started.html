@@ -415,7 +415,7 @@ div.csl-indent {
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    MA-Seasonal-12  </span></span>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           0.49736</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The first argument of seas is a time series of class <code>ts</code>. <code>ts</code> objects are frequently used in base R and are useful to store monthly, quarterly, or annual data. The <code>AirPassengers</code> example series is included in base R and shows monthly totals of international airline passengers from 1949 to 1960. <code>seas()</code> returns a <code>seas</code> object that contains the necessary information on the adjustment performed on this time series; we can assign it to a variable:</p>
+<p>The first argument of seas is a time series of class <code>ts</code>. <code>ts</code> objects are frequently used in base R and are useful to store monthly, quarterly, or annual data. We restrict our attention to monthly and quarterly series. This is done for two reasons; first is these are the main frequencies handled by X-13, second, this sampling frequency make conceptual understanding of statistical methods, such as linear filters, easier to grasp. The <code>AirPassengers</code> example series is included in base R and shows monthly totals of international airline passengers from 1949 to 1960. <code>seas()</code> returns a <code>seas</code> object that contains the necessary information on the adjustment performed on this time series; we can assign it to a variable:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">seas</span>(AirPassengers)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -426,9 +426,9 @@ div.csl-indent {
 <p><img src="11-getting-started_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="864"></p>
 </div>
 </div>
-<p>As you can see, the adjusted series is much less volatile than the original one because the seasonal component was removed from the original series. But the adjusted series is not entirely smooth, too, because it still contains the irregular component.</p>
-<p>This constitutes a crucial point about seasonal adjustment: It only removes regular, predictable movements, not irregular ones. In the adjusted series, we can see a decrease in airline passengers in 1953 and between 1957 and 1958. These decreases were impossible to discover in the original series.</p>
-<p>The summary method displays an overview of the model, very similar to the one produced by R’s lm function:</p>
+<p>As you can see, the adjusted series is much less volatile than the original one because the seasonal component was removed from the original series. But the adjusted series is not entirely smooth. This is because it still contains the irregular component.</p>
+<p>This constitutes a crucial point about seasonal adjustment: It only removes regular, predictable movements, not irregular ones. In the adjusted series, we can see a decrease in airline passengers in 1953 and between 1957 and 1958. These decreases were difficult to discover in the original series.</p>
+<p>The summary method displays an overview of the model, very similar to the one produced by other R classes (eg <code>lm</code> or <code>numeric</code>):</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
