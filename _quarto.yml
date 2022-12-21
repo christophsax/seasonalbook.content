@@ -2,6 +2,9 @@ project:
   type: book
   output-dir: _book
 
+reference-location: margin
+citation-location: margin
+
 book:
   title: "Seasonal Adjustment in R"
   reader-mode: true
