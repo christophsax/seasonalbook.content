@@ -120,7 +120,7 @@ Some primary options within this spec are
 |-----------------|-----------------|----------------------|-----------------|
 | `transform.function` | Transform function                             | `none`, `log`, `auto` | `none`  |
 | `transform.aicdiff`  | adjust tolerance of AIC test for log transform | `0.0`, `3.0`, `-4.5`  | `-2.0`  |
-| `xtrans`             | Prior adjustment factor                        | `seas(m, xreg = y)`   | `NULL`  |
+| `xtrans`             | Prior adjustment factor                        | `seas(m, xtrans = y)`   | `NULL`  |
 
 ## Case Study: `AirPassengers`
 
