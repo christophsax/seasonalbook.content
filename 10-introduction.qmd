@@ -5,7 +5,7 @@
 #| echo: false
 source("_common.R")
 ans <- append_df(refresh = TRUE)
-status("polishing", "2022-12-21", section = "A minimal example")  # drafting, polishing, complete
+status("course_complete", "2022-12-21", section = "A minimal example")  # drafting, polishing, complete
 ```
 
 ```{=html}
@@ -81,6 +81,23 @@ Meanwhile, TRAMO-SEATS, developed by the Bank of Spain [@caporello01], offers an
 
 In its most recent version, X-13 offers these two seasonal adjustment methods in a single command-line tool written in Fortran.
 The National Bank of Belgium has created an alternative Java-based implementation called JDemetra+ [@eurostat17], also widely deployed by statistical agencies.
+
+## The [seasonalbook](https://github.com/christophsax/seasonalbook) package
+
+An R package that supplements "Seasonal Adjustment in R", and contains all data and examples.
+
+To install:
+
+``` r
+remotes::install_github("christophsax/seasonalbook")
+```
+
+Example series:
+
+```{r}
+library(seasonalbook)
+plot(grocery)
+```
 
 ## Acknowledgements {.unnumbered}
 

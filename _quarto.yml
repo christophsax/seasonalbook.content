@@ -23,7 +23,6 @@ book:
       chapters:
         - 10-introduction.qmd
         - 11-getting-started.qmd
-        - 12-how-to-use.qmd
 
     - part: 20-part-basics.qmd
       chapters:

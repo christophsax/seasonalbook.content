@@ -4,7 +4,7 @@
 #| results: "asis"
 #| echo: false
 source("_common.R")
-status("drafting")  # drafting, polishing, complete
+status("course_complete")  # drafting, polishing, complete
 ```
 
 This section gets readers familiar with X-13ARIMA-SEATS.
