@@ -56,10 +56,11 @@ The remaining of the SEATS section will heavily rely on the autoregressive and m
 
 If $X_t$ follows and ARIMA($p$, $d$, $q$) model:
 $$
-\begin{align*}
-\phi(B) X_t &= \theta(B) a_t \\
-(1 - \phi_1 B - \cdots - \phi_p B^p)(1-B)^d X_t &= (1 + \theta_1 B + \cdots \theta_q B^q) a_t \\
-\end{align*}
+\phi(B) X_t = \theta(B) a_t 
+$$
+
+$$
+(1 - \phi_1 B - \cdots - \phi_p B^p)(1-B)^d X_t = (1 + \theta_1 B + \cdots \theta_q B^q) a_t
 $$
 
 For example, in an ARIMA(2,0,1) we are modeling $X_t$ as:
@@ -99,13 +100,9 @@ X_t =
 $$
 
 If the spectra of all components in non-negative the decomposition is admissible, SEATS finds admissible models for components
-$$
-\begin{align*}
-\phi_T(B) T_t &= \theta_T(B) a_{T, t} \\
-\phi_S(B) S_t &= \theta_S(B) a_{S, t} \\
-\phi_R(B) R_t &= \theta_R(B) a_{R, t} \\
-\end{align*}
-$$
+$$ \phi_T(B) T_t = \theta_T(B) a_{T, t} $$
+$$ \phi_S(B) S_t = \theta_S(B) a_{S, t} $$
+$$\phi_R(B) R_t = \theta_R(B) a_{R, t} $$
 *Problem:* Infinite number of models that yield the same aggregate. The choices differ in how white noise is allocated among the components.
 *Solution:* Canonical Decomposition: SEATS uses the method of Pierce, Box-Hillmer, Tiao and Burman:
 

@@ -8,11 +8,10 @@ status("polishing", "2022-12-21", section = "regARIMA Model")  # drafting, polis
 ```
 
 An important part of the X13 procedure is regARIMA modeling.
-It sits above seasonal adjustment at the top of the flow chart describing progress towards an adequate adjustment. 
+It sits above seasonal adjustment at the top of the flow chart describing progress towards an adequate adjustment.
 As with all statistical modeling, the process to find the best model is iterative in nature.
 This is represented as a loop at the left of our flow chart.
 An analyst can use statistical tools and subject matter expertise to fine tune and create an overall regARIMA model that is satisfactory to be used and proceed to the seasonal adjustment step of our work flow.
-
 
 ```{mermaid}
 flowchart TD
@@ -122,22 +121,18 @@ Recall that earlier it was mentioned that using automatic model identification i
 Hence, this is simply for the interested reader to begin to gain additional intuition into the stochastic structures involved in their series and the types of structures the automatic modeling procedures look at.
 One of the main tools in a time series analyist tool box is the autocorrelation function (ACF).
 This is a function that returns the correlation between observations $h$ time units apart throughout the entire sample.
-So for $h=2$ this means looking at the correlation between the pairs $(X_1, X_3), (X_2, X_4), (X_3, X_5), \ldots$. 
-Then a way to build a SARIMA model is to match the sample ACF and the theoretical ACF of a given model. 
-The main point distinguishing an AR($p$) and MA($q$) is how their theoretical ACF behaves. 
+So for $h=2$ this means looking at the correlation between the pairs $(X_1, X_3), (X_2, X_4), (X_3, X_5), \ldots$.
+Then a way to build a SARIMA model is to match the sample ACF and the theoretical ACF of a given model.
+The main point distinguishing an AR($p$) and MA($q$) is how their theoretical ACF behaves.
 An AR($p$) will have ACF the has exponential decay as $h$ increases.
-For example, an AR(1) ACF is
-$$\rho(h) = \phi^h$$
-An MA($q$) models ACF will be non-zero for the first $q$ lags and then cutoff to zero thereafter. 
-The ACF of an MA(1) is
-$$\rho(h) = \begin{cases} 
+For example, an AR(1) ACF is $$\rho(h) = \phi^h$$ An MA($q$) models ACF will be non-zero for the first $q$ lags and then cutoff to zero thereafter.
+The ACF of an MA(1) is $$\rho(h) = \begin{cases} 
 ~~1 & h = 0 \\
 \frac{\theta}{1 + \theta^2} & h = 1 \\
 ~~0 & \text{otherwise}
 \end{cases}
-$$
-In practice of course the difference between decay and cut-off can be nebulous to detect but the interested reader is encouraged to explore the `arima.sim()` function the look at the sample ACF with the `acf()` function. 
-As you increase the sample size it will converge to the theoretical ACF value and you can start to see the structures just discussed. 
+$$ In practice of course the difference between decay and cut-off can be nebulous to detect but the interested reader is encouraged to explore the `arima.sim()` function the look at the sample ACF with the `acf()` function.
+As you increase the sample size it will converge to the theoretical ACF value and you can start to see the structures just discussed.
 
 ```{r}
 x_AR <- arima.sim(model = list(ar = .75), n = 300)
@@ -224,7 +219,9 @@ m_span <- seas(AirPassengers,
   outlier.critical = 4.0,
   outlier.span = "1958.jan, ")
 summary(m_span)
+```
 
+```{r}
 m_nospan <- seas(AirPassengers,
   outlier.types = c("ao", "ls", "tc"),
   outlier.critical = 4.0)
@@ -235,7 +232,7 @@ The default critical value is set based on the length of the outlier span.
 Notice the MA-Nonseasonal-01 value when comparing `m_span` with `m_nospan`.
 We see the choice of span, and ultimately the choise to include an outlier in your model can have a dramatic effect on the estimated regARIMA parameters.
 
-## Case study 2
+<!-- ## Case study 2 -->
 
-Decide if you should include AO in May 2014.
-Construct a simple user defined regressor to handle specific issue.
+<!-- Decide if you should include AO in May 2014. -->
+<!-- Construct a simple user defined regressor to handle specific issue. -->
