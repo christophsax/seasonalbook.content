@@ -186,7 +186,7 @@
     "href": "22-transform.html#transform-options",
     "title": "4  Transform",
     "section": "\n4.4 Transform options",
-    "text": "4.4 Transform options\nThe transform spec controls these options. Some primary options within this spec are\n\n\n\n\n\n\n\n\nSpec option\nUse\nExample values\ndefault\n\n\n\ntransform.function\nTransform function\n\nnone, log, auto\n\nnone\n\n\ntransform.aicdiff\nadjust tolerance of AIC test for log transform\n\n0.0, 3.0, -4.5\n\n-2.0\n\n\nxtrans\nPrior adjustment factor\nseas(m, xreg = y)\nNULL"
+    "text": "4.4 Transform options\nThe transform spec controls these options. Some primary options within this spec are\n\n\n\n\n\n\n\n\nSpec option\nUse\nExample values\ndefault\n\n\n\ntransform.function\nTransform function\n\nnone, log, auto\n\nnone\n\n\ntransform.aicdiff\nadjust tolerance of AIC test for log transform\n\n0.0, 3.0, -4.5\n\n-2.0\n\n\nxtrans\nPrior adjustment factor\nseas(m, xtrans = y)\nNULL"
   },
   {
     "objectID": "22-transform.html#case-study-airpassengers",
