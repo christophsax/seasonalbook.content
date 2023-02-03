@@ -110,7 +110,21 @@ $$\phi_R(B) R_t = \theta_R(B) a_{R, t} $$
 * Maximize the variance of the irregular
 * Minimizes the variance of the stationary transforms of the other components
 
-This is called the *Canonical Decomposition*.
+This is called the *Canonical Decomposition*. We already stated that both X-11 and SEATS estimate the unobserved components by passing a moving-average filter over the observed data. So how do we use these implied component models to get a linear filter? It should be clear that the filter weights will depend on that arima model is picked $X_t = \Psi(B) a_t$, and what the implied seasonal model, $\phi_S(B) S_t = \theta_S(B) a_{S,t} \Rightarrow S_t = \Psi(B) a_t$, is. The **Wiener-Kolmogorov** (WK) algorithm outlines the methodology to get the so-called WK filter. This is the filter that is equal to the conditional expectation of the seasonal component conditional on the observed series.  
+$$\widehat{S}_t = \underbrace{\left[ \frac{\Sigma_S}{\Sigma} \frac{\Psi_S(B)\Psi_S(F)}{\Psi(B)\Psi(F)} \right]}_{\mbox{WK filter weights}} X_t$$
+where $F=B^{-1}$ if the forward shift operator such that $F X_t = X_{t+1}$.
+
+More than other coefficients, the seasonal MA ($\theta_{12}$) influences whether estimated seasonal factors change either slowly over time ($\theta_{12}$ close to 1) or rapidly over time ($\theta_{12}$ close to zero).
+
+## Example SEATS adjustment
+
+## Some existing studies and conclusions
+
+The Bureau of Labor Statistics formed a group to do a comparison study between X-11 and model-based seasonal adjustments (CITE BLS 2007). The examined a cross section of 87 BLS series with X-11, SEATS, and STAMP using spectral, revisions history, model adequacy and sliding spans diagnostics. They found that SEATS seasonal factors are usually more stable than X-11 and X-11 trend component is usually more stable than SEATS. Also, among series that were seasonal, residual seasonality almost never appears using either method. The only exception being a small number of  SEATS runs where model inadequacy for the full span of data was present. This manifested as SEATS having difficulty identifying a usable model for decomposition and falling back on the airline model. They found even in these situations the SEATS seasonal adjustment is usually reasonable. 
+
+Overall, X-11 and SEATS seasonal adjustments are very similar for many series. 
+SEATS adjustments are often smoother than X-11 seasonal adjustments. For some series, the variance can be different based on the month or season. For example, U.S. Housing Starts is more variable in the winter months than in the summer due to the differences in warm and cold winters. ARIMA model-based seasonal adjustment does not handle this situation very well and assumes a constant variance and the SEATS adjustment wont compensate for this.
+
 
 
 
