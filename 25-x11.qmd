@@ -61,13 +61,12 @@ By subtracting this seasonal estimate we have our crude seasonal adjustment.
 SeasonalAdjustment = AirPassengers - seas_est
 tsbox::ts_plot(cbind(AirPassengers, SeasonalAdjustment))
 ```
-We see some obvious flaws this this adjustment. Visually, there appears to be residual seasonality and the heteroskedastic variance of the series is not reflected in the seasonal component appropriates. This motivates the X-11 method which is an iterative application of this simple procedure we have just performed. Each subsequent iteration allows the estimated components to be refined by selecting better filters and handling extreme values and regression effects. 
-
+We see some obvious flaws this this adjustment. Visually, there appears to be residual seasonality and the heteroskedastic variance of the series is not reflected in the seasonal component appropriates. This motivates the X-11 method which is an iterative application of this simple procedure we have just performed. Each subsequent iteration allows the estimated components to be refined by selecting better filters and handling extreme values and regression effects. The first adaptation is to consider a transofmation of our series from `AirPassengers` to `log(AirPassengers)`. Our simple example performed an additive seasonal adjustment. This transformation will require a move to a multiplicative decomposition.
 
 ## Additive and multiplicative (again)
 
 The X-13ARIMA-SEATS development was highly motivated to study economic time series.
-As such, the default seasonal adjustment mode is multiplicative due to most seasonal economic time series displaying seasonal fluctuations that increase and decrease along with the level of the time series.\
+As such, the default seasonal adjustment mode is multiplicative due to most seasonal economic time series displaying seasonal fluctuations that increase and decrease along with the level of the time series.
 
 If your series does not have this feature then additive adjustment might be more appropriate.
 This can be changed in the `mode` argument of the x11 spec.
@@ -77,55 +76,6 @@ These are less common than additive and multiplicative models and are not the fo
 If your series has some extremely small values in certain months (quarters) then pseudo-additive models could be worth further investigation.
 It has been observed that when multiplicative seasonal adjustment produces more extreme values in conjunction with small seasonal factors then pseudo-additive adjustment should be explored.
 NEED TO SHOW USERS HOW TO VIEW THEIR EXTREME VALUES - D8.B TABLE DESIGNATIONS NEXT TO OBSERVATIONS. A good reference on the subject is Baxter (1994).
-
-## Filter length
-
-The X11 spec also allows users to control the length of the trend and seasonal moving average filters used during the adjustment.
-Generally speaking, longer filters imply a more stable seasonal component and shorter filters a more changing seasonal pattern.
-Of course, a longer filter will use more data for the caluclation of components at each time point.
-This is an important observation and understanding it might help a user decide on a short or long filter.
-Since longer filters use more data there tend to be smaller revisions when a new data point is added.
-However, there will be revisions to data values further back.
-
-A shorter filter is just the opposite, they tend to produce smaller revisions but they do not extend as far back into the series.
-If a filter is not choosen by the user then automatic filter selection is used.
-To understand the length of a filter let's look at the (finite) number of choice available in during an x11 adjustment.
-@tbl-x11-filters shows the different filters available for the seasonal component and the trend component.
-
-| Value        | Description                                                                                                                                                                                                                     |
-|------------|------------------------------------------------------------|
-| `s3x1`       | 3×1 moving average                                                                                                                                                                                                              |
-| `s3x3`       | 3×3 moving average                                                                                                                                                                                                              |
-| `s3x5`       | 3×5 moving average                                                                                                                                                                                                              |
-| `s3x9`       | 3×9 moving average                                                                                                                                                                                                              |
-| `s3x15`      | 3×15 moving average                                                                                                                                                                                                             |
-| `stable`     | Stable seasonal filter. A single seasonal factor for each calendar month or quarter is generated by calculating the simple average of all the values for each month or quarter (taken after detrending and outlier adjustment). |
-| `x11default` | A 3×3 moving average is used to calculate the initial seasonal factors in each iteration, and a 3×5 moving average to calculate the final seasonal factors.                                                                     |
-
-: Filters available in X11 {#tbl-x11-filters tbl-colwidths="\[30,70\]"}
-
-## Extreme value
-
-::: callout-warning
-## Related concept: Outlier
-
-FIXME: explain how this is related to transform.
-:::
-
-## Case study
-
-```{r}
-
-tsbox::ts_plot(
-  s3x1 = predict(seas(AirPassengers, x11.seasonalma = "s3x1")),
-  s3x15 = predict(seas(AirPassengers, x11.seasonalma = "s3x15"))
-)
-
-
-
-
-```
-
 
 ## Frequency domain of time series (Optional)
 
@@ -156,8 +106,95 @@ There is some mathematical machinery needed when understanding exactly what the 
 
 ## X-11 Moving average filters
 
-We introduce the moving average filters by plotting the filter weights along with the values of the squared gain fuction. 
+We introduce the moving average filters and subsequently plot the filter weights along with the values of the squared gain function. 
+The X11 spec also allows users to control the length of the trend and seasonal moving average filters used during the adjustment.
+Generally speaking, longer filters imply a more stable seasonal component and shorter filters a more changing seasonal pattern.
+Of course, a longer filter will use more data for the calculation of components at each time point.
+This is an important observation and understanding it might help a user decide on a short or long filter.
+Since longer filters use more data there tend to be smaller revisions when a new data point is added.
+However, there will be revisions to data values further back.
 
+A shorter filter is just the opposite, they tend to produce larger revisions but they do not extend as far back into the series.
+If a filter is not choosen by the user then automatic filter selection is used.
+To understand the length of a filter let's look at the (finite) number of choice available in during an x11 adjustment.
+@tbl-x11-filters shows the different filters available for the seasonal component and the trend component.
+
+| Value        | Description                                                                                                                                                                                                                     |
+|------------|------------------------------------------------------------|
+| `s3x1`       | 3×1 moving average                                                                                                                                                                                                              |
+| `s3x3`       | 3×3 moving average                                                                                                                                                                                                              |
+| `s3x5`       | 3×5 moving average                                                                                                                                                                                                              |
+| `s3x9`       | 3×9 moving average                                                                                                                                                                                                              |
+| `s3x15`      | 3×15 moving average                                                                                                                                                                                                             |
+| `stable`     | Stable seasonal filter. A single seasonal factor for each calendar month or quarter is generated by calculating the simple average of all the values for each month or quarter (taken after detrending and outlier adjustment). |
+| `x11default` | A 3×3 moving average is used to calculate the initial seasonal factors in each iteration, and a 3×5 moving average to calculate the final seasonal factors.                                                                     |
+
+: Filters available in X11 {#tbl-x11-filters tbl-colwidths="\[30,70\]"}
+
+```{r, echo=FALSE}
+# Function to find seasonal filter weight by passing impuse through
+find_seasonal_PxQ_filter_wts = function(P, Q) {
+  v = rep(0, 100)
+  v[50] = 1
+  v2 = filter(v, rep(1 / Q, Q), sides = 2)
+  v3 = filter(v2, rep(1 / P, P), sides = 2)
+  wts = v3[v3 > 0 & !is.na(v3)]
+  wts
+}
+```
+
+```{r, echo=FALSE}
+# 3 x 3 seasonal filter wts 
+w = find_seasonal_PxQ_filter_wts(3, 3)
+w_len = (length(w) - 1) / 2
+plot((-w_len):(w_len), w, type = "b", ylim = c(0, max(w)), xlab = "time lag", ylab = "filter weight", main = "3x3 Seasonal Filter wts")
+abline(h = 0, lty = 'dotted')
+```
+
+```{r, echo=FALSE}
+# 3 x 5 seasonal filter wts 
+w = find_seasonal_PxQ_filter_wts(3, 5)
+w_len = (length(w) - 1) / 2
+plot((-w_len):(w_len), w, type = "b", ylim = c(0, max(w)), xlab = "time lag", ylab = "filter weight", main = "3x5 Seasonal Filter wts")
+abline(h = 0, lty = 'dotted')
+```
+
+```{r, echo=FALSE}
+# 3 x 9 seasonal filter wts 
+w = find_seasonal_PxQ_filter_wts(3, 9)
+w_len = (length(w) - 1) / 2
+plot((-w_len):(w_len), w, type = "b", ylim = c(0, max(w)), xlab = "time lag", ylab = "filter weight", main = "3x9 Seasonal Filter wts")
+abline(h = 0, lty = 'dotted')
+```
+```{r, echo=FALSE}
+# 3 x 15 seasonal filter wts 
+w = find_seasonal_PxQ_filter_wts(3, 15)
+w_len = (length(w) - 1) / 2
+plot((-w_len):(w_len), w, type = "b", ylim = c(0, max(w)), xlab = "time lag", ylab = "filter weight", main = "3x15 Seasonal Filter wts")
+abline(h = 0, lty = 'dotted')
+```
+
+## Extreme value
+
+::: callout-warning
+## Related concept: Outlier
+
+FIXME: explain how this is related to transform.
+:::
+
+## Case study
+
+```{r}
+
+tsbox::ts_plot(
+  s3x1 = predict(seas(AirPassengers, x11.seasonalma = "s3x1")),
+  s3x15 = predict(seas(AirPassengers, x11.seasonalma = "s3x15"))
+)
+
+
+
+
+```
 
 
 
