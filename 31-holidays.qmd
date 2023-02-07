@@ -1,4 +1,4 @@
-## Irregular holidays {#sec-holidays}
+# Irregular holidays {#sec-holidays}
 
 ```{r}
 #| results: "asis"
@@ -6,7 +6,7 @@
 source("_common.R")
 status("drafting", "2023-01-21", section = "Holidays")  # drafting, polishing, complete
 ```
-
+<!--
 -   Why should we adjust for holiday effects
 
 -   Easter adjustment
@@ -14,3 +14,195 @@ status("drafting", "2023-01-21", section = "Holidays")  # drafting, polishing, c
 -   User defined adjustments (Chinese New Year, Diwali)
 
 -   Case Study: How to adjust for Ramadan (which is connected with some additional challenges)
+
+ -->
+
+
+## Why should we adjust for holiday effects
+
+
+## Easter Adjustments
+
+
+## Case Study: Chinese New Year
+
+The Lunar New Year is the most important holiday in China and many other
+Asian countries. Traditionally, the holiday starts on Lunar New Year’s
+Eve, and lasts to the Lantern Festival on the 15th day of the first month of
+the lunisolar calendar. The Chinese New Year is celebrated either in January
+or in February of the Gregorian calendar.
+
+Because of its importance, Chinese New Year seriously distorts monthly time
+series, which are usually reported according to the Gregorian calendar.
+Unlike Easter, Chinese New Year does not affect quarterly time series, as it
+always falls in the first quarter.
+
+X-13-ARIMA-SEATS has a built-in adjustment procedure for Easter holiday, but
+not for Chinese New Year. However, all packages allow for the inclusion of
+user-defined variables, and the Chinese New Year can be modeled as such.
+
+With the R package seasonal, generating and including such a series is easy.
+We will use it in the following to seasonally adjust and remove Chinese New
+Year effects from the nominal dollar value of imports to China. seasonal is
+an interface to X-13ARIMA-SEATS; for more information and installation
+details, see here.
+
+### Imports of Goods to China
+
+Chinese imports are included as an example series in seasonal, both with and
+without the official seasonal adjustment.
+
+````{r }
+library(tsbox)
+ts_plot(imp_cn)
+````
+
+The series has a very different seasonal pattern before 2000, we focus on the
+later period. (Adjusting the whole series in one step is possible, but for
+good results one should manually model the seasonal break.)
+
+````{r }
+imp_cn_2000 <- ts_span(imp_cn, start = 2000)
+````
+
+`ts_dygraphs()` works similar to `ts_plot()`, but allows for zooming:
+
+````{r }
+ts_dygraphs(imp_cn_2000)
+````
+
+
+::: {.callout-note}
+
+### How to read data from FRED into R
+
+{fredr} provides access to the
+[Federal Reserve of Economic Data](https://fred.stlouisfed.org)
+(FRED), provided by the Federal Reserve Bank of St. Louis. To use fredr and
+the FRED API in general, you must first obtain a FRED API key. Have a look
+at the [Documentation](https://cran.r-project.org/web/packages/fredr/vignettes/fredr.html)
+for details.
+
+The core function in this package is `fredr()`, which fetches observations
+for a FRED series.
+
+We can use `purrr::map_dfr()` to download multiple series at once:
+
+````{r }
+#| eval = FALSE
+library(fredr)
+imp_cn_raw <- purrr::map_dfr(c("XTIMVA01CNM667S", "XTIMVA01CNM667N"), fredr)
+````
+
+A bit of tidying:
+
+````{r }
+#| eval = FALSE
+imp_cn_tidy <-
+  imp_cn_raw %>%
+  select(time = date, id = series_id, value) %>%
+  mutate(id = recode(
+    id,
+    XTIMVA01CNM667S = "sa",
+    XTIMVA01CNM667N = "nsa"
+  ))
+````
+
+Use the tsbox package to convert the data frame into ts objects.
+
+````{r }
+#| eval = FALSE
+library(tsbox)
+imp_cn_sa <- ts_ts(ts_pick(imp_cn_tidy, "sa"))
+imp_cn <- ts_ts(ts_pick(imp_cn_tidy, "nsa"))
+
+````
+Both time series are included in the book package.
+
+````{r }
+#| eval = FALSE
+library(seasonalbook)
+imp_cn_sa
+imp_cn
+````
+
+
+:::
+
+seasonal includes the genhol() function, a R version of the equally named
+software utility by the U.S. Census Bureau. Using the dates of the Chinese
+New Year as an input, it produces a time series with the deviations from the
+monthly means. Here we are assuming that the holiday starts on New Year’s Eve
+and lasts for one week.
+
+````{r }
+reg_cny <- genhol(cny, start = -1, end = 6, center = "calendar")
+tsbox::ts_dygraphs(reg_cny)
+````
+
+### Including user-defined regressors
+
+The time series `reg_cny` can be included in the main seasonal adjustment. The
+automated procedures of X-13ARIMA-SEATS can be applied to the imp series in
+the following way:
+
+````{r }
+m1 <- seas(
+  imp_cn,
+  xreg = reg_cny,
+  regression.usertype = "holiday",
+  x11 = list()
+)
+summary(m1)
+plot(m1)
+````
+
+With `xreg`, arbitrary user-defined regressors can be included,
+regression.usertype = "holiday" ensures that the final series does not
+include the regression effect. We also have chosen X11 as the decomposition
+method.
+
+Unsurprisingly, the summary reveals a highly significant Chinese New Year
+effect. As the automatic model has been estimated on the logarithmic series,
+the coefficient of -0.17 indicates that New Year in 2023 will lower imports
+in January, by approximately 0.74 * 17 ~ 13% (compared to average January),
+and increase it by the same amount in February. The automatic procedure has
+also detected weekday effects and a level shift during the financial
+crisis.
+
+### Multiple regressors
+
+We can do even better by using more than one user-defined regressors, one for
+the pre-New-Year period and one for the post-New-Year period:
+
+````{r }
+pre_cny <- genhol(cny, start = -6, end = -1, frequency = 12, center = "calendar")
+post_cny <- genhol(cny, start = 0, end = 6, frequency = 12, center = "calendar")
+m2 <- seas(
+  imp_cn,
+  xreg = ts_c(pre_cny, post_cny),
+  regression.usertype = "holiday",
+  x11 = list()
+)
+summary(m2)
+plot(m2)
+````
+
+### Compare with official adjustments
+
+I haven't done any research on how the officially seasonally adjusted rates
+are computed, but they seem very close to a default call to `seas()`.
+Our models (both `m1`, but especially `m2`), does a much better job of
+adjusting to Chinese New Year.
+
+````{r }
+ts_dygraphs(
+  ts_c(
+    cny = ts_span(reg_cny * 1e11 + 1e11, start = 2000, end = 2024),
+    ts_pick(imp_cn_2000, "sa"),
+    final(seas(x = imp_cn, x11 = "")),
+    final(m2)
+  )
+)
+````
+
