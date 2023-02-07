@@ -1,4 +1,4 @@
-## SEATS {#sec-seats}
+# SEATS {#sec-seats}
 
 ```{r}
 #| results: "asis"
