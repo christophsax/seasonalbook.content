@@ -19,7 +19,7 @@ library(seasonal)
 One of the two main methods available in X-13ARIMA-SEATS to extract trend and seasonal components is the X-11 method.
 This is a nonparametric procedure that works by passing moving-average filters over the data to extract intended components.
 
-In order to use symetric moving average filters at the end of the time series (current value), a regARIMA model is used to forecast extend the series.
+In order to use symmetric moving average filters at the end of the time series (current value), a regARIMA model is used to forecast extend the series.
 This RegARIMA model is where users can test for or specify outliers, trading day and moving holiday regressors in their adjustment.
 The forecast extended series is then used to filter.
 
@@ -40,13 +40,16 @@ Additionally, `sigmalim` will control the amount of extreme value adjustment tha
 
 ## Simple Seasonal Adjustment proceedure
 
-In order to better understand the X-11 method, it will be helpful to first perform a basic seasonal adjustment proceedure "by-hand". A basic trend filter could be a simple filter with 13 filter weights all equal to 1/13. We use these weights to estimate the trend of the `AirPassengers` series.
+In order to better understand the X-11 method, it will be helpful to first perform a basic seasonal adjustment procedure "by-hand".
+A basic trend filter could be a simple filter with 13 filter weights all equal to 1/13.
+We use these weights to estimate the trend of the `AirPassengers` series.
 
 ```{r}
 filter_wts = rep(1, 13) / 13
 trend_est = stats::filter(x = AirPassengers, filter = filter_wts, sides = 2)
 tsbox::ts_plot(cbind(AirPassengers, trend_est))
 ```
+
 After estimating the trend we now can estimate the seasonal component of the detrended series using a 3x3 seasonal filter that has weights (1,2,3,2,1)/9.
 
 ```{r}
@@ -61,7 +64,14 @@ By subtracting this seasonal estimate we have our crude seasonal adjustment.
 SeasonalAdjustment = AirPassengers - seas_est
 tsbox::ts_plot(cbind(AirPassengers, SeasonalAdjustment))
 ```
-We see some obvious flaws this this adjustment. Visually, there appears to be residual seasonality and the heteroskedastic variance of the series is not reflected in the seasonal component appropriates. This motivates the X-11 method which is an iterative application of this simple procedure we have just performed. Each subsequent iteration allows the estimated components to be refined by selecting better filters and handling extreme values and regression effects. The first adaptation is to consider a transofmation of our series from `AirPassengers` to `log(AirPassengers)`. Our simple example performed an additive seasonal adjustment. This transformation will require a move to a multiplicative decomposition.
+
+We see some obvious flaws this this adjustment.
+Visually, there appears to be residual seasonality and the heteroskedastic variance of the series is not reflected in the seasonal component appropriates.
+This motivates the X-11 method which is an iterative application of this simple procedure we have just performed.
+Each subsequent iteration allows the estimated components to be refined by selecting better filters and handling extreme values and regression effects.
+The first adaptation is to consider a transofmation of our series from `AirPassengers` to `log(AirPassengers)`.
+Our simple example performed an additive seasonal adjustment.
+This transformation will require a move to a multiplicative decomposition.
 
 ## Additive and multiplicative (again)
 
@@ -79,34 +89,43 @@ NEED TO SHOW USERS HOW TO VIEW THEIR EXTREME VALUES - D8.B TABLE DESIGNATIONS NE
 
 ## Frequency domain of time series (Optional)
 
-We present the following material as optional reading material. For those interesting in simply performing seasonal adjustment, an understanding of the frequency domain of a time series, is not manditory. However, the spectral domain representation will help the interested reader further understand the impact a linear filter has on a time series. Since both X-11 and SEATS use linear filters this will deepen the users understanding of whichever seasonal adjustmnet proceedure is choosen. 
+We present the following material as optional reading material.
+For those interesting in simply performing seasonal adjustment, an understanding of the frequency domain of a time series, is not manditory.
+However, the spectral domain representation will help the interested reader further understand the impact a linear filter has on a time series.
+Since both X-11 and SEATS use linear filters this will deepen the users understanding of whichever seasonal adjustmnet proceedure is choosen.
 
-Seasonal adjustment is highly motivated by the study, estimation, and ultimately removal of regular fulutions in a time series. The words *regular fluctuations* immediately leads us to trigonomic functions sin and cos. It turns out, there exist two equivilant representations of a time series. The first, and usually easier for beginners to understand, is the time domain representation. This is expressing how $X_t$ evolves as time $t$ evolves. For example, an MA(1) time domiain representation is:
-$$X_t = w_t + \theta w_{t-1}$$
-The second, is a frequency domain representation of a series. Here, $X_t$ is represented as the sum of trigonometric functions. More specifically, the spectral density of $X_t$ is the fourier transform of the acf of the series. 
-$$f_X(\nu) = \sum_{h = - \infty}^{\infty} \gamma(h) e^{-2\pi i \nu h}$$
-For example, the spectral density of an MA(1) is:
-$$f_X(\nu) = \sigma^2 \left( 1 + \theta^2 + 2\theta\cos(2\pi\nu) \right)$$
-The important concept here is to understand that these representations are equivalent; meaning they contain the same information about a time series, such as encoding the acf function.
+Seasonal adjustment is highly motivated by the study, estimation, and ultimately removal of regular fulutions in a time series.
+The words *regular fluctuations* immediately leads us to trigonomic functions sin and cos.
+It turns out, there exist two equivilant representations of a time series.
+The first, and usually easier for beginners to understand, is the time domain representation.
+This is expressing how $X_t$ evolves as time $t$ evolves.
+For example, an MA(1) time domiain representation is: $$X_t = w_t + \theta w_{t-1}$$ The second, is a frequency domain representation of a series.
+Here, $X_t$ is represented as the sum of trigonometric functions.
+More specifically, the spectral density of $X_t$ is the fourier transform of the acf of the series.
+$$f_X(\nu) = \sum_{h = - \infty}^{\infty} \gamma(h) e^{-2\pi i \nu h}$$ For example, the spectral density of an MA(1) is: $$f_X(\nu) = \sigma^2 \left( 1 + \theta^2 + 2\theta\cos(2\pi\nu) \right)$$ The important concept here is to understand that these representations are equivalent; meaning they contain the same information about a time series, such as encoding the acf function.
 
 ::: callout-tip
-## Where does the term ``White Noise'' come from?
+## Where does the term \`\`White Noise'' come from?
 
-The spectral density of an uncorrelated sequence with variance $\sigma^2$ is simply $f(\nu) = \sigma^2$. Notice this is not a function of any frequencies but just a constant for any $\nu$. Hence, it is a stochastic process that equally weight all frequencies in the spectrum. This is precisely where the names white noise comes from as white light has the same property of reflecting all color bands equally, combining to produce white light. 
+The spectral density of an uncorrelated sequence with variance $\sigma^2$ is simply $f(\nu) = \sigma^2$.
+Notice this is not a function of any frequencies but just a constant for any $\nu$.
+Hence, it is a stochastic process that equally weight all frequencies in the spectrum.
+This is precisely where the names white noise comes from as white light has the same property of reflecting all color bands equally, combining to produce white light.
 :::
 
-Now that we know we can express a time series either in the time domain or as a sum of sin and cosine curves, we get to the important part for seasonal adjustment - how does a linear filter effect the input series? Assume we want to pass a moving-average linear filter over our data $X_t$ with weights $\ldots, w_{-2}, w_{-1}, w_{0}, w_{1}, w_{2}, \ldots$. Assume the output of the linear filter will be $Y_t$ such that
-$$Y_t = \sum_{j = -\infty}^{\infty} w_j X_{t+j} = 
-\ldots + w_{-2}X_{t-2} + w_{-1}X_{t-1} +  w_{0}X_{t} + w_{1}X_{t+1} + w_{2}X_{t+2} + \ldots$$
-This type of linear filter can be expressed as a linear operator in terms of the backshift operator $B$ , where $BX_t = X_{t-1}$ and $B^{-1}X_t = X_{t+1}$.
-$$W(B) = \ldots + w_{-2}B^2 + w_{-1}B +  w_{0} + w_{1}B^{-1} + w_{2}B^{-2} + \ldots$$
-and hence $Y_t = W(B)X_t$. We can now express the spectral density of $Y_t$ in terms of the input spectral density $X_t$.
+Now that we know we can express a time series either in the time domain or as a sum of sin and cosine curves, we get to the important part for seasonal adjustment - how does a linear filter effect the input series?
+Assume we want to pass a moving-average linear filter over our data $X_t$ with weights $\ldots, w_{-2}, w_{-1}, w_{0}, w_{1}, w_{2}, \ldots$.
+Assume the output of the linear filter will be $Y_t$ such that $$Y_t = \sum_{j = -\infty}^{\infty} w_j X_{t+j} = 
+\ldots + w_{-2}X_{t-2} + w_{-1}X_{t-1} +  w_{0}X_{t} + w_{1}X_{t+1} + w_{2}X_{t+2} + \ldots$$ This type of linear filter can be expressed as a linear operator in terms of the backshift operator $B$ , where $BX_t = X_{t-1}$ and $B^{-1}X_t = X_{t+1}$.
+$$W(B) = \ldots + w_{-2}B^2 + w_{-1}B +  w_{0} + w_{1}B^{-1} + w_{2}B^{-2} + \ldots$$ and hence $Y_t = W(B)X_t$.
+We can now express the spectral density of $Y_t$ in terms of the input spectral density $X_t$.
 $$f_Y(\nu) = \underbrace{\lvert W(e^{2\pi i \nu}) \rvert^2}_{\text{Square Gain Function}} f_X(\nu)$$.
-There is some mathematical machinery needed when understanding exactly what the square-gain function, $\lvert W(e^{2\pi i \nu}) \rvert^2$, is. However, for the sake of this text we just know that it tells us exactly the frequencies of $X_t$ that amplified in the output $Y_t$ as well as the frequencies of $X_t$ that will be annihilated (when the square-gain function equals 0). 
+There is some mathematical machinery needed when understanding exactly what the square-gain function, $\lvert W(e^{2\pi i \nu}) \rvert^2$, is.
+However, for the sake of this text we just know that it tells us exactly the frequencies of $X_t$ that amplified in the output $Y_t$ as well as the frequencies of $X_t$ that will be annihilated (when the square-gain function equals 0).
 
 ## X-11 Moving average filters
 
-We introduce the moving average filters and subsequently plot the filter weights along with the values of the squared gain function. 
+We introduce the moving average filters and subsequently plot the filter weights along with the values of the squared gain function.
 The X11 spec also allows users to control the length of the trend and seasonal moving average filters used during the adjustment.
 Generally speaking, longer filters imply a more stable seasonal component and shorter filters a more changing seasonal pattern.
 Of course, a longer filter will use more data for the calculation of components at each time point.
@@ -166,6 +185,7 @@ w_len = (length(w) - 1) / 2
 plot((-w_len):(w_len), w, type = "b", ylim = c(0, max(w)), xlab = "time lag", ylab = "filter weight", main = "3x9 Seasonal Filter wts")
 abline(h = 0, lty = 'dotted')
 ```
+
 ```{r, echo=FALSE}
 # 3 x 15 seasonal filter wts 
 w = find_seasonal_PxQ_filter_wts(3, 15)
@@ -175,6 +195,35 @@ abline(h = 0, lty = 'dotted')
 ```
 
 ## Extreme value
+
+The X11 method is sensitive to outliers. Beyond the specified regressors (AOs, level shifts, temporary changes, etc), an X11 adjustment will replace extreme values after the initial crude trend estimation occurs in the first iteration of the X11 method. 
+
+The replacement proceedure looks as follows:
+
+
+```{mermaid}
+%%| label: fig-spec-interaction
+%%| fig-width: 9
+%%| fig-cap: |
+%%|   Interactions between X-13 specs.
+flowchart LR
+    A(  Estimate standard deviation <br> of irregular, s  )-->B(Compare SI-ration to <br> multiples of s)
+    B-->C(SI < 1.5 * s)
+    B-->D(1.5 * s < SI < 2.5 * s)
+    B-->E(SI > 2.5 * s)
+    C --> F(SI unchanged)
+    D --> G(SI linearly weighted)
+    E --> H(SI fully weighted)
+```
+
+::: callout-warning
+### SI ratio / SI difference
+
+In a multiplicative adjustment, the detrended series is reffered to the SI ratio. 
+It is an estimate of the seasonal component. The SI ratio is used to identify extreme values during the initial and intermediate steps of the X-11 method. 
+
+:::
+
 
 ::: callout-warning
 ## Related concept: Outlier
@@ -196,15 +245,7 @@ tsbox::ts_plot(
 
 ```
 
+## Points to include in Chapter
 
-
-
-
-
-
-
-
-
-
-
-
+* Level shifts are included with the trend component while AOs and extreme values are included in the irregular.
+* 
