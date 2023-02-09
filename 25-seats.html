@@ -5,7 +5,7 @@
 <meta name="generator" content="quarto-1.2.269">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="James Livsey and Christoph Sax">
-<title>Seasonal Adjustment in R - 1&nbsp; Introduction</title>
+<title>Seasonal Adjustment in R - 7&nbsp; SEATS</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -109,8 +109,8 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./11-getting-started.html" rel="next">
-<link href="./index.html" rel="prev">
+<link href="./30-part-data-problems.html" rel="next">
+<link href="./24-x11.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -138,12 +138,13 @@ div.csl-indent {
     "search-submit-button-title": "Submit"
   }
 }</script><meta name="robots" content="noindex">
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 </head>
 <body class="nav-sidebar floating slimcontent">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></h1>
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">SEATS</span></h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -180,7 +181,7 @@ div.csl-indent {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./10-introduction.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a>
+  <a href="./10-introduction.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -220,7 +221,7 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./25-seats.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">SEATS</span></a>
+  <a href="./25-seats.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">SEATS</span></a>
   </div>
 </li>
       </ul>
@@ -321,19 +322,18 @@ div.csl-indent {
         <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
-<li><a href="#seasonal-adjustment" id="toc-seasonal-adjustment" class="nav-link active" data-scroll-target="#seasonal-adjustment">Seasonal Adjustment</a></li>
-  <li><a href="#x-13arima-seats" id="toc-x-13arima-seats" class="nav-link" data-scroll-target="#x-13arima-seats">X-13ARIMA-SEATS</a></li>
-  <li><a href="#r" id="toc-r" class="nav-link" data-scroll-target="#r">R</a></li>
-  <li><a href="#target-audience" id="toc-target-audience" class="nav-link" data-scroll-target="#target-audience">Target audience</a></li>
-  <li><a href="#history-of-x-13" id="toc-history-of-x-13" class="nav-link" data-scroll-target="#history-of-x-13">History of X-13</a></li>
-  <li><a href="#the-seasonalbook-package" id="toc-the-seasonalbook-package" class="nav-link" data-scroll-target="#the-seasonalbook-package"><span class="toc-section-number">1.1</span>  The seasonalbook package</a></li>
-  <li><a href="#acknowledgements" id="toc-acknowledgements" class="nav-link" data-scroll-target="#acknowledgements">Acknowledgements</a></li>
-  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
-  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/10-introduction.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+<li><a href="#model-based-decomposition" id="toc-model-based-decomposition" class="nav-link active" data-scroll-target="#model-based-decomposition"><span class="toc-section-number">7.1</span>  Model based decomposition</a></li>
+  <li><a href="#comparing-seats-with-x-11-filters" id="toc-comparing-seats-with-x-11-filters" class="nav-link" data-scroll-target="#comparing-seats-with-x-11-filters"><span class="toc-section-number">7.2</span>  Comparing SEATS with X-11 filters:</a></li>
+  <li><a href="#transitory-component-later-more-optional" id="toc-transitory-component-later-more-optional" class="nav-link" data-scroll-target="#transitory-component-later-more-optional"><span class="toc-section-number">7.3</span>  Transitory component [Later, more optional]</a></li>
+  <li><a href="#quick-refresher-on-arima-models-and-notation" id="toc-quick-refresher-on-arima-models-and-notation" class="nav-link" data-scroll-target="#quick-refresher-on-arima-models-and-notation"><span class="toc-section-number">7.4</span>  Quick refresher on ARIMA models and notation</a></li>
+  <li><a href="#seats-assumptions" id="toc-seats-assumptions" class="nav-link" data-scroll-target="#seats-assumptions"><span class="toc-section-number">7.5</span>  SEATS Assumptions</a></li>
+  <li><a href="#example-seats-adjustment" id="toc-example-seats-adjustment" class="nav-link" data-scroll-target="#example-seats-adjustment"><span class="toc-section-number">7.6</span>  Example SEATS adjustment</a></li>
+  <li><a href="#some-existing-studies-and-conclusions" id="toc-some-existing-studies-and-conclusions" class="nav-link" data-scroll-target="#some-existing-studies-and-conclusions"><span class="toc-section-number">7.7</span>  Some existing studies and conclusions</a></li>
+  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/25-seats.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content page-columns page-full" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
-<h1 class="title"><span id="sec-introduction" class="quarto-section-identifier d-none d-lg-block"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></h1>
+<h1 class="title"><span id="sec-seats" class="quarto-section-identifier d-none d-lg-block"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">SEATS</span></span></h1>
 </div>
 
 
@@ -347,67 +347,128 @@ div.csl-indent {
   
 
 </header><div class="status">
-<div class="callout-note callout callout-style-simple">
+<div class="callout-important callout callout-style-simple">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-body-container">
-<p>You are reading an early draft of <em>Seasonal Adjustment in R</em>. This chapter is complete enough as an education tool and can be used in a course. It needs additional polishing.</p>
-<p><strong>It is part of the course materials intended for Dec 21, 2022</strong>.</p>
+<p>You are reading an early draft of <em>Seasonal Adjustment in R</em>. This chapter is currently a dumping ground for ideas, and we don’t recommend reading it.</p>
+<p><strong>It is part of the course materials intended for Jan 21, 2023</strong>.</p>
 </div>
 </div>
 </div>
 </div>
-<!--
-- What is Seasonal Adjustment?
-- What is X-13ARIMA-SEATS (X13)?
-- Who uses X13?
-- Available alternatives in and outside of R (some topics are covered in chapter VI)
-- Case Study: A use cases outside of official statistics: seasonal adjustment of business data
- -->
-<p>This book will teach you how to do seasonal adjustment in R using X-13ARIMA-SEATS. The audience will be both R users who want to learn about seasonal adjustment and seasonal adjustment practitioners who are interested in using R. The book will be tailored to the practical applications of seasonal adjustment within R.</p>
-<section id="seasonal-adjustment" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="seasonal-adjustment">Seasonal Adjustment</h2>
-<p>Many time series exhibit a regular seasonal pattern over the year. US unemployment, for example, is usually higher from January to March and again in June and July. Similarly, retail sales tend to peak during the Christmas season. This seasonal behavior is regular and predictable. The goal of seasonal adjustment is to estimate and remove the seasonal component from a time series.</p>
-<p>Why do we want to do this? Seasonal data is usually hard to interpret. For example, if we want to learn from the US unemployment rate if the economy is moving out of a recession during certain months, we want the labor market data to be free from seasonal effects.</p>
-</section><section id="x-13arima-seats" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="x-13arima-seats">X-13ARIMA-SEATS</h2>
-<p>Fundamentally, seasonal adjustment decomposes a time series into a <strong>trend</strong>, a <strong>seasonal</strong>, and an <strong>irregular</strong> component. Seasonal adjustment is then the act of removing the seasonal estimate from the observed series. There are many ways to perform this decomposition. This book focuses on a particular one, X-13ARIMA-SEATS (X-13, for short), the seasonal adjustment software developed by the United States Census Bureau. X-13 offers an elaborate toolkit to perform seasonal adjustment. The software allows users to control all aspects of the modeling process or alternatively, to use automated methods to make all modeling choices. In the text we will try to present material with this in mind. Throughout we offer suggestions about when built-in automatic method are sufficient (and sometimes even preferred) and when an analyst can get the most ``bang for the buck’’ to control modeling options themselves.</p>
-</section><section id="r" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="r">R</h2>
-<p>This book will teach you how to use X-13 in R through the <em>seasonal</em> package, which offers access to all features of X-13 with a usually much simpler syntax. It should be noted that the seasonal package is not a re-coding of the X-13 software. Instead it is a translation from R to the X-13 software. This translation is done under the hood and practitioners need not concern themselves with this inner working of the package. However, we make this point such that users understand that conceptually anything that can be done in the native X-13ARIMA-SEATS software, either from the command line or HTML version, can be done in the seasonal R package. Also this means if additional clarification or information about seasonal adjustment is desired, the X-13 manual or research papers can be consulted. Any example or methods found via the X-13 documentation can be easily translated to the R seasonal package. In fact, all examples from the X-13 manual can be seen run in the R seasonal package at http://www.seasonal.website/examples.html. The required X-13 binaries are provided by the <em>x13binary</em> package and automatically included in <em>seasonal</em>. The next chapter provides a minimal example to get you started in less than five minutes.</p>
-</section><section id="target-audience" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="target-audience">Target audience</h2>
-<p>We write this book for two primary audiences: The first focus is on current practitioners of seasonal adjustment who are interested in learning how to implement in R. This audience includes researchers from statistical agencies who want to use features of R to evaluate the properties of their seasonal adjustments.</p>
-<p>The second focus is on current R users who want to learn seasonal adjustment. We are able to leverage the reader’s knowledge of R to make learning seasonal adjustment easier. We will feature exciting applications outside official statistics, such as the seasonal adjustment of business data.</p>
-<p>The book tries to be as practical as possible. It usually starts with a practical problem and shows how to solve it in a cookbook style. Formal derivations are usually avoided. Each chapter ends with a case study that discusses a real-life example of the topic.</p>
-</section><section id="history-of-x-13" class="level2 unnumbered page-columns page-full"><h2 class="unnumbered anchored" data-anchor-id="history-of-x-13">History of X-13</h2>
-<p>In official statistics, seasonal adjustment has a long tradition. The US Census Bureau developed the original X-11 software in the 1960s, Statistics Canada <span class="citation" data-cites="dagum80">(<a href="#ref-dagum80" role="doc-biblioref">Dagum 1980</a>)</span> continued the development afterward. The following software packages by the US Census Bureau were called X-12-ARIMA <span class="citation" data-cites="findley98">(<a href="#ref-findley98" role="doc-biblioref">Findley et al. 1998</a>)</span> and X-13ARIMA-SEATS (or X-13, for short) <span class="citation" data-cites="monsell07">(<a href="#ref-monsell07" role="doc-biblioref">Monsell 2007</a>)</span>. X-11 is still used as a name for filter-based seasonal adjustment methods within X-13. Meanwhile, TRAMO-SEATS, developed by the Bank of Spain <span class="citation" data-cites="caporello01">(<a href="#ref-caporello01" role="doc-biblioref">Caporello, Maravall, and Sánchez 2001</a>)</span>, offers an alternative model-based approach to seasonal adjustment.</p>
-<div class="no-row-height column-margin column-container"><div id="ref-dagum80" class="csl-entry" role="doc-biblioentry">
-Dagum, Estela Bee. 1980. <em>The x-11-ARIMA Seasonal Adjustment Method</em>. Statistics Canada, Seasonal Adjustment; Time Series Staff.
-</div><div id="ref-findley98" class="csl-entry" role="doc-biblioentry">
-Findley, David F, Brian C Monsell, William R Bell, Mark C Otto, and Bor-Chung Chen. 1998. <span>“New Capabilities and Methods of the x-12-ARIMA Seasonal-Adjustment Program.”</span> <em>Journal of Business &amp; Economic Statistics</em> 16 (2): 127–52.
-</div><div id="ref-monsell07" class="csl-entry" role="doc-biblioentry">
-Monsell, B. 2007. <span>“The x-13A-s Seasonal Adjustment Program.”</span> In <em>Proceedings of the 2007 Federal Committee on Statistical Methodology Research Conference</em>. <a href="http://www.fcsm.gov/07papers/Monsell.II-B.pdf">http://www.fcsm.gov/07papers/Monsell.II-B.pdf</a>.
-</div><div id="ref-caporello01" class="csl-entry" role="doc-biblioentry">
-Caporello, Gianluca, Agustin Maravall, and Fernando J Sánchez. 2001. <span>“<span>Program TSW Reference Manual</span>.”</span> 0112. Banco de Espa<span>ñ</span>a Madrid. <a href="https://ideas.repec.org/p/bde/wpaper/0112.html">https://ideas.repec.org/p/bde/wpaper/0112.html</a>.
-</div><div id="ref-eurostat17" class="csl-entry" role="doc-biblioentry">
-National Bank of Belgium, Deutsche Bundesbank, Eurostat. 2017. <em>JDemetra+: Econometric Software for Seasonal Adjustment and Other Time Series Methods</em>. Eurostat. <a href="https://ec.europa.eu/eurostat/cros/content/download">https://ec.europa.eu/eurostat/cros/content/download</a>.
-</div></div><p>In its most recent version, X-13 offers these two seasonal adjustment methods in a single command-line tool written in Fortran. The National Bank of Belgium has created an alternative Java-based implementation called JDemetra+ <span class="citation" data-cites="eurostat17">(<a href="#ref-eurostat17" role="doc-biblioref">National Bank of Belgium, Deutsche Bundesbank, Eurostat 2017</a>)</span>, also widely deployed by statistical agencies.</p>
-</section><section id="the-seasonalbook-package" class="level2" data-number="1.1"><h2 data-number="1.1" class="anchored" data-anchor-id="the-seasonalbook-package">
-<span class="header-section-number">1.1</span> The <a href="https://github.com/christophsax/seasonalbook">seasonalbook</a> package</h2>
-<p>An R package that supplements “Seasonal Adjustment in R”, and contains all data and examples.</p>
-<p>To install:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"christophsax/seasonalbook"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Example series:</p>
+<section id="model-based-decomposition" class="level2 page-columns page-full" data-number="7.1"><h2 data-number="7.1" class="anchored" data-anchor-id="model-based-decomposition">
+<span class="header-section-number">7.1</span> Model based decomposition</h2>
+<p>Signal Extraction in ARIMA Time Series, or SEATS, is a method for estimating unobserved components in a time series. It is developed from the work of <span class="citation" data-cites="cleveland76">Cleveland and Tiao (<a href="#ref-cleveland76" role="doc-biblioref">1976</a>)</span>, <span class="citation" data-cites="hillmer82">Hillmer and Tiao (<a href="#ref-hillmer82" role="doc-biblioref">1982</a>)</span>, <span class="citation" data-cites="maravall86">Maravall (<a href="#ref-maravall86" role="doc-biblioref">1986</a>)</span>. If applied properly, SEATS seasonal factors are usually more stable than X-11, and the seasonally adjusted series show less revisions than X11 (??) (see final section for a more extensive discussion).</p>
+<div class="no-row-height column-margin column-container"><div id="ref-cleveland76" class="csl-entry" role="doc-biblioentry">
+Cleveland, William P, and George C Tiao. 1976. <span>“Decomposition of Seasonal Time Series: A Model for the Census x-11 Program.”</span> <em>Journal of the American Statistical Association</em> 71 (355): 581–87.
+</div><div id="ref-hillmer82" class="csl-entry" role="doc-biblioentry">
+Hillmer, S. C., and G. C. Tiao. 1982. <span>“An ARIMA-Model-Based Approach to Seasonal Adjustment.”</span> <em>Journal of the American Statistical Association</em> 77 (377): 63–70. <a href="http://www.jstor.org/stable/2287770">http://www.jstor.org/stable/2287770</a>.
+</div><div id="ref-maravall86" class="csl-entry" role="doc-biblioentry">
+Maravall, Agustin. 1986. <span>“Revisions in ARIMA Signal Extraction.”</span> <em>Journal of the American Statistical Association</em> 81 (395): 736–40. <a href="http://www.jstor.org/stable/2289005">http://www.jstor.org/stable/2289005</a>.
+</div></div><p>Like X-11, SEATS applies a series of filters to an observed time series, as described in <a href="24-x11.html#sec-seasonal-decomposition"><span>Section&nbsp;6.1</span></a>. Like X-11, SEATS uses a forecast extended series, in order to obtain unbiased results at the margin.</p>
+<p>Unlike X-11, however, SEATS filters are derived from the ARIMA model of the time series. While X-11 filters are predefined and fixed, the SEATS filters are different for each ARIMA model.</p>
+<div class="callout-important callout callout-style-simple callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+X-11 Filter
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>finite set of empirically developed moving average filters</li>
+<li>fixed filtering seen as easier to use (less statistical machinery)</li>
+</ul>
+<section id="seats-filters" class="level4" data-number="7.1.0.1"><h4 data-number="7.1.0.1" class="anchored" data-anchor-id="seats-filters">
+<span class="header-section-number">7.1.0.1</span> SEATS filters</h4>
+<ul>
+<li>specifies stochastic models for unobserved components</li>
+<li>derives seasonal adjustment filters from these models</li>
+<li>infinite number of possible filter choices</li>
+<li>requires more statistical machinery</li>
+</ul></section>
+</div>
+</div>
+<p>Given a certain ARIMA model (such as the “Airline” (0 1 1)(0 1 1) model which is appropriate for the description of the <code>AirPassengers</code> time series), SEATS decomposes the model into separate models for the trend, the seasonal and the irregular component. This is done by the <em>canonical decomposition</em> derived by Pierce, Box-Hillmer, Tiao and Burman [FIXME] and will be discussed in section (FIXME).</p>
+<p>The decomposition of the ARIMA model is independent of the data. For each ARIMA specification, there is a unique canonical decomposition. Some decompositions for common ARIMA models are given in table [FIXME, e.g.&nbsp;(011)(011) -&gt; ??? ???].</p>
+<p>The decomposed ARIMA models imply a certain filter, which is derived by the WK procedure. The filters depend on the parameters of the original arima models. Figure FIXME displays the SEATS filters for an (0 1 1)(0 1 1) model, for various values of theta.</p>
+</section><section id="comparing-seats-with-x-11-filters" class="level2" data-number="7.2"><h2 data-number="7.2" class="anchored" data-anchor-id="comparing-seats-with-x-11-filters">
+<span class="header-section-number">7.2</span> Comparing SEATS with X-11 filters:</h2>
+<p>If SEATS and X-11 use similar filters, the final adjustment will be similar. Using the default arguments of <code>seas()</code> on <code>AirPassengers</code>, the adjustment is very similar:</p>
 <div class="cell">
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">seasonalbook</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">grocery</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">seats</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span></span>
+<span><span class="va">x11</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, x11 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">tsbox</span><span class="fu">::</span><span class="fu"><a href="https://www.tsbox.help/reference/ts_plot.html">ts_plot</a></span><span class="op">(</span><span class="fu">final</span><span class="op">(</span><span class="va">seats</span><span class="op">)</span>, <span class="fu">final</span><span class="op">(</span><span class="va">x11</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="10-introduction_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="864"></p>
+<p><img src="25-seats_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="864"></p>
 </div>
 </div>
-</section><section id="acknowledgements" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="acknowledgements">Acknowledgements</h2>
-<p>We are indebted to the United States Census Bureau for X-13ARIMA-SEATS and support for research around the software. Help and support by Brian Monsell are especially acknowledged.</p>
-<p>seasonal was originally developed for use at the Swiss State Secretariat of Economic Affairs. It has been dramatically improved thanks to suggestions and support from Matthias Bannert, Freya Beamish, Vidur Dhanda, Alain Galli, Ronald Indergand, Preetha Kalambaden, Stefan Leist, James Livsey, Pinaki Mukherjee, Bruno Parnisari and many others. The related work on the x13binary package facilitated (automated) deployment thanks to the R package system, CRAN, and GitHub for the x13prebuilt repository.</p>
-</section><section id="references" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="references">References</h2>
+<p>If we look at the applied filters, we see that FIXME.</p>
+</section><section id="transitory-component-later-more-optional" class="level2" data-number="7.3"><h2 data-number="7.3" class="anchored" data-anchor-id="transitory-component-later-more-optional">
+<span class="header-section-number">7.3</span> Transitory component [Later, more optional]</h2>
+<p>Sometimes SEATS includes a transitory component in its decomposition:</p>
+<p><span class="math display">\[ X_t = T_t + S_t + R_t + u_t \]</span></p>
+<p>The transitory component captures short, erratic behavior that is not white noise, sometimes associated with awkward frequencies.</p>
+<ul>
+<li>The variation from the transitory component should not contaminate the trend or seasonal, and removing it allows SEATS to obtain smoother, more stable trends and seasonal components.</li>
+<li>In the final decomposition, the transitory and irregular components are usually combined.</li>
+<li>SEATS does not always estimate a transitory component</li>
+</ul></section><section id="quick-refresher-on-arima-models-and-notation" class="level2" data-number="7.4"><h2 data-number="7.4" class="anchored" data-anchor-id="quick-refresher-on-arima-models-and-notation">
+<span class="header-section-number">7.4</span> Quick refresher on ARIMA models and notation</h2>
+<p>The remaining of the SEATS section will heavily rely on the autoregressive and moving-average operators <span class="math inline">\(\phi(B)\)</span> and <span class="math inline">\(\theta(B)\)</span> where <span class="math inline">\(B X_t = X_{t-1}\)</span>.</p>
+<p>If <span class="math inline">\(X_t\)</span> follows and ARIMA(<span class="math inline">\(p\)</span>, <span class="math inline">\(d\)</span>, <span class="math inline">\(q\)</span>) model: <span class="math display">\[
+\phi(B) X_t = \theta(B) a_t
+\]</span></p>
+<p><span class="math display">\[
+(1 - \phi_1 B - \cdots - \phi_p B^p)(1-B)^d X_t = (1 + \theta_1 B + \cdots \theta_q B^q) a_t
+\]</span></p>
+<p>For example, in an ARIMA(2,0,1) we are modeling <span class="math inline">\(X_t\)</span> as:</p>
+<p><span class="math display">\[
+X_t = \phi_1 X_{t-1} + \phi_2 X_{t-2} + a_t + \theta_1 a_{t-1}
+\]</span></p>
+<p>and all model information is contained in <span class="math inline">\(\phi(B)\)</span> and <span class="math inline">\(\theta(B)\)</span>. Moreover, for any specified <span class="math inline">\(\phi(B)\)</span> and <span class="math inline">\(\theta(B)\)</span> that satisfy certain causality criteria there exists a unique Wold decomposition <span class="math display">\[
+\phi(B) X_t = \theta(B) a_t  
+\]</span></p>
+<p><span class="math display">\[
+X_t = \frac{\theta(B)}{\phi(B)} a_t = \Psi(B) a_t = \sum_{k=0}^{\infty} \psi_k a_{t-k}
+\]</span></p>
+</section><section id="seats-assumptions" class="level2" data-number="7.5"><h2 data-number="7.5" class="anchored" data-anchor-id="seats-assumptions">
+<span class="header-section-number">7.5</span> SEATS Assumptions</h2>
+<ul>
+<li>The linearized series can be represented by an ARIMA model which captures the stochastic structure of the series (Linearized series = series with regression effects removed)</li>
+<li>After differencing each with the ARIMA’s differencing polynomial, the components are orthogonal (uncorrelated)</li>
+</ul>
+<p>SEATs decomposes the autoregressive polynomial by its roots associating them with different latent components. For example, roots near seasonal frequencies are associated with the seasonal component and roots near zero are associated with the trend component. <span class="math display">\[
+\phi(B) = \phi_T(B) \cdot \phi_S(B) \cdot \phi_R(B).
+\]</span></p>
+<p>Hence we have, <span class="math display">\[
+X_t =
+\frac{\theta(B)}{\phi(B)} a_{t} =
+\frac{\theta_T(B)}{\phi_T(B)} a_{T,t} +
+\frac{\theta_S(B)}{\phi_S(B)} a_{S,t}  +
+\frac{\theta_R(B)}{\phi_R(B)} a_{R,t}  + u_t
+\]</span></p>
+<p>If the spectra of all components in non-negative the decomposition is admissible, SEATS finds admissible models for components <span class="math display">\[ \phi_T(B) T_t = \theta_T(B) a_{T, t} \]</span> <span class="math display">\[ \phi_S(B) S_t = \theta_S(B) a_{S, t} \]</span> <span class="math display">\[\phi_R(B) R_t = \theta_R(B) a_{R, t} \]</span> <em>Problem:</em> Infinite number of models that yield the same aggregate. The choices differ in how white noise is allocated among the components. <em>Solution:</em> Canonical Decomposition: SEATS uses the method of Pierce, Box-Hillmer, Tiao and Burman:</p>
+<ul>
+<li>Put all the white noise into the irregular components</li>
+<li>Maximize the variance of the irregular</li>
+<li>Minimizes the variance of the stationary transforms of the other components</li>
+</ul>
+<p>This is called the <em>Canonical Decomposition</em>. We already stated that both X-11 and SEATS estimate the unobserved components by passing a moving-average filter over the observed data. So how do we use these implied component models to get a linear filter? It should be clear that the filter weights will depend on that arima model is picked <span class="math inline">\(X_t = \Psi(B) a_t\)</span>, and what the implied seasonal model, <span class="math inline">\(\phi_S(B) S_t = \theta_S(B) a_{S,t} \Rightarrow S_t = \Psi(B) a_t\)</span>, is. The <strong>Wiener-Kolmogorov</strong> (WK) algorithm outlines the methodology to get the so-called WK filter. This is the filter that is equal to the conditional expectation of the seasonal component conditional on the observed series.<br></p>
+<p><span class="math display">\[\widehat{S}_t = \underbrace{\left[ \frac{\Sigma_S}{\Sigma} \frac{\Psi_S(B)\Psi_S(F)}{\Psi(B)\Psi(F)} \right]}_{\mbox{WK filter weights}} X_t\]</span> where <span class="math inline">\(F=B^{-1}\)</span> if the forward shift operator such that <span class="math inline">\(F X_t = X_{t+1}\)</span>.</p>
+<p>More than other coefficients, the seasonal MA (<span class="math inline">\(\theta_{12}\)</span>) influences whether estimated seasonal factors change either slowly over time (<span class="math inline">\(\theta_{12}\)</span> close to 1) or rapidly over time (<span class="math inline">\(\theta_{12}\)</span> close to zero).</p>
+</section><section id="example-seats-adjustment" class="level2" data-number="7.6"><h2 data-number="7.6" class="anchored" data-anchor-id="example-seats-adjustment">
+<span class="header-section-number">7.6</span> Example SEATS adjustment</h2>
+</section><section id="some-existing-studies-and-conclusions" class="level2" data-number="7.7"><h2 data-number="7.7" class="anchored" data-anchor-id="some-existing-studies-and-conclusions">
+<span class="header-section-number">7.7</span> Some existing studies and conclusions</h2>
+<p>The Bureau of Labor Statistics formed a group to do a comparison study between X-11 and model-based seasonal adjustments (CITE BLS 2007). The examined a cross section of 87 BLS series with X-11, SEATS, and STAMP using spectral, revisions history, model adequacy and sliding spans diagnostics. They found that SEATS seasonal factors are usually more stable than X-11 and X-11 trend component is usually more stable than SEATS. Also, among series that were seasonal, residual seasonality almost never appears using either method. The only exception being a small number of SEATS runs where model inadequacy for the full span of data was present. This manifested as SEATS having difficulty identifying a usable model for decomposition and falling back on the airline model. They found even in these situations the SEATS seasonal adjustment is usually reasonable.</p>
+<p>Overall, X-11 and SEATS seasonal adjustments are very similar for many series. SEATS adjustments are often smoother than X-11 seasonal adjustments. For some series, the variance can be different based on the month or season. For example, U.S. Housing Starts is more variable in the winter months than in the summer due to the differences in warm and cold winters. ARIMA model-based seasonal adjustment does not handle this situation very well and assumes a constant variance and the SEATS adjustment wont compensate for this.</p>
 
 
 
@@ -544,13 +605,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
-      <a href="./index.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Welcome</span>
+      <a href="./24-x11.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">X11</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./11-getting-started.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Getting started</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./30-part-data-problems.html" class="pagination-link">
+        <span class="nav-page-text">Data Problems</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

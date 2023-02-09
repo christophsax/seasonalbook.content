@@ -154,9 +154,8 @@ div.csl-indent {
   <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Seasonal Adjustment in R</a> 
-        <div class="sidebar-tools-main tools-wide">
+        <div class="sidebar-tools-main">
     <a href="https://github.com/christophsax/seasonalbook.content" title="Source Code" class="sidebar-tool px-1"><i class="bi bi-github"></i></a>
-    <a href="./Seasonal-Adjustment-in-R.pdf" title="Download PDF" class="sidebar-tool px-1"><i class="bi bi-file-pdf"></i></a>
   <a href="" class="quarto-reader-toggle sidebar-tool" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
   <div class="quarto-reader-toggle-btn">
   <i class="bi"></i>
@@ -217,12 +216,12 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./24-seats.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">SEATS</span></a>
+  <a href="./24-x11.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">X11</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./25-x11.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">X11</span></a>
+  <a href="./25-seats.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">SEATS</span></a>
   </div>
 </li>
       </ul>
@@ -422,12 +421,12 @@ div.csl-indent {
 <tr class="even">
 <td><code>seats</code></td>
 <td>Invoke the production of model-based signal extraction using SEATS. Default in the R seasonal package.</td>
-<td><a href="24-seats.html"><span>Chapter&nbsp;6</span></a></td>
+<td><a href="25-seats.html"><span>Chapter&nbsp;7</span></a></td>
 </tr>
 <tr class="odd">
 <td><code>x11</code></td>
 <td>An optional spec for invoking seasonal adjustment by the X-11 methodology.</td>
-<td><a href="25-x11.html"><span>Chapter&nbsp;7</span></a></td>
+<td><a href="24-x11.html"><span>Chapter&nbsp;6</span></a></td>
 </tr>
 <tr class="even">
 <td><code>forecast</code></td>
@@ -439,7 +438,7 @@ div.csl-indent {
 </div>
 </section><section id="interactions-between-specs" class="level2" data-number="3.2"><h2 data-number="3.2" class="anchored" data-anchor-id="interactions-between-specs">
 <span class="header-section-number">3.2</span> Interactions between specs</h2>
-<p>X-13 specs interact with each other. For example, once a series is transformed, it is usually passed to the <code>regression</code> and <code>arima</code> specs, which estimate a regARIMA model. To come up with a good model, it uses the <code>automdl</code> spec to determine a good ARIMA model automatically. To correct outlier values, it collaborates with the <code>outlier</code> spec. Once the series is modeled, it is decomposed either by the <code>seats</code> or the <code>x11</code> spec. <a href="#fig-spec-interaction">Figure&nbsp;<span>3.1</span></a> shows the interaction between the main specs in a typical seasonal adjustment run.</p>
+<p>X-13 specs interact with each other. For example, once a series is transformed, it is usually passed to the <code>regression</code> and <code>arima</code> specs, which estimate a regARIMA model. To come up with a good model, it uses the <code>automdl</code> spec to determine a good ARIMA model automatically. To correct outlier values, it collaborates with the <code>outlier</code> spec. Once the series is modeled, it is decomposed either by the <code>seats</code> or the <code>x11</code> spec. <a href="24-x11.html#fig-spec-interaction">Figure&nbsp;<span>6.1</span></a> shows the interaction between the main specs in a typical seasonal adjustment run.</p>
 <!-- https://mermaid-js.github.io/mermaid/#/flowchart?id=styling-and-classes -->
 <div class="cell" data-fig-width="9">
 <div class="cell-output-display">

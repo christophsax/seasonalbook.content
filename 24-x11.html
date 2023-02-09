@@ -5,7 +5,7 @@
 <meta name="generator" content="quarto-1.2.269">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="James Livsey and Christoph Sax">
-<title>Seasonal Adjustment in R - 7&nbsp; X11</title>
+<title>Seasonal Adjustment in R - 6&nbsp; X11</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -90,8 +90,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./25-regARIMA.html" rel="next">
-<link href="./23-seats.html" rel="prev">
+<link href="./25-seats.html" rel="next">
+<link href="./23-regARIMA.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -119,14 +119,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     "search-submit-button-title": "Submit"
   }
 }</script><meta name="robots" content="noindex">
+<script src="site_libs/quarto-diagram/mermaid.min.js"></script><script src="site_libs/quarto-diagram/mermaid-init.js"></script><link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 </head>
 <body class="nav-sidebar floating">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title">
-<span class="chapter-number">7</span>&nbsp; <span class="chapter-title">X11</span>
-</h1>
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">X11</span></h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -136,9 +136,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Seasonal Adjustment in R</a> 
-        <div class="sidebar-tools-main tools-wide">
+        <div class="sidebar-tools-main">
     <a href="https://github.com/christophsax/seasonalbook.content" title="Source Code" class="sidebar-tool px-1"><i class="bi bi-github"></i></a>
-    <a href="./Seasonal-Adjustment-in-R.pdf" title="Download PDF" class="sidebar-tool px-1"><i class="bi bi-file-pdf"></i></a>
   <a href="" class="quarto-reader-toggle sidebar-tool" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
   <div class="quarto-reader-toggle-btn">
   <i class="bi"></i>
@@ -169,12 +168,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./11-minimal-example.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">A minimal example</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./12-how-to-use.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">How to use the book</span></a>
+  <a href="./11-getting-started.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Getting started</span></a>
   </div>
 </li>
       </ul>
@@ -189,27 +183,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./21-overview.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Overview of the software</span></a>
+  <a href="./21-overview.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The fundamentals of X-13</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./22-transform.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Transform</span></a>
+  <a href="./22-transform.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Transform</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./23-seats.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">SEATS</span></a>
+  <a href="./23-regARIMA.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">regARIMA Model</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./24-x11.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">X11</span></a>
+  <a href="./24-x11.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">X11</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./25-regARIMA.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">regARIMA Model</span></a>
+  <a href="./25-seats.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">SEATS</span></a>
   </div>
 </li>
       </ul>
@@ -224,22 +218,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./31-holidays.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Irregular holidays</span></a>
+  <a href="./31-holidays.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Irregular holidays</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./32-trading-days.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Trading days</span></a>
+  <a href="./32-trading-days.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Trading days</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./33-outliers.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Outliers</span></a>
+  <a href="./33-outliers.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Outliers</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./34-seasonal-breaks.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Seasonal breaks</span></a>
+  <a href="./34-seasonal-breaks.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Seasonal breaks</span></a>
   </div>
 </li>
       </ul>
@@ -254,17 +248,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./41-presence-of-seasonality.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Presence of seasonality</span></a>
+  <a href="./41-presence-of-seasonality.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Presence of seasonality</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./42-annual-constraining.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Annual constraining</span></a>
+  <a href="./42-annual-constraining.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Annual constraining</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./43-indirect-vs-direct.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Indirect vs direct adjustment</span></a>
+  <a href="./43-indirect-vs-direct.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Indirect vs direct adjustment</span></a>
   </div>
 </li>
       </ul>
@@ -279,12 +273,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./51-quality-measures.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Quality measures</span></a>
+  <a href="./51-quality-measures.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Quality measures</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./52-revisions.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Revisions</span></a>
+  <a href="./52-revisions.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Revisions</span></a>
   </div>
 </li>
       </ul>
@@ -310,17 +304,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
-<li><a href="#additive-and-multiplicative-again" id="toc-additive-and-multiplicative-again" class="nav-link active" data-scroll-target="#additive-and-multiplicative-again"><span class="toc-section-number">7.1</span>  Additive and multiplicative (again)</a></li>
-  <li><a href="#filter-length" id="toc-filter-length" class="nav-link" data-scroll-target="#filter-length"><span class="toc-section-number">7.2</span>  Filter length</a></li>
-  <li><a href="#extrem-value" id="toc-extrem-value" class="nav-link" data-scroll-target="#extrem-value"><span class="toc-section-number">7.3</span>  Extrem value</a></li>
-  <li><a href="#case-study" id="toc-case-study" class="nav-link" data-scroll-target="#case-study"><span class="toc-section-number">7.4</span>  Case study</a></li>
+<li><a href="#sec-seasonal-decomposition" id="toc-sec-seasonal-decomposition" class="nav-link active" data-scroll-target="#sec-seasonal-decomposition"><span class="toc-section-number">6.1</span>  Seasonal decomposition</a></li>
+  <li><a href="#a-simple-decomposition-in-r" id="toc-a-simple-decomposition-in-r" class="nav-link" data-scroll-target="#a-simple-decomposition-in-r"><span class="toc-section-number">6.2</span>  A simple decomposition in R</a></li>
+  <li><a href="#x-11-adjusment" id="toc-x-11-adjusment" class="nav-link" data-scroll-target="#x-11-adjusment"><span class="toc-section-number">6.3</span>  X-11 Adjusment</a></li>
+  <li><a href="#additive-and-multiplicative-again" id="toc-additive-and-multiplicative-again" class="nav-link" data-scroll-target="#additive-and-multiplicative-again"><span class="toc-section-number">6.4</span>  Additive and multiplicative (again)</a></li>
+  <li><a href="#frequency-domain-of-time-series-optional" id="toc-frequency-domain-of-time-series-optional" class="nav-link" data-scroll-target="#frequency-domain-of-time-series-optional"><span class="toc-section-number">6.5</span>  Frequency domain of time series (Optional)</a></li>
+  <li><a href="#x-11-moving-average-filters" id="toc-x-11-moving-average-filters" class="nav-link" data-scroll-target="#x-11-moving-average-filters"><span class="toc-section-number">6.6</span>  X-11 Moving average filters</a></li>
+  <li><a href="#extreme-value" id="toc-extreme-value" class="nav-link" data-scroll-target="#extreme-value"><span class="toc-section-number">6.7</span>  Extreme value</a></li>
+  <li><a href="#case-study" id="toc-case-study" class="nav-link" data-scroll-target="#case-study"><span class="toc-section-number">6.8</span>  Case study</a></li>
+  <li><a href="#points-to-include-in-chapter" id="toc-points-to-include-in-chapter" class="nav-link" data-scroll-target="#points-to-include-in-chapter"><span class="toc-section-number">6.9</span>  Points to include in Chapter</a></li>
   </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/24-x11.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
-<h1 class="title d-none d-lg-block">
-<span class="chapter-number">7</span>&nbsp; <span class="chapter-title">X11</span>
-</h1>
+<h1 class="title"><span id="sec-x11" class="quarto-section-identifier d-none d-lg-block"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">X11</span></span></h1>
 </div>
 
 
@@ -334,14 +331,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   
 
 </header><div class="status">
-<div class="callout-note callout callout-style-simple">
+<div class="callout-important callout callout-style-simple">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-body-container">
-<p>You are reading an early draft of <em>Seasonal Adjustment in R</em>. This chapter should be readable but needs polishing.</p>
-<p><strong>It is part of the course materials intended for Dec 21, 2022</strong>.</p>
+<p>You are reading an early draft of <em>Seasonal Adjustment in R</em>. This chapter is currently a dumping ground for ideas, and we don’t recommend reading it.</p>
+<p><strong>It is part of the course materials intended for Jan 21, 2023</strong>.</p>
 </div>
 </div>
 </div>
@@ -352,11 +349,78 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 -   Case Study: Changing the length of trend and/or seasonal filter
 
  -->
-<p>One of the two main methods available in X-13ARIMA-SEATS to extract trend and seasonal components is the X-11 method. This is a nonparametric procedure that works by passing moving-average filters over the data to extract intended components.</p>
-<p>In order to use symetric moving average filters at the end of the time series (current value), a regARIMA model is used to forecast extend the series. This RegARIMA model is where users can test for or specify outliers, trading day and moving holiday regressors in their adjustment. The forecast extended series is then used to filter.</p>
+<p>One of the two main methods available in X-13ARIMA-SEATS to extract trend and seasonal components is the X-11 method. This is a nonparametric procedure that works by passing moving-average filters over the data to extract the intended components. Since both X-11 and SEATS apply filters to time-series, we start with a general discussion on seasonal decomposition that applies both to X-11 and STEATS. SEATS will be discussed in greater detail in <a href="25-seats.html"><span>Chapter&nbsp;7</span></a>.</p>
+<section id="sec-seasonal-decomposition" class="level2" data-number="6.1"><h2 data-number="6.1" class="anchored" data-anchor-id="sec-seasonal-decomposition">
+<span class="header-section-number">6.1</span> Seasonal decomposition</h2>
+<p>As we have seen in the previous chapters, the core of seasonal adjustment is the decomposition of a time series into a <strong>trend</strong>, a <strong>seasonal</strong> and and <strong>irregular</strong> component. Algebraically, we write the fundamental identity as:</p>
+<p><span class="math display">\[
+X_t = T_t + S_t + I_t
+\]</span></p>
+<p>where, <span class="math inline">\(X_t\)</span> is the observed time series, <span class="math inline">\(T_t\)</span> the trend, <span class="math inline">\(S_t\)</span> the seasonal component and <span class="math inline">\(I_t\)</span> the irregular component. Once the decomposition is done, the seasonally adjusted series can be computed as follows:</p>
+<p>How to perform the seasonal decomposition? Ultimately, both X-11 and SEATS estimate the components <span class="math inline">\(T_t\)</span>, <span class="math inline">\(S_t\)</span>, <span class="math inline">\(I_t\)</span> by passing moving average filters over the series. In order to get unbiased results at the margin, the underlying series is usually extended by forecasts from the regARIMA model discussed in the <a href="23-regARIMA.html"><span>Chapter&nbsp;5</span></a>.</p>
+<p>How do we apply moving average filters over a series? The <strong>trend component</strong> can be estimated by applying a moving average over the observed series. For each point in time, an simple average that uses a certain number of observations both on the left and the right of the series. Because the window is symmetric, we need the series extended by forecasts and backcasts.</p>
+<p>Once the trend component is computed, we can subtract it from the original series to compute a <em>detrended series</em>.</p>
+<p>FIXME complete after discussion w Jim.</p>
+</section><section id="a-simple-decomposition-in-r" class="level2" data-number="6.2"><h2 data-number="6.2" class="anchored" data-anchor-id="a-simple-decomposition-in-r">
+<span class="header-section-number">6.2</span> A simple decomposition in R</h2>
+<p>Let’s apply the previous discuss by hand, using basic R functions. A basic trend filter could be a simple filter with 13 filter weights all equal to 1/13. We use these weights to estimate the trend of the <code>AirPassengers</code> series.</p>
+<div class="cell">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">observed</span> <span class="op">&lt;-</span> <span class="va">AirPassengers</span>         <span class="co"># the observed series</span></span>
+<span><span class="va">filter_trend</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">13</span><span class="op">)</span> <span class="op">/</span> <span class="fl">13</span>      <span class="co"># a symetric filter that uses 6 obs. on each side</span></span>
+<span><span class="va">trend</span> <span class="op">=</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">observed</span>, filter <span class="op">=</span> <span class="va">filter_trend</span>, sides <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="fu">tsbox</span><span class="fu">::</span><span class="fu"><a href="https://www.tsbox.help/reference/ts_plot.html">ts_plot</a></span><span class="op">(</span><span class="va">observed</span>, <span class="va">trend</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="24-x11_files/figure-html/x11-trend-1.png" class="img-fluid" width="864"></p>
+</div>
+</div>
+<p>After estimating the trend we now can estimate the seasonal component of the detrended series using a 3x3 seasonal filter that has weights (1,2,3,2,1)/9.</p>
+<div class="cell">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">detrended</span> <span class="op">&lt;-</span> <span class="va">observed</span> <span class="op">-</span> <span class="va">trend</span></span>
+<span><span class="va">filter_seas</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">/</span> <span class="fl">9</span></span>
+<span><span class="va">seasonal</span> <span class="op">=</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">detrended</span>, filter <span class="op">=</span> <span class="va">filter_seas</span>, sides <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="fu">tsbox</span><span class="fu">::</span><span class="fu"><a href="https://www.tsbox.help/reference/ts_plot.html">ts_plot</a></span><span class="op">(</span><span class="va">detrended</span>, <span class="va">seasonal</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="24-x11_files/figure-html/x11-seasonal-component-1.png" class="img-fluid" width="864"></p>
+</div>
+</div>
+<p><strong>DISCUSS</strong>, but isn’t the idea of estimating the seasonal component more something like this? Where we average among same periods?</p>
+<div class="cell">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">detrended</span> <span class="op">&lt;-</span> <span class="va">observed</span> <span class="op">-</span> <span class="va">trend</span></span>
+<span><span class="va">filter_seas</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">/</span> <span class="fl">5</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">seasonal</span> <span class="op">&lt;-</span> </span>
+<span>  <span class="fu">ts_tbl</span><span class="op">(</span><span class="va">detrended</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>month <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/month.html">month</a></span><span class="op">(</span><span class="va">time</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">month</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>seasonal <span class="op">=</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">value</span>, filter <span class="op">=</span> <span class="va">filter_seas</span>, sides <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">time</span>, value <span class="op">=</span> <span class="va">seasonal</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">ts_ts</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">tsbox</span><span class="fu">::</span><span class="fu"><a href="https://www.tsbox.help/reference/ts_plot.html">ts_plot</a></span><span class="op">(</span><span class="va">detrended</span>, <span class="va">seasonal</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="24-x11_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="864"></p>
+</div>
+</div>
+<p>By subtracting this seasonal estimate we have our crude seasonal adjustment.</p>
+<div class="cell">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">adjusted</span> <span class="op">=</span> <span class="va">observed</span> <span class="op">-</span> <span class="va">seasonal</span></span>
+<span><span class="fu">tsbox</span><span class="fu">::</span><span class="fu"><a href="https://www.tsbox.help/reference/ts_plot.html">ts_plot</a></span><span class="op">(</span><span class="va">observed</span>, <span class="va">adjusted</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="24-x11_files/figure-html/x11-seasonal-adj-1.png" class="img-fluid" width="864"></p>
+</div>
+</div>
+<p>We see some obvious flaws this this adjustment.</p>
+<p>The most obvious one is the insufficient length of the adjusted series that is caused by the symmetric filters. A simple trick to circumvent the problem is to forecast the series - and this is exactly what X13-ARIMA-SEATS does.</p>
+<p>Visually, there appears to be residual seasonality and the heteroskedastic variance of the series is not reflected in the seasonal component appropriates. This motivates the X-11 method which is an iterative application of this simple procedure we have just performed. Each subsequent iteration allows the estimated components to be refined by selecting better filters and handling extreme values and regression effects. The first adaptation is to consider a transformation of our series from <code>AirPassengers</code> to <code>log(AirPassengers)</code>. Our simple example performed an additive seasonal adjustment. This transformation will require a move to a multiplicative decomposition.</p>
+</section><section id="x-11-adjusment" class="level2" data-number="6.3"><h2 data-number="6.3" class="anchored" data-anchor-id="x-11-adjusment">
+<span class="header-section-number">6.3</span> X-11 Adjusment</h2>
+<p>FIXME a few lines of history.</p>
+<p>In order to use symmetric moving average filters at the end of the time series (current value), a regARIMA model is used to forecast extend the series. This RegARIMA model is where users can test for or specify outliers, trading day and moving holiday regressors in their adjustment. The forecast extended series is then used to filter.</p>
 <p>Additionally, X-11 has a built in extreme value procedure included. This procedure identifies extremes and replaces. This results in a robust procedure that can automatically choose filters and identify extreme values without much user intervention. All that needs to be evoked beyond the default <code>seas()</code> call is to turn on the X11 spec option.</p>
 <div class="cell">
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, x11 <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, x11 <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Call:</span></span>
@@ -382,17 +446,36 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>Before further discussion about the details of the X-11 process, let us see what happened during this modeling run…</p>
 <p>When using the x11 spec you can change the length of the filter used for the trend and seasonal components with the <code>trendma</code> and <code>seasonalma</code> arguments respectively. Additionally, <code>sigmalim</code> will control the amount of extreme value adjustment that is done during the seasonal adjustment.</p>
-<section id="additive-and-multiplicative-again" class="level2" data-number="7.1"><h2 data-number="7.1" class="anchored" data-anchor-id="additive-and-multiplicative-again">
-<span class="header-section-number">7.1</span> Additive and multiplicative (again)</h2>
-<p>The X-13ARIMA-SEATS development was highly motivated to study economic time series. As such, the default seasonal adjustment mode is multiplicative due to most seasonal economic time series displaying seasonal fluctuations that increase and decrease along with the level of the time series.<br></p>
+</section><section id="additive-and-multiplicative-again" class="level2" data-number="6.4"><h2 data-number="6.4" class="anchored" data-anchor-id="additive-and-multiplicative-again">
+<span class="header-section-number">6.4</span> Additive and multiplicative (again)</h2>
+<p>The X-13ARIMA-SEATS development was highly motivated to study economic time series. As such, the default seasonal adjustment mode is multiplicative due to most seasonal economic time series displaying seasonal fluctuations that increase and decrease along with the level of the time series.</p>
 <p>If your series does not have this feature then additive adjustment might be more appropriate. This can be changed in the <code>mode</code> argument of the x11 spec. For example, <code>seas(x, x11.mode = 'add')</code> will perform an additive x11 run. There exist two other models for decomposition, pseudo-additive and log additive. These are less common than additive and multiplicative models and are not the focus of this text. If your series has some extremely small values in certain months (quarters) then pseudo-additive models could be worth further investigation. It has been observed that when multiplicative seasonal adjustment produces more extreme values in conjunction with small seasonal factors then pseudo-additive adjustment should be explored. NEED TO SHOW USERS HOW TO VIEW THEIR EXTREME VALUES - D8.B TABLE DESIGNATIONS NEXT TO OBSERVATIONS. A good reference on the subject is Baxter (1994).</p>
-</section><section id="filter-length" class="level2" data-number="7.2"><h2 data-number="7.2" class="anchored" data-anchor-id="filter-length">
-<span class="header-section-number">7.2</span> Filter length</h2>
-<p>The X11 spec also allows users to control the length of the trend and seasonal moving average filters used during the adjustment. Generally speaking, longer filters imply a more stable seasonal component and shorter filters a more changing seasonal pattern. Of course, a longer filter will use more data for the caluclation of components at each time point. This is an important observation and understanding it might help a user decide on a short or long filter. Since longer filters use more data there tend to be smaller revisions when a new data point is added. However, there will be revisions to data values further back.</p>
-<p>A shorter filter is just the opposite, they tend to produce smaller revisions but they do not extend as far back into the series. If a filter is not choosen by the user then automatic filter selection is used. To understand the length of a filter let’s look at the (finite) number of choice available in during an x11 adjustment. <a href="#tbl-x11-filters">Table&nbsp;<span>7.1</span></a> shows the different filters available for the seasonal component and the trend component.</p>
+</section><section id="frequency-domain-of-time-series-optional" class="level2" data-number="6.5"><h2 data-number="6.5" class="anchored" data-anchor-id="frequency-domain-of-time-series-optional">
+<span class="header-section-number">6.5</span> Frequency domain of time series (Optional)</h2>
+<p>We present the following material as optional reading material. For those interesting in simply performing seasonal adjustment, an understanding of the frequency domain of a time series, is not manditory. However, the spectral domain representation will help the interested reader further understand the impact a linear filter has on a time series. Since both X-11 and SEATS use linear filters this will deepen the users understanding of whichever seasonal adjustmnet proceedure is choosen.</p>
+<p>Seasonal adjustment is highly motivated by the study, estimation, and ultimately removal of regular fulutions in a time series. The words <em>regular fluctuations</em> immediately leads us to trigonomic functions sin and cos. It turns out, there exist two equivilant representations of a time series. The first, and usually easier for beginners to understand, is the time domain representation. This is expressing how <span class="math inline">\(X_t\)</span> evolves as time <span class="math inline">\(t\)</span> evolves. For example, an MA(1) time domiain representation is: <span class="math display">\[X_t = w_t + \theta w_{t-1}\]</span> The second, is a frequency domain representation of a series. Here, <span class="math inline">\(X_t\)</span> is represented as the sum of trigonometric functions. More specifically, the spectral density of <span class="math inline">\(X_t\)</span> is the fourier transform of the acf of the series. <span class="math display">\[f_X(\nu) = \sum_{h = - \infty}^{\infty} \gamma(h) e^{-2\pi i \nu h}\]</span> For example, the spectral density of an MA(1) is: <span class="math display">\[f_X(\nu) = \sigma^2 \left( 1 + \theta^2 + 2\theta\cos(2\pi\nu) \right)\]</span> The important concept here is to understand that these representations are equivalent; meaning they contain the same information about a time series, such as encoding the acf function.</p>
+<div class="callout-tip callout callout-style-simple callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Where does the term ``White Noise’’ come from?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The spectral density of an uncorrelated sequence with variance <span class="math inline">\(\sigma^2\)</span> is simply <span class="math inline">\(f(\nu) = \sigma^2\)</span>. Notice this is not a function of any frequencies but just a constant for any <span class="math inline">\(\nu\)</span>. Hence, it is a stochastic process that equally weight all frequencies in the spectrum. This is precisely where the names white noise comes from as white light has the same property of reflecting all color bands equally, combining to produce white light.</p>
+</div>
+</div>
+<p>Now that we know we can express a time series either in the time domain or as a sum of sin and cosine curves, we get to the important part for seasonal adjustment - how does a linear filter effect the input series? Assume we want to pass a moving-average linear filter over our data <span class="math inline">\(X_t\)</span> with weights <span class="math inline">\(\ldots, w_{-2}, w_{-1}, w_{0}, w_{1}, w_{2}, \ldots\)</span>. Assume the output of the linear filter will be <span class="math inline">\(Y_t\)</span> such that <span class="math display">\[Y_t = \sum_{j = -\infty}^{\infty} w_j X_{t+j} =
+\ldots + w_{-2}X_{t-2} + w_{-1}X_{t-1} +  w_{0}X_{t} + w_{1}X_{t+1} + w_{2}X_{t+2} + \ldots\]</span> This type of linear filter can be expressed as a linear operator in terms of the backshift operator <span class="math inline">\(B\)</span> , where <span class="math inline">\(BX_t = X_{t-1}\)</span> and <span class="math inline">\(B^{-1}X_t = X_{t+1}\)</span>. <span class="math display">\[W(B) = \ldots + w_{-2}B^2 + w_{-1}B +  w_{0} + w_{1}B^{-1} + w_{2}B^{-2} + \ldots\]</span> and hence <span class="math inline">\(Y_t = W(B)X_t\)</span>. We can now express the spectral density of <span class="math inline">\(Y_t\)</span> in terms of the input spectral density <span class="math inline">\(X_t\)</span>. <span class="math display">\[f_Y(\nu) = \underbrace{\lvert W(e^{2\pi i \nu}) \rvert^2}_{\text{Square Gain Function}} f_X(\nu)\]</span>. There is some mathematical machinery needed when understanding exactly what the square-gain function, <span class="math inline">\(\lvert W(e^{2\pi i \nu}) \rvert^2\)</span>, is. However, for the sake of this text we just know that it tells us exactly the frequencies of <span class="math inline">\(X_t\)</span> that amplified in the output <span class="math inline">\(Y_t\)</span> as well as the frequencies of <span class="math inline">\(X_t\)</span> that will be annihilated (when the square-gain function equals 0).</p>
+</section><section id="x-11-moving-average-filters" class="level2" data-number="6.6"><h2 data-number="6.6" class="anchored" data-anchor-id="x-11-moving-average-filters">
+<span class="header-section-number">6.6</span> X-11 Moving average filters</h2>
+<p>We introduce the moving average filters and subsequently plot the filter weights along with the values of the squared gain function. The X11 spec also allows users to control the length of the trend and seasonal moving average filters used during the adjustment. Generally speaking, longer filters imply a more stable seasonal component and shorter filters a more changing seasonal pattern. Of course, a longer filter will use more data for the calculation of components at each time point. This is an important observation and understanding it might help a user decide on a short or long filter. Since longer filters use more data there tend to be smaller revisions when a new data point is added. However, there will be revisions to data values further back.</p>
+<p>A shorter filter is just the opposite, they tend to produce larger revisions but they do not extend as far back into the series. If a filter is not choosen by the user then automatic filter selection is used. To understand the length of a filter let’s look at the (finite) number of choice available in during an x11 adjustment. <a href="#tbl-x11-filters">Table&nbsp;<span>6.1</span></a> shows the different filters available for the seasonal component and the trend component.</p>
 <div id="tbl-x11-filters" class="anchored">
 <table class="table">
-<caption>Table&nbsp;7.1: Filters available in X11</caption>
+<caption>Table&nbsp;6.1: Filters available in X11</caption>
 <colgroup>
 <col style="width: 30%">
 <col style="width: 70%">
@@ -433,8 +516,69 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tbody>
 </table>
 </div>
-</section><section id="extrem-value" class="level2" data-number="7.3"><h2 data-number="7.3" class="anchored" data-anchor-id="extrem-value">
-<span class="header-section-number">7.3</span> Extrem value</h2>
+<div class="cell">
+
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="24-x11_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="864"></p>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="24-x11_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="864"></p>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="24-x11_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="864"></p>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="24-x11_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="864"></p>
+</div>
+</div>
+</section><section id="extreme-value" class="level2" data-number="6.7"><h2 data-number="6.7" class="anchored" data-anchor-id="extreme-value">
+<span class="header-section-number">6.7</span> Extreme value</h2>
+<p>The X11 method is sensitive to outliers. Beyond the specified regressors (AOs, level shifts, temporary changes, etc), an X11 adjustment will replace extreme values after the initial crude trend estimation occurs in the first iteration of the X11 method.</p>
+<p>The replacement proceedure looks as follows:</p>
+<div class="cell" data-fig-width="9">
+<div class="cell-output-display">
+<div id="fig-spec-interaction" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure"><p>
+</p>
+<pre class="mermaid mermaid-js" data-tooltip-selector="#mermaid-tooltip-1">flowchart LR
+    A(  Estimate standard deviation &lt;br&gt; of irregular, s  )--&gt;B(Compare SI-ration to &lt;br&gt; multiples of s)
+    B--&gt;C(SI &lt; 1.5 * s)
+    B--&gt;D(1.5 * s &lt; SI &lt; 2.5 * s)
+    B--&gt;E(SI &gt; 2.5 * s)
+    C --&gt; F(SI unchanged)
+    D --&gt; G(SI linearly weighted)
+    E --&gt; H(SI fully weighted)
+</pre>
+<div id="mermaid-tooltip-1" class="mermaidTooltip">
+
+</div>
+
+<p></p><figcaption class="figure-caption">Figure&nbsp;6.1: Interactions between X-13 specs.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout-warning callout callout-style-simple callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+SI ratio / SI difference
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In a multiplicative adjustment, the detrended series is reffered to the SI ratio. It is an estimate of the seasonal component. The SI ratio is used to identify extreme values during the initial and intermediate steps of the X-11 method.</p>
+</div>
+</div>
 <div class="callout-warning callout callout-style-simple callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -448,18 +592,24 @@ Related concept: Outlier
 <p>FIXME: explain how this is related to transform.</p>
 </div>
 </div>
-</section><section id="case-study" class="level2" data-number="7.4"><h2 data-number="7.4" class="anchored" data-anchor-id="case-study">
-<span class="header-section-number">7.4</span> Case study</h2>
+</section><section id="case-study" class="level2" data-number="6.8"><h2 data-number="6.8" class="anchored" data-anchor-id="case-study">
+<span class="header-section-number">6.8</span> Case study</h2>
 <div class="cell">
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span></span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span></span>
 <span><span class="fu">tsbox</span><span class="fu">::</span><span class="fu"><a href="https://www.tsbox.help/reference/ts_plot.html">ts_plot</a></span><span class="op">(</span></span>
 <span>  s3x1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, x11.seasonalma <span class="op">=</span> <span class="st">"s3x1"</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  s3x15 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, x11.seasonalma <span class="op">=</span> <span class="st">"s3x15"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="24-x11_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+<p><img src="24-x11_files/figure-html/x11-case-study-1.png" class="img-fluid" width="864"></p>
 </div>
 </div>
+</section><section id="points-to-include-in-chapter" class="level2" data-number="6.9"><h2 data-number="6.9" class="anchored" data-anchor-id="points-to-include-in-chapter">
+<span class="header-section-number">6.9</span> Points to include in Chapter</h2>
+<ul>
+<li>Level shifts are included with the trend component while AOs and extreme values are included in the irregular.</li>
+<li>
+</li></ul>
 
 
 </section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
@@ -595,13 +745,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
-      <a href="./23-seats.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">SEATS</span></span>
+      <a href="./23-regARIMA.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">regARIMA Model</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./25-regARIMA.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">regARIMA Model</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./25-seats.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">SEATS</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
