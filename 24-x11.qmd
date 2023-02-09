@@ -16,6 +16,7 @@ library(seasonal)
 
  -->
 ```
+
 One of the two main methods available in X-13ARIMA-SEATS to extract trend and seasonal components is the X-11 method.
 This is a nonparametric procedure that works by passing moving-average filters over the data to extract intended components.
 
@@ -44,15 +45,16 @@ In order to better understand the X-11 method, it will be helpful to first perfo
 A basic trend filter could be a simple filter with 13 filter weights all equal to 1/13.
 We use these weights to estimate the trend of the `AirPassengers` series.
 
-```{r}
+```{r x11-trend}
 filter_wts = rep(1, 13) / 13
 trend_est = stats::filter(x = AirPassengers, filter = filter_wts, sides = 2)
 tsbox::ts_plot(cbind(AirPassengers, trend_est))
+
 ```
 
 After estimating the trend we now can estimate the seasonal component of the detrended series using a 3x3 seasonal filter that has weights (1,2,3,2,1)/9.
 
-```{r}
+```{r x11-seasonal-component}
 seas_3x3 = c(1, 2, 3, 2, 1) / 9
 seas_est = stats::filter(AirPassengers - trend_est, seas_3x3, sides = 2)
 tsbox::ts_plot(cbind(AirPassengers - trend_est, seas_est))
@@ -60,7 +62,7 @@ tsbox::ts_plot(cbind(AirPassengers - trend_est, seas_est))
 
 By subtracting this seasonal estimate we have our crude seasonal adjustment.
 
-```{r}
+```{r x11-seasonal-adj}
 SeasonalAdjustment = AirPassengers - seas_est
 tsbox::ts_plot(cbind(AirPassengers, SeasonalAdjustment))
 ```
@@ -232,15 +234,12 @@ FIXME: explain how this is related to transform.
 
 ## Case study
 
-```{r}
+```{r x11-case-study}
 
 tsbox::ts_plot(
   s3x1 = predict(seas(AirPassengers, x11.seasonalma = "s3x1")),
   s3x15 = predict(seas(AirPassengers, x11.seasonalma = "s3x15"))
 )
-
-
-
 
 ```
 
