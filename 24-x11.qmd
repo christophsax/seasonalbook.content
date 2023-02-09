@@ -50,7 +50,7 @@ FIXME complete after discussion w Jim.
 ## A simple decomposition in R
 
 In order to better understand the X-11 method, it will be helpful to first perform a basic seasonal adjustment procedure "by-hand".
-A basic trend filter could be a simple 2x12 moving average. 
+A basic trend filter could be a simple 2x12 moving average.
 This filter has weights 1/24, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/24.
 We use these weights to estimate the trend of the `AirPassengers` series.
 
@@ -79,7 +79,7 @@ This basic seasonal adjustment is a useful tool to understand other features of 
 The most obvious thing we see in this plot is the last of seasonal adjustment at the ends of the series.
 Hence, why we need to use RegARIMA modeling to forecast extend.
 Additionally, we see some obvious flaws this this adjustment.
-It is difficult to estimate a trend in the presence of seasonality. 
+It is difficult to estimate a trend in the presence of seasonality.
 Similarly, it is difficult to estimate the seasonal factors when the trend is poorly estimated/removed.
 
 This motivates the X-11 method which is an iterative application of this simple procedure we have just performed.
@@ -255,13 +255,11 @@ flowchart LR
 
 Users can change the multiples of $\sigma$ that are converted to extreme values.
 This is done with the `sigmalim` option within the `x11` spec.
-This option should be a vector of length 2 that specifies when weighting should begin and when full weight of zero should be applied. 
-Between the endpooints of the specifed vector a linear weight will be applied. 
+This option should be a vector of length 2 that specifies when weighting should begin and when full weight of zero should be applied.
+Between the endpooints of the specifed vector a linear weight will be applied.
 SI ratios are replaced with an average of the two nearest SI ratios from the same month/quarter.
 One caveat being that only fully weighted SI ratios are used for SI ratio replacement.
-Hence, if too small of a $\sigma$ limit is used the SI ratios used to replace an extreme value should be many years away. 
-
-
+Hence, if too small of a $\sigma$ limit is used the SI ratios used to replace an extreme value should be many years away.
 
 ```{r}
 m = seas(AirPassengers, x11 = "")
@@ -279,7 +277,7 @@ seasonal_factors <- series(m, "d10")
 tsbox::ts_dygraphs(cbind(unmodified_SIratio, modified_SIratio, seasonal_factors))
 ```
 
-It should be noted that extreme value choices can greatly affect the seasonal adjustment. 
+It should be noted that extreme value choices can greatly affect the seasonal adjustment.
 
 ::: callout-warning
 ### SI ratio / SI difference
