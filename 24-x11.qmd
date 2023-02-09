@@ -42,20 +42,20 @@ Additionally, `sigmalim` will control the amount of extreme value adjustment tha
 ## Simple Seasonal Adjustment proceedure
 
 In order to better understand the X-11 method, it will be helpful to first perform a basic seasonal adjustment procedure "by-hand".
-A basic trend filter could be a simple filter with 13 filter weights all equal to 1/13.
+A basic trend filter could be a simple 2x12 moving average. 
+This filter has weights 1/24, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/24.
 We use these weights to estimate the trend of the `AirPassengers` series.
 
 ```{r x11-trend}
-filter_wts = rep(1, 13) / 13
+filter_wts = c(1/24, rep(1/12, 11), 1/24)
 trend_est = stats::filter(x = AirPassengers, filter = filter_wts, sides = 2)
 tsbox::ts_plot(cbind(AirPassengers, trend_est))
-
 ```
 
-After estimating the trend we now can estimate the seasonal component of the detrended series using a 3x3 seasonal filter that has weights (1,2,3,2,1)/9.
+After estimating the trend we now can estimate the seasonal component of the detrended series using a 3x3 seasonal filter that has weights (1,2,3,2,1)/9 applied to the same season.
 
 ```{r x11-seasonal-component}
-seas_3x3 = c(1, 2, 3, 2, 1) / 9
+seas_3x3 = c(1, rep(0, 11), 2, rep(0, 11), 3, rep(0, 11), 2, rep(0, 11), 1) / 9
 seas_est = stats::filter(AirPassengers - trend_est, seas_3x3, sides = 2)
 tsbox::ts_plot(cbind(AirPassengers - trend_est, seas_est))
 ```
@@ -67,11 +67,15 @@ SeasonalAdjustment = AirPassengers - seas_est
 tsbox::ts_plot(cbind(AirPassengers, SeasonalAdjustment))
 ```
 
-We see some obvious flaws this this adjustment.
-Visually, there appears to be residual seasonality and the heteroskedastic variance of the series is not reflected in the seasonal component appropriates.
+This basic seasonal adjustment is a useful tool to understand other features of the X-13A-S program.
+The most obvious thing we see in this plot is the last of seasonal adjustment at the ends of the series.
+Hence, why we need to use RegARIMA modeling to forecast extend.
+Additionally, we see some obvious flaws this this adjustment.
+It is difficult to estimate a trend in the presence of seasonality. 
+Similarly, it is difficult to estimate the seasonal factors when the trend is poorly estimated/removed.
 This motivates the X-11 method which is an iterative application of this simple procedure we have just performed.
 Each subsequent iteration allows the estimated components to be refined by selecting better filters and handling extreme values and regression effects.
-The first adaptation is to consider a transofmation of our series from `AirPassengers` to `log(AirPassengers)`.
+The first adaptation is to consider a transformation of our series from `AirPassengers` to `log(AirPassengers)`.
 Our simple example performed an additive seasonal adjustment.
 This transformation will require a move to a multiplicative decomposition.
 
@@ -200,14 +204,13 @@ abline(h = 0, lty = 'dotted')
 
 The X11 method is sensitive to outliers.
 Beyond the specified regressors (AOs, level shifts, temporary changes, etc), an X11 adjustment will replace extreme values after the initial crude trend estimation occurs in the first iteration of the X11 method.
-
-The replacement proceedure looks as follows:
+The replacement procedure looks as follows:
 
 ```{mermaid}
 %%| label: fig-spec-interaction
 %%| fig-width: 9
 %%| fig-cap: |
-%%|   Interactions between X-13 specs.
+%%|   Default behavior of Extreme value replacement procedure. 
 flowchart LR
     A(  Estimate standard deviation <br> of irregular, s  )-->B(Compare SI-ration to <br> multiples of s)
     B-->C(SI < 1.5 * s)
@@ -218,10 +221,38 @@ flowchart LR
     E --> H(SI fully weighted)
 ```
 
+Users can change the multiples of $\sigma$ that are converted to extreme values.
+This is done with the `sigmalim` option within the `x11` spec.
+This option should be a vector of length 2 that specifies when weighting should begin and when full weight of zero should be applied. 
+Between the endpooints of the specifed vector a linear weight will be applied. 
+SI ratios are replaced with an average of the two nearest SI ratios from the same month/quarter.
+One caveat being that only fully weighted SI ratios are used for SI ratio replacement.
+Hence, if too small of a $\sigma$ limit is used the SI ratios used to replace an extreme value should be many years away. 
+
+
+
+```{r}
+m = seas(AirPassengers, x11 = "")
+unmodified_SIratio <- series(m, "d8")
+modified_SIratio   <- series(m, "d9")
+seasonal_factors <- series(m, "d10")
+tsbox::ts_dygraphs(cbind(unmodified_SIratio, modified_SIratio, seasonal_factors))
+```
+
+```{r}
+m = seas(AirPassengers, x11 = "", x11.sigmalim = c(1, 2))
+unmodified_SIratio <- series(m, "d8")
+modified_SIratio   <- series(m, "d9")
+seasonal_factors <- series(m, "d10")
+tsbox::ts_dygraphs(cbind(unmodified_SIratio, modified_SIratio, seasonal_factors))
+```
+
+It should be noted that extreme value choices can greatly affect the seasonal adjustment. 
+
 ::: callout-warning
 ### SI ratio / SI difference
 
-In a multiplicative adjustment, the detrended series is reffered to the SI ratio.
+In a multiplicative adjustment, the detrended series is called the SI ratio.
 It is an estimate of the seasonal component.
 The SI ratio is used to identify extreme values during the initial and intermediate steps of the X-11 method.
 :::
