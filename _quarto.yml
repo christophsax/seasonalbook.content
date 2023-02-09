@@ -8,7 +8,6 @@ citation-location: margin
 book:
   title: "Seasonal Adjustment in R"
   reader-mode: true
-  downloads: [pdf]
   page-footer:
     left: |
       by James Livsey and Christoph Sax
@@ -64,8 +63,6 @@ format:
     include-in-header: "header.html"
     author-meta: "James Livsey and Christoph Sax"
     callout-appearance: simple
-
-  pdf: default
 
 editor: visual
 
