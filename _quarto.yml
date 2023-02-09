@@ -29,8 +29,8 @@ book:
         - 21-overview.qmd
         - 22-transform.qmd
         - 23-regARIMA.qmd
-        - 24-seats.qmd
-        - 25-x11.qmd
+        - 24-x11.qmd
+        - 25-seats.qmd
 
     - part: 30-part-data-problems.qmd
       chapters:
