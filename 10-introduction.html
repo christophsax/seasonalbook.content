@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.269">
+<meta name="generator" content="quarto-1.2.280">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
 <meta name="author" content="James Livsey and Christoph Sax">
+
 <title>Seasonal Adjustment in R - 1&nbsp; Introduction</title>
 <style>
 code{white-space: pre-wrap;}
@@ -102,6 +105,7 @@ div.csl-indent {
 }
 </style>
 
+
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
 <script src="site_libs/clipboard/clipboard.min.js"></script>
@@ -119,7 +123,8 @@ div.csl-indent {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -137,20 +142,30 @@ div.csl-indent {
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit"
   }
-}</script><meta name="robots" content="noindex">
+}</script>
+<meta name="robots" content="noindex">
+
+
 </head>
+
 <body class="nav-sidebar floating slimcontent">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
       <h1 class="quarto-secondary-nav-title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
     </div>
-  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Seasonal Adjustment in R</a> 
         <div class="sidebar-tools-main">
@@ -170,15 +185,15 @@ div.csl-indent {
       </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
-<li class="sidebar-item sidebar-item-section">
+        <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a href="./index.html" class="sidebar-item-text sidebar-link">Welcome</a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
-<li class="sidebar-item">
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./10-introduction.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a>
   </div>
@@ -189,7 +204,7 @@ div.csl-indent {
   </div>
 </li>
       </ul>
-</li>
+  </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a href="./20-part-basics.html" class="sidebar-item-text sidebar-link">Basics</a>
@@ -197,8 +212,8 @@ div.csl-indent {
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">
-<li class="sidebar-item">
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./21-overview.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The fundamentals of X-13</span></a>
   </div>
@@ -224,7 +239,7 @@ div.csl-indent {
   </div>
 </li>
       </ul>
-</li>
+  </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a href="./30-part-data-problems.html" class="sidebar-item-text sidebar-link">Data Problems</a>
@@ -232,8 +247,8 @@ div.csl-indent {
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">
-<li class="sidebar-item">
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./31-holidays.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Irregular holidays</span></a>
   </div>
@@ -254,7 +269,7 @@ div.csl-indent {
   </div>
 </li>
       </ul>
-</li>
+  </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a href="./40-part-other-issues.html" class="sidebar-item-text sidebar-link">Other Issues</a>
@@ -262,8 +277,8 @@ div.csl-indent {
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">
-<li class="sidebar-item">
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./41-presence-of-seasonality.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Presence of seasonality</span></a>
   </div>
@@ -279,7 +294,7 @@ div.csl-indent {
   </div>
 </li>
       </ul>
-</li>
+  </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a href="./50-part-quality-assessment.html" class="sidebar-item-text sidebar-link">Quality assessment</a>
@@ -287,8 +302,8 @@ div.csl-indent {
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">
-<li class="sidebar-item">
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./51-quality-measures.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Quality measures</span></a>
   </div>
@@ -299,7 +314,7 @@ div.csl-indent {
   </div>
 </li>
       </ul>
-</li>
+  </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a href="./60-part-future.html" class="sidebar-item-text sidebar-link">The future of seasonal adjustment</a>
@@ -307,21 +322,24 @@ div.csl-indent {
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">
-<li class="sidebar-item">
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./99-status.html" class="sidebar-item-text sidebar-link">Status of the book</a>
   </div>
 </li>
       </ul>
-</li>
+  </li>
     </ul>
-</div>
-</nav><!-- margin-sidebar --><div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-<li><a href="#seasonal-adjustment" id="toc-seasonal-adjustment" class="nav-link active" data-scroll-target="#seasonal-adjustment">Seasonal Adjustment</a></li>
+  <li><a href="#seasonal-adjustment" id="toc-seasonal-adjustment" class="nav-link active" data-scroll-target="#seasonal-adjustment">Seasonal Adjustment</a></li>
   <li><a href="#x-13arima-seats" id="toc-x-13arima-seats" class="nav-link" data-scroll-target="#x-13arima-seats">X-13ARIMA-SEATS</a></li>
   <li><a href="#r" id="toc-r" class="nav-link" data-scroll-target="#r">R</a></li>
   <li><a href="#target-audience" id="toc-target-audience" class="nav-link" data-scroll-target="#target-audience">Target audience</a></li>
@@ -329,10 +347,14 @@ div.csl-indent {
   <li><a href="#the-seasonalbook-package" id="toc-the-seasonalbook-package" class="nav-link" data-scroll-target="#the-seasonalbook-package"><span class="toc-section-number">1.1</span>  The seasonalbook package</a></li>
   <li><a href="#acknowledgements" id="toc-acknowledgements" class="nav-link" data-scroll-target="#acknowledgements">Acknowledgements</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
-  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/10-introduction.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/10-introduction.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
-<main class="content page-columns page-full" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<main class="content page-columns page-full" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
 <h1 class="title"><span id="sec-introduction" class="quarto-section-identifier d-none d-lg-block"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></h1>
 </div>
 
@@ -346,7 +368,9 @@ div.csl-indent {
   </div>
   
 
-</header><div class="status">
+</header>
+
+<div class="status">
 <div class="callout-note callout callout-style-simple">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -367,18 +391,27 @@ div.csl-indent {
 - Case Study: A use cases outside of official statistics: seasonal adjustment of business data
  -->
 <p>This book will teach you how to do seasonal adjustment in R using X-13ARIMA-SEATS. The audience will be both R users who want to learn about seasonal adjustment and seasonal adjustment practitioners who are interested in using R. The book will be tailored to the practical applications of seasonal adjustment within R.</p>
-<section id="seasonal-adjustment" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="seasonal-adjustment">Seasonal Adjustment</h2>
+<section id="seasonal-adjustment" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="seasonal-adjustment">Seasonal Adjustment</h2>
 <p>Many time series exhibit a regular seasonal pattern over the year. US unemployment, for example, is usually higher from January to March and again in June and July. Similarly, retail sales tend to peak during the Christmas season. This seasonal behavior is regular and predictable. The goal of seasonal adjustment is to estimate and remove the seasonal component from a time series.</p>
 <p>Why do we want to do this? Seasonal data is usually hard to interpret. For example, if we want to learn from the US unemployment rate if the economy is moving out of a recession during certain months, we want the labor market data to be free from seasonal effects.</p>
-</section><section id="x-13arima-seats" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="x-13arima-seats">X-13ARIMA-SEATS</h2>
+</section>
+<section id="x-13arima-seats" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="x-13arima-seats">X-13ARIMA-SEATS</h2>
 <p>Fundamentally, seasonal adjustment decomposes a time series into a <strong>trend</strong>, a <strong>seasonal</strong>, and an <strong>irregular</strong> component. Seasonal adjustment is then the act of removing the seasonal estimate from the observed series. There are many ways to perform this decomposition. This book focuses on a particular one, X-13ARIMA-SEATS (X-13, for short), the seasonal adjustment software developed by the United States Census Bureau. X-13 offers an elaborate toolkit to perform seasonal adjustment. The software allows users to control all aspects of the modeling process or alternatively, to use automated methods to make all modeling choices. In the text we will try to present material with this in mind. Throughout we offer suggestions about when built-in automatic method are sufficient (and sometimes even preferred) and when an analyst can get the most ``bang for the buck’’ to control modeling options themselves.</p>
-</section><section id="r" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="r">R</h2>
+</section>
+<section id="r" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="r">R</h2>
 <p>This book will teach you how to use X-13 in R through the <em>seasonal</em> package, which offers access to all features of X-13 with a usually much simpler syntax. It should be noted that the seasonal package is not a re-coding of the X-13 software. Instead it is a translation from R to the X-13 software. This translation is done under the hood and practitioners need not concern themselves with this inner working of the package. However, we make this point such that users understand that conceptually anything that can be done in the native X-13ARIMA-SEATS software, either from the command line or HTML version, can be done in the seasonal R package. Also this means if additional clarification or information about seasonal adjustment is desired, the X-13 manual or research papers can be consulted. Any example or methods found via the X-13 documentation can be easily translated to the R seasonal package. In fact, all examples from the X-13 manual can be seen run in the R seasonal package at http://www.seasonal.website/examples.html. The required X-13 binaries are provided by the <em>x13binary</em> package and automatically included in <em>seasonal</em>. The next chapter provides a minimal example to get you started in less than five minutes.</p>
-</section><section id="target-audience" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="target-audience">Target audience</h2>
+</section>
+<section id="target-audience" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="target-audience">Target audience</h2>
 <p>We write this book for two primary audiences: The first focus is on current practitioners of seasonal adjustment who are interested in learning how to implement in R. This audience includes researchers from statistical agencies who want to use features of R to evaluate the properties of their seasonal adjustments.</p>
 <p>The second focus is on current R users who want to learn seasonal adjustment. We are able to leverage the reader’s knowledge of R to make learning seasonal adjustment easier. We will feature exciting applications outside official statistics, such as the seasonal adjustment of business data.</p>
 <p>The book tries to be as practical as possible. It usually starts with a practical problem and shows how to solve it in a cookbook style. Formal derivations are usually avoided. Each chapter ends with a case study that discusses a real-life example of the topic.</p>
-</section><section id="history-of-x-13" class="level2 unnumbered page-columns page-full"><h2 class="unnumbered anchored" data-anchor-id="history-of-x-13">History of X-13</h2>
+</section>
+<section id="history-of-x-13" class="level2 unnumbered page-columns page-full">
+<h2 class="unnumbered anchored" data-anchor-id="history-of-x-13">History of X-13</h2>
 <p>In official statistics, seasonal adjustment has a long tradition. The US Census Bureau developed the original X-11 software in the 1960s, Statistics Canada <span class="citation" data-cites="dagum80">(<a href="#ref-dagum80" role="doc-biblioref">Dagum 1980</a>)</span> continued the development afterward. The following software packages by the US Census Bureau were called X-12-ARIMA <span class="citation" data-cites="findley98">(<a href="#ref-findley98" role="doc-biblioref">Findley et al. 1998</a>)</span> and X-13ARIMA-SEATS (or X-13, for short) <span class="citation" data-cites="monsell07">(<a href="#ref-monsell07" role="doc-biblioref">Monsell 2007</a>)</span>. X-11 is still used as a name for filter-based seasonal adjustment methods within X-13. Meanwhile, TRAMO-SEATS, developed by the Bank of Spain <span class="citation" data-cites="caporello01">(<a href="#ref-caporello01" role="doc-biblioref">Caporello, Maravall, and Sánchez 2001</a>)</span>, offers an alternative model-based approach to seasonal adjustment.</p>
 <div class="no-row-height column-margin column-container"><div id="ref-dagum80" class="csl-entry" role="doc-biblioentry">
 Dagum, Estela Bee. 1980. <em>The x-11-ARIMA Seasonal Adjustment Method</em>. Statistics Canada, Seasonal Adjustment; Time Series Staff.
@@ -391,27 +424,35 @@ Caporello, Gianluca, Agustin Maravall, and Fernando J Sánchez. 2001. <span>“<
 </div><div id="ref-eurostat17" class="csl-entry" role="doc-biblioentry">
 National Bank of Belgium, Deutsche Bundesbank, Eurostat. 2017. <em>JDemetra+: Econometric Software for Seasonal Adjustment and Other Time Series Methods</em>. Eurostat. <a href="https://ec.europa.eu/eurostat/cros/content/download">https://ec.europa.eu/eurostat/cros/content/download</a>.
 </div></div><p>In its most recent version, X-13 offers these two seasonal adjustment methods in a single command-line tool written in Fortran. The National Bank of Belgium has created an alternative Java-based implementation called JDemetra+ <span class="citation" data-cites="eurostat17">(<a href="#ref-eurostat17" role="doc-biblioref">National Bank of Belgium, Deutsche Bundesbank, Eurostat 2017</a>)</span>, also widely deployed by statistical agencies.</p>
-</section><section id="the-seasonalbook-package" class="level2" data-number="1.1"><h2 data-number="1.1" class="anchored" data-anchor-id="the-seasonalbook-package">
-<span class="header-section-number">1.1</span> The <a href="https://github.com/christophsax/seasonalbook">seasonalbook</a> package</h2>
+</section>
+<section id="the-seasonalbook-package" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="the-seasonalbook-package"><span class="header-section-number">1.1</span> The <a href="https://github.com/christophsax/seasonalbook">seasonalbook</a> package</h2>
 <p>An R package that supplements “Seasonal Adjustment in R”, and contains all data and examples.</p>
 <p>To install:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"christophsax/seasonalbook"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"christophsax/seasonalbook"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Example series:</p>
 <div class="cell">
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">seasonalbook</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">grocery</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(seasonalbook)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(grocery)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="10-introduction_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="864"></p>
+<p><img src="10-introduction_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="864"></p>
 </div>
 </div>
-</section><section id="acknowledgements" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="acknowledgements">Acknowledgements</h2>
+</section>
+<section id="acknowledgements" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="acknowledgements">Acknowledgements</h2>
 <p>We are indebted to the United States Census Bureau for X-13ARIMA-SEATS and support for research around the software. Help and support by Brian Monsell are especially acknowledged.</p>
 <p>seasonal was originally developed for use at the Swiss State Secretariat of Economic Affairs. It has been dramatically improved thanks to suggestions and support from Matthias Bannert, Freya Beamish, Vidur Dhanda, Alain Galli, Ronald Indergand, Preetha Kalambaden, Stefan Leist, James Livsey, Pinaki Mukherjee, Bruno Parnisari and many others. The related work on the x13binary package facilitated (automated) deployment thanks to the R package system, CRAN, and GitHub for the x13prebuilt repository.</p>
-</section><section id="references" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="references">References</h2>
+</section>
+<section id="references" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="references">References</h2>
 
 
 
-</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
@@ -543,7 +584,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
 });
-</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
       <a href="./index.html" class="pagination-link">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Welcome</span>
       </a>          
@@ -555,11 +598,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
 </nav>
 </div> <!-- /content -->
-<footer class="footer"><div class="nav-footer">
+<footer class="footer">
+  <div class="nav-footer">
     <div class="nav-footer-left">by James Livsey and Christoph Sax</div>   
     <div class="nav-footer-right">Seasonal Adjustment in R</div>
   </div>
 </footer>
+
 
 
 </body></html>

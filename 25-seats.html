@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.269">
+<meta name="generator" content="quarto-1.2.280">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
 <meta name="author" content="James Livsey and Christoph Sax">
+
 <title>Seasonal Adjustment in R - 7&nbsp; SEATS</title>
 <style>
 code{white-space: pre-wrap;}
@@ -102,6 +105,7 @@ div.csl-indent {
 }
 </style>
 
+
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
 <script src="site_libs/clipboard/clipboard.min.js"></script>
@@ -119,7 +123,8 @@ div.csl-indent {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -137,21 +142,31 @@ div.csl-indent {
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit"
   }
-}</script><meta name="robots" content="noindex">
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+}</script>
+<meta name="robots" content="noindex">
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
 </head>
+
 <body class="nav-sidebar floating slimcontent">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
       <h1 class="quarto-secondary-nav-title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">SEATS</span></h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
     </div>
-  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Seasonal Adjustment in R</a> 
         <div class="sidebar-tools-main">
@@ -171,15 +186,15 @@ div.csl-indent {
       </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
-<li class="sidebar-item sidebar-item-section">
+        <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a href="./index.html" class="sidebar-item-text sidebar-link">Welcome</a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
-<li class="sidebar-item">
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./10-introduction.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a>
   </div>
@@ -190,7 +205,7 @@ div.csl-indent {
   </div>
 </li>
       </ul>
-</li>
+  </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a href="./20-part-basics.html" class="sidebar-item-text sidebar-link">Basics</a>
@@ -198,8 +213,8 @@ div.csl-indent {
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">
-<li class="sidebar-item">
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./21-overview.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The fundamentals of X-13</span></a>
   </div>
@@ -225,7 +240,7 @@ div.csl-indent {
   </div>
 </li>
       </ul>
-</li>
+  </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a href="./30-part-data-problems.html" class="sidebar-item-text sidebar-link">Data Problems</a>
@@ -233,8 +248,8 @@ div.csl-indent {
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">
-<li class="sidebar-item">
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./31-holidays.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Irregular holidays</span></a>
   </div>
@@ -255,7 +270,7 @@ div.csl-indent {
   </div>
 </li>
       </ul>
-</li>
+  </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a href="./40-part-other-issues.html" class="sidebar-item-text sidebar-link">Other Issues</a>
@@ -263,8 +278,8 @@ div.csl-indent {
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">
-<li class="sidebar-item">
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./41-presence-of-seasonality.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Presence of seasonality</span></a>
   </div>
@@ -280,7 +295,7 @@ div.csl-indent {
   </div>
 </li>
       </ul>
-</li>
+  </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a href="./50-part-quality-assessment.html" class="sidebar-item-text sidebar-link">Quality assessment</a>
@@ -288,8 +303,8 @@ div.csl-indent {
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">
-<li class="sidebar-item">
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./51-quality-measures.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Quality measures</span></a>
   </div>
@@ -300,7 +315,7 @@ div.csl-indent {
   </div>
 </li>
       </ul>
-</li>
+  </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a href="./60-part-future.html" class="sidebar-item-text sidebar-link">The future of seasonal adjustment</a>
@@ -308,31 +323,38 @@ div.csl-indent {
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">
-<li class="sidebar-item">
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./99-status.html" class="sidebar-item-text sidebar-link">Status of the book</a>
   </div>
 </li>
       </ul>
-</li>
+  </li>
     </ul>
-</div>
-</nav><!-- margin-sidebar --><div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-<li><a href="#model-based-decomposition" id="toc-model-based-decomposition" class="nav-link active" data-scroll-target="#model-based-decomposition"><span class="toc-section-number">7.1</span>  Model based decomposition</a></li>
+  <li><a href="#model-based-decomposition" id="toc-model-based-decomposition" class="nav-link active" data-scroll-target="#model-based-decomposition"><span class="toc-section-number">7.1</span>  Model based decomposition</a></li>
   <li><a href="#comparing-seats-with-x-11-filters" id="toc-comparing-seats-with-x-11-filters" class="nav-link" data-scroll-target="#comparing-seats-with-x-11-filters"><span class="toc-section-number">7.2</span>  Comparing SEATS with X-11 filters:</a></li>
   <li><a href="#transitory-component-later-more-optional" id="toc-transitory-component-later-more-optional" class="nav-link" data-scroll-target="#transitory-component-later-more-optional"><span class="toc-section-number">7.3</span>  Transitory component [Later, more optional]</a></li>
   <li><a href="#quick-refresher-on-arima-models-and-notation" id="toc-quick-refresher-on-arima-models-and-notation" class="nav-link" data-scroll-target="#quick-refresher-on-arima-models-and-notation"><span class="toc-section-number">7.4</span>  Quick refresher on ARIMA models and notation</a></li>
   <li><a href="#seats-assumptions" id="toc-seats-assumptions" class="nav-link" data-scroll-target="#seats-assumptions"><span class="toc-section-number">7.5</span>  SEATS Assumptions</a></li>
   <li><a href="#example-seats-adjustment" id="toc-example-seats-adjustment" class="nav-link" data-scroll-target="#example-seats-adjustment"><span class="toc-section-number">7.6</span>  Example SEATS adjustment</a></li>
   <li><a href="#some-existing-studies-and-conclusions" id="toc-some-existing-studies-and-conclusions" class="nav-link" data-scroll-target="#some-existing-studies-and-conclusions"><span class="toc-section-number">7.7</span>  Some existing studies and conclusions</a></li>
-  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/25-seats.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/25-seats.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
-<main class="content page-columns page-full" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<main class="content page-columns page-full" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
 <h1 class="title"><span id="sec-seats" class="quarto-section-identifier d-none d-lg-block"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">SEATS</span></span></h1>
 </div>
 
@@ -346,7 +368,9 @@ div.csl-indent {
   </div>
   
 
-</header><div class="status">
+</header>
+
+<div class="status">
 <div class="callout-important callout callout-style-simple">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -359,8 +383,8 @@ div.csl-indent {
 </div>
 </div>
 </div>
-<section id="model-based-decomposition" class="level2 page-columns page-full" data-number="7.1"><h2 data-number="7.1" class="anchored" data-anchor-id="model-based-decomposition">
-<span class="header-section-number">7.1</span> Model based decomposition</h2>
+<section id="model-based-decomposition" class="level2 page-columns page-full" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="model-based-decomposition"><span class="header-section-number">7.1</span> Model based decomposition</h2>
 <p>Signal Extraction in ARIMA Time Series, or SEATS, is a method for estimating unobserved components in a time series. It is developed from the work of <span class="citation" data-cites="cleveland76">Cleveland and Tiao (<a href="#ref-cleveland76" role="doc-biblioref">1976</a>)</span>, <span class="citation" data-cites="hillmer82">Hillmer and Tiao (<a href="#ref-hillmer82" role="doc-biblioref">1982</a>)</span>, <span class="citation" data-cites="maravall86">Maravall (<a href="#ref-maravall86" role="doc-biblioref">1986</a>)</span>. If applied properly, SEATS seasonal factors are usually more stable than X-11, and the seasonally adjusted series show less revisions than X11 (??) (see final section for a more extensive discussion).</p>
 <div class="no-row-height column-margin column-container"><div id="ref-cleveland76" class="csl-entry" role="doc-biblioentry">
 Cleveland, William P, and George C Tiao. 1976. <span>“Decomposition of Seasonal Time Series: A Model for the Census x-11 Program.”</span> <em>Journal of the American Statistical Association</em> 71 (355): 581–87.
@@ -384,34 +408,64 @@ X-11 Filter
 <li>finite set of empirically developed moving average filters</li>
 <li>fixed filtering seen as easier to use (less statistical machinery)</li>
 </ul>
-<section id="seats-filters" class="level4" data-number="7.1.0.1"><h4 data-number="7.1.0.1" class="anchored" data-anchor-id="seats-filters">
-<span class="header-section-number">7.1.0.1</span> SEATS filters</h4>
+<section id="seats-filters" class="level4" data-number="7.1.0.1">
+<h4 data-number="7.1.0.1" class="anchored" data-anchor-id="seats-filters"><span class="header-section-number">7.1.0.1</span> SEATS filters</h4>
 <ul>
 <li>specifies stochastic models for unobserved components</li>
 <li>derives seasonal adjustment filters from these models</li>
 <li>infinite number of possible filter choices</li>
 <li>requires more statistical machinery</li>
-</ul></section>
+</ul>
+</section>
 </div>
 </div>
 <p>Given a certain ARIMA model (such as the “Airline” (0 1 1)(0 1 1) model which is appropriate for the description of the <code>AirPassengers</code> time series), SEATS decomposes the model into separate models for the trend, the seasonal and the irregular component. This is done by the <em>canonical decomposition</em> derived by Pierce, Box-Hillmer, Tiao and Burman [FIXME] and will be discussed in section (FIXME).</p>
 <p>The decomposition of the ARIMA model is independent of the data. For each ARIMA specification, there is a unique canonical decomposition. Some decompositions for common ARIMA models are given in table [FIXME, e.g.&nbsp;(011)(011) -&gt; ??? ???].</p>
 <p>The decomposed ARIMA models imply a certain filter, which is derived by the WK procedure. The filters depend on the parameters of the original arima models. Figure FIXME displays the SEATS filters for an (0 1 1)(0 1 1) model, for various values of theta.</p>
-</section><section id="comparing-seats-with-x-11-filters" class="level2" data-number="7.2"><h2 data-number="7.2" class="anchored" data-anchor-id="comparing-seats-with-x-11-filters">
-<span class="header-section-number">7.2</span> Comparing SEATS with X-11 filters:</h2>
+</section>
+<section id="comparing-seats-with-x-11-filters" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="comparing-seats-with-x-11-filters"><span class="header-section-number">7.2</span> Comparing SEATS with X-11 filters:</h2>
 <p>If SEATS and X-11 use similar filters, the final adjustment will be similar. Using the default arguments of <code>seas()</code> on <code>AirPassengers</code>, the adjustment is very similar:</p>
 <div class="cell">
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">seats</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span></span>
-<span><span class="va">x11</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, x11 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">tsbox</span><span class="fu">::</span><span class="fu"><a href="https://www.tsbox.help/reference/ts_plot.html">ts_plot</a></span><span class="op">(</span><span class="fu">final</span><span class="op">(</span><span class="va">seats</span><span class="op">)</span>, <span class="fu">final</span><span class="op">(</span><span class="va">x11</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>seats <span class="ot">&lt;-</span> <span class="fu">seas</span>(AirPassengers)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>x11 <span class="ot">&lt;-</span> <span class="fu">seas</span>(AirPassengers, <span class="at">x11 =</span> <span class="fu">list</span>())</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>tsbox<span class="sc">::</span><span class="fu">ts_plot</span>(<span class="fu">final</span>(seats), <span class="fu">final</span>(x11))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="25-seats_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="864"></p>
+<p><img src="25-seats_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="864"></p>
 </div>
 </div>
 <p>If we look at the applied filters, we see that FIXME.</p>
-</section><section id="transitory-component-later-more-optional" class="level2" data-number="7.3"><h2 data-number="7.3" class="anchored" data-anchor-id="transitory-component-later-more-optional">
-<span class="header-section-number">7.3</span> Transitory component [Later, more optional]</h2>
+<p>Others have looked at comparing SEATS and X-11 filters. In Planas and Depoutot (2002) they show with X11 seasonal filter that is closest to an implied Airline SEATS model based on the <span class="math inline">\(\Theta_{12}\)</span></p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Filter</th>
+<th>Seasonal MA</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>3x3</td>
+<td>0.364 - 0.400</td>
+</tr>
+<tr class="even">
+<td>3x5</td>
+<td>0.543-0.563</td>
+</tr>
+<tr class="odd">
+<td>3x9</td>
+<td>0.723-0.732</td>
+</tr>
+<tr class="even">
+<td>3x15</td>
+<td>0.824-0.828</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="transitory-component-later-more-optional" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="transitory-component-later-more-optional"><span class="header-section-number">7.3</span> Transitory component [Later, more optional]</h2>
 <p>Sometimes SEATS includes a transitory component in its decomposition:</p>
 <p><span class="math display">\[ X_t = T_t + S_t + R_t + u_t \]</span></p>
 <p>The transitory component captures short, erratic behavior that is not white noise, sometimes associated with awkward frequencies.</p>
@@ -419,8 +473,10 @@ X-11 Filter
 <li>The variation from the transitory component should not contaminate the trend or seasonal, and removing it allows SEATS to obtain smoother, more stable trends and seasonal components.</li>
 <li>In the final decomposition, the transitory and irregular components are usually combined.</li>
 <li>SEATS does not always estimate a transitory component</li>
-</ul></section><section id="quick-refresher-on-arima-models-and-notation" class="level2" data-number="7.4"><h2 data-number="7.4" class="anchored" data-anchor-id="quick-refresher-on-arima-models-and-notation">
-<span class="header-section-number">7.4</span> Quick refresher on ARIMA models and notation</h2>
+</ul>
+</section>
+<section id="quick-refresher-on-arima-models-and-notation" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="quick-refresher-on-arima-models-and-notation"><span class="header-section-number">7.4</span> Quick refresher on ARIMA models and notation</h2>
 <p>The remaining of the SEATS section will heavily rely on the autoregressive and moving-average operators <span class="math inline">\(\phi(B)\)</span> and <span class="math inline">\(\theta(B)\)</span> where <span class="math inline">\(B X_t = X_{t-1}\)</span>.</p>
 <p>If <span class="math inline">\(X_t\)</span> follows and ARIMA(<span class="math inline">\(p\)</span>, <span class="math inline">\(d\)</span>, <span class="math inline">\(q\)</span>) model: <span class="math display">\[
 \phi(B) X_t = \theta(B) a_t
@@ -438,8 +494,9 @@ X_t = \phi_1 X_{t-1} + \phi_2 X_{t-2} + a_t + \theta_1 a_{t-1}
 <p><span class="math display">\[
 X_t = \frac{\theta(B)}{\phi(B)} a_t = \Psi(B) a_t = \sum_{k=0}^{\infty} \psi_k a_{t-k}
 \]</span></p>
-</section><section id="seats-assumptions" class="level2" data-number="7.5"><h2 data-number="7.5" class="anchored" data-anchor-id="seats-assumptions">
-<span class="header-section-number">7.5</span> SEATS Assumptions</h2>
+</section>
+<section id="seats-assumptions" class="level2" data-number="7.5">
+<h2 data-number="7.5" class="anchored" data-anchor-id="seats-assumptions"><span class="header-section-number">7.5</span> SEATS Assumptions</h2>
 <ul>
 <li>The linearized series can be represented by an ARIMA model which captures the stochastic structure of the series (Linearized series = series with regression effects removed)</li>
 <li>After differencing each with the ARIMA’s differencing polynomial, the components are orthogonal (uncorrelated)</li>
@@ -460,19 +517,25 @@ X_t =
 <li>Maximize the variance of the irregular</li>
 <li>Minimizes the variance of the stationary transforms of the other components</li>
 </ul>
-<p>This is called the <em>Canonical Decomposition</em>. We already stated that both X-11 and SEATS estimate the unobserved components by passing a moving-average filter over the observed data. So how do we use these implied component models to get a linear filter? It should be clear that the filter weights will depend on that arima model is picked <span class="math inline">\(X_t = \Psi(B) a_t\)</span>, and what the implied seasonal model, <span class="math inline">\(\phi_S(B) S_t = \theta_S(B) a_{S,t} \Rightarrow S_t = \Psi(B) a_t\)</span>, is. The <strong>Wiener-Kolmogorov</strong> (WK) algorithm outlines the methodology to get the so-called WK filter. This is the filter that is equal to the conditional expectation of the seasonal component conditional on the observed series.<br></p>
+<p>This is called the <em>Canonical Decomposition</em>. We already stated that both X-11 and SEATS estimate the unobserved components by passing a moving-average filter over the observed data. So how do we use these implied component models to get a linear filter? It should be clear that the filter weights will depend on that arima model is picked <span class="math inline">\(X_t = \Psi(B) a_t\)</span>, and what the implied seasonal model, <span class="math inline">\(\phi_S(B) S_t = \theta_S(B) a_{S,t} \Rightarrow S_t = \Psi(B) a_t\)</span>, is. The <strong>Wiener-Kolmogorov</strong> (WK) algorithm outlines the methodology to get the so-called WK filter. This is the filter that is equal to the conditional expectation of the seasonal component conditional on the observed series.<br>
+</p>
 <p><span class="math display">\[\widehat{S}_t = \underbrace{\left[ \frac{\Sigma_S}{\Sigma} \frac{\Psi_S(B)\Psi_S(F)}{\Psi(B)\Psi(F)} \right]}_{\mbox{WK filter weights}} X_t\]</span> where <span class="math inline">\(F=B^{-1}\)</span> if the forward shift operator such that <span class="math inline">\(F X_t = X_{t+1}\)</span>.</p>
 <p>More than other coefficients, the seasonal MA (<span class="math inline">\(\theta_{12}\)</span>) influences whether estimated seasonal factors change either slowly over time (<span class="math inline">\(\theta_{12}\)</span> close to 1) or rapidly over time (<span class="math inline">\(\theta_{12}\)</span> close to zero).</p>
-</section><section id="example-seats-adjustment" class="level2" data-number="7.6"><h2 data-number="7.6" class="anchored" data-anchor-id="example-seats-adjustment">
-<span class="header-section-number">7.6</span> Example SEATS adjustment</h2>
-</section><section id="some-existing-studies-and-conclusions" class="level2" data-number="7.7"><h2 data-number="7.7" class="anchored" data-anchor-id="some-existing-studies-and-conclusions">
-<span class="header-section-number">7.7</span> Some existing studies and conclusions</h2>
+</section>
+<section id="example-seats-adjustment" class="level2" data-number="7.6">
+<h2 data-number="7.6" class="anchored" data-anchor-id="example-seats-adjustment"><span class="header-section-number">7.6</span> Example SEATS adjustment</h2>
+</section>
+<section id="some-existing-studies-and-conclusions" class="level2" data-number="7.7">
+<h2 data-number="7.7" class="anchored" data-anchor-id="some-existing-studies-and-conclusions"><span class="header-section-number">7.7</span> Some existing studies and conclusions</h2>
 <p>The Bureau of Labor Statistics formed a group to do a comparison study between X-11 and model-based seasonal adjustments (CITE BLS 2007). The examined a cross section of 87 BLS series with X-11, SEATS, and STAMP using spectral, revisions history, model adequacy and sliding spans diagnostics. They found that SEATS seasonal factors are usually more stable than X-11 and X-11 trend component is usually more stable than SEATS. Also, among series that were seasonal, residual seasonality almost never appears using either method. The only exception being a small number of SEATS runs where model inadequacy for the full span of data was present. This manifested as SEATS having difficulty identifying a usable model for decomposition and falling back on the airline model. They found even in these situations the SEATS seasonal adjustment is usually reasonable.</p>
 <p>Overall, X-11 and SEATS seasonal adjustments are very similar for many series. SEATS adjustments are often smoother than X-11 seasonal adjustments. For some series, the variance can be different based on the month or season. For example, U.S. Housing Starts is more variable in the winter months than in the summer due to the differences in warm and cold winters. ARIMA model-based seasonal adjustment does not handle this situation very well and assumes a constant variance and the SEATS adjustment wont compensate for this.</p>
 
 
 
-</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
@@ -604,7 +667,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
 });
-</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
       <a href="./24-x11.html" class="pagination-link">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">X11</span></span>
       </a>          
@@ -616,11 +681,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
 </nav>
 </div> <!-- /content -->
-<footer class="footer"><div class="nav-footer">
+<footer class="footer">
+  <div class="nav-footer">
     <div class="nav-footer-left">by James Livsey and Christoph Sax</div>   
     <div class="nav-footer-right">Seasonal Adjustment in R</div>
   </div>
 </footer>
+
 
 
 </body></html>
