@@ -22,7 +22,7 @@ This is a nonparametric procedure that works by passing moving-average filters o
 Since both X-11 and SEATS apply filters to time-series, we start with a general discussion on seasonal decomposition that applies both to X-11 and STEATS.
 SEATS will be discussed in greater detail in @sec-seats.
 
-## Seasonal decomposition
+## Seasonal decomposition {#sec-seasonal-decomposition}
 
 As we have seen in the previous chapters, the core of seasonal adjustment is the decomposition of a time series into a **trend**, a **seasonal** and and **irregular** component.
 Algebraically, we write the fundamental identity as:

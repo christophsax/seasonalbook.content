@@ -7,32 +7,58 @@ source("_common.R")
 status("drafting", "2023-01-21", section = "SEATS")  # drafting, polishing, complete
 ```
 
-SEATS = "Signal Extraction in ARIMA Time Series"
+## Model based decomposition
 
-Both X-11 method and SEATS assume the observed time series is a function of latent (unobserved) components.
-$$
-X_t = S_t + N_t
-$$ where $S_t$ is a seasonal component and $N_t$ is a non-seasonal component.
+Signal Extraction in ARIMA Time Series, or SEATS, is a method for estimating unobserved components in a time series.
+It is developed from the work of @cleveland76, @hillmer82, @maravall86. If applied properly, SEATS seasonal factors are usually more stable than X-11, and the seasonally adjusted series show less revisions than X11 (??) (see final section for a more extensive discussion).
 
-Usually the non-seasonal component is broken down further into trends, cycles, transitory, etc.
+Like X-11, SEATS applies a series of filters to an observed time series, as described in @sec-seasonal-decomposition. Like X-11, SEATS uses a forecast extended series, in order to obtain unbiased results at the margin.
 
-$$
-X_t = T_t + S_t + I_t
-$$
+Unlike X-11, however, SEATS filters are derived from the ARIMA model of the time series.
+While X-11 filters are predefined and fixed, the SEATS filters are different for each ARIMA model.
 
-Ultimately, both X-11 and SEATS estimate the components $T_t$, $S_t$, $I_t$ by passing moving average filters over the forecast extended series.
-
-*X-11 Filters*:
+::: callout-important
+#### X-11 Filter
 
 -   finite set of empirically developed moving average filters
 -   fixed filtering seen as easier to use (less statistical machinery)
 
-*SEATS filters*:
+#### SEATS filters
 
 -   specifies stochastic models for unobserved components
 -   derives seasonal adjustment filters from these models
 -   infinite number of possible filter choices
 -   requires more statistical machinery
+:::
+
+Given a certain ARIMA model (such as the "Airline" (0 1 1)(0 1 1) model which is appropriate for the description of the `AirPassengers` time series), SEATS decomposes the model into separate models for the trend, the seasonal and the irregular component.
+This is done by the *canonical decomposition* derived by Pierce, Box-Hillmer, Tiao and Burman \[FIXME\] and will be discussed in section (FIXME).
+
+The decomposition of the ARIMA model is independent of the data.
+For each ARIMA specification, there is a unique canonical decomposition.
+Some decompositions for common ARIMA models are given in table \[FIXME, e.g. (011)(011) -\> ???
+???\].
+
+The decomposed ARIMA models imply a certain filter, which is derived by the WK procedure.
+The filters depend on the parameters of the original arima models.
+Figure FIXME displays the SEATS filters for an (0 1 1)(0 1 1) model, for various values of theta.
+
+## Comparing SEATS with X-11 filters:
+
+If SEATS and X-11 use similar filters, the final adjustment will be similar.
+Using the default arguments of `seas()` on `AirPassengers`, the adjustment is very similar:
+
+```{r}
+seats <- seas(AirPassengers)
+x11 <- seas(AirPassengers, x11 = list())
+
+tsbox::ts_plot(final(seats), final(x11))
+
+```
+
+If we look at the applied filters, we see that FIXME.
+
+## Transitory component \[Later, more optional\]
 
 Sometimes SEATS includes a transitory component in its decomposition:
 
