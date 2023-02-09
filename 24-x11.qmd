@@ -6,6 +6,7 @@
 source("_common.R")
 status("drafting", "2023-01-21", section = "X11")  # drafting, polishing, complete
 library(seasonal)
+library(tsbox)
 ```
 
 ```{=html}
@@ -16,9 +17,80 @@ library(seasonal)
 
  -->
 ```
-
 One of the two main methods available in X-13ARIMA-SEATS to extract trend and seasonal components is the X-11 method.
-This is a nonparametric procedure that works by passing moving-average filters over the data to extract intended components.
+This is a nonparametric procedure that works by passing moving-average filters over the data to extract the intended components.
+Since both X-11 and SEATS apply filters to time-series, we start with a general discussion on seasonal decomposition that applies both to X-11 and STEATS.
+SEATS will be discussed in greater detail in @sec-seats.
+
+## Seasonal decomposition {#sec-seasonal-decomposition}
+
+As we have seen in the previous chapters, the core of seasonal adjustment is the decomposition of a time series into a **trend**, a **seasonal** and and **irregular** component.
+Algebraically, we write the fundamental identity as:
+
+$$
+X_t = T_t + S_t + I_t
+$$
+
+where, $X_t$ is the observed time series, $T_t$ the trend, $S_t$ the seasonal component and $I_t$ the irregular component.
+Once the decomposition is done, the seasonally adjusted series can be computed as follows:
+
+How to perform the seasonal decomposition?
+Ultimately, both X-11 and SEATS estimate the components $T_t$, $S_t$, $I_t$ by passing moving average filters over the series.
+In order to get unbiased results at the margin, the underlying series is usually extended by forecasts from the regARIMA model discussed in the @sec-regarima.
+
+How do we apply moving average filters over a series?
+The **trend component** can be estimated by applying a moving average over the observed series.
+For each point in time, an simple average that uses a certain number of observations both on the left and the right of the series.
+Because the window is symmetric, we need the series extended by forecasts and backcasts.
+
+Once the trend component is computed, we can subtract it from the original series to compute a *detrended series*.
+
+FIXME complete after discussion w Jim.
+
+## A simple decomposition in R
+
+In order to better understand the X-11 method, it will be helpful to first perform a basic seasonal adjustment procedure "by-hand".
+A basic trend filter could be a simple 2x12 moving average. 
+This filter has weights 1/24, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/24.
+We use these weights to estimate the trend of the `AirPassengers` series.
+
+```{r x11-trend}
+observed <- AirPassengers         # the observed series
+filter_trend = c(1/24, rep(1/12, 11), 1/24)     # a 2x12 symetric filter that uses 6 obs. on each side
+trend = stats::filter(observed, filter = filter_trend, sides = 2)
+tsbox::ts_plot(observed, trend)
+```
+
+After estimating the trend we now can estimate the seasonal component of the detrended series using a 3x3 seasonal filter that has weights (1,2,3,2,1)/9 applied to the same season.
+
+```{r x11-seasonal-component}
+detrended <- observed - trend
+filter_seas = c(1, rep(0, 11), 2, rep(0, 11), 3, rep(0, 11), 2, rep(0, 11), 1) / 9
+seasonal = stats::filter(detrended, filter = filter_seas, sides = 2)
+tsbox::ts_plot(detrended, seasonal)
+```
+By subtracting this seasonal estimate we have our crude seasonal adjustment.
+
+```{r x11-seasonal-adj}
+adjusted = observed - seasonal
+tsbox::ts_plot(observed, adjusted)
+```
+This basic seasonal adjustment is a useful tool to understand other features of the X-13A-S program.
+The most obvious thing we see in this plot is the last of seasonal adjustment at the ends of the series.
+Hence, why we need to use RegARIMA modeling to forecast extend.
+Additionally, we see some obvious flaws this this adjustment.
+It is difficult to estimate a trend in the presence of seasonality. 
+Similarly, it is difficult to estimate the seasonal factors when the trend is poorly estimated/removed.
+
+This motivates the X-11 method which is an iterative application of this simple procedure we have just performed.
+Each subsequent iteration allows the estimated components to be refined by selecting better filters and handling extreme values and regression effects.
+The first adaptation is to consider a transformation of our series from `AirPassengers` to `log(AirPassengers)`.
+Our simple example performed an additive seasonal adjustment.
+This transformation will require a move to a multiplicative decomposition.
+
+## X-11 Adjusment
+
+FIXME a few lines of history.
 
 In order to use symmetric moving average filters at the end of the time series (current value), a regARIMA model is used to forecast extend the series.
 This RegARIMA model is where users can test for or specify outliers, trading day and moving holiday regressors in their adjustment.
@@ -38,46 +110,6 @@ Before further discussion about the details of the X-11 process, let us see what
 
 When using the x11 spec you can change the length of the filter used for the trend and seasonal components with the `trendma` and `seasonalma` arguments respectively.
 Additionally, `sigmalim` will control the amount of extreme value adjustment that is done during the seasonal adjustment.
-
-## Simple Seasonal Adjustment proceedure
-
-In order to better understand the X-11 method, it will be helpful to first perform a basic seasonal adjustment procedure "by-hand".
-A basic trend filter could be a simple 2x12 moving average. 
-This filter has weights 1/24, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/24.
-We use these weights to estimate the trend of the `AirPassengers` series.
-
-```{r x11-trend}
-filter_wts = c(1/24, rep(1/12, 11), 1/24)
-trend_est = stats::filter(x = AirPassengers, filter = filter_wts, sides = 2)
-tsbox::ts_plot(cbind(AirPassengers, trend_est))
-```
-
-After estimating the trend we now can estimate the seasonal component of the detrended series using a 3x3 seasonal filter that has weights (1,2,3,2,1)/9 applied to the same season.
-
-```{r x11-seasonal-component}
-seas_3x3 = c(1, rep(0, 11), 2, rep(0, 11), 3, rep(0, 11), 2, rep(0, 11), 1) / 9
-seas_est = stats::filter(AirPassengers - trend_est, seas_3x3, sides = 2)
-tsbox::ts_plot(cbind(AirPassengers - trend_est, seas_est))
-```
-
-By subtracting this seasonal estimate we have our crude seasonal adjustment.
-
-```{r x11-seasonal-adj}
-SeasonalAdjustment = AirPassengers - seas_est
-tsbox::ts_plot(cbind(AirPassengers, SeasonalAdjustment))
-```
-
-This basic seasonal adjustment is a useful tool to understand other features of the X-13A-S program.
-The most obvious thing we see in this plot is the last of seasonal adjustment at the ends of the series.
-Hence, why we need to use RegARIMA modeling to forecast extend.
-Additionally, we see some obvious flaws this this adjustment.
-It is difficult to estimate a trend in the presence of seasonality. 
-Similarly, it is difficult to estimate the seasonal factors when the trend is poorly estimated/removed.
-This motivates the X-11 method which is an iterative application of this simple procedure we have just performed.
-Each subsequent iteration allows the estimated components to be refined by selecting better filters and handling extreme values and regression effects.
-The first adaptation is to consider a transformation of our series from `AirPassengers` to `log(AirPassengers)`.
-Our simple example performed an additive seasonal adjustment.
-This transformation will require a move to a multiplicative decomposition.
 
 ## Additive and multiplicative (again)
 
@@ -145,7 +177,7 @@ To understand the length of a filter let's look at the (finite) number of choice
 @tbl-x11-filters shows the different filters available for the seasonal component and the trend component.
 
 | Value        | Description                                                                                                                                                                                                                     |
-|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|------------|------------------------------------------------------------|
 | `s3x1`       | 3×1 moving average                                                                                                                                                                                                              |
 | `s3x3`       | 3×3 moving average                                                                                                                                                                                                              |
 | `s3x5`       | 3×5 moving average                                                                                                                                                                                                              |
@@ -161,8 +193,8 @@ To understand the length of a filter let's look at the (finite) number of choice
 find_seasonal_PxQ_filter_wts = function(P, Q) {
   v = rep(0, 100)
   v[50] = 1
-  v2 = filter(v, rep(1 / Q, Q), sides = 2)
-  v3 = filter(v2, rep(1 / P, P), sides = 2)
+  v2 = stats::filter(v, rep(1 / Q, Q), sides = 2)
+  v3 = stats::filter(v2, rep(1 / P, P), sides = 2)
   wts = v3[v3 > 0 & !is.na(v3)]
   wts
 }
