@@ -139,7 +139,7 @@ To understand the length of a filter let's look at the (finite) number of choice
 @tbl-x11-filters shows the different filters available for the seasonal component and the trend component.
 
 | Value        | Description                                                                                                                                                                                                                     |
-|------------|------------------------------------------------------------|
+|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `s3x1`       | 3×1 moving average                                                                                                                                                                                                              |
 | `s3x3`       | 3×3 moving average                                                                                                                                                                                                              |
 | `s3x5`       | 3×5 moving average                                                                                                                                                                                                              |
@@ -196,10 +196,10 @@ abline(h = 0, lty = 'dotted')
 
 ## Extreme value
 
-The X11 method is sensitive to outliers. Beyond the specified regressors (AOs, level shifts, temporary changes, etc), an X11 adjustment will replace extreme values after the initial crude trend estimation occurs in the first iteration of the X11 method. 
+The X11 method is sensitive to outliers.
+Beyond the specified regressors (AOs, level shifts, temporary changes, etc), an X11 adjustment will replace extreme values after the initial crude trend estimation occurs in the first iteration of the X11 method.
 
 The replacement proceedure looks as follows:
-
 
 ```{mermaid}
 %%| label: fig-spec-interaction
@@ -219,11 +219,10 @@ flowchart LR
 ::: callout-warning
 ### SI ratio / SI difference
 
-In a multiplicative adjustment, the detrended series is reffered to the SI ratio. 
-It is an estimate of the seasonal component. The SI ratio is used to identify extreme values during the initial and intermediate steps of the X-11 method. 
-
+In a multiplicative adjustment, the detrended series is reffered to the SI ratio.
+It is an estimate of the seasonal component.
+The SI ratio is used to identify extreme values during the initial and intermediate steps of the X-11 method.
 :::
-
 
 ::: callout-warning
 ## Related concept: Outlier
@@ -247,5 +246,5 @@ tsbox::ts_plot(
 
 ## Points to include in Chapter
 
-* Level shifts are included with the trend component while AOs and extreme values are included in the irregular.
-* 
+-   Level shifts are included with the trend component while AOs and extreme values are included in the irregular.
+-   
