@@ -1,4 +1,4 @@
-# X11 {#sec-x11}
+# X-11 {#sec-x11}
 
 ```{r}
 #| results: "asis"
@@ -32,14 +32,22 @@ X_t = T_t + S_t + I_t
 $$
 
 where, $X_t$ is the observed time series, $T_t$ the trend, $S_t$ the seasonal component and $I_t$ the irregular component.
-Once the decomposition is done, the seasonally adjusted series can be computed as follows:
+Once the decomposition is done, the seasonally adjusted series for an additive[^24-x11-1] decomposition can be computed as:
+
+[^24-x11-1]: For a multiplicative decomposition, the fundamental identity is
+
+    $$
+    X_t = T_t \cdot S_t \cdot I_t
+    $$
+
+    and the adjusted series is:
+
+    $$
+    A_t = \frac{X_t}{S_t}
+    $$
 
 $$
-A_t = 
-\begin{cases}
-X_t - S_t \qquad \text{additive decomposition} \\
-X_t / S_t \qquad \text{multiplicative decomposition}
-\end{cases}
+A_t = X_t - S_t
 $$
 
 How to perform the seasonal decomposition?
@@ -62,8 +70,8 @@ This filter has weights 1/24, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/
 We use these weights to estimate the trend of the `AirPassengers` series.
 
 ```{r x11-trend}
-observed <- AirPassengers         # the observed series
-filter_trend = c(1/24, rep(1/12, 11), 1/24)     # a 2x12 symetric filter that uses 6 obs. on each side
+observed <- AirPassengers         
+filter_trend = c(1/24, rep(1/12, 11), 1/24)     
 trend = stats::filter(observed, filter = filter_trend, sides = 2)
 tsbox::ts_plot(observed, trend)
 ```
@@ -84,9 +92,9 @@ adjusted = observed - seasonal
 tsbox::ts_plot(observed, adjusted)
 ```
 
-This basic seasonal adjustment is a useful tool to understand other features of the X-13A-S program.
+This basic seasonal adjustment is a useful tool to understand other features of X-13.
 The most obvious thing we see in this plot is the last of seasonal adjustment at the ends of the series.
-Hence, why we need to use RegARIMA modeling to forecast extend.
+Hence, why we need to use regARIMA modeling to forecast extend.
 Additionally, we see some obvious flaws this this adjustment.
 It is difficult to estimate a trend in the presence of seasonality.
 Similarly, it is difficult to estimate the seasonal factors when the trend is poorly estimated/removed.
@@ -97,12 +105,10 @@ The first adaptation is to consider a transformation of our series from `AirPass
 Our simple example performed an additive seasonal adjustment.
 This transformation will require a move to a multiplicative decomposition.
 
-## X-11 Adjusment
-
-FIXME a few lines of history.
+## X-11 Adjustment
 
 In order to use symmetric moving average filters at the end of the time series (current value), a regARIMA model is used to forecast extend the series.
-This RegARIMA model is where users can test for or specify outliers, trading day and moving holiday regressors in their adjustment.
+This regARIMA model is where users can test for or specify outliers, trading day and moving holiday regressors in their adjustment.
 The forecast extended series is then used to filter.
 
 Additionally, X-11 has a built in extreme value procedure included.
@@ -116,23 +122,36 @@ summary(m)
 ```
 
 Before further discussion about the details of the X-11 process, let us see what happened during this modeling run.
-A variant of the simple decomposition performed in Section @sec-simple-decomposition is run 3 times along with a preprocessing step to fit a regARIMA model.
-This proceedure can be seen in great detail in (Ladiray and Quenneville).
-The overview of each step
+A variant of the simple decomposition performed in Section @sec-simple-decomposition is run 3 times along with a pre-processing step to fit a regARIMA model.
+This procedure can be seen in great detail in @ladiray12.
+The overview of each step:
 
-1.  (*Part A*) Prior adjustments including regARIMA modeling of outliers, trading day and moving holiday effects.
-2.  (*Part B*) First application of seasonal decomposition. Calculate initial extreme value weights.
-3.  (*Part C*) Second estimation of seasonal and trend. Final estimation of extreme value weights.
-4.  (*Part D*) Final estimation of seasonally adjusted series, seasonal factors, trend, irregular. Combined factors incorporate the trading day and moving holiday regression effects estimated in Part A
+Part A
+
+:   Prior adjustments including regARIMA modeling of outliers, trading day and moving holiday effects.
+
+Part B
+
+:   First application of seasonal decomposition.
+    Calculate initial extreme value weights.
+
+Part C
+
+:   Second estimation of seasonal and trend.
+    Final estimation of extreme value weights.
+
+Part D
+
+:   Final estimation of seasonally adjusted series, seasonal factors, trend, irregular.
+    Combined factors incorporate the trading day and moving holiday regression effects estimated in Part A
 
 ::: callout-warning
-## Outliers vs Extreme values
+## Outliers and Extreme values
 
-First note that we discuss extreme values later in this Chapter of the book.
-Outliers are a more substantial topic and a later chapter is reserved for their discussion.
+We will discuss extreme values and outliers in more detail in @sec-outliers.
 
 The terms outlier and extreme value seem interchangeable.
-In the X-13ARIMA-SEATS program these refer to very different types of effects.
+In X-13, these refer to very different types of effects.
 An outlier is identified by the regARIMA model in Part A of the X-11 method.
 An extreme value is a value that is large enough to effect the results of a moving-average filter but is not identified by the regARIMA automatic modeling identification.
 Outliers are prior-adjusted out of the series while extreme values are replaced within the X-11 procedure.
@@ -144,30 +163,36 @@ Outliers get included in Part D when X-11 calculates the final seasonal factors 
 
 During these steps the trend filter is automatically chosen based the noise-to-signal ratios, labeled I/C in the output file.
 The seasonal moving average is determined by the Global Moving Seasonality Ratio (GMSR).
-Being able to understnad the
+Being able to understand the
 
 When using the x11 spec you can change the length of the filter used for the trend and seasonal components with the `trendma` and `seasonalma` arguments respectively.
 Additionally, `sigmalim` will control the amount of extreme value adjustment that is done during the seasonal adjustment.
 
-## Frequency domain of time series (Optional)
+## Frequency domain of time series (optional)
 
 We present the following as optional reading material.
-For those interesting in simply performing seasonal adjustment, an understanding of the frequency domain of a time series, is not manditory.
+For those interesting in simply performing seasonal adjustment, an understanding of the frequency domain of a time series, is not mandatory.
 However, the spectral domain representation will help the interested reader further understand the impact a linear filter has on a time series.
-Since both X-11 and SEATS use linear filters this will deepen the users understanding of whichever seasonal adjustmnet proceedure is choosen.
+Since both X-11 and SEATS use linear filters this will deepen the users understanding of whichever seasonal adjustment procedure is chosen.
 
-Seasonal adjustment is highly motivated by the study, estimation, and ultimately removal of regular fulutions in a time series.
-The words *regular fluctuations* immediately leads us to trigonomic functions sin and cos.
-It turns out, there exist two equivilant representations of a time series.
+Seasonal adjustment is highly motivated by the study, estimation, and ultimately removal of regular fluctuations in a time series.
+The words *regular fluctuations* immediately leads us to trigonometric functions sine and cosine.
+It turns out, there exist two equivalent representations of a time series.
 The first, and usually easier for beginners to understand, is the time domain representation.
 This is expressing how $X_t$ evolves as time $t$ evolves.
-For example, an MA(1) time domiain representation is: $$X_t = w_t + \theta w_{t-1}$$ The second, is a frequency domain representation of a series.
+For example, an MA(1) time domain representation:
+
+$$X_t = w_t + \theta w_{t-1}$$
+
+The second, is a frequency domain representation of a series.
 Here, $X_t$ is represented as the sum of trigonometric functions.
 More specifically, the spectral density of $X_t$ is the fourier transform of the acf of the series.
-$$f_X(\nu) = \sum_{h = - \infty}^{\infty} \gamma(h) e^{-2\pi i \nu h}$$ For example, the spectral density of an MA(1) is: $$f_X(\nu) = \sigma^2 \left( 1 + \theta^2 + 2\theta\cos(2\pi\nu) \right)$$ The important concept here is to understand that these representations are equivalent; meaning they contain the same information about a time series, such as encoding the acf function.
+$$f_X(\nu) = \sum_{h = - \infty}^{\infty} \gamma(h) e^{-2\pi i \nu h}$$ For example, the spectral density of an MA(1) is: $$f_X(\nu) = \sigma^2 \left( 1 + \theta^2 + 2\theta\cos(2\pi\nu) \right)$$
+
+The important concept here is to understand that these representations are equivalent; meaning they contain the same information about a time series, such as encoding the acf function.
 
 ::: callout-tip
-## Where does the term \`\`White Noise'' come from?
+## Where does the term "White Noise" come from?
 
 The spectral density of an uncorrelated sequence with variance $\sigma^2$ is simply $f(\nu) = \sigma^2$.
 Notice this is not a function of any frequencies but just a constant for any $\nu$.
@@ -181,7 +206,8 @@ Assume the output of the linear filter will be $Y_t$ such that $$Y_t = \sum_{j =
 \ldots + w_{-2}X_{t-2} + w_{-1}X_{t-1} +  w_{0}X_{t} + w_{1}X_{t+1} + w_{2}X_{t+2} + \ldots$$ This type of linear filter can be expressed as a linear operator in terms of the backshift operator $B$ , where $BX_t = X_{t-1}$ and $B^{-1}X_t = X_{t+1}$.
 $$W(B) = \ldots + w_{-2}B^2 + w_{-1}B +  w_{0} + w_{1}B^{-1} + w_{2}B^{-2} + \ldots$$ and hence $Y_t = W(B)X_t$.
 We can now express the spectral density of $Y_t$ in terms of the input spectral density $X_t$.
-$$f_Y(\nu) = \underbrace{\lvert W(e^{2\pi i \nu}) \rvert^2}_{\text{Square Gain Function}} f_X(\nu)$$.
+$$f_Y(\nu) = \underbrace{\lvert W(e^{2\pi i \nu}) \rvert^2}_{\text{Square Gain Function}} f_X(\nu)$$
+
 There is some mathematical machinery needed when understanding exactly what the square-gain function, $\lvert W(e^{2\pi i \nu}) \rvert^2$, is.
 However, for the sake of this text we just know that it tells us exactly the frequencies of $X_t$ that amplified in the output $Y_t$ as well as the frequencies of $X_t$ that will be annihilated (when the square-gain function equals 0).
 
@@ -212,7 +238,7 @@ fx_seasonal = spec.ar(x_seasonal, na.action = na.pass)
 ## X-11 Moving average filters
 
 We introduce the moving average filters and subsequently plot the filter weights along with the values of the squared gain function.
-The X11 spec also allows users to control the length of the trend and seasonal moving average filters used during the adjustment.
+The X-11 spec also allows users to control the length of the trend and seasonal moving average filters used during the adjustment.
 Generally speaking, longer filters imply a more stable seasonal component and shorter filters a more changing seasonal pattern.
 Of course, a longer filter will use more data for the calculation of components at each time point.
 This is an important observation and understanding it might help a user decide on a short or long filter.
@@ -225,7 +251,7 @@ To understand the length of a filter let's look at the (finite) number of choice
 @tbl-x11-filters shows the different filters available for the seasonal component and the trend component.
 
 | Value        | Description                                                                                                                                                                                                                     |
-|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|-----------------------|------------------------------------------------|
 | `s3x1`       | 3×1 moving average                                                                                                                                                                                                              |
 | `s3x3`       | 3×3 moving average                                                                                                                                                                                                              |
 | `s3x5`       | 3×5 moving average                                                                                                                                                                                                              |
