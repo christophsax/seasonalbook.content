@@ -34,9 +34,17 @@ $$
 where, $X_t$ is the observed time series, $T_t$ the trend, $S_t$ the seasonal component and $I_t$ the irregular component.
 Once the decomposition is done, the seasonally adjusted series can be computed as follows:
 
+$$
+A_t = 
+\begin{cases}
+X_t - S_t \qquad \text{additive decomposition} \\
+X_t / S_t \qquad \text{multiplicative decomposition}
+\end{cases}
+$$
+
 How to perform the seasonal decomposition?
 Ultimately, both X-11 and SEATS estimate the components $T_t$, $S_t$, $I_t$ by passing moving average filters over the series.
-In order to get unbiased results at the margin, the underlying series is usually extended by forecasts from the regARIMA model discussed in the @sec-regarima.
+In order to get unbiased results at the margin, the underlying series is usually extended by forecasts from the regARIMA model discussed in the @sec-regarima. This regARIMA model also serves as the foundation of the initial steps in the X11 algorithm to remove outliers and other regression effects before application of moving-averages. 
 
 How do we apply moving average filters over a series?
 The **trend component** can be estimated by applying a moving average over the observed series.
@@ -45,9 +53,8 @@ Because the window is symmetric, we need the series extended by forecasts and ba
 
 Once the trend component is computed, we can subtract it from the original series to compute a *detrended series*.
 
-FIXME complete after discussion w Jim.
 
-## A simple decomposition in R
+## A simple decomposition in R {#sec-simple-decomposition}
 
 In order to better understand the X-11 method, it will be helpful to first perform a basic seasonal adjustment procedure "by-hand".
 A basic trend filter could be a simple 2x12 moving average.
@@ -106,28 +113,31 @@ m <- seas(AirPassengers, x11 = "")
 summary(m)
 ```
 
-Before further discussion about the details of the X-11 process, let us see what happened during this modeling run...
+Before further discussion about the details of the X-11 process, let us see what happened during this modeling run. A variant of the simple decomposition performed in Section @sec-simple-decomposition is run 3 times along with a preprocessing step to fit a regARIMA model. This proceedure can be seen in great detail in (Ladiray and Quenneville). The overview of each step
+
+1. (*Part A*) Prior adjustments including regARIMA modeling of outliers, trading day and moving holiday effects.
+1. (*Part B*) First application of seasonal decomposition. Calculate initial extreme value weights.
+1. (*Part C*) Second estimation of seasonal and trend. Final estimation of extreme value weights.
+1. (*Part D*) Final estimation of seasonally adjusted series, seasonal factors, trend, irregular. Combined factors incorporate the trading day and moving holiday regression effects estimated in Part A
+
+::: callout-warning
+## Outliers vs Extreme values
+
+First note that we discuss extreme values later in this Chapter of the book. Outliers are a more substantial topic and a later chapter is reserved for their discussion. 
+
+The terms outlier and extreme value seem interchangeable. In the X-13ARIMA-SEATS program these refer to very different types of effects. An outlier is identified by the regARIMA model in Part A of the X-11 method. An extreme value is a value that is large enough to effect the results of a moving-average filter but is not identified by the regARIMA automatic modeling identification. Outliers are prior-adjusted out of the series while extreme values are replaced within the X-11 procedure.
+
+Both types end up in the seasonally adjusted series. Extreme values are assigned to the irregular component and are hence included in the seasonally adjusted series. Outliers get included in Part D when X-11 calculates the final seasonal factors using the original series including outlier effects.
+:::
+
+During these steps the trend filter is automatically chosen based the noise-to-signal ratios, labeled I/C in the output file. The seasonal moving average is determined by the Global Moving Seasonality Ratio (GMSR). Being able to understnad the 
 
 When using the x11 spec you can change the length of the filter used for the trend and seasonal components with the `trendma` and `seasonalma` arguments respectively.
 Additionally, `sigmalim` will control the amount of extreme value adjustment that is done during the seasonal adjustment.
 
-## Additive and multiplicative (again)
-
-The X-13ARIMA-SEATS development was highly motivated to study economic time series.
-As such, the default seasonal adjustment mode is multiplicative due to most seasonal economic time series displaying seasonal fluctuations that increase and decrease along with the level of the time series.
-
-If your series does not have this feature then additive adjustment might be more appropriate.
-This can be changed in the `mode` argument of the x11 spec.
-For example, `seas(x, x11.mode = 'add')` will perform an additive x11 run.
-There exist two other models for decomposition, pseudo-additive and log additive.
-These are less common than additive and multiplicative models and are not the focus of this text.
-If your series has some extremely small values in certain months (quarters) then pseudo-additive models could be worth further investigation.
-It has been observed that when multiplicative seasonal adjustment produces more extreme values in conjunction with small seasonal factors then pseudo-additive adjustment should be explored.
-NEED TO SHOW USERS HOW TO VIEW THEIR EXTREME VALUES - D8.B TABLE DESIGNATIONS NEXT TO OBSERVATIONS. A good reference on the subject is Baxter (1994).
-
 ## Frequency domain of time series (Optional)
 
-We present the following material as optional reading material.
+We present the following as optional reading material.
 For those interesting in simply performing seasonal adjustment, an understanding of the frequency domain of a time series, is not manditory.
 However, the spectral domain representation will help the interested reader further understand the impact a linear filter has on a time series.
 Since both X-11 and SEATS use linear filters this will deepen the users understanding of whichever seasonal adjustmnet proceedure is choosen.
@@ -160,6 +170,28 @@ We can now express the spectral density of $Y_t$ in terms of the input spectral 
 $$f_Y(\nu) = \underbrace{\lvert W(e^{2\pi i \nu}) \rvert^2}_{\text{Square Gain Function}} f_X(\nu)$$.
 There is some mathematical machinery needed when understanding exactly what the square-gain function, $\lvert W(e^{2\pi i \nu}) \rvert^2$, is.
 However, for the sake of this text we just know that it tells us exactly the frequencies of $X_t$ that amplified in the output $Y_t$ as well as the frequencies of $X_t$ that will be annihilated (when the square-gain function equals 0).
+
+Let's look at an example spectrum for the airline model. Instead of deriving the result, the following code simulates observations from an airline model with $\theta = .5$ and $\Theta = .9$. The spectrum is then estimated using a parametric estimator using the `spec.ar` function. Details of this estimation can be found in (Brockwell and Davis).
+
+```{r}
+library(forecast)
+set.seed(123)
+model <- Arima(y = ts(rnorm(1000),freq=12), 
+               order=c(0,1,1), 
+               seasonal=c(0,1,1),
+               fixed=c(theta=-0.5, Theta=-0.9))
+x <- simulate(model, nsim=10000)
+fx = spec.ar(x, order = 36, plot = TRUE)
+
+# Pass a trend filter over data
+x_trend = stats::filter(x, filter = filter_trend, sides = 2)
+fx_trend = spec.ar(x_trend, na.action = na.pass)
+
+# Remove trend to leave seasonal + irregular
+x_seasonal = x - x_trend
+fx_seasonal = spec.ar(x_seasonal, na.action = na.pass)
+```
+
 
 ## X-11 Moving average filters
 
@@ -256,7 +288,7 @@ flowchart LR
 Users can change the multiples of $\sigma$ that are converted to extreme values.
 This is done with the `sigmalim` option within the `x11` spec.
 This option should be a vector of length 2 that specifies when weighting should begin and when full weight of zero should be applied.
-Between the endpooints of the specifed vector a linear weight will be applied.
+Between the endpoints of the specified vector a linear weight will be applied.
 SI ratios are replaced with an average of the two nearest SI ratios from the same month/quarter.
 One caveat being that only fully weighted SI ratios are used for SI ratio replacement.
 Hence, if too small of a $\sigma$ limit is used the SI ratios used to replace an extreme value should be many years away.
@@ -287,11 +319,20 @@ It is an estimate of the seasonal component.
 The SI ratio is used to identify extreme values during the initial and intermediate steps of the X-11 method.
 :::
 
-::: callout-warning
-## Related concept: Outlier
 
-FIXME: explain how this is related to transform.
-:::
+## Additive and multiplicative (again)
+
+The X-13ARIMA-SEATS development was highly motivated to study economic time series.
+As such, the default seasonal adjustment mode is multiplicative due to most seasonal economic time series displaying seasonal fluctuations that increase and decrease along with the level of the time series.
+
+If your series does not have this feature then additive adjustment might be more appropriate.
+This can be changed in the `mode` argument of the x11 spec.
+For example, `seas(x, x11.mode = 'add')` will perform an additive x11 run.
+There exist two other models for decomposition, pseudo-additive and log additive.
+These are less common than additive and multiplicative models and are not the focus of this text.
+If your series has some extremely small values in certain months (quarters) then pseudo-additive models could be worth further investigation.
+It has been observed that when multiplicative seasonal adjustment produces more extreme values in conjunction with small seasonal factors then pseudo-additive adjustment should be explored.
+NEED TO SHOW USERS HOW TO VIEW THEIR EXTREME VALUES - D8.B TABLE DESIGNATIONS NEXT TO OBSERVATIONS. A good reference on the subject is Baxter (1994).
 
 ## Case study
 
@@ -307,4 +348,6 @@ tsbox::ts_plot(
 ## Points to include in Chapter
 
 -   Level shifts are included with the trend component while AOs and extreme values are included in the irregular.
--   
+- Changing filters can affect which values are extreme
+- Changing sigma limits changes the extreme values and can affect what filter seems most appropriate
+    * Experiment with changing filters and sigma limits for your series to see the results
