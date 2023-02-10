@@ -1,14 +1,11 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
-
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.280">
-
+<meta name="generator" content="quarto-1.2.269">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-
 <meta name="author" content="James Livsey and Christoph Sax">
-
-<title>Seasonal Adjustment in R - 6&nbsp; X11</title>
+<title>Seasonal Adjustment in R - 6&nbsp; X-11</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -84,8 +81,26 @@ code span.st { color: #4070a0; } /* String */
 code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
 </style>
-
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
@@ -104,8 +119,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
-<script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -123,43 +137,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit"
   }
-}</script>
-<meta name="robots" content="noindex">
-<script src="site_libs/quarto-diagram/mermaid.min.js"></script>
-<script src="site_libs/quarto-diagram/mermaid-init.js"></script>
-<link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
-<script src="site_libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
-<script src="site_libs/jquery-1.11.1/jquery.min.js"></script>
-<link href="site_libs/dygraphs-1.1.1/dygraph.css" rel="stylesheet">
-<script src="site_libs/dygraphs-1.1.1/dygraph-combined.js"></script>
-<script src="site_libs/dygraphs-1.1.1/shapes.js"></script>
-<script src="site_libs/moment-2.8.4/moment.js"></script>
-<script src="site_libs/moment-timezone-0.2.5/moment-timezone-with-data.js"></script>
-<script src="site_libs/moment-fquarter-1.0.0/moment-fquarter.min.js"></script>
-<script src="site_libs/dygraphs-binding-1.1.1.6/dygraphs.js"></script>
-
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
+}</script><meta name="robots" content="noindex">
+<script src="site_libs/quarto-diagram/mermaid.min.js"></script><script src="site_libs/quarto-diagram/mermaid-init.js"></script><link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
+<script src="site_libs/htmlwidgets-1.6.1/htmlwidgets.js"></script><script src="site_libs/jquery-1.11.1/jquery.min.js"></script><link href="site_libs/dygraphs-1.1.1/dygraph.css" rel="stylesheet">
+<script src="site_libs/dygraphs-1.1.1/dygraph-combined.js"></script><script src="site_libs/dygraphs-1.1.1/shapes.js"></script><script src="site_libs/moment-2.8.4/moment.js"></script><script src="site_libs/moment-timezone-0.2.5/moment-timezone-with-data.js"></script><script src="site_libs/moment-fquarter-1.0.0/moment-fquarter.min.js"></script><script src="site_libs/dygraphs-binding-1.1.1.6/dygraphs.js"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 </head>
-
-<body class="nav-sidebar floating">
+<body class="nav-sidebar floating slimcontent">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-    <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">X11</span></h1>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">X-11</span></h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
     </div>
-  </nav>
-</header>
-<!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Seasonal Adjustment in R</a> 
         <div class="sidebar-tools-main">
@@ -179,15 +173,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
-        <li class="sidebar-item sidebar-item-section">
+<li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a href="./index.html" class="sidebar-item-text sidebar-link">Welcome</a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./10-introduction.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a>
   </div>
@@ -198,7 +192,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </div>
 </li>
       </ul>
-  </li>
+</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a href="./20-part-basics.html" class="sidebar-item-text sidebar-link">Basics</a>
@@ -206,8 +200,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./21-overview.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The fundamentals of X-13</span></a>
   </div>
@@ -224,7 +218,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./24-x11.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">X11</span></a>
+  <a href="./24-x11.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">X-11</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -233,7 +227,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </div>
 </li>
       </ul>
-  </li>
+</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a href="./30-part-data-problems.html" class="sidebar-item-text sidebar-link">Data Problems</a>
@@ -241,8 +235,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./31-holidays.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Irregular holidays</span></a>
   </div>
@@ -263,7 +257,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </div>
 </li>
       </ul>
-  </li>
+</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a href="./40-part-other-issues.html" class="sidebar-item-text sidebar-link">Other Issues</a>
@@ -271,8 +265,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./41-presence-of-seasonality.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Presence of seasonality</span></a>
   </div>
@@ -288,7 +282,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </div>
 </li>
       </ul>
-  </li>
+</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a href="./50-part-quality-assessment.html" class="sidebar-item-text sidebar-link">Quality assessment</a>
@@ -296,8 +290,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./51-quality-measures.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Quality measures</span></a>
   </div>
@@ -308,7 +302,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </div>
 </li>
       </ul>
-  </li>
+</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a href="./60-part-future.html" class="sidebar-item-text sidebar-link">The future of seasonal adjustment</a>
@@ -316,41 +310,34 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./99-status.html" class="sidebar-item-text sidebar-link">Status of the book</a>
   </div>
 </li>
       </ul>
-  </li>
+</li>
     </ul>
-    </div>
-</nav>
-<!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Table of contents</h2>
+</div>
+</nav><!-- margin-sidebar --><div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#sec-seasonal-decomposition" id="toc-sec-seasonal-decomposition" class="nav-link active" data-scroll-target="#sec-seasonal-decomposition"><span class="toc-section-number">6.1</span>  Seasonal decomposition</a></li>
+<li><a href="#sec-seasonal-decomposition" id="toc-sec-seasonal-decomposition" class="nav-link active" data-scroll-target="#sec-seasonal-decomposition"><span class="toc-section-number">6.1</span>  Seasonal decomposition</a></li>
   <li><a href="#sec-simple-decomposition" id="toc-sec-simple-decomposition" class="nav-link" data-scroll-target="#sec-simple-decomposition"><span class="toc-section-number">6.2</span>  A simple decomposition in R</a></li>
-  <li><a href="#x-11-adjusment" id="toc-x-11-adjusment" class="nav-link" data-scroll-target="#x-11-adjusment"><span class="toc-section-number">6.3</span>  X-11 Adjusment</a></li>
-  <li><a href="#frequency-domain-of-time-series-optional" id="toc-frequency-domain-of-time-series-optional" class="nav-link" data-scroll-target="#frequency-domain-of-time-series-optional"><span class="toc-section-number">6.4</span>  Frequency domain of time series (Optional)</a></li>
+  <li><a href="#x-11-adjustment" id="toc-x-11-adjustment" class="nav-link" data-scroll-target="#x-11-adjustment"><span class="toc-section-number">6.3</span>  X-11 Adjustment</a></li>
+  <li><a href="#frequency-domain-of-time-series-optional" id="toc-frequency-domain-of-time-series-optional" class="nav-link" data-scroll-target="#frequency-domain-of-time-series-optional"><span class="toc-section-number">6.4</span>  Frequency domain of time series (optional)</a></li>
   <li><a href="#x-11-moving-average-filters" id="toc-x-11-moving-average-filters" class="nav-link" data-scroll-target="#x-11-moving-average-filters"><span class="toc-section-number">6.5</span>  X-11 Moving average filters</a></li>
   <li><a href="#extreme-value" id="toc-extreme-value" class="nav-link" data-scroll-target="#extreme-value"><span class="toc-section-number">6.6</span>  Extreme value</a></li>
   <li><a href="#additive-and-multiplicative-again" id="toc-additive-and-multiplicative-again" class="nav-link" data-scroll-target="#additive-and-multiplicative-again"><span class="toc-section-number">6.7</span>  Additive and multiplicative (again)</a></li>
   <li><a href="#case-study" id="toc-case-study" class="nav-link" data-scroll-target="#case-study"><span class="toc-section-number">6.8</span>  Case study</a></li>
   <li><a href="#points-to-include-in-chapter" id="toc-points-to-include-in-chapter" class="nav-link" data-scroll-target="#points-to-include-in-chapter"><span class="toc-section-number">6.9</span>  Points to include in Chapter</a></li>
-  </ul>
-<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/24-x11.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/24-x11.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title"><span id="sec-x11" class="quarto-section-identifier d-none d-lg-block"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">X11</span></span></h1>
+<main class="content page-columns page-full" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<h1 class="title"><span id="sec-x11" class="quarto-section-identifier d-none d-lg-block"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">X-11</span></span></h1>
 </div>
 
 
@@ -363,9 +350,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </div>
   
 
-</header>
-
-<div class="status">
+</header><div class="status">
 <div class="callout-important callout callout-style-simple">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -385,123 +370,141 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
  -->
 <p>One of the two main methods available in X-13ARIMA-SEATS to extract trend and seasonal components is the X-11 method. This is a nonparametric procedure that works by passing moving-average filters over the data to extract the intended components. Since both X-11 and SEATS apply filters to time-series, we start with a general discussion on seasonal decomposition that applies both to X-11 and STEATS. SEATS will be discussed in greater detail in <a href="25-seats.html"><span>Chapter&nbsp;7</span></a>.</p>
-<section id="sec-seasonal-decomposition" class="level2" data-number="6.1">
-<h2 data-number="6.1" class="anchored" data-anchor-id="sec-seasonal-decomposition"><span class="header-section-number">6.1</span> Seasonal decomposition</h2>
-<p>As we have seen in the previous chapters, the core of seasonal adjustment is the decomposition of a time series into a <strong>trend</strong>, a <strong>seasonal</strong> and and <strong>irregular</strong> component. Algebraically, we write the fundamental identity as:</p>
+<section id="sec-seasonal-decomposition" class="level2 page-columns page-full" data-number="6.1"><h2 data-number="6.1" class="anchored" data-anchor-id="sec-seasonal-decomposition">
+<span class="header-section-number">6.1</span> Seasonal decomposition</h2>
+<p>As we have seen in the previous chapters, the core of seasonal adjustment is the decomposition of a time series into a <strong>trend</strong>, a <strong>seasonal</strong> and and <strong>irregular</strong> component. As we have seen in <a href="22-transform.html#sec-additive-and-multiplicative-adjustment"><span>Section&nbsp;4.2</span></a>, we write the fundamental identity as:</p>
 <p><span class="math display">\[
 X_t = T_t + S_t + I_t
 \]</span></p>
-<p>where, <span class="math inline">\(X_t\)</span> is the observed time series, <span class="math inline">\(T_t\)</span> the trend, <span class="math inline">\(S_t\)</span> the seasonal component and <span class="math inline">\(I_t\)</span> the irregular component. Once the decomposition is done, the seasonally adjusted series can be computed as follows:</p>
+<div class="page-columns page-full"><p>where, <span class="math inline">\(X_t\)</span> is the observed time series, <span class="math inline">\(T_t\)</span> the trend, <span class="math inline">\(S_t\)</span> the seasonal component and <span class="math inline">\(I_t\)</span> the irregular component. Once the decomposition is done, the seasonally adjusted series for an additive<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> decomposition can be computed as:</p><div class="no-row-height column-margin column-container"><li id="fn1">
+<p>For a multiplicative decomposition, the fundamental identity is</p>
 <p><span class="math display">\[
-A_t =
-\begin{cases}
-X_t - S_t \qquad \text{additive decomposition} \\
-X_t / S_t \qquad \text{multiplicative decomposition}
-\end{cases}
+X_t = T_t \cdot S_t \cdot I_t
+\]</span></p>
+<p>and the adjusted series is:</p>
+<p><span class="math display">\[
+A_t = \frac{X_t}{S_t}
+\]</span></p>
+</li></div></div>
+<p><span class="math display">\[
+A_t = X_t - S_t
 \]</span></p>
 <p>How to perform the seasonal decomposition? Ultimately, both X-11 and SEATS estimate the components <span class="math inline">\(T_t\)</span>, <span class="math inline">\(S_t\)</span>, <span class="math inline">\(I_t\)</span> by passing moving average filters over the series. In order to get unbiased results at the margin, the underlying series is usually extended by forecasts from the regARIMA model discussed in the <a href="23-regARIMA.html"><span>Chapter&nbsp;5</span></a>. This regARIMA model also serves as the foundation of the initial steps in the X11 algorithm to remove outliers and other regression effects before application of moving-averages.</p>
 <p>How do we apply moving average filters over a series? The <strong>trend component</strong> can be estimated by applying a moving average over the observed series. For each point in time, an simple average that uses a certain number of observations both on the left and the right of the series. Because the window is symmetric, we need the series extended by forecasts and backcasts.</p>
 <p>Once the trend component is computed, we can subtract it from the original series to compute a <em>detrended series</em>.</p>
-</section>
-<section id="sec-simple-decomposition" class="level2" data-number="6.2">
-<h2 data-number="6.2" class="anchored" data-anchor-id="sec-simple-decomposition"><span class="header-section-number">6.2</span> A simple decomposition in R</h2>
+</section><section id="sec-simple-decomposition" class="level2" data-number="6.2"><h2 data-number="6.2" class="anchored" data-anchor-id="sec-simple-decomposition">
+<span class="header-section-number">6.2</span> A simple decomposition in R</h2>
 <p>In order to better understand the X-11 method, it will be helpful to first perform a basic seasonal adjustment procedure “by-hand”. A basic trend filter could be a simple 2x12 moving average. This filter has weights 1/24, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/24. We use these weights to estimate the trend of the <code>AirPassengers</code> series.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>observed <span class="ot">&lt;-</span> AirPassengers         <span class="co"># the observed series</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>filter_trend <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">24</span>, <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">12</span>, <span class="dv">11</span>), <span class="dv">1</span><span class="sc">/</span><span class="dv">24</span>)     <span class="co"># a 2x12 symetric filter that uses 6 obs. on each side</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>trend <span class="ot">=</span> stats<span class="sc">::</span><span class="fu">filter</span>(observed, <span class="at">filter =</span> filter_trend, <span class="at">sides =</span> <span class="dv">2</span>)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>tsbox<span class="sc">::</span><span class="fu">ts_plot</span>(observed, trend)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">observed</span> <span class="op">&lt;-</span> <span class="va">AirPassengers</span>         </span>
+<span><span class="va">filter_trend</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">24</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">12</span>, <span class="fl">11</span><span class="op">)</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">24</span><span class="op">)</span>     </span>
+<span><span class="va">trend</span> <span class="op">=</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">observed</span>, filter <span class="op">=</span> <span class="va">filter_trend</span>, sides <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="fu">tsbox</span><span class="fu">::</span><span class="fu"><a href="https://www.tsbox.help/reference/ts_plot.html">ts_plot</a></span><span class="op">(</span><span class="va">observed</span>, <span class="va">trend</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="24-x11_files/figure-html/x11-trend-1.png" class="img-fluid" width="864"></p>
 </div>
 </div>
 <p>After estimating the trend we now can estimate the seasonal component of the detrended series using a 3x3 seasonal filter that has weights (1,2,3,2,1)/9 applied to the same season.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>detrended <span class="ot">&lt;-</span> observed <span class="sc">-</span> trend</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>filter_seas <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">11</span>), <span class="dv">2</span>, <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">11</span>), <span class="dv">3</span>, <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">11</span>), <span class="dv">2</span>, <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">11</span>), <span class="dv">1</span>) <span class="sc">/</span> <span class="dv">9</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>seasonal <span class="ot">=</span> stats<span class="sc">::</span><span class="fu">filter</span>(detrended, <span class="at">filter =</span> filter_seas, <span class="at">sides =</span> <span class="dv">2</span>)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>tsbox<span class="sc">::</span><span class="fu">ts_plot</span>(detrended, seasonal)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">detrended</span> <span class="op">&lt;-</span> <span class="va">observed</span> <span class="op">-</span> <span class="va">trend</span></span>
+<span><span class="va">filter_seas</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">11</span><span class="op">)</span>, <span class="fl">2</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">11</span><span class="op">)</span>, <span class="fl">3</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">11</span><span class="op">)</span>, <span class="fl">2</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">11</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">/</span> <span class="fl">9</span></span>
+<span><span class="va">seasonal</span> <span class="op">=</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">detrended</span>, filter <span class="op">=</span> <span class="va">filter_seas</span>, sides <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="fu">tsbox</span><span class="fu">::</span><span class="fu"><a href="https://www.tsbox.help/reference/ts_plot.html">ts_plot</a></span><span class="op">(</span><span class="va">detrended</span>, <span class="va">seasonal</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="24-x11_files/figure-html/x11-seasonal-component-1.png" class="img-fluid" width="864"></p>
 </div>
 </div>
 <p>By subtracting this seasonal estimate we have our crude seasonal adjustment.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>adjusted <span class="ot">=</span> observed <span class="sc">-</span> seasonal</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>tsbox<span class="sc">::</span><span class="fu">ts_plot</span>(observed, adjusted)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">adjusted</span> <span class="op">=</span> <span class="va">observed</span> <span class="op">-</span> <span class="va">seasonal</span></span>
+<span><span class="fu">tsbox</span><span class="fu">::</span><span class="fu"><a href="https://www.tsbox.help/reference/ts_plot.html">ts_plot</a></span><span class="op">(</span><span class="va">observed</span>, <span class="va">adjusted</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="24-x11_files/figure-html/x11-seasonal-adj-1.png" class="img-fluid" width="864"></p>
 </div>
 </div>
-<p>This basic seasonal adjustment is a useful tool to understand other features of the X-13A-S program. The most obvious thing we see in this plot is the last of seasonal adjustment at the ends of the series. Hence, why we need to use RegARIMA modeling to forecast extend. Additionally, we see some obvious flaws this this adjustment. It is difficult to estimate a trend in the presence of seasonality. Similarly, it is difficult to estimate the seasonal factors when the trend is poorly estimated/removed.</p>
+<p>This basic seasonal adjustment is a useful tool to understand other features of X-13. The most obvious thing we see in this plot is the last of seasonal adjustment at the ends of the series. Hence, why we need to use regARIMA modeling to forecast extend. Additionally, we see some obvious flaws this this adjustment. It is difficult to estimate a trend in the presence of seasonality. Similarly, it is difficult to estimate the seasonal factors when the trend is poorly estimated/removed.</p>
 <p>This motivates the X-11 method which is an iterative application of this simple procedure we have just performed. Each subsequent iteration allows the estimated components to be refined by selecting better filters and handling extreme values and regression effects. The first adaptation is to consider a transformation of our series from <code>AirPassengers</code> to <code>log(AirPassengers)</code>. Our simple example performed an additive seasonal adjustment. This transformation will require a move to a multiplicative decomposition.</p>
-</section>
-<section id="x-11-adjusment" class="level2" data-number="6.3">
-<h2 data-number="6.3" class="anchored" data-anchor-id="x-11-adjusment"><span class="header-section-number">6.3</span> X-11 Adjusment</h2>
-<p>FIXME a few lines of history.</p>
-<p>In order to use symmetric moving average filters at the end of the time series (current value), a regARIMA model is used to forecast extend the series. This RegARIMA model is where users can test for or specify outliers, trading day and moving holiday regressors in their adjustment. The forecast extended series is then used to filter.</p>
+</section><section id="x-11-adjustment" class="level2 page-columns page-full" data-number="6.3"><h2 data-number="6.3" class="anchored" data-anchor-id="x-11-adjustment">
+<span class="header-section-number">6.3</span> X-11 Adjustment</h2>
+<p>In order to use symmetric moving average filters at the end of the time series (current value), a regARIMA model is used to forecast extend the series. This regARIMA model is where users can test for or specify outliers, trading day and moving holiday regressors in their adjustment. The forecast extended series is then used to filter.</p>
 <p>Additionally, X-11 has a built in extreme value procedure included. This procedure identifies extremes and replaces. This results in a robust procedure that can automatically choose filters and identify extreme values without much user intervention. All that needs to be evoked beyond the default <code>seas()</code> call is to turn on the X11 spec option.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">seas</span>(AirPassengers, <span class="at">x11 =</span> <span class="st">""</span>)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; seas(x = AirPassengers, x11 = "")</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Coefficients:</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                     Estimate Std. Error z value Pr(&gt;|z|)    </span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Weekday           -0.0029497  0.0005232  -5.638 1.72e-08 ***</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Easter[1]          0.0177674  0.0071580   2.482   0.0131 *  </span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; AO1951.May         0.1001558  0.0204387   4.900 9.57e-07 ***</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; MA-Nonseasonal-01  0.1156204  0.0858588   1.347   0.1781    </span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; MA-Seasonal-12     0.4973600  0.0774677   6.420 1.36e-10 ***</span></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ---</span></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; X11 adj.  ARIMA: (0 1 1)(0 1 1)  Obs.: 144  Transform: log</span></span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; AICc: 947.3, BIC: 963.9  QS (no seasonality in final):    0  </span></span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Box-Ljung (no autocorr.): 26.65   Shapiro (normality): 0.9908  </span></span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Messages generated by X-13:</span></span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warnings:</span></span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; - Visually significant seasonal and trading day peaks have</span></span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   been found in one or more of the estimated spectra.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, x11 <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; seas(x = AirPassengers, x11 = "")</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients:</span></span>
+<span><span class="co">#&gt;                     Estimate Std. Error z value Pr(&gt;|z|)    </span></span>
+<span><span class="co">#&gt; Weekday           -0.0029497  0.0005232  -5.638 1.72e-08 ***</span></span>
+<span><span class="co">#&gt; Easter[1]          0.0177674  0.0071580   2.482   0.0131 *  </span></span>
+<span><span class="co">#&gt; AO1951.May         0.1001558  0.0204387   4.900 9.57e-07 ***</span></span>
+<span><span class="co">#&gt; MA-Nonseasonal-01  0.1156204  0.0858588   1.347   0.1781    </span></span>
+<span><span class="co">#&gt; MA-Seasonal-12     0.4973600  0.0774677   6.420 1.36e-10 ***</span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; X11 adj.  ARIMA: (0 1 1)(0 1 1)  Obs.: 144  Transform: log</span></span>
+<span><span class="co">#&gt; AICc: 947.3, BIC: 963.9  QS (no seasonality in final):    0  </span></span>
+<span><span class="co">#&gt; Box-Ljung (no autocorr.): 26.65   Shapiro (normality): 0.9908  </span></span>
+<span><span class="co">#&gt; Messages generated by X-13:</span></span>
+<span><span class="co">#&gt; Warnings:</span></span>
+<span><span class="co">#&gt; - Visually significant seasonal and trading day peaks have</span></span>
+<span><span class="co">#&gt;   been found in one or more of the estimated spectra.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Before further discussion about the details of the X-11 process, let us see what happened during this modeling run. A variant of the simple decomposition performed in Section <a href="#sec-simple-decomposition"><span>Section&nbsp;6.2</span></a> is run 3 times along with a preprocessing step to fit a regARIMA model. This proceedure can be seen in great detail in (Ladiray and Quenneville). The overview of each step</p>
-<ol type="1">
-<li>(<em>Part A</em>) Prior adjustments including regARIMA modeling of outliers, trading day and moving holiday effects.</li>
-<li>(<em>Part B</em>) First application of seasonal decomposition. Calculate initial extreme value weights.</li>
-<li>(<em>Part C</em>) Second estimation of seasonal and trend. Final estimation of extreme value weights.</li>
-<li>(<em>Part D</em>) Final estimation of seasonally adjusted series, seasonal factors, trend, irregular. Combined factors incorporate the trading day and moving holiday regression effects estimated in Part A</li>
-</ol>
+<p>Before further discussion about the details of the X-11 process, let us see what happened during this modeling run. A variant of the simple decomposition performed in Section <a href="#sec-simple-decomposition"><span>Section&nbsp;6.2</span></a> is run 3 times along with a pre-processing step to fit a regARIMA model. This procedure can be seen in great detail in <span class="citation" data-cites="ladiray12">Ladiray and Quenneville (<a href="#ref-ladiray12" role="doc-biblioref">2012</a>)</span>. The overview of each step:</p>
+<div class="no-row-height column-margin column-container"><div id="ref-ladiray12" class="csl-entry" role="doc-biblioentry">
+Ladiray, Dominique, and Benoit Quenneville. 2012. <em>Seasonal Adjustment with the x-11 Method</em>. Vol. 158. Springer Science &amp; Business Media.
+</div></div><dl>
+<dt>Part A</dt>
+<dd>
+<p>Prior adjustments including regARIMA modeling of outliers, trading day and moving holiday effects.</p>
+</dd>
+<dt>Part B</dt>
+<dd>
+<p>First application of seasonal decomposition. Calculate initial extreme value weights.</p>
+</dd>
+<dt>Part C</dt>
+<dd>
+<p>Second estimation of seasonal and trend. Final estimation of extreme value weights.</p>
+</dd>
+<dt>Part D</dt>
+<dd>
+<p>Final estimation of seasonally adjusted series, seasonal factors, trend, irregular. Combined factors incorporate the trading day and moving holiday regression effects estimated in Part A</p>
+</dd>
+</dl>
 <div class="callout-warning callout callout-style-simple callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-caption-container flex-fill">
-Outliers vs Extreme values
+Outliers and Extreme values
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>First note that we discuss extreme values later in this Chapter of the book. Outliers are a more substantial topic and a later chapter is reserved for their discussion.</p>
-<p>The terms outlier and extreme value seem interchangeable. In the X-13ARIMA-SEATS program these refer to very different types of effects. An outlier is identified by the regARIMA model in Part A of the X-11 method. An extreme value is a value that is large enough to effect the results of a moving-average filter but is not identified by the regARIMA automatic modeling identification. Outliers are prior-adjusted out of the series while extreme values are replaced within the X-11 procedure.</p>
+<p>We will discuss extreme values and outliers in more detail in <a href="33-outliers.html"><span>Chapter&nbsp;10</span></a>.</p>
+<p>The terms outlier and extreme value seem interchangeable. In X-13, these refer to very different types of effects. An outlier is identified by the regARIMA model in Part A of the X-11 method. An extreme value is a value that is large enough to effect the results of a moving-average filter but is not identified by the regARIMA automatic modeling identification. Outliers are prior-adjusted out of the series while extreme values are replaced within the X-11 procedure.</p>
 <p>Both types end up in the seasonally adjusted series. Extreme values are assigned to the irregular component and are hence included in the seasonally adjusted series. Outliers get included in Part D when X-11 calculates the final seasonal factors using the original series including outlier effects.</p>
 </div>
 </div>
-<p>During these steps the trend filter is automatically chosen based the noise-to-signal ratios, labeled I/C in the output file. The seasonal moving average is determined by the Global Moving Seasonality Ratio (GMSR). Being able to understnad the</p>
+<p>During these steps the trend filter is automatically chosen based the noise-to-signal ratios, labeled I/C in the output file. The seasonal moving average is determined by the Global Moving Seasonality Ratio (GMSR). Being able to understand the</p>
 <p>When using the x11 spec you can change the length of the filter used for the trend and seasonal components with the <code>trendma</code> and <code>seasonalma</code> arguments respectively. Additionally, <code>sigmalim</code> will control the amount of extreme value adjustment that is done during the seasonal adjustment.</p>
-</section>
-<section id="frequency-domain-of-time-series-optional" class="level2" data-number="6.4">
-<h2 data-number="6.4" class="anchored" data-anchor-id="frequency-domain-of-time-series-optional"><span class="header-section-number">6.4</span> Frequency domain of time series (Optional)</h2>
-<p>We present the following as optional reading material. For those interesting in simply performing seasonal adjustment, an understanding of the frequency domain of a time series, is not manditory. However, the spectral domain representation will help the interested reader further understand the impact a linear filter has on a time series. Since both X-11 and SEATS use linear filters this will deepen the users understanding of whichever seasonal adjustmnet proceedure is choosen.</p>
-<p>Seasonal adjustment is highly motivated by the study, estimation, and ultimately removal of regular fulutions in a time series. The words <em>regular fluctuations</em> immediately leads us to trigonomic functions sin and cos. It turns out, there exist two equivilant representations of a time series. The first, and usually easier for beginners to understand, is the time domain representation. This is expressing how <span class="math inline">\(X_t\)</span> evolves as time <span class="math inline">\(t\)</span> evolves. For example, an MA(1) time domiain representation is: <span class="math display">\[X_t = w_t + \theta w_{t-1}\]</span> The second, is a frequency domain representation of a series. Here, <span class="math inline">\(X_t\)</span> is represented as the sum of trigonometric functions. More specifically, the spectral density of <span class="math inline">\(X_t\)</span> is the fourier transform of the acf of the series. <span class="math display">\[f_X(\nu) = \sum_{h = - \infty}^{\infty} \gamma(h) e^{-2\pi i \nu h}\]</span> For example, the spectral density of an MA(1) is: <span class="math display">\[f_X(\nu) = \sigma^2 \left( 1 + \theta^2 + 2\theta\cos(2\pi\nu) \right)\]</span> The important concept here is to understand that these representations are equivalent; meaning they contain the same information about a time series, such as encoding the acf function.</p>
+</section><section id="frequency-domain-of-time-series-optional" class="level2" data-number="6.4"><h2 data-number="6.4" class="anchored" data-anchor-id="frequency-domain-of-time-series-optional">
+<span class="header-section-number">6.4</span> Frequency domain of time series (optional)</h2>
+<p>We present the following as optional reading material. For those interesting in simply performing seasonal adjustment, an understanding of the frequency domain of a time series, is not mandatory. However, the spectral domain representation will help the interested reader further understand the impact a linear filter has on a time series. Since both X-11 and SEATS use linear filters this will deepen the users understanding of whichever seasonal adjustment procedure is chosen.</p>
+<p>Seasonal adjustment is highly motivated by the study, estimation, and ultimately removal of regular fluctuations in a time series. The words <em>regular fluctuations</em> immediately leads us to trigonometric functions sine and cosine. It turns out, there exist two equivalent representations of a time series. The first, and usually easier for beginners to understand, is the time domain representation. This is expressing how <span class="math inline">\(X_t\)</span> evolves as time <span class="math inline">\(t\)</span> evolves. For example, an MA(1) time domain representation:</p>
+<p><span class="math display">\[X_t = w_t + \theta w_{t-1}\]</span></p>
+<p>The second, is a frequency domain representation of a series. Here, <span class="math inline">\(X_t\)</span> is represented as the sum of trigonometric functions. More specifically, the spectral density of <span class="math inline">\(X_t\)</span> is the fourier transform of the acf of the series. <span class="math display">\[f_X(\nu) = \sum_{h = - \infty}^{\infty} \gamma(h) e^{-2\pi i \nu h}\]</span> For example, the spectral density of an MA(1) is: <span class="math display">\[f_X(\nu) = \sigma^2 \left( 1 + \theta^2 + 2\theta\cos(2\pi\nu) \right)\]</span></p>
+<p>The important concept here is to understand that these representations are equivalent; meaning they contain the same information about a time series, such as encoding the acf function.</p>
 <div class="callout-tip callout callout-style-simple callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-caption-container flex-fill">
-Where does the term ``White Noise’’ come from?
+Where does the term “White Noise” come from?
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -509,42 +512,42 @@ Where does the term ``White Noise’’ come from?
 </div>
 </div>
 <p>Now that we know we can express a time series either in the time domain or as a sum of sin and cosine curves, we get to the important part for seasonal adjustment - how does a linear filter effect the input series? Assume we want to pass a moving-average linear filter over our data <span class="math inline">\(X_t\)</span> with weights <span class="math inline">\(\ldots, w_{-2}, w_{-1}, w_{0}, w_{1}, w_{2}, \ldots\)</span>. Assume the output of the linear filter will be <span class="math inline">\(Y_t\)</span> such that <span class="math display">\[Y_t = \sum_{j = -\infty}^{\infty} w_j X_{t+j} =
-\ldots + w_{-2}X_{t-2} + w_{-1}X_{t-1} +  w_{0}X_{t} + w_{1}X_{t+1} + w_{2}X_{t+2} + \ldots\]</span> This type of linear filter can be expressed as a linear operator in terms of the backshift operator <span class="math inline">\(B\)</span> , where <span class="math inline">\(BX_t = X_{t-1}\)</span> and <span class="math inline">\(B^{-1}X_t = X_{t+1}\)</span>. <span class="math display">\[W(B) = \ldots + w_{-2}B^2 + w_{-1}B +  w_{0} + w_{1}B^{-1} + w_{2}B^{-2} + \ldots\]</span> and hence <span class="math inline">\(Y_t = W(B)X_t\)</span>. We can now express the spectral density of <span class="math inline">\(Y_t\)</span> in terms of the input spectral density <span class="math inline">\(X_t\)</span>. <span class="math display">\[f_Y(\nu) = \underbrace{\lvert W(e^{2\pi i \nu}) \rvert^2}_{\text{Square Gain Function}} f_X(\nu)\]</span>. There is some mathematical machinery needed when understanding exactly what the square-gain function, <span class="math inline">\(\lvert W(e^{2\pi i \nu}) \rvert^2\)</span>, is. However, for the sake of this text we just know that it tells us exactly the frequencies of <span class="math inline">\(X_t\)</span> that amplified in the output <span class="math inline">\(Y_t\)</span> as well as the frequencies of <span class="math inline">\(X_t\)</span> that will be annihilated (when the square-gain function equals 0).</p>
+\ldots + w_{-2}X_{t-2} + w_{-1}X_{t-1} +  w_{0}X_{t} + w_{1}X_{t+1} + w_{2}X_{t+2} + \ldots\]</span> This type of linear filter can be expressed as a linear operator in terms of the backshift operator <span class="math inline">\(B\)</span> , where <span class="math inline">\(BX_t = X_{t-1}\)</span> and <span class="math inline">\(B^{-1}X_t = X_{t+1}\)</span>. <span class="math display">\[W(B) = \ldots + w_{-2}B^2 + w_{-1}B +  w_{0} + w_{1}B^{-1} + w_{2}B^{-2} + \ldots\]</span> and hence <span class="math inline">\(Y_t = W(B)X_t\)</span>. We can now express the spectral density of <span class="math inline">\(Y_t\)</span> in terms of the input spectral density <span class="math inline">\(X_t\)</span>. <span class="math display">\[f_Y(\nu) = \underbrace{\lvert W(e^{2\pi i \nu}) \rvert^2}_{\text{Square Gain Function}} f_X(\nu)\]</span></p>
+<p>There is some mathematical machinery needed when understanding exactly what the square-gain function, <span class="math inline">\(\lvert W(e^{2\pi i \nu}) \rvert^2\)</span>, is. However, for the sake of this text we just know that it tells us exactly the frequencies of <span class="math inline">\(X_t\)</span> that amplified in the output <span class="math inline">\(Y_t\)</span> as well as the frequencies of <span class="math inline">\(X_t\)</span> that will be annihilated (when the square-gain function equals 0).</p>
 <p>Let’s look at an example spectrum for the airline model. Instead of deriving the result, the following code simulates observations from an airline model with <span class="math inline">\(\theta = .5\)</span> and <span class="math inline">\(\Theta = .9\)</span>. The spectrum is then estimated using a parametric estimator using the <code>spec.ar</code> function. Details of this estimation can be found in (Brockwell and Davis).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(forecast)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: package 'forecast' was built under R version 4.1.2</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Registered S3 method overwritten by 'quantmod':</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   method            from</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   as.zoo.data.frame zoo</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">Arima</span>(<span class="at">y =</span> <span class="fu">ts</span>(<span class="fu">rnorm</span>(<span class="dv">10000</span>),<span class="at">freq=</span><span class="dv">12</span>), </span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">order=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>), </span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>               <span class="at">seasonal=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>),</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>               <span class="at">fixed=</span><span class="fu">c</span>(<span class="at">theta=</span><span class="sc">-</span><span class="fl">0.5</span>, <span class="at">Theta=</span><span class="sc">-</span><span class="fl">0.9</span>))</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">simulate</span>(model, <span class="at">nsim=</span><span class="dv">1000</span>)</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="fu">spec.ar</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://pkg.robjhyndman.com/forecast/">forecast</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Registered S3 method overwritten by 'quantmod':</span></span>
+<span><span class="co">#&gt;   method            from</span></span>
+<span><span class="co">#&gt;   as.zoo.data.frame zoo</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
+<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://pkg.robjhyndman.com/forecast/reference/Arima.html">Arima</a></span><span class="op">(</span>y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/ts.html">ts</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">1000</span><span class="op">)</span>,freq<span class="op">=</span><span class="fl">12</span><span class="op">)</span>, </span>
+<span>               order<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>, </span>
+<span>               seasonal<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>,</span>
+<span>               fixed<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>theta<span class="op">=</span><span class="op">-</span><span class="fl">0.5</span>, Theta<span class="op">=</span><span class="op">-</span><span class="fl">0.9</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/simulate.html">simulate</a></span><span class="op">(</span><span class="va">model</span>, nsim<span class="op">=</span><span class="fl">10000</span><span class="op">)</span></span>
+<span><span class="va">fx</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/spec.ar.html">spec.ar</a></span><span class="op">(</span><span class="va">x</span>, order <span class="op">=</span> <span class="fl">36</span>, plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Pass a trend filter over data</span></span>
+<span><span class="va">x_trend</span> <span class="op">=</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">x</span>, filter <span class="op">=</span> <span class="va">filter_trend</span>, sides <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="va">fx_trend</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/spec.ar.html">spec.ar</a></span><span class="op">(</span><span class="va">x_trend</span>, na.action <span class="op">=</span> <span class="va">na.pass</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Remove trend to leave seasonal + irregular</span></span>
+<span><span class="va">x_seasonal</span> <span class="op">=</span> <span class="va">x</span> <span class="op">-</span> <span class="va">x_trend</span></span>
+<span><span class="va">fx_seasonal</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/spec.ar.html">spec.ar</a></span><span class="op">(</span><span class="va">x_seasonal</span>, na.action <span class="op">=</span> <span class="va">na.pass</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="24-x11_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="864"></p>
+<p><img src="24-x11_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="864"></p>
 </div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>x_trend <span class="ot">=</span> stats<span class="sc">::</span><span class="fu">filter</span>(x, <span class="at">filter =</span> filter_trend, <span class="at">sides =</span> <span class="dv">2</span>)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">spec.ar</span>(x_trend, <span class="at">na.action =</span> na.pass)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="24-x11_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="864"></p>
+<p><img src="24-x11_files/figure-html/unnamed-chunk-3-2.png" class="img-fluid" width="864"></p>
 </div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>x_detrend <span class="ot">=</span> x <span class="sc">-</span> x_trend</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">spec.ar</span>(x_detrend, <span class="at">na.action =</span> na.pass)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="24-x11_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="864"></p>
+<p><img src="24-x11_files/figure-html/unnamed-chunk-3-3.png" class="img-fluid" width="864"></p>
 </div>
 </div>
-</section>
-<section id="x-11-moving-average-filters" class="level2" data-number="6.5">
-<h2 data-number="6.5" class="anchored" data-anchor-id="x-11-moving-average-filters"><span class="header-section-number">6.5</span> X-11 Moving average filters</h2>
-<p>We introduce the moving average filters and subsequently plot the filter weights along with the values of the squared gain function. The X11 spec also allows users to control the length of the trend and seasonal moving average filters used during the adjustment. Generally speaking, longer filters imply a more stable seasonal component and shorter filters a more changing seasonal pattern. Of course, a longer filter will use more data for the calculation of components at each time point. This is an important observation and understanding it might help a user decide on a short or long filter. Since longer filters use more data there tend to be smaller revisions when a new data point is added. However, there will be revisions to data values further back.</p>
+</section><section id="x-11-moving-average-filters" class="level2" data-number="6.5"><h2 data-number="6.5" class="anchored" data-anchor-id="x-11-moving-average-filters">
+<span class="header-section-number">6.5</span> X-11 Moving average filters</h2>
+<p>We introduce the moving average filters and subsequently plot the filter weights along with the values of the squared gain function. The X-11 spec also allows users to control the length of the trend and seasonal moving average filters used during the adjustment. Generally speaking, longer filters imply a more stable seasonal component and shorter filters a more changing seasonal pattern. Of course, a longer filter will use more data for the calculation of components at each time point. This is an important observation and understanding it might help a user decide on a short or long filter. Since longer filters use more data there tend to be smaller revisions when a new data point is added. However, there will be revisions to data values further back.</p>
 <p>A shorter filter is just the opposite, they tend to produce larger revisions but they do not extend as far back into the series. If a filter is not choosen by the user then automatic filter selection is used. To understand the length of a filter let’s look at the (finite) number of choice available in during an x11 adjustment. <a href="#tbl-x11-filters">Table&nbsp;<span>6.1</span></a> shows the different filters available for the seasonal component and the trend component.</p>
 <div id="tbl-x11-filters" class="anchored">
 <table class="table">
@@ -553,12 +556,10 @@ Where does the term ``White Noise’’ come from?
 <col style="width: 30%">
 <col style="width: 70%">
 </colgroup>
-<thead>
-<tr class="header">
+<thead><tr class="header">
 <th>Value</th>
 <th>Description</th>
-</tr>
-</thead>
+</tr></thead>
 <tbody>
 <tr class="odd">
 <td><code>s3x1</code></td>
@@ -596,34 +597,33 @@ Where does the term ``White Noise’’ come from?
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="24-x11_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="864"></p>
+<p><img src="24-x11_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="864"></p>
 </div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="24-x11_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="864"></p>
+<p><img src="24-x11_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="864"></p>
 </div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="24-x11_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="864"></p>
+<p><img src="24-x11_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="864"></p>
 </div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="24-x11_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" width="864"></p>
+<p><img src="24-x11_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="864"></p>
 </div>
 </div>
-</section>
-<section id="extreme-value" class="level2" data-number="6.6">
-<h2 data-number="6.6" class="anchored" data-anchor-id="extreme-value"><span class="header-section-number">6.6</span> Extreme value</h2>
+</section><section id="extreme-value" class="level2" data-number="6.6"><h2 data-number="6.6" class="anchored" data-anchor-id="extreme-value">
+<span class="header-section-number">6.6</span> Extreme value</h2>
 <p>The X11 method is sensitive to outliers. Beyond the specified regressors (AOs, level shifts, temporary changes, etc), an X11 adjustment will replace extreme values after the initial crude trend estimation occurs in the first iteration of the X11 method. The replacement procedure looks as follows:</p>
 <div class="cell" data-fig-width="9">
 <div class="cell-output-display">
 <div id="fig-spec-interaction" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p>
-</p><pre class="mermaid mermaid-js" data-tooltip-selector="#mermaid-tooltip-1">flowchart LR
+<figure class="figure"><p>
+</p>
+<pre class="mermaid mermaid-js" data-tooltip-selector="#mermaid-tooltip-1">flowchart LR
     A(  Estimate standard deviation &lt;br&gt; of irregular, s  )--&gt;B(Compare SI-ration to &lt;br&gt; multiples of s)
     B--&gt;C(SI &lt; 1.5 * s)
     B--&gt;D(1.5 * s &lt; SI &lt; 2.5 * s)
@@ -635,7 +635,7 @@ Where does the term ``White Noise’’ come from?
 <div id="mermaid-tooltip-1" class="mermaidTooltip">
 
 </div>
-<p></p>
+
 <p></p><figcaption class="figure-caption">Figure&nbsp;6.1: Default behavior of Extreme value replacement procedure.</figcaption><p></p>
 </figure>
 </div>
@@ -643,25 +643,25 @@ Where does the term ``White Noise’’ come from?
 </div>
 <p>Users can change the multiples of <span class="math inline">\(\sigma\)</span> that are converted to extreme values. This is done with the <code>sigmalim</code> option within the <code>x11</code> spec. This option should be a vector of length 2 that specifies when weighting should begin and when full weight of zero should be applied. Between the endpoints of the specified vector a linear weight will be applied. SI ratios are replaced with an average of the two nearest SI ratios from the same month/quarter. One caveat being that only fully weighted SI ratios are used for SI ratio replacement. Hence, if too small of a <span class="math inline">\(\sigma\)</span> limit is used the SI ratios used to replace an extreme value should be many years away.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>m <span class="ot">=</span> <span class="fu">seas</span>(AirPassengers, <span class="at">x11 =</span> <span class="st">""</span>)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>unmodified_SIratio <span class="ot">&lt;-</span> <span class="fu">series</span>(m, <span class="st">"d8"</span>)</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>modified_SIratio   <span class="ot">&lt;-</span> <span class="fu">series</span>(m, <span class="st">"d9"</span>)</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>seasonal_factors <span class="ot">&lt;-</span> <span class="fu">series</span>(m, <span class="st">"d10"</span>)</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>tsbox<span class="sc">::</span><span class="fu">ts_dygraphs</span>(<span class="fu">cbind</span>(unmodified_SIratio, modified_SIratio, seasonal_factors))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">=</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, x11 <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
+<span><span class="va">unmodified_SIratio</span> <span class="op">&lt;-</span> <span class="fu">series</span><span class="op">(</span><span class="va">m</span>, <span class="st">"d8"</span><span class="op">)</span></span>
+<span><span class="va">modified_SIratio</span>   <span class="op">&lt;-</span> <span class="fu">series</span><span class="op">(</span><span class="va">m</span>, <span class="st">"d9"</span><span class="op">)</span></span>
+<span><span class="va">seasonal_factors</span> <span class="op">&lt;-</span> <span class="fu">series</span><span class="op">(</span><span class="va">m</span>, <span class="st">"d10"</span><span class="op">)</span></span>
+<span><span class="fu">tsbox</span><span class="fu">::</span><span class="fu"><a href="https://www.tsbox.help/reference/ts_examples.html">ts_dygraphs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">unmodified_SIratio</span>, <span class="va">modified_SIratio</span>, <span class="va">seasonal_factors</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div id="htmlwidget-0fe3bb78a9d916c6fdc5" style="width:100%;height:433px;" class="dygraphs html-widget"></div>
-<script type="application/json" data-for="htmlwidget-0fe3bb78a9d916c6fdc5">{"x":{"attrs":{"labels":["month","unmodified_SIratio","modified_SIratio","seasonal_factors"],"legend":"auto","retainDateWindow":false,"axes":{"x":{"pixelsPerLabel":60}}},"scale":"monthly","annotations":[],"shadings":[],"events":[],"format":"date","data":[["1949-01-01T00:00:00.000Z","1949-02-01T00:00:00.000Z","1949-03-01T00:00:00.000Z","1949-04-01T00:00:00.000Z","1949-05-01T00:00:00.000Z","1949-06-01T00:00:00.000Z","1949-07-01T00:00:00.000Z","1949-08-01T00:00:00.000Z","1949-09-01T00:00:00.000Z","1949-10-01T00:00:00.000Z","1949-11-01T00:00:00.000Z","1949-12-01T00:00:00.000Z","1950-01-01T00:00:00.000Z","1950-02-01T00:00:00.000Z","1950-03-01T00:00:00.000Z","1950-04-01T00:00:00.000Z","1950-05-01T00:00:00.000Z","1950-06-01T00:00:00.000Z","1950-07-01T00:00:00.000Z","1950-08-01T00:00:00.000Z","1950-09-01T00:00:00.000Z","1950-10-01T00:00:00.000Z","1950-11-01T00:00:00.000Z","1950-12-01T00:00:00.000Z","1951-01-01T00:00:00.000Z","1951-02-01T00:00:00.000Z","1951-03-01T00:00:00.000Z","1951-04-01T00:00:00.000Z","1951-05-01T00:00:00.000Z","1951-06-01T00:00:00.000Z","1951-07-01T00:00:00.000Z","1951-08-01T00:00:00.000Z","1951-09-01T00:00:00.000Z","1951-10-01T00:00:00.000Z","1951-11-01T00:00:00.000Z","1951-12-01T00:00:00.000Z","1952-01-01T00:00:00.000Z","1952-02-01T00:00:00.000Z","1952-03-01T00:00:00.000Z","1952-04-01T00:00:00.000Z","1952-05-01T00:00:00.000Z","1952-06-01T00:00:00.000Z","1952-07-01T00:00:00.000Z","1952-08-01T00:00:00.000Z","1952-09-01T00:00:00.000Z","1952-10-01T00:00:00.000Z","1952-11-01T00:00:00.000Z","1952-12-01T00:00:00.000Z","1953-01-01T00:00:00.000Z","1953-02-01T00:00:00.000Z","1953-03-01T00:00:00.000Z","1953-04-01T00:00:00.000Z","1953-05-01T00:00:00.000Z","1953-06-01T00:00:00.000Z","1953-07-01T00:00:00.000Z","1953-08-01T00:00:00.000Z","1953-09-01T00:00:00.000Z","1953-10-01T00:00:00.000Z","1953-11-01T00:00:00.000Z","1953-12-01T00:00:00.000Z","1954-01-01T00:00:00.000Z","1954-02-01T00:00:00.000Z","1954-03-01T00:00:00.000Z","1954-04-01T00:00:00.000Z","1954-05-01T00:00:00.000Z","1954-06-01T00:00:00.000Z","1954-07-01T00:00:00.000Z","1954-08-01T00:00:00.000Z","1954-09-01T00:00:00.000Z","1954-10-01T00:00:00.000Z","1954-11-01T00:00:00.000Z","1954-12-01T00:00:00.000Z","1955-01-01T00:00:00.000Z","1955-02-01T00:00:00.000Z","1955-03-01T00:00:00.000Z","1955-04-01T00:00:00.000Z","1955-05-01T00:00:00.000Z","1955-06-01T00:00:00.000Z","1955-07-01T00:00:00.000Z","1955-08-01T00:00:00.000Z","1955-09-01T00:00:00.000Z","1955-10-01T00:00:00.000Z","1955-11-01T00:00:00.000Z","1955-12-01T00:00:00.000Z","1956-01-01T00:00:00.000Z","1956-02-01T00:00:00.000Z","1956-03-01T00:00:00.000Z","1956-04-01T00:00:00.000Z","1956-05-01T00:00:00.000Z","1956-06-01T00:00:00.000Z","1956-07-01T00:00:00.000Z","1956-08-01T00:00:00.000Z","1956-09-01T00:00:00.000Z","1956-10-01T00:00:00.000Z","1956-11-01T00:00:00.000Z","1956-12-01T00:00:00.000Z","1957-01-01T00:00:00.000Z","1957-02-01T00:00:00.000Z","1957-03-01T00:00:00.000Z","1957-04-01T00:00:00.000Z","1957-05-01T00:00:00.000Z","1957-06-01T00:00:00.000Z","1957-07-01T00:00:00.000Z","1957-08-01T00:00:00.000Z","1957-09-01T00:00:00.000Z","1957-10-01T00:00:00.000Z","1957-11-01T00:00:00.000Z","1957-12-01T00:00:00.000Z","1958-01-01T00:00:00.000Z","1958-02-01T00:00:00.000Z","1958-03-01T00:00:00.000Z","1958-04-01T00:00:00.000Z","1958-05-01T00:00:00.000Z","1958-06-01T00:00:00.000Z","1958-07-01T00:00:00.000Z","1958-08-01T00:00:00.000Z","1958-09-01T00:00:00.000Z","1958-10-01T00:00:00.000Z","1958-11-01T00:00:00.000Z","1958-12-01T00:00:00.000Z","1959-01-01T00:00:00.000Z","1959-02-01T00:00:00.000Z","1959-03-01T00:00:00.000Z","1959-04-01T00:00:00.000Z","1959-05-01T00:00:00.000Z","1959-06-01T00:00:00.000Z","1959-07-01T00:00:00.000Z","1959-08-01T00:00:00.000Z","1959-09-01T00:00:00.000Z","1959-10-01T00:00:00.000Z","1959-11-01T00:00:00.000Z","1959-12-01T00:00:00.000Z","1960-01-01T00:00:00.000Z","1960-02-01T00:00:00.000Z","1960-03-01T00:00:00.000Z","1960-04-01T00:00:00.000Z","1960-05-01T00:00:00.000Z","1960-06-01T00:00:00.000Z","1960-07-01T00:00:00.000Z","1960-08-01T00:00:00.000Z","1960-09-01T00:00:00.000Z","1960-10-01T00:00:00.000Z","1960-11-01T00:00:00.000Z","1960-12-01T00:00:00.000Z"],[0.90954413431534,0.958134917539742,1.05826773384958,0.999397737363081,0.944379568327052,1.07040950573565,1.15999647046193,1.18306222028636,1.07392626243068,0.91631534440944,0.812868876444744,0.913450477556662,0.883834610881889,0.967863309105704,1.0752414159197,0.983492034479799,0.923233529212133,1.0760915122933,1.18031018249828,1.18585758505258,1.07838981346238,0.903447425824739,0.769090631905992,0.9071161368089,0.932049791420416,0.938250170191052,1.06846376887048,0.992507219748891,0.944801530516278,1.0643203161951,1.18685289455577,1.18363265800482,1.05092958118441,0.930187747125574,0.819309866624069,0.899351819626127,0.936959736037217,0.953003632964046,1.03550158711414,0.971195706347769,0.963671593690028,1.12248883924447,1.18042146492558,1.20128169180775,1.0403475769631,0.93625161295518,0.809233204622607,0.919827253691367,0.904350437899859,0.895649035193236,1.05094262980911,1.0319080644982,0.992106216128487,1.08026626739443,1.18462462879818,1.1964935551942,1.05956198534361,0.93731210223075,0.801432856548351,0.909236151699971,0.899800728969994,0.836804076069371,1.03606830111466,0.974272086806499,0.977740639290948,1.10879157607621,1.24669563803931,1.20007633593339,1.06086241913829,0.911749360960517,0.808926017101905,0.896503540252334,0.909775647001528,0.880225777974371,1.00171654242081,0.974863143677357,0.973069419208514,1.12514983739183,1.25638102747165,1.20751587059459,1.07170336641446,0.914108635875142,0.792737869108345,0.908665229651781,0.9145799036658,0.860097635705891,0.978635823108172,0.975646938151824,0.980639353723917,1.13240436925751,1.25315143098219,1.23865202548331,1.05402075271827,0.922198652693858,0.805970024383932,0.882332309472674,0.912636026332554,0.857921912022811,0.983440043386464,0.958644662623798,0.979009462390656,1.12976852166067,1.26562820136624,1.24776096538582,1.06820903283991,0.924573383618965,0.800040298661844,0.885022518009677,0.908017465276688,0.854181883997277,0.961822076819965,0.931616419948275,0.962161880564697,1.13871554123048,1.29188049254777,1.29682418119793,1.05637115290913,0.942212302955565,0.791037639878657,0.870037178449764,0.903360363059405,0.848663455604889,0.966161710550523,0.963456809194516,0.983520216695563,1.11622921801704,1.28825460765788,1.27438528639414,1.06276256186295,0.916724216331607,0.803832543595562,0.901217446893226,0.899715511673992,0.826258466325697,0.909921267905064,0.969406081625013,0.992925836014278,1.1286971921091,1.28462400856531,1.27141415150184,1.05560859967825,0.934620322831166,0.799975724754911,0.875888904861646],[null,null,null,null,null,null,null,null,null,null,null,null,0.900527790332045,0.962208489770208,null,null,0.927980421115131,null,null,null,null,null,0.812319911038172,null,0.928531515950159,null,null,null,null,null,null,null,null,null,null,null,0.932122353316006,0.937057673215138,null,null,null,1.0979702189209,null,null,null,null,null,null,null,null,null,0.98135187729223,0.988717572530327,null,1.20312627934509,null,null,null,null,null,null,0.886390253199416,1.0272174058301,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,0.964159543619706,0.964007965826692,null,null,1.25691069998093,null,0.94030970972797,null,0.87297980172345,null,null,null,null,null,null,null,null,null,0.922016091392353,null,0.878117628232022,null,0.839041539392619,0.957583669693264,null,0.983411225008442,null,null,null,null,null,null,null],[0.90935007237941,0.956073345125063,1.0670277723926,0.99160135672252,0.937738504497997,1.07155326597769,1.17319820881253,1.18424464803987,1.07171433028113,0.914044336950166,0.814205799347947,0.908473148139657,0.913626622647239,0.951919618862513,1.06457578848137,0.988578455827032,0.940401480908341,1.07381832160793,1.17633179939498,1.18617632751191,1.06653394648844,0.918239892474166,0.814499247813562,0.908321792514824,0.91813503673266,0.940246192392003,1.05915878230746,0.984924664889449,0.949481559218605,1.07621715004149,1.18209143789227,1.1894889074053,1.05937802160207,0.926465247373682,0.813997770677307,0.908816373604204,0.917818689989548,0.924416504909579,1.04875325029655,0.978995646858134,0.961709957860645,1.08437590859936,1.19342783499427,1.19485801853074,1.05517884235453,0.930775052742994,0.811469408473747,0.909759914761113,0.912652809827241,0.904862728219081,1.03735872075183,0.976690855101899,0.972950452753459,1.0927213495352,1.21102231291106,1.19833565857511,1.05756292184555,0.930147981131505,0.807641785342168,0.908948179619376,0.908308532004758,0.888800436100846,1.02073792626847,0.974343296375168,0.976805648329117,1.10659250814481,1.23172840064205,1.20524986110268,1.06118168168883,0.923632340533625,0.804989443161376,0.904442179475742,0.908706211302979,0.875732512298506,1.00437461968699,0.97250884993047,0.97707095561048,1.11773888166943,1.24776407913982,1.21558059417396,1.0644475445879,0.920633656116358,0.802548053017466,0.898927016335924,0.911301288081659,0.865936970048281,0.987315377553399,0.969191102014292,0.975263315774453,1.12735948661914,1.25962733361482,1.23128956200715,1.06274070107359,0.922890380795408,0.80150671134746,0.890512420558572,0.911461110475219,0.858863268490313,0.976892699514958,0.96503119227683,0.974797636100437,1.12940703437102,1.26959839861087,1.24616422384016,1.06279193977777,0.926992370989458,0.799792516228969,0.88454319615238,0.908414417576894,0.852540701132179,0.96833500688435,0.963912168879851,0.974803185535111,1.12917524493515,1.27978634971801,1.25846070654514,1.06061870577394,0.930768127993303,0.798976499995137,0.878625489988868,0.904387799339879,0.847774870128798,0.963381835240387,0.964475192086481,0.978784904452811,1.1263996541674,1.28488947995354,1.26663679339097,1.06038753879957,0.930408683393861,0.799281679022411,0.877488783142212,0.901126005653719,0.843482183455421,0.959028811795915,0.966720634309478,0.982423252039094,1.12635616690097,1.28600947032347,1.27074544954115,1.05871510243072,0.930755938683671,0.799541830846422,0.876970558906644]]},"evals":[],"jsHooks":[]}</script>
+<div class="dygraphs html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-06b94554eba9d1b042d0" style="width:100%;height:433px;"></div>
+<script type="application/json" data-for="htmlwidget-06b94554eba9d1b042d0">{"x":{"attrs":{"labels":["month","unmodified_SIratio","modified_SIratio","seasonal_factors"],"legend":"auto","retainDateWindow":false,"axes":{"x":{"pixelsPerLabel":60}}},"scale":"monthly","annotations":[],"shadings":[],"events":[],"format":"date","data":[["1949-01-01T00:00:00.000Z","1949-02-01T00:00:00.000Z","1949-03-01T00:00:00.000Z","1949-04-01T00:00:00.000Z","1949-05-01T00:00:00.000Z","1949-06-01T00:00:00.000Z","1949-07-01T00:00:00.000Z","1949-08-01T00:00:00.000Z","1949-09-01T00:00:00.000Z","1949-10-01T00:00:00.000Z","1949-11-01T00:00:00.000Z","1949-12-01T00:00:00.000Z","1950-01-01T00:00:00.000Z","1950-02-01T00:00:00.000Z","1950-03-01T00:00:00.000Z","1950-04-01T00:00:00.000Z","1950-05-01T00:00:00.000Z","1950-06-01T00:00:00.000Z","1950-07-01T00:00:00.000Z","1950-08-01T00:00:00.000Z","1950-09-01T00:00:00.000Z","1950-10-01T00:00:00.000Z","1950-11-01T00:00:00.000Z","1950-12-01T00:00:00.000Z","1951-01-01T00:00:00.000Z","1951-02-01T00:00:00.000Z","1951-03-01T00:00:00.000Z","1951-04-01T00:00:00.000Z","1951-05-01T00:00:00.000Z","1951-06-01T00:00:00.000Z","1951-07-01T00:00:00.000Z","1951-08-01T00:00:00.000Z","1951-09-01T00:00:00.000Z","1951-10-01T00:00:00.000Z","1951-11-01T00:00:00.000Z","1951-12-01T00:00:00.000Z","1952-01-01T00:00:00.000Z","1952-02-01T00:00:00.000Z","1952-03-01T00:00:00.000Z","1952-04-01T00:00:00.000Z","1952-05-01T00:00:00.000Z","1952-06-01T00:00:00.000Z","1952-07-01T00:00:00.000Z","1952-08-01T00:00:00.000Z","1952-09-01T00:00:00.000Z","1952-10-01T00:00:00.000Z","1952-11-01T00:00:00.000Z","1952-12-01T00:00:00.000Z","1953-01-01T00:00:00.000Z","1953-02-01T00:00:00.000Z","1953-03-01T00:00:00.000Z","1953-04-01T00:00:00.000Z","1953-05-01T00:00:00.000Z","1953-06-01T00:00:00.000Z","1953-07-01T00:00:00.000Z","1953-08-01T00:00:00.000Z","1953-09-01T00:00:00.000Z","1953-10-01T00:00:00.000Z","1953-11-01T00:00:00.000Z","1953-12-01T00:00:00.000Z","1954-01-01T00:00:00.000Z","1954-02-01T00:00:00.000Z","1954-03-01T00:00:00.000Z","1954-04-01T00:00:00.000Z","1954-05-01T00:00:00.000Z","1954-06-01T00:00:00.000Z","1954-07-01T00:00:00.000Z","1954-08-01T00:00:00.000Z","1954-09-01T00:00:00.000Z","1954-10-01T00:00:00.000Z","1954-11-01T00:00:00.000Z","1954-12-01T00:00:00.000Z","1955-01-01T00:00:00.000Z","1955-02-01T00:00:00.000Z","1955-03-01T00:00:00.000Z","1955-04-01T00:00:00.000Z","1955-05-01T00:00:00.000Z","1955-06-01T00:00:00.000Z","1955-07-01T00:00:00.000Z","1955-08-01T00:00:00.000Z","1955-09-01T00:00:00.000Z","1955-10-01T00:00:00.000Z","1955-11-01T00:00:00.000Z","1955-12-01T00:00:00.000Z","1956-01-01T00:00:00.000Z","1956-02-01T00:00:00.000Z","1956-03-01T00:00:00.000Z","1956-04-01T00:00:00.000Z","1956-05-01T00:00:00.000Z","1956-06-01T00:00:00.000Z","1956-07-01T00:00:00.000Z","1956-08-01T00:00:00.000Z","1956-09-01T00:00:00.000Z","1956-10-01T00:00:00.000Z","1956-11-01T00:00:00.000Z","1956-12-01T00:00:00.000Z","1957-01-01T00:00:00.000Z","1957-02-01T00:00:00.000Z","1957-03-01T00:00:00.000Z","1957-04-01T00:00:00.000Z","1957-05-01T00:00:00.000Z","1957-06-01T00:00:00.000Z","1957-07-01T00:00:00.000Z","1957-08-01T00:00:00.000Z","1957-09-01T00:00:00.000Z","1957-10-01T00:00:00.000Z","1957-11-01T00:00:00.000Z","1957-12-01T00:00:00.000Z","1958-01-01T00:00:00.000Z","1958-02-01T00:00:00.000Z","1958-03-01T00:00:00.000Z","1958-04-01T00:00:00.000Z","1958-05-01T00:00:00.000Z","1958-06-01T00:00:00.000Z","1958-07-01T00:00:00.000Z","1958-08-01T00:00:00.000Z","1958-09-01T00:00:00.000Z","1958-10-01T00:00:00.000Z","1958-11-01T00:00:00.000Z","1958-12-01T00:00:00.000Z","1959-01-01T00:00:00.000Z","1959-02-01T00:00:00.000Z","1959-03-01T00:00:00.000Z","1959-04-01T00:00:00.000Z","1959-05-01T00:00:00.000Z","1959-06-01T00:00:00.000Z","1959-07-01T00:00:00.000Z","1959-08-01T00:00:00.000Z","1959-09-01T00:00:00.000Z","1959-10-01T00:00:00.000Z","1959-11-01T00:00:00.000Z","1959-12-01T00:00:00.000Z","1960-01-01T00:00:00.000Z","1960-02-01T00:00:00.000Z","1960-03-01T00:00:00.000Z","1960-04-01T00:00:00.000Z","1960-05-01T00:00:00.000Z","1960-06-01T00:00:00.000Z","1960-07-01T00:00:00.000Z","1960-08-01T00:00:00.000Z","1960-09-01T00:00:00.000Z","1960-10-01T00:00:00.000Z","1960-11-01T00:00:00.000Z","1960-12-01T00:00:00.000Z"],[0.90954413431534,0.958134917539742,1.05826773384958,0.999397737363081,0.944379568327052,1.07040950573565,1.15999647046193,1.18306222028636,1.07392626243068,0.91631534440944,0.812868876444744,0.913450477556662,0.883834610881889,0.967863309105704,1.0752414159197,0.983492034479799,0.923233529212133,1.0760915122933,1.18031018249828,1.18585758505258,1.07838981346238,0.903447425824739,0.769090631905992,0.9071161368089,0.932049791420416,0.938250170191052,1.06846376887048,0.992507219748891,0.944801530516278,1.0643203161951,1.18685289455577,1.18363265800482,1.05092958118441,0.930187747125574,0.819309866624069,0.899351819626127,0.936959736037217,0.953003632964046,1.03550158711414,0.971195706347769,0.963671593690028,1.12248883924447,1.18042146492558,1.20128169180775,1.0403475769631,0.93625161295518,0.809233204622607,0.919827253691367,0.904350437899859,0.895649035193236,1.05094262980911,1.0319080644982,0.992106216128487,1.08026626739443,1.18462462879818,1.1964935551942,1.05956198534361,0.93731210223075,0.801432856548351,0.909236151699971,0.899800728969994,0.836804076069371,1.03606830111466,0.974272086806499,0.977740639290948,1.10879157607621,1.24669563803931,1.20007633593339,1.06086241913829,0.911749360960517,0.808926017101905,0.896503540252334,0.909775647001528,0.880225777974371,1.00171654242081,0.974863143677357,0.973069419208514,1.12514983739183,1.25638102747165,1.20751587059459,1.07170336641446,0.914108635875142,0.792737869108345,0.908665229651781,0.9145799036658,0.860097635705891,0.978635823108172,0.975646938151824,0.980639353723917,1.13240436925751,1.25315143098219,1.23865202548331,1.05402075271827,0.922198652693858,0.805970024383932,0.882332309472674,0.912636026332554,0.857921912022811,0.983440043386464,0.958644662623798,0.979009462390656,1.12976852166067,1.26562820136624,1.24776096538582,1.06820903283991,0.924573383618965,0.800040298661844,0.885022518009677,0.908017465276688,0.854181883997277,0.961822076819965,0.931616419948275,0.962161880564697,1.13871554123048,1.29188049254777,1.29682418119793,1.05637115290913,0.942212302955565,0.791037639878657,0.870037178449764,0.903360363059405,0.848663455604889,0.966161710550523,0.963456809194516,0.983520216695563,1.11622921801704,1.28825460765788,1.27438528639414,1.06276256186295,0.916724216331607,0.803832543595562,0.901217446893226,0.899715511673992,0.826258466325697,0.909921267905064,0.969406081625013,0.992925836014278,1.1286971921091,1.28462400856531,1.27141415150184,1.05560859967825,0.934620322831166,0.799975724754911,0.875888904861646],[null,null,null,null,null,null,null,null,null,null,null,null,0.900527790332045,0.962208489770208,null,null,0.927980421115131,null,null,null,null,null,0.812319911038172,null,0.928531515950159,null,null,null,null,null,null,null,null,null,null,null,0.932122353316006,0.937057673215138,null,null,null,1.0979702189209,null,null,null,null,null,null,null,null,null,0.98135187729223,0.988717572530327,null,1.20312627934509,null,null,null,null,null,null,0.886390253199416,1.0272174058301,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,0.964159543619706,0.964007965826692,null,null,1.25691069998093,null,0.94030970972797,null,0.87297980172345,null,null,null,null,null,null,null,null,null,0.922016091392353,null,0.878117628232022,null,0.839041539392619,0.957583669693264,null,0.983411225008442,null,null,null,null,null,null,null],[0.90935007237941,0.956073345125063,1.0670277723926,0.99160135672252,0.937738504497997,1.07155326597769,1.17319820881253,1.18424464803987,1.07171433028113,0.914044336950166,0.814205799347947,0.908473148139657,0.913626622647239,0.951919618862513,1.06457578848137,0.988578455827032,0.940401480908341,1.07381832160793,1.17633179939498,1.18617632751191,1.06653394648844,0.918239892474166,0.814499247813562,0.908321792514824,0.91813503673266,0.940246192392003,1.05915878230746,0.984924664889449,0.949481559218605,1.07621715004149,1.18209143789227,1.1894889074053,1.05937802160207,0.926465247373682,0.813997770677307,0.908816373604204,0.917818689989548,0.924416504909579,1.04875325029655,0.978995646858134,0.961709957860645,1.08437590859936,1.19342783499427,1.19485801853074,1.05517884235453,0.930775052742994,0.811469408473747,0.909759914761113,0.912652809827241,0.904862728219081,1.03735872075183,0.976690855101899,0.972950452753459,1.0927213495352,1.21102231291106,1.19833565857511,1.05756292184555,0.930147981131505,0.807641785342168,0.908948179619376,0.908308532004758,0.888800436100846,1.02073792626847,0.974343296375168,0.976805648329117,1.10659250814481,1.23172840064205,1.20524986110268,1.06118168168883,0.923632340533625,0.804989443161376,0.904442179475742,0.908706211302979,0.875732512298506,1.00437461968699,0.97250884993047,0.97707095561048,1.11773888166943,1.24776407913982,1.21558059417396,1.0644475445879,0.920633656116358,0.802548053017466,0.898927016335924,0.911301288081659,0.865936970048281,0.987315377553399,0.969191102014292,0.975263315774453,1.12735948661914,1.25962733361482,1.23128956200715,1.06274070107359,0.922890380795408,0.80150671134746,0.890512420558572,0.911461110475219,0.858863268490313,0.976892699514958,0.96503119227683,0.974797636100437,1.12940703437102,1.26959839861087,1.24616422384016,1.06279193977777,0.926992370989458,0.799792516228969,0.88454319615238,0.908414417576894,0.852540701132179,0.96833500688435,0.963912168879851,0.974803185535111,1.12917524493515,1.27978634971801,1.25846070654514,1.06061870577394,0.930768127993303,0.798976499995137,0.878625489988868,0.904387799339879,0.847774870128798,0.963381835240387,0.964475192086481,0.978784904452811,1.1263996541674,1.28488947995354,1.26663679339097,1.06038753879957,0.930408683393861,0.799281679022411,0.877488783142212,0.901126005653719,0.843482183455421,0.959028811795915,0.966720634309478,0.982423252039094,1.12635616690097,1.28600947032347,1.27074544954115,1.05871510243072,0.930755938683671,0.799541830846422,0.876970558906644]]},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>m <span class="ot">=</span> <span class="fu">seas</span>(AirPassengers, <span class="at">x11 =</span> <span class="st">""</span>, <span class="at">x11.sigmalim =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>unmodified_SIratio <span class="ot">&lt;-</span> <span class="fu">series</span>(m, <span class="st">"d8"</span>)</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>modified_SIratio   <span class="ot">&lt;-</span> <span class="fu">series</span>(m, <span class="st">"d9"</span>)</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>seasonal_factors <span class="ot">&lt;-</span> <span class="fu">series</span>(m, <span class="st">"d10"</span>)</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>tsbox<span class="sc">::</span><span class="fu">ts_dygraphs</span>(<span class="fu">cbind</span>(unmodified_SIratio, modified_SIratio, seasonal_factors))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">=</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, x11 <span class="op">=</span> <span class="st">""</span>, x11.sigmalim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">unmodified_SIratio</span> <span class="op">&lt;-</span> <span class="fu">series</span><span class="op">(</span><span class="va">m</span>, <span class="st">"d8"</span><span class="op">)</span></span>
+<span><span class="va">modified_SIratio</span>   <span class="op">&lt;-</span> <span class="fu">series</span><span class="op">(</span><span class="va">m</span>, <span class="st">"d9"</span><span class="op">)</span></span>
+<span><span class="va">seasonal_factors</span> <span class="op">&lt;-</span> <span class="fu">series</span><span class="op">(</span><span class="va">m</span>, <span class="st">"d10"</span><span class="op">)</span></span>
+<span><span class="fu">tsbox</span><span class="fu">::</span><span class="fu"><a href="https://www.tsbox.help/reference/ts_examples.html">ts_dygraphs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">unmodified_SIratio</span>, <span class="va">modified_SIratio</span>, <span class="va">seasonal_factors</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div id="htmlwidget-11096faed0d9a5cba1a4" style="width:100%;height:433px;" class="dygraphs html-widget"></div>
-<script type="application/json" data-for="htmlwidget-11096faed0d9a5cba1a4">{"x":{"attrs":{"labels":["month","unmodified_SIratio","modified_SIratio","seasonal_factors"],"legend":"auto","retainDateWindow":false,"axes":{"x":{"pixelsPerLabel":60}}},"scale":"monthly","annotations":[],"shadings":[],"events":[],"format":"date","data":[["1949-01-01T00:00:00.000Z","1949-02-01T00:00:00.000Z","1949-03-01T00:00:00.000Z","1949-04-01T00:00:00.000Z","1949-05-01T00:00:00.000Z","1949-06-01T00:00:00.000Z","1949-07-01T00:00:00.000Z","1949-08-01T00:00:00.000Z","1949-09-01T00:00:00.000Z","1949-10-01T00:00:00.000Z","1949-11-01T00:00:00.000Z","1949-12-01T00:00:00.000Z","1950-01-01T00:00:00.000Z","1950-02-01T00:00:00.000Z","1950-03-01T00:00:00.000Z","1950-04-01T00:00:00.000Z","1950-05-01T00:00:00.000Z","1950-06-01T00:00:00.000Z","1950-07-01T00:00:00.000Z","1950-08-01T00:00:00.000Z","1950-09-01T00:00:00.000Z","1950-10-01T00:00:00.000Z","1950-11-01T00:00:00.000Z","1950-12-01T00:00:00.000Z","1951-01-01T00:00:00.000Z","1951-02-01T00:00:00.000Z","1951-03-01T00:00:00.000Z","1951-04-01T00:00:00.000Z","1951-05-01T00:00:00.000Z","1951-06-01T00:00:00.000Z","1951-07-01T00:00:00.000Z","1951-08-01T00:00:00.000Z","1951-09-01T00:00:00.000Z","1951-10-01T00:00:00.000Z","1951-11-01T00:00:00.000Z","1951-12-01T00:00:00.000Z","1952-01-01T00:00:00.000Z","1952-02-01T00:00:00.000Z","1952-03-01T00:00:00.000Z","1952-04-01T00:00:00.000Z","1952-05-01T00:00:00.000Z","1952-06-01T00:00:00.000Z","1952-07-01T00:00:00.000Z","1952-08-01T00:00:00.000Z","1952-09-01T00:00:00.000Z","1952-10-01T00:00:00.000Z","1952-11-01T00:00:00.000Z","1952-12-01T00:00:00.000Z","1953-01-01T00:00:00.000Z","1953-02-01T00:00:00.000Z","1953-03-01T00:00:00.000Z","1953-04-01T00:00:00.000Z","1953-05-01T00:00:00.000Z","1953-06-01T00:00:00.000Z","1953-07-01T00:00:00.000Z","1953-08-01T00:00:00.000Z","1953-09-01T00:00:00.000Z","1953-10-01T00:00:00.000Z","1953-11-01T00:00:00.000Z","1953-12-01T00:00:00.000Z","1954-01-01T00:00:00.000Z","1954-02-01T00:00:00.000Z","1954-03-01T00:00:00.000Z","1954-04-01T00:00:00.000Z","1954-05-01T00:00:00.000Z","1954-06-01T00:00:00.000Z","1954-07-01T00:00:00.000Z","1954-08-01T00:00:00.000Z","1954-09-01T00:00:00.000Z","1954-10-01T00:00:00.000Z","1954-11-01T00:00:00.000Z","1954-12-01T00:00:00.000Z","1955-01-01T00:00:00.000Z","1955-02-01T00:00:00.000Z","1955-03-01T00:00:00.000Z","1955-04-01T00:00:00.000Z","1955-05-01T00:00:00.000Z","1955-06-01T00:00:00.000Z","1955-07-01T00:00:00.000Z","1955-08-01T00:00:00.000Z","1955-09-01T00:00:00.000Z","1955-10-01T00:00:00.000Z","1955-11-01T00:00:00.000Z","1955-12-01T00:00:00.000Z","1956-01-01T00:00:00.000Z","1956-02-01T00:00:00.000Z","1956-03-01T00:00:00.000Z","1956-04-01T00:00:00.000Z","1956-05-01T00:00:00.000Z","1956-06-01T00:00:00.000Z","1956-07-01T00:00:00.000Z","1956-08-01T00:00:00.000Z","1956-09-01T00:00:00.000Z","1956-10-01T00:00:00.000Z","1956-11-01T00:00:00.000Z","1956-12-01T00:00:00.000Z","1957-01-01T00:00:00.000Z","1957-02-01T00:00:00.000Z","1957-03-01T00:00:00.000Z","1957-04-01T00:00:00.000Z","1957-05-01T00:00:00.000Z","1957-06-01T00:00:00.000Z","1957-07-01T00:00:00.000Z","1957-08-01T00:00:00.000Z","1957-09-01T00:00:00.000Z","1957-10-01T00:00:00.000Z","1957-11-01T00:00:00.000Z","1957-12-01T00:00:00.000Z","1958-01-01T00:00:00.000Z","1958-02-01T00:00:00.000Z","1958-03-01T00:00:00.000Z","1958-04-01T00:00:00.000Z","1958-05-01T00:00:00.000Z","1958-06-01T00:00:00.000Z","1958-07-01T00:00:00.000Z","1958-08-01T00:00:00.000Z","1958-09-01T00:00:00.000Z","1958-10-01T00:00:00.000Z","1958-11-01T00:00:00.000Z","1958-12-01T00:00:00.000Z","1959-01-01T00:00:00.000Z","1959-02-01T00:00:00.000Z","1959-03-01T00:00:00.000Z","1959-04-01T00:00:00.000Z","1959-05-01T00:00:00.000Z","1959-06-01T00:00:00.000Z","1959-07-01T00:00:00.000Z","1959-08-01T00:00:00.000Z","1959-09-01T00:00:00.000Z","1959-10-01T00:00:00.000Z","1959-11-01T00:00:00.000Z","1959-12-01T00:00:00.000Z","1960-01-01T00:00:00.000Z","1960-02-01T00:00:00.000Z","1960-03-01T00:00:00.000Z","1960-04-01T00:00:00.000Z","1960-05-01T00:00:00.000Z","1960-06-01T00:00:00.000Z","1960-07-01T00:00:00.000Z","1960-08-01T00:00:00.000Z","1960-09-01T00:00:00.000Z","1960-10-01T00:00:00.000Z","1960-11-01T00:00:00.000Z","1960-12-01T00:00:00.000Z"],[0.887974729279798,0.945029696785452,1.05312812862458,1.00147846751502,0.949055443234175,1.07378210011798,1.16006727994943,1.18118517565554,1.07314647137437,0.915769788646691,0.811723574628519,0.912640709638217,0.885672399210254,0.971804025360512,1.07852003729274,0.982889716109695,0.919269004646821,1.07152029744221,1.17989399313883,1.18899666914257,1.0818997726362,0.905933083270103,0.770262928085515,0.906098773558216,0.928388946027909,0.933798796800464,1.06484707835212,0.992336602609853,0.947249107921254,1.06761264655812,1.18889415743728,1.18460264289765,1.05090955933266,0.930134037896621,0.821032420370171,0.904410957241598,0.944351598707869,0.959675180227853,1.04007508599633,0.973598031328615,0.966425238292902,1.12659615300587,1.18328858958863,1.20072834882525,1.03821575162528,0.934589018076138,0.808212220010769,0.917847868521361,0.900762109268817,0.892126184048224,1.04846838015737,1.02935526836645,0.987255569954422,1.07191333042538,1.17518641268648,1.19073308355285,1.05898450084633,0.93909028112979,0.802011825108116,0.909095924996266,0.900603793834205,0.83881623175932,1.03928176044468,0.977502180463746,0.981055793110756,1.11286374486714,1.25080312116872,1.20232317795802,1.06031131804639,0.910036988807627,0.80786952973621,0.896383470421797,0.910167687505109,0.880421257391721,1.00122455904605,0.974782552924741,0.974216944750376,1.12796293118828,1.26006151569755,1.20921904181626,1.0705749530238,0.911696200340137,0.790920163322938,0.907089090942412,0.912549403085505,0.857489049421987,0.975545384372266,0.973039997264418,0.978670859166832,1.12990833776464,1.24966051254276,1.23611784081834,1.05383816288416,0.923055444571064,0.80639473235146,0.88204410947504,0.912258752605411,0.858115560879123,0.984481207357092,0.95920121237858,0.977721494912401,1.12629542182681,1.26075255408653,1.2437345369362,1.06752601541612,0.927124196976427,0.804013861477931,0.8895754884204,0.911610916168875,0.855659831315323,0.961658033708789,0.931982982299339,0.965069353947832,1.14478227975948,1.30047860295281,1.30346116392724,1.05643758165289,0.936740325684237,0.784102378243254,0.86327489956298,0.899236092138059,0.847626762599447,0.96613284816436,0.961859225196422,0.979944525512129,1.11160325459495,1.28295132788073,1.27019559438991,1.06016073828799,0.915083485747852,0.802134658083333,0.898517689459563,0.896767843601081,0.824553945921003,0.910315640227596,0.97183638673868,0.994997468135186,1.12869175759937,1.28191791900835,1.26826286464411,1.05525288317586,0.937116676473561,0.803856166104034,0.880079553764126],[0.918684073650685,0.941223087262003,null,1.00062428032516,null,null,1.16587061034671,null,null,null,null,null,0.922451270839879,0.929626902904842,1.07097829852707,null,0.949720218655375,null,null,null,1.07055127355755,0.909785412314879,0.812245250873222,null,null,0.931568545233879,1.06471315558229,null,null,1.0691340502956,null,null,null,null,null,null,0.928734165878555,0.918566790390601,null,0.975415496520266,null,1.09527929673117,1.18371722419036,null,1.04822894775009,null,null,null,0.906009505085983,null,1.04736116647186,0.982401976197141,0.975986208972667,1.0986876277567,1.20765180041802,null,null,null,null,null,null,0.887026131583308,1.01637305545984,null,null,null,1.23563322220141,null,null,0.918612368846586,null,null,null,null,null,null,null,null,1.24426911998267,null,null,0.917208550020241,0.797574420875795,null,null,0.861880548065391,0.985955022881923,null,null,null,null,null,null,null,null,0.891939588508623,null,null,null,null,null,null,null,null,null,null,null,null,null,null,0.961969862730823,0.961877270690051,0.968459661325285,1.13310475430383,1.27415992805488,1.25861168292463,null,null,0.801168533865201,0.88944202408055,null,null,null,null,null,1.1138793620158,null,1.26944986916122,null,0.929586670695862,null,0.894619137819449,null,0.843581602477117,0.958582632859901,0.96293161990481,0.976143191185803,null,null,null,null,null,null,0.882988861214277],[0.922023813650713,0.934718701882888,1.06255473514585,0.991872677403461,0.948999755457085,1.07200889424544,1.17585735318396,1.18506513178444,1.06821002270079,0.916349765890352,0.814011456202423,0.908696171090075,0.923756982261809,0.931747163853791,1.06120611173926,0.989064645179196,0.950578465153771,1.07389709696048,1.17875916548075,1.18722788290177,1.06421508423159,0.920112140707792,0.814534675454418,0.908953722447756,0.923438282520674,0.924464349909801,1.05701776890542,0.985881276626912,0.954823760112776,1.07857745836627,1.18466461016656,1.18962126314146,1.05911687299545,0.927477465279265,0.81423992552825,0.909784237024067,0.919580818368989,0.912548408800752,1.04704387458459,0.980880276110354,0.963120954446683,1.08861611979267,1.19486177650469,1.1941410658312,1.0564713964535,0.931879840561726,0.811475909624179,0.910054830241871,0.912629093087595,0.899096938767267,1.03444499103165,0.978777295253882,0.970519572536611,1.10008030692616,1.20978102290569,1.19700261518254,1.05865003727371,0.932067632156114,0.807933379788453,0.908656988643846,0.908487096158106,0.886596933627917,1.01775955482453,0.976011570271933,0.975562656420005,1.11220380430982,1.22644277524439,1.2047330247308,1.06125299659935,0.926696705584245,0.805603871644739,0.904752864292952,0.908759272353101,0.876088942260961,1.00333259853062,0.973020414357308,0.976372319959012,1.12075527912862,1.24046073936686,1.21497395186425,1.06360164300195,0.923660578268188,0.804344546522413,0.900911006237764,0.911209862010813,0.866983347581512,0.988843985105808,0.968734324987753,0.975648339621204,1.12623077252373,1.2513291257462,1.23021646074047,1.06207703992187,0.924667049096899,0.804528322720989,0.896176912938528,0.911316591366644,0.859644250843375,0.978982271147108,0.964110338835657,0.974800095114592,1.12647755874577,1.26113703918268,1.24408146330444,1.06197519410256,0.928361458693161,0.803805591754039,0.893548450680685,0.908127788811014,0.85364013200585,0.969647808263063,0.962030803416289,0.974286484858009,1.12569858327364,1.27076467721125,1.25628331322967,1.0597590020728,0.932163218717079,0.803403312570997,0.890772596673381,0.90338031031615,0.848632378964443,0.964531356485312,0.961454451825561,0.976279635335357,1.12351553871526,1.27766699615578,1.26391580621024,1.05925104602802,0.933182526527071,0.802887328178623,0.889847020476811,0.899926363962222,0.844659618605418,0.961122901241104,0.96220432038614,0.978036342098203,1.12403524424406,1.28085467850521,1.26786293662154,1.05779299956934,0.93382658190755,0.802994373282577,0.888114609548784]]},"evals":[],"jsHooks":[]}</script>
+<div class="dygraphs html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-222d0def189b016705d0" style="width:100%;height:433px;"></div>
+<script type="application/json" data-for="htmlwidget-222d0def189b016705d0">{"x":{"attrs":{"labels":["month","unmodified_SIratio","modified_SIratio","seasonal_factors"],"legend":"auto","retainDateWindow":false,"axes":{"x":{"pixelsPerLabel":60}}},"scale":"monthly","annotations":[],"shadings":[],"events":[],"format":"date","data":[["1949-01-01T00:00:00.000Z","1949-02-01T00:00:00.000Z","1949-03-01T00:00:00.000Z","1949-04-01T00:00:00.000Z","1949-05-01T00:00:00.000Z","1949-06-01T00:00:00.000Z","1949-07-01T00:00:00.000Z","1949-08-01T00:00:00.000Z","1949-09-01T00:00:00.000Z","1949-10-01T00:00:00.000Z","1949-11-01T00:00:00.000Z","1949-12-01T00:00:00.000Z","1950-01-01T00:00:00.000Z","1950-02-01T00:00:00.000Z","1950-03-01T00:00:00.000Z","1950-04-01T00:00:00.000Z","1950-05-01T00:00:00.000Z","1950-06-01T00:00:00.000Z","1950-07-01T00:00:00.000Z","1950-08-01T00:00:00.000Z","1950-09-01T00:00:00.000Z","1950-10-01T00:00:00.000Z","1950-11-01T00:00:00.000Z","1950-12-01T00:00:00.000Z","1951-01-01T00:00:00.000Z","1951-02-01T00:00:00.000Z","1951-03-01T00:00:00.000Z","1951-04-01T00:00:00.000Z","1951-05-01T00:00:00.000Z","1951-06-01T00:00:00.000Z","1951-07-01T00:00:00.000Z","1951-08-01T00:00:00.000Z","1951-09-01T00:00:00.000Z","1951-10-01T00:00:00.000Z","1951-11-01T00:00:00.000Z","1951-12-01T00:00:00.000Z","1952-01-01T00:00:00.000Z","1952-02-01T00:00:00.000Z","1952-03-01T00:00:00.000Z","1952-04-01T00:00:00.000Z","1952-05-01T00:00:00.000Z","1952-06-01T00:00:00.000Z","1952-07-01T00:00:00.000Z","1952-08-01T00:00:00.000Z","1952-09-01T00:00:00.000Z","1952-10-01T00:00:00.000Z","1952-11-01T00:00:00.000Z","1952-12-01T00:00:00.000Z","1953-01-01T00:00:00.000Z","1953-02-01T00:00:00.000Z","1953-03-01T00:00:00.000Z","1953-04-01T00:00:00.000Z","1953-05-01T00:00:00.000Z","1953-06-01T00:00:00.000Z","1953-07-01T00:00:00.000Z","1953-08-01T00:00:00.000Z","1953-09-01T00:00:00.000Z","1953-10-01T00:00:00.000Z","1953-11-01T00:00:00.000Z","1953-12-01T00:00:00.000Z","1954-01-01T00:00:00.000Z","1954-02-01T00:00:00.000Z","1954-03-01T00:00:00.000Z","1954-04-01T00:00:00.000Z","1954-05-01T00:00:00.000Z","1954-06-01T00:00:00.000Z","1954-07-01T00:00:00.000Z","1954-08-01T00:00:00.000Z","1954-09-01T00:00:00.000Z","1954-10-01T00:00:00.000Z","1954-11-01T00:00:00.000Z","1954-12-01T00:00:00.000Z","1955-01-01T00:00:00.000Z","1955-02-01T00:00:00.000Z","1955-03-01T00:00:00.000Z","1955-04-01T00:00:00.000Z","1955-05-01T00:00:00.000Z","1955-06-01T00:00:00.000Z","1955-07-01T00:00:00.000Z","1955-08-01T00:00:00.000Z","1955-09-01T00:00:00.000Z","1955-10-01T00:00:00.000Z","1955-11-01T00:00:00.000Z","1955-12-01T00:00:00.000Z","1956-01-01T00:00:00.000Z","1956-02-01T00:00:00.000Z","1956-03-01T00:00:00.000Z","1956-04-01T00:00:00.000Z","1956-05-01T00:00:00.000Z","1956-06-01T00:00:00.000Z","1956-07-01T00:00:00.000Z","1956-08-01T00:00:00.000Z","1956-09-01T00:00:00.000Z","1956-10-01T00:00:00.000Z","1956-11-01T00:00:00.000Z","1956-12-01T00:00:00.000Z","1957-01-01T00:00:00.000Z","1957-02-01T00:00:00.000Z","1957-03-01T00:00:00.000Z","1957-04-01T00:00:00.000Z","1957-05-01T00:00:00.000Z","1957-06-01T00:00:00.000Z","1957-07-01T00:00:00.000Z","1957-08-01T00:00:00.000Z","1957-09-01T00:00:00.000Z","1957-10-01T00:00:00.000Z","1957-11-01T00:00:00.000Z","1957-12-01T00:00:00.000Z","1958-01-01T00:00:00.000Z","1958-02-01T00:00:00.000Z","1958-03-01T00:00:00.000Z","1958-04-01T00:00:00.000Z","1958-05-01T00:00:00.000Z","1958-06-01T00:00:00.000Z","1958-07-01T00:00:00.000Z","1958-08-01T00:00:00.000Z","1958-09-01T00:00:00.000Z","1958-10-01T00:00:00.000Z","1958-11-01T00:00:00.000Z","1958-12-01T00:00:00.000Z","1959-01-01T00:00:00.000Z","1959-02-01T00:00:00.000Z","1959-03-01T00:00:00.000Z","1959-04-01T00:00:00.000Z","1959-05-01T00:00:00.000Z","1959-06-01T00:00:00.000Z","1959-07-01T00:00:00.000Z","1959-08-01T00:00:00.000Z","1959-09-01T00:00:00.000Z","1959-10-01T00:00:00.000Z","1959-11-01T00:00:00.000Z","1959-12-01T00:00:00.000Z","1960-01-01T00:00:00.000Z","1960-02-01T00:00:00.000Z","1960-03-01T00:00:00.000Z","1960-04-01T00:00:00.000Z","1960-05-01T00:00:00.000Z","1960-06-01T00:00:00.000Z","1960-07-01T00:00:00.000Z","1960-08-01T00:00:00.000Z","1960-09-01T00:00:00.000Z","1960-10-01T00:00:00.000Z","1960-11-01T00:00:00.000Z","1960-12-01T00:00:00.000Z"],[0.887974729279798,0.945029696785452,1.05312812862458,1.00147846751502,0.949055443234175,1.07378210011798,1.16006727994943,1.18118517565554,1.07314647137437,0.915769788646691,0.811723574628519,0.912640709638217,0.885672399210254,0.971804025360512,1.07852003729274,0.982889716109695,0.919269004646821,1.07152029744221,1.17989399313883,1.18899666914257,1.0818997726362,0.905933083270103,0.770262928085515,0.906098773558216,0.928388946027909,0.933798796800464,1.06484707835212,0.992336602609853,0.947249107921254,1.06761264655812,1.18889415743728,1.18460264289765,1.05090955933266,0.930134037896621,0.821032420370171,0.904410957241598,0.944351598707869,0.959675180227853,1.04007508599633,0.973598031328615,0.966425238292902,1.12659615300587,1.18328858958863,1.20072834882525,1.03821575162528,0.934589018076138,0.808212220010769,0.917847868521361,0.900762109268817,0.892126184048224,1.04846838015737,1.02935526836645,0.987255569954422,1.07191333042538,1.17518641268648,1.19073308355285,1.05898450084633,0.93909028112979,0.802011825108116,0.909095924996266,0.900603793834205,0.83881623175932,1.03928176044468,0.977502180463746,0.981055793110756,1.11286374486714,1.25080312116872,1.20232317795802,1.06031131804639,0.910036988807627,0.80786952973621,0.896383470421797,0.910167687505109,0.880421257391721,1.00122455904605,0.974782552924741,0.974216944750376,1.12796293118828,1.26006151569755,1.20921904181626,1.0705749530238,0.911696200340137,0.790920163322938,0.907089090942412,0.912549403085505,0.857489049421987,0.975545384372266,0.973039997264418,0.978670859166832,1.12990833776464,1.24966051254276,1.23611784081834,1.05383816288416,0.923055444571064,0.80639473235146,0.88204410947504,0.912258752605411,0.858115560879123,0.984481207357092,0.95920121237858,0.977721494912401,1.12629542182681,1.26075255408653,1.2437345369362,1.06752601541612,0.927124196976427,0.804013861477931,0.8895754884204,0.911610916168875,0.855659831315323,0.961658033708789,0.931982982299339,0.965069353947832,1.14478227975948,1.30047860295281,1.30346116392724,1.05643758165289,0.936740325684237,0.784102378243254,0.86327489956298,0.899236092138059,0.847626762599447,0.96613284816436,0.961859225196422,0.979944525512129,1.11160325459495,1.28295132788073,1.27019559438991,1.06016073828799,0.915083485747852,0.802134658083333,0.898517689459563,0.896767843601081,0.824553945921003,0.910315640227596,0.97183638673868,0.994997468135186,1.12869175759937,1.28191791900835,1.26826286464411,1.05525288317586,0.937116676473561,0.803856166104034,0.880079553764126],[0.918684073650685,0.941223087262003,null,1.00062428032516,null,null,1.16587061034671,null,null,null,null,null,0.922451270839879,0.929626902904842,1.07097829852707,null,0.949720218655375,null,null,null,1.07055127355755,0.909785412314879,0.812245250873222,null,null,0.931568545233879,1.06471315558229,null,null,1.0691340502956,null,null,null,null,null,null,0.928734165878555,0.918566790390601,null,0.975415496520266,null,1.09527929673117,1.18371722419036,null,1.04822894775009,null,null,null,0.906009505085983,null,1.04736116647186,0.982401976197141,0.975986208972667,1.0986876277567,1.20765180041802,null,null,null,null,null,null,0.887026131583308,1.01637305545984,null,null,null,1.23563322220141,null,null,0.918612368846586,null,null,null,null,null,null,null,null,1.24426911998267,null,null,0.917208550020241,0.797574420875795,null,null,0.861880548065391,0.985955022881923,null,null,null,null,null,null,null,null,0.891939588508623,null,null,null,null,null,null,null,null,null,null,null,null,null,null,0.961969862730823,0.961877270690051,0.968459661325285,1.13310475430383,1.27415992805488,1.25861168292463,null,null,0.801168533865201,0.88944202408055,null,null,null,null,null,1.1138793620158,null,1.26944986916122,null,0.929586670695862,null,0.894619137819449,null,0.843581602477117,0.958582632859901,0.96293161990481,0.976143191185803,null,null,null,null,null,null,0.882988861214277],[0.922023813650713,0.934718701882888,1.06255473514585,0.991872677403461,0.948999755457085,1.07200889424544,1.17585735318396,1.18506513178444,1.06821002270079,0.916349765890352,0.814011456202423,0.908696171090075,0.923756982261809,0.931747163853791,1.06120611173926,0.989064645179196,0.950578465153771,1.07389709696048,1.17875916548075,1.18722788290177,1.06421508423159,0.920112140707792,0.814534675454418,0.908953722447756,0.923438282520674,0.924464349909801,1.05701776890542,0.985881276626912,0.954823760112776,1.07857745836627,1.18466461016656,1.18962126314146,1.05911687299545,0.927477465279265,0.81423992552825,0.909784237024067,0.919580818368989,0.912548408800752,1.04704387458459,0.980880276110354,0.963120954446683,1.08861611979267,1.19486177650469,1.1941410658312,1.0564713964535,0.931879840561726,0.811475909624179,0.910054830241871,0.912629093087595,0.899096938767267,1.03444499103165,0.978777295253882,0.970519572536611,1.10008030692616,1.20978102290569,1.19700261518254,1.05865003727371,0.932067632156114,0.807933379788453,0.908656988643846,0.908487096158106,0.886596933627917,1.01775955482453,0.976011570271933,0.975562656420005,1.11220380430982,1.22644277524439,1.2047330247308,1.06125299659935,0.926696705584245,0.805603871644739,0.904752864292952,0.908759272353101,0.876088942260961,1.00333259853062,0.973020414357308,0.976372319959012,1.12075527912862,1.24046073936686,1.21497395186425,1.06360164300195,0.923660578268188,0.804344546522413,0.900911006237764,0.911209862010813,0.866983347581512,0.988843985105808,0.968734324987753,0.975648339621204,1.12623077252373,1.2513291257462,1.23021646074047,1.06207703992187,0.924667049096899,0.804528322720989,0.896176912938528,0.911316591366644,0.859644250843375,0.978982271147108,0.964110338835657,0.974800095114592,1.12647755874577,1.26113703918268,1.24408146330444,1.06197519410256,0.928361458693161,0.803805591754039,0.893548450680685,0.908127788811014,0.85364013200585,0.969647808263063,0.962030803416289,0.974286484858009,1.12569858327364,1.27076467721125,1.25628331322967,1.0597590020728,0.932163218717079,0.803403312570997,0.890772596673381,0.90338031031615,0.848632378964443,0.964531356485312,0.961454451825561,0.976279635335357,1.12351553871526,1.27766699615578,1.26391580621024,1.05925104602802,0.933182526527071,0.802887328178623,0.889847020476811,0.899926363962222,0.844659618605418,0.961122901241104,0.96220432038614,0.978036342098203,1.12403524424406,1.28085467850521,1.26786293662154,1.05779299956934,0.93382658190755,0.802994373282577,0.888114609548784]]},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <p>It should be noted that extreme value choices can greatly affect the seasonal adjustment.</p>
@@ -678,40 +678,39 @@ SI ratio / SI difference
 <p>In a multiplicative adjustment, the detrended series is called the SI ratio. It is an estimate of the seasonal component. The SI ratio is used to identify extreme values during the initial and intermediate steps of the X-11 method.</p>
 </div>
 </div>
-</section>
-<section id="additive-and-multiplicative-again" class="level2" data-number="6.7">
-<h2 data-number="6.7" class="anchored" data-anchor-id="additive-and-multiplicative-again"><span class="header-section-number">6.7</span> Additive and multiplicative (again)</h2>
+</section><section id="additive-and-multiplicative-again" class="level2" data-number="6.7"><h2 data-number="6.7" class="anchored" data-anchor-id="additive-and-multiplicative-again">
+<span class="header-section-number">6.7</span> Additive and multiplicative (again)</h2>
 <p>The X-13ARIMA-SEATS development was highly motivated to study economic time series. As such, the default seasonal adjustment mode is multiplicative due to most seasonal economic time series displaying seasonal fluctuations that increase and decrease along with the level of the time series.</p>
-<p>If your series does not have this feature then additive adjustment might be more appropriate. This can be changed in the <code>mode</code> argument of the x11 spec. For example, <code>seas(x, x11.mode = 'add')</code> will perform an additive x11 run. There exist two other models for decomposition, pseudo-additive and log additive. These are less common than additive and multiplicative models and are not the focus of this text. If your series has some extremely small values in certain months (quarters) then pseudo-additive models could be worth further investigation. It has been observed that when multiplicative seasonal adjustment produces more extreme values in conjunction with small seasonal factors then pseudo-additive adjustment should be explored. NEED TO SHOW USERS HOW TO VIEW THEIR EXTREME VALUES - D8.B TABLE DESIGNATIONS NEXT TO OBSERVATIONS. A good reference on the subject is Baxter (1994).</p>
-</section>
-<section id="case-study" class="level2" data-number="6.8">
-<h2 data-number="6.8" class="anchored" data-anchor-id="case-study"><span class="header-section-number">6.8</span> Case study</h2>
+<p>If your series does not have this feature then additive adjustment might be more appropriate. This can be changed in the <code>mode</code> argument of the x11 spec. For example, <code>seas(x, x11.mode = 'add')</code> will perform an additive x11 run. There exist two other models for decomposition, pseudo-additive and log additive. These are less common than additive and multiplicative models and are not the focus of this text. If your series has some extremely small values in certain months (quarters) then pseudo-additive models could be worth further investigation. It has been observed that when multiplicative seasonal adjustment produces more extreme values in conjunction with small seasonal factors then pseudo-additive adjustment should be explored.</p>
+
+<!-- NEED TO SHOW USERS HOW TO VIEW THEIR EXTREME VALUES - D8.B TABLE DESIGNATIONS NEXT TO OBSERVATIONS. A good reference on the subject is Baxter (1994). -->
+</section><section id="case-study" class="level2" data-number="6.8"><h2 data-number="6.8" class="anchored" data-anchor-id="case-study">
+<span class="header-section-number">6.8</span> Case study</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>tsbox<span class="sc">::</span><span class="fu">ts_plot</span>(</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">s3x1 =</span> <span class="fu">predict</span>(<span class="fu">seas</span>(AirPassengers, <span class="at">x11.seasonalma =</span> <span class="st">"s3x1"</span>)),</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">s3x15 =</span> <span class="fu">predict</span>(<span class="fu">seas</span>(AirPassengers, <span class="at">x11.seasonalma =</span> <span class="st">"s3x15"</span>))</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span></span>
+<span><span class="fu">tsbox</span><span class="fu">::</span><span class="fu"><a href="https://www.tsbox.help/reference/ts_plot.html">ts_plot</a></span><span class="op">(</span></span>
+<span>  s3x1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, x11.seasonalma <span class="op">=</span> <span class="st">"s3x1"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  s3x15 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, x11.seasonalma <span class="op">=</span> <span class="st">"s3x15"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="24-x11_files/figure-html/x11-case-study-1.png" class="img-fluid" width="864"></p>
 </div>
 </div>
-</section>
-<section id="points-to-include-in-chapter" class="level2" data-number="6.9">
-<h2 data-number="6.9" class="anchored" data-anchor-id="points-to-include-in-chapter"><span class="header-section-number">6.9</span> Points to include in Chapter</h2>
+</section><section id="points-to-include-in-chapter" class="level2" data-number="6.9"><h2 data-number="6.9" class="anchored" data-anchor-id="points-to-include-in-chapter">
+<span class="header-section-number">6.9</span> Points to include in Chapter</h2>
 <ul>
 <li>Level shifts are included with the trend component while AOs and extreme values are included in the irregular.</li>
 <li>Changing filters can affect which values are extreme</li>
 <li>Changing sigma limits changes the extreme values and can affect what filter seems most appropriate
 <ul>
 <li>Experiment with changing filters and sigma limits for your series to see the results</li>
-</ul></li>
+</ul>
+</li>
 </ul>
 
 
-</section>
 
-</main> <!-- /main -->
-<script id="quarto-html-after-body" type="application/javascript">
+</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
@@ -843,9 +842,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
 });
-</script>
-<nav class="page-navigation">
-  <div class="nav-page nav-page-previous">
+</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
       <a href="./23-regARIMA.html" class="pagination-link">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">regARIMA Model</span></span>
       </a>          
@@ -857,13 +854,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
 </nav>
 </div> <!-- /content -->
-<footer class="footer">
-  <div class="nav-footer">
+<footer class="footer"><div class="nav-footer">
     <div class="nav-footer-left">by James Livsey and Christoph Sax</div>   
     <div class="nav-footer-right">Seasonal Adjustment in R</div>
   </div>
 </footer>
-
 
 
 </body></html>
