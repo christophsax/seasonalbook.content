@@ -505,6 +505,57 @@ X_t =
 <p>More than other coefficients, the seasonal MA (<span class="math inline">\(\theta_{12}\)</span>) influences whether estimated seasonal factors change either slowly over time (<span class="math inline">\(\theta_{12}\)</span> close to 1) or rapidly over time (<span class="math inline">\(\theta_{12}\)</span> close to zero).</p>
 </section><section id="example-seats-adjustment" class="level2" data-number="7.8"><h2 data-number="7.8" class="anchored" data-anchor-id="example-seats-adjustment">
 <span class="header-section-number">7.8</span> Example SEATS adjustment</h2>
+<p>Let’s have a look at nominal taxes from Swiss production account, previously discussed <a href="https://github.com/dpkj/dpkj-research/blob/master/seas_adj/pk_tax_n.md">here</a>. <em>(added some minutes ago, to be discussed in class).</em></p>
+<p>The series looks as follows:</p>
+<div class="cell">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">tax_n</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/ts.html">ts</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">5512.43723529998</span>, <span class="fl">5302.66127551312</span>, <span class="fl">5637.04650218708</span>, <span class="fl">5407.75865307982</span>, <span class="fl">5254.75041765537</span>, <span class="fl">5883.31044127543</span>, <span class="fl">5465.12983546186</span>, <span class="fl">5296.83011638733</span>, <span class="fl">5577.28917595672</span>, <span class="fl">5634.79857930988</span>, <span class="fl">5832.41514259211</span>, <span class="fl">5640.32968921129</span>, <span class="fl">6066.78258591999</span>, <span class="fl">6222.68082980585</span>, <span class="fl">6504.17063502564</span>, <span class="fl">6074.99091524851</span>, <span class="fl">6580.71692950301</span>, <span class="fl">6274.60948561261</span>, <span class="fl">7157.60005559455</span>, <span class="fl">6944.58546551983</span>, <span class="fl">7448.63554376696</span>, <span class="fl">6976.09702323069</span>, <span class="fl">7818.38121589548</span>, <span class="fl">7289.71620307687</span>, <span class="fl">7768.40193169586</span>, <span class="fl">6942.77891782026</span>, <span class="fl">7578.22907029965</span>, <span class="fl">7077.70301249423</span>, <span class="fl">7410.68364011917</span>, <span class="fl">6927.73248230177</span>, <span class="fl">7087.72613485434</span>, <span class="fl">6926.90090299472</span>, <span class="fl">7336.73867165469</span>, <span class="fl">7108.4949497024</span>, <span class="fl">7145.42480380572</span>, <span class="fl">7154.30815153718</span>, <span class="fl">7498.01519467561</span>, <span class="fl">7559.01824893372</span>, <span class="fl">7156.60513953808</span>, <span class="fl">7639.02255770258</span>, <span class="fl">7569.94029094276</span>, <span class="fl">7515.34158790891</span>, <span class="fl">7732.93688269533</span>, <span class="fl">7551.953334793</span>, <span class="fl">8197.88127458863</span>, <span class="fl">7939.93851007643</span>, <span class="fl">8141.79136494712</span>, <span class="fl">7568.40068251781</span>, <span class="fl">8499.84629558006</span>, <span class="fl">8345.25921525785</span>, <span class="fl">8386.38082590207</span>, <span class="fl">7886.29186614002</span>, <span class="fl">8821.87792569236</span>, <span class="fl">8595.73223990369</span>, <span class="fl">8637.63939154854</span>, <span class="fl">7991.04698685541</span>, <span class="fl">8464.50040108557</span>, <span class="fl">8003.27264004253</span>, <span class="fl">8399.90637539542</span>, <span class="fl">8384.22143621648</span>, <span class="fl">8784.63271925264</span>, <span class="fl">8595.77482962329</span>, <span class="fl">8591.67855177336</span>, <span class="fl">8602.6019974407</span>, <span class="fl">8966.1740189959</span>, <span class="fl">8993.28779502417</span>, <span class="fl">8839.41351045546</span>, <span class="fl">8468.69899389445</span>, <span class="fl">9221.6367572731</span>, <span class="fl">8801.73025651442</span>, <span class="fl">8426.53923852333</span>, <span class="fl">8661.00570414916</span>, <span class="fl">8930.21895672981</span>, <span class="fl">9116.66536122397</span>, <span class="fl">8794.81591614758</span>, <span class="fl">8559.38402031864</span>, <span class="fl">9056.19152051174</span>, <span class="fl">8842.45736626125</span>, <span class="fl">9043.08264307781</span>, <span class="fl">8549.5389771392</span>, <span class="fl">8980.20969432594</span>, <span class="fl">8893.75993928538</span>, <span class="fl">9010.28560160679</span>, <span class="fl">8664.05904218189</span>, <span class="fl">8765.47235867103</span>, <span class="fl">9170.15544669832</span>, <span class="fl">8970.77030836517</span>, <span class="fl">8310.62969865549</span>, <span class="fl">9180.42069018707</span>, <span class="fl">8566.35919301958</span>, <span class="fl">9497.27766001259</span>, <span class="fl">9012.51934200076</span>, <span class="fl">8454.34333463005</span>, <span class="fl">9357.61750287723</span>, <span class="fl">9190.28660347765</span>, <span class="fl">9060.07897285508</span>, <span class="fl">9253.43694298711</span>, <span class="fl">8809.60616470625</span>, <span class="fl">8825.87955511076</span>, <span class="fl">9047.15212801588</span>, <span class="fl">9255.87581159138</span>, <span class="fl">8423.29760776073</span><span class="op">)</span>, start <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1995</span>, <span class="fl">1</span><span class="op">)</span>, frequency <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># static(seas(tax_n))</span></span>
+<span></span>
+<span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span></span>
+<span>  x <span class="op">=</span> <span class="va">tax_n</span>,</span>
+<span>  regression.variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"easter[15]"</span><span class="op">)</span>,</span>
+<span>  arima.model <span class="op">=</span> <span class="st">"(0 1 1)(1 0 0)"</span>,</span>
+<span>  regression.aictest <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  outlier <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  transform.function <span class="op">=</span> <span class="st">"none"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="25-seats_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="864"></p>
+</div>
+</div>
+<p>While the summary looks fine,</p>
+<div class="cell">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; seas(x = tax_n, transform.function = "none", regression.aictest = NULL, </span></span>
+<span><span class="co">#&gt;     outlier = NULL, regression.variables = c("easter[15]"), arima.model = "(0 1 1)(1 0 0)")</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients:</span></span>
+<span><span class="co">#&gt;                     Estimate Std. Error z value Pr(&gt;|z|)    </span></span>
+<span><span class="co">#&gt; Easter[15]        -213.82083   63.50954  -3.367 0.000761 ***</span></span>
+<span><span class="co">#&gt; AR-Seasonal-04       0.47697    0.09087   5.249 1.53e-07 ***</span></span>
+<span><span class="co">#&gt; MA-Nonseasonal-01    0.63304    0.07859   8.055 7.98e-16 ***</span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; SEATS adj.  ARIMA: (0 1 1)(1 0 0)  Obs.: 102  Transform: none</span></span>
+<span><span class="co">#&gt; AICc:  1442, BIC:  1452  QS (no seasonality in final):    0  </span></span>
+<span><span class="co">#&gt; Box-Ljung (no autocorr.): 17.27   Shapiro (normality): 0.9833</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>the seasonal factors seem erratic:</p>
+<div class="cell">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/monthplot.html">monthplot</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="25-seats_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="864"></p>
+</div>
+</div>
+<p>To me (Christoph), this seems against the very basic idea of seasonal adjustment: We want to collect predictable fluctuations in the seasonal component, not random noise. The other side of the coin is a very smooth seasonal adjustment.</p>
+<p>These kind of SI ratios appear in around 10 to 20% of SEATS adjustment and may be the reason why SEATS often seems smoother than X11.</p>
+<p>How to detect these cases? How to deal with these adjustments?</p>
 </section><section id="considerations-when-using-seats-in-x-13" class="level2" data-number="7.9"><h2 data-number="7.9" class="anchored" data-anchor-id="considerations-when-using-seats-in-x-13">
 <span class="header-section-number">7.9</span> Considerations when using SEATS in X-13</h2>
 <p>Some model limitations when using SEATS are as follows.</p>
