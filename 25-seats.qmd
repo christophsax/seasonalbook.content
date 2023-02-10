@@ -10,9 +10,11 @@ status("drafting", "2023-01-21", section = "SEATS")  # drafting, polishing, comp
 ## Model based decomposition
 
 Signal Extraction in ARIMA Time Series, or SEATS, is a method for estimating unobserved components in a time series.
-It is developed from the work of @cleveland76, @hillmer82, @maravall86. If applied properly, SEATS seasonal factors are usually more stable than X-11, and the seasonally adjusted series show less revisions than X11 (??) (see final section for a more extensive discussion).
+It is developed from the work of @cleveland76, @hillmer82, @maravall86.
+If applied properly, SEATS seasonal factors are usually more stable than X-11, and the seasonally adjusted series show less revisions than X11 (??) (see final section for a more extensive discussion).
 
-Like X-11, SEATS applies a series of filters to an observed time series, as described in @sec-seasonal-decomposition. Like X-11, SEATS uses a forecast extended series, in order to obtain unbiased results at the margin.
+Like X-11, SEATS applies a series of filters to an observed time series, as described in @sec-seasonal-decomposition.
+Like X-11, SEATS uses a forecast extended series, in order to obtain unbiased results at the margin.
 
 Unlike X-11, however, SEATS filters are derived from the ARIMA model of the time series.
 While X-11 filters are predefined and fixed, the SEATS filters are different for each ARIMA model.
@@ -57,6 +59,22 @@ tsbox::ts_plot(final(seats), final(x11))
 ```
 
 If we look at the applied filters, we see that FIXME.
+
+Others have looked at comparing SEATS and X-11 filters.
+In Planas and Depoutot (2002) they show with X11 seasonal filter that is closest to an implied Airline SEATS model based on the $\Theta_{12}$
+
+| Filter | Closest Seasonal MA  | Seasonal MA Interval |
+|--------|----------------------|----------------------|
+| 3x3    | 0.364 - 0.400        | 0.0 - 0.5            |
+| 3x5    | 0.543 - 0.563        | 0.51 - 0.74          |
+| 3x9    | 0.723 - 0.732        | 0.75 - 0.87          |
+| 3x15   | 0.824 - 0.828        | 0.88 - 1.00          |
+
+Let's consider small vs large values of seasonal $\Theta$:
+
+Values of $\Theta$ close to zero yield a seasonal adjustment filter that has seasonal factors that change rapidly over time. This provides considerable smoothing and large revisions. These revisions will only last for a small number of years due to the shorter filters.
+
+Values of $\Theta$ close to one yield a seasonal adjustmnet filter that has seasonal factors that change slowly over time. This provides less smoothing but relatively small revisions. Any revisions that do occur will last for a longer period of time due to the longer filters. 
 
 ## Transitory component \[Later, more optional\]
 
@@ -136,6 +154,19 @@ $$\widehat{S}_t = \underbrace{\left[ \frac{\Sigma_S}{\Sigma} \frac{\Psi_S(B)\Psi
 More than other coefficients, the seasonal MA ($\theta_{12}$) influences whether estimated seasonal factors change either slowly over time ($\theta_{12}$ close to 1) or rapidly over time ($\theta_{12}$ close to zero).
 
 ## Example SEATS adjustment
+
+## Considerations when using SEATS in X-13A-S
+
+Some model limitations when using SEATS are as follows. 
+
+  * SEATS does not accept missing lag models. Hence, it is acceptable to specify a (0 1 3)(0 1 1) model but unacceptable to specify (0 1 [1 3])(0 1 1). 
+  * The AR and MA orders (p and q) cannot be greater than 3.
+  * *Inadmissible decomposition*: Sometimes, the estimated values of coefficients make it impossible to estimate components from the estimated ARIMA models.
+      - SEATS will usually change the model and re-estimate it in order to get an admissible decomposition.
+      - When it is difficult to find an admissible decomposition the airline model is often used as a replacement. This usually gives acceptable results for a broad range of series.
+  * Model span can have large implications in a SEATS adjustment. This is due to the changing dynamics of long time series and how SEATS derives its filters. 
+  
+
 
 ## Some existing studies and conclusions
 
