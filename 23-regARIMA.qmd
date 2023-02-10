@@ -235,4 +235,5 @@ We see the choice of span, and ultimately the choise to include an outlier in yo
 <!-- ## Case study 2 -->
 
 <!-- Decide if you should include AO in May 2014. -->
+
 <!-- Construct a simple user defined regressor to handle specific issue. -->

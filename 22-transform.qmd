@@ -28,7 +28,8 @@ Two types of transformation types typically occur within X-13, *prior modificati
 The first is a prior modification.
 A prior modification scales each observation for known fixed effects.
 These effects can be well-known and established, such as the length of a period or leap-year effects, or they can be more subjective such as a modification for a workers' strike.
-We will see how this comes into the regARIMA model in @sec-regarima. We can think of prior-modification factors as events or corrections made to your data that are fixed throughout the adjustment process.
+We will see how this comes into the regARIMA model in @sec-regarima.
+We can think of prior-modification factors as events or corrections made to your data that are fixed throughout the adjustment process.
 These prior modification factors can also be permanent (default) or temporary.
 Permanent modifications are excluded from the final seasonal adjustment.
 Temporary modifications are removed while calculating seasonal factors but added back to the seasonally adjusted series.
@@ -41,9 +42,9 @@ m_none <- seas(AirPassengers, transform.function = "none")
 m_log  <- seas(AirPassengers, transform.function = "log")
 ```
 
-## Additive and multiplicative adjustment
+## Additive and multiplicative adjustment {#sec-additive-and-multiplicative-adjustment}
 
-As you remember from \@sec-introduction, Seasonal adjustment decomposes a time series into a **trend**, a **seasonal**, and an **irregular** component.
+As you remember from @sec-introduction, Seasonal adjustment decomposes a time series into a **trend**, a **seasonal**, and an **irregular** component.
 Algebraically, the fundamental identity of seasonal adjustment looks like this:
 
 $$Y_t = T_t + S_t + I_t.$$ {#eq-additive}
@@ -117,10 +118,10 @@ The `transform` spec controls these options.
 Some primary options within this spec are
 
 | Spec option          | Use                                            | Example values        | default |
-|-----------------|-----------------|----------------------|-----------------|
+|-----------------|-----------------|---------------------|-----------------|
 | `transform.function` | Transform function                             | `none`, `log`, `auto` | `none`  |
 | `transform.aicdiff`  | adjust tolerance of AIC test for log transform | `0.0`, `3.0`, `-4.5`  | `-2.0`  |
-| `xtrans`             | Prior adjustment factor                        | `seas(m, xtrans = y)`   | `NULL`  |
+| `xtrans`             | Prior adjustment factor                        | `seas(m, xtrans = y)` | `NULL`  |
 
 ## Case Study: `AirPassengers`
 

@@ -4,7 +4,7 @@
 #| results: "asis"
 #| echo: false
 source("_common.R")
-status("drafting", "2023-01-21", section = "X11")  # drafting, polishing, complete
+status("polishing", "2023-01-21", section = "X11")  # drafting, polishing, complete
 library(seasonal)
 library(tsbox)
 ```
@@ -25,7 +25,7 @@ SEATS will be discussed in greater detail in @sec-seats.
 ## Seasonal decomposition {#sec-seasonal-decomposition}
 
 As we have seen in the previous chapters, the core of seasonal adjustment is the decomposition of a time series into a **trend**, a **seasonal** and and **irregular** component.
-Algebraically, we write the fundamental identity as:
+As we have seen in @sec-additive-and-multiplicative-adjustment, we write the fundamental identity as:
 
 $$
 X_t = T_t + S_t + I_t
@@ -251,7 +251,7 @@ To understand the length of a filter let's look at the (finite) number of choice
 @tbl-x11-filters shows the different filters available for the seasonal component and the trend component.
 
 | Value        | Description                                                                                                                                                                                                                     |
-|-----------------------|------------------------------------------------|
+|------------------------|------------------------------------------------|
 | `s3x1`       | 3×1 moving average                                                                                                                                                                                                              |
 | `s3x3`       | 3×3 moving average                                                                                                                                                                                                              |
 | `s3x5`       | 3×5 moving average                                                                                                                                                                                                              |
@@ -373,7 +373,8 @@ There exist two other models for decomposition, pseudo-additive and log additive
 These are less common than additive and multiplicative models and are not the focus of this text.
 If your series has some extremely small values in certain months (quarters) then pseudo-additive models could be worth further investigation.
 It has been observed that when multiplicative seasonal adjustment produces more extreme values in conjunction with small seasonal factors then pseudo-additive adjustment should be explored.
-NEED TO SHOW USERS HOW TO VIEW THEIR EXTREME VALUES - D8.B TABLE DESIGNATIONS NEXT TO OBSERVATIONS. A good reference on the subject is Baxter (1994).
+
+<!-- NEED TO SHOW USERS HOW TO VIEW THEIR EXTREME VALUES - D8.B TABLE DESIGNATIONS NEXT TO OBSERVATIONS. A good reference on the subject is Baxter (1994). -->
 
 ## Case study
 
