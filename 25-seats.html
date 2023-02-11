@@ -331,7 +331,12 @@ div.csl-indent {
   <li><a href="#sec-wiener-kolmogorov-algorithm" id="toc-sec-wiener-kolmogorov-algorithm" class="nav-link" data-scroll-target="#sec-wiener-kolmogorov-algorithm"><span class="toc-section-number">7.7</span>  Wiener-Kolmogorov Algorithm</a></li>
   <li><a href="#example-seats-adjustment" id="toc-example-seats-adjustment" class="nav-link" data-scroll-target="#example-seats-adjustment"><span class="toc-section-number">7.8</span>  Example SEATS adjustment</a></li>
   <li><a href="#considerations-when-using-seats-in-x-13" id="toc-considerations-when-using-seats-in-x-13" class="nav-link" data-scroll-target="#considerations-when-using-seats-in-x-13"><span class="toc-section-number">7.9</span>  Considerations when using SEATS in X-13</a></li>
-  <li><a href="#sec-comparing" id="toc-sec-comparing" class="nav-link" data-scroll-target="#sec-comparing"><span class="toc-section-number">7.10</span>  Comparing X-11 and SEATS</a></li>
+  <li>
+<a href="#sec-comparing" id="toc-sec-comparing" class="nav-link" data-scroll-target="#sec-comparing"><span class="toc-section-number">7.10</span>  Comparing X-11 and SEATS</a>
+  <ul class="collapse">
+<li><a href="#reasons-for-using-seats-or-x11-work-in-progress" id="toc-reasons-for-using-seats-or-x11-work-in-progress" class="nav-link" data-scroll-target="#reasons-for-using-seats-or-x11-work-in-progress"><span class="toc-section-number">7.10.1</span>  Reasons for using SEATS or X11 (Work in progress)</a></li>
+  </ul>
+</li>
   </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/25-seats.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
@@ -373,6 +378,7 @@ Hillmer, S. C., and G. C. Tiao. 1982. <span>“An ARIMA-Model-Based Approach to 
 Maravall, Agustin. 1986. <span>“Revisions in ARIMA Signal Extraction.”</span> <em>Journal of the American Statistical Association</em> 81 (395): 736–40. <a href="http://www.jstor.org/stable/2289005">http://www.jstor.org/stable/2289005</a>.
 </div></div><p>Like X-11, SEATS applies a series of filters to an observed time series, as described in <a href="24-x11.html#sec-seasonal-decomposition"><span>Section&nbsp;6.1</span></a>. Like X-11, SEATS uses a forecast extended series, in order to obtain unbiased results at the margin.</p>
 <p>Unlike X-11, however, SEATS filters are derived from the ARIMA model of the time series. While X-11 filters are predefined and fixed, the SEATS filters are different for each ARIMA model.</p>
+<p>While X-11 offers a finite set of filters (in fact, there are exactly seven filters available), SEATS offers an infinte set of filters. Overall, they cover a broader set of possilbe filter lengths, which makes SEATS a more flexilble option than X-11. <strong>The available set filter lengths is the most crucial difference between X-11 and SEATS</strong>. At the same time, the additional flexibility may lead at times to filters that are undedesirable. As will be shown later on, SEATS sometimes choose a filter that is too narrow, and produces an overly volatile seasonal component.</p>
 <div class="callout-note callout callout-style-simple callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -444,6 +450,8 @@ Planas, Christophe, and Raoul Depoutot. 2002. <span>“Controlling Revisions in 
 </table>
 <p>Let’s consider small vs large values of seasonal <span class="math inline">\(\Theta_{12}\)</span>. Values of <span class="math inline">\(\Theta\)</span> close to zero yield a seasonal adjustment filter that has seasonal factors that change rapidly over time. This provides considerable smoothing and large revisions. These revisions will only last for a small number of years due to the shorter filters.</p>
 <p>Values of <span class="math inline">\(\Theta\)</span> close to one yield a seasonal adjustment filter that has seasonal factors that change slowly over time. This provides less smoothing but relatively small revisions. Any revisions that do occur will last for a longer period of time due to the longer filters.</p>
+<p>Overall, we may think of SEATS filters as a broader, more flexible set of filters than X-11 filers. While we have just seven filters in X-11, we have an infite numer of filters in SEATS. They cover a larger range of filters spans, ranging from filters that are much narrower than X-11 to filters that are much wider.</p>
+<p>SEATS greatest stength is also its greatest weakness. As we will see in the example below, SEATS sometimes chooses a filter that is very narrow. From a SEATS perspective, this makes sense: Given an ARIMA model with a very weak seasonality, the filter lengths should be chooses narrowly. From a practical perspective, the resulting seasonal component is undesirable. It is too volatile, essentially catching much of the irregular component and making the resulting seasonally adjusted series too smooth.</p>
 </section><section id="transitory-component" class="level2" data-number="7.3"><h2 data-number="7.3" class="anchored" data-anchor-id="transitory-component">
 <span class="header-section-number">7.3</span> Transitory component</h2>
 <p>Sometimes SEATS includes a transitory component in its decomposition:</p>
@@ -570,10 +578,19 @@ X_t =
 <p>The Bureau of Labor Statistics formed a group to do a comparison study between X-11 and model-based seasonal adjustments (CITE BLS 2007). The examined a cross section of 87 BLS series with X-11, SEATS, and STAMP using spectral, revisions history, model adequacy and sliding spans diagnostics. They found that SEATS seasonal factors are usually more stable than X-11 and X-11 trend component is usually more stable than SEATS. Also, among series that were seasonal, residual seasonality almost never appears using either method.</p>
 <p>The only exception being a small number of SEATS runs where model inadequacy for the full span of data was present. This manifested as SEATS having difficulty identifying a usable model for decomposition and falling back on the airline model. They found even in these situations the SEATS seasonal adjustment is usually reasonable.</p>
 <p>Overall, X-11 and SEATS seasonal adjustments are very similar for many series. SEATS adjustments are often smoother than X-11 seasonal adjustments. For some series, the variance can be different based on the month or season. For example, U.S. Housing Starts is more variable in the winter months than in the summer due to the differences in warm and cold winters. ARIMA model-based seasonal adjustment does not handle this situation very well and assumes a constant variance and the SEATS adjustment wont compensate for this.</p>
+<section id="reasons-for-using-seats-or-x11-work-in-progress" class="level3" data-number="7.10.1"><h3 data-number="7.10.1" class="anchored" data-anchor-id="reasons-for-using-seats-or-x11-work-in-progress">
+<span class="header-section-number">7.10.1</span> Reasons for using SEATS or X11 (Work in progress)</h3>
+<ul>
+<li><p>When applied properly (good ARIMA model, filters are not too narrow), it produces a seasonal component that is more stable. This leads to less revisions in the resulting series.</p></li>
+<li><p>When applied improperly (bad ARIMA model, narrow filters), it produces an unpredictable seasonal component and an overly smooth seasonally adjusted series.</p></li>
+<li><p>X-11 is more ‘robust’: If applied without additional checks, it is probably the better option.</p></li>
+<li><p>If you check SEATS models carefully, it may produce a more stable adjstument.</p></li>
+</ul>
+<p>To sum op, wheter you should use SEATS or X11 also depends on how much work you are willing to invest in a series. SEATS needs more love, etc.</p>
 
 
 
-</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+</section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
