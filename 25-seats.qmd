@@ -19,7 +19,7 @@ Like X-11, SEATS uses a forecast extended series, in order to obtain unbiased re
 Unlike X-11, however, SEATS filters are derived from the ARIMA model of the time series.
 While X-11 filters are predefined and fixed, the SEATS filters are different for each ARIMA model.
 
-While X-11 offers a finite set of filters (in fact, there are exactly seven filters available), SEATS offers an infinte set of filters.
+While X-11 offers a finite set of filters (in fact, there are seven seasonal filters available), SEATS offers an infinte set of filters.
 Overall, they cover a broader set of possilbe filter lengths, which makes SEATS a more flexilble option than X-11.
 **The available set filter lengths is the most crucial difference between X-11 and SEATS**.
 At the same time, the additional flexibility may lead at times to filters that are undedesirable.
