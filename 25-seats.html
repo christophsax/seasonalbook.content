@@ -378,7 +378,7 @@ Hillmer, S. C., and G. C. Tiao. 1982. <span>“An ARIMA-Model-Based Approach to 
 Maravall, Agustin. 1986. <span>“Revisions in ARIMA Signal Extraction.”</span> <em>Journal of the American Statistical Association</em> 81 (395): 736–40. <a href="http://www.jstor.org/stable/2289005">http://www.jstor.org/stable/2289005</a>.
 </div></div><p>Like X-11, SEATS applies a series of filters to an observed time series, as described in <a href="24-x11.html#sec-seasonal-decomposition"><span>Section&nbsp;6.1</span></a>. Like X-11, SEATS uses a forecast extended series, in order to obtain unbiased results at the margin.</p>
 <p>Unlike X-11, however, SEATS filters are derived from the ARIMA model of the time series. While X-11 filters are predefined and fixed, the SEATS filters are different for each ARIMA model.</p>
-<p>While X-11 offers a finite set of filters (in fact, there are exactly seven filters available), SEATS offers an infinte set of filters. Overall, they cover a broader set of possilbe filter lengths, which makes SEATS a more flexilble option than X-11. <strong>The available set filter lengths is the most crucial difference between X-11 and SEATS</strong>. At the same time, the additional flexibility may lead at times to filters that are undedesirable. As will be shown later on, SEATS sometimes choose a filter that is too narrow, and produces an overly volatile seasonal component.</p>
+<p>While X-11 offers a finite set of filters (in fact, there are seven seasonal filters available), SEATS offers an infinte set of filters. Overall, they cover a broader set of possilbe filter lengths, which makes SEATS a more flexilble option than X-11. <strong>The available set filter lengths is the most crucial difference between X-11 and SEATS</strong>. At the same time, the additional flexibility may lead at times to filters that are undedesirable. As will be shown later on, SEATS sometimes choose a filter that is too narrow, and produces an overly volatile seasonal component.</p>
 <div class="callout-note callout callout-style-simple callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -402,6 +402,19 @@ Comparing X-11 and SEATS filters
 </ul></section>
 </div>
 </div>
+<div class="callout-note callout callout-style-simple callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+TODO
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Plots of X-11 filters vs SEATS filters</p>
+</div>
+</div>
 <p>Given a certain ARIMA model (such as the “Airline” (0 1 1)(0 1 1) model which is appropriate for the description of the <code>AirPassengers</code> time series), SEATS decomposes the model into separate models for the trend, the seasonal and the irregular component. This is done by the <em>Canonical Decomposition</em> and will be discussed in <a href="#sec-canonical-decomposition"><span>Section&nbsp;7.6</span></a>.</p>
 <p>The decomposition of the ARIMA model is almost independent of the data. For each ARIMA specification, there is a unique canonical decomposition. For a normal “Airline” (0 1 1)(0 1 1) model (with both moving average coefficients not being to close to 1), the trend component can be described with a (0 2 2)(0 0 0) model, while the seasonal component can be described approximately by a (0 0 11)(0 0 0) model. The parameters of these models can be derived from the parameter estimations of the initial airline model that describes the original series. The irregular component is usually white noise, described by the trivial (0 0 0)(0 0 0) model.</p>
 <p>The decomposed ARIMA models imply a certain filter, which is derived by the Wiener-Kolmogorov procedure (<a href="#sec-wiener-kolmogorov-algorithm"><span>Section&nbsp;7.7</span></a>).</p>
@@ -411,7 +424,7 @@ Comparing X-11 and SEATS filters
 <div class="cell">
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">seats</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span></span>
 <span><span class="va">x11</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, x11 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu">tsbox</span><span class="fu">::</span><span class="fu"><a href="https://www.tsbox.help/reference/ts_plot.html">ts_plot</a></span><span class="op">(</span><span class="fu">final</span><span class="op">(</span><span class="va">seats</span><span class="op">)</span>, <span class="fu">final</span><span class="op">(</span><span class="va">x11</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="fu">tsbox</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/tsbox/reference/ts_plot.html">ts_plot</a></span><span class="op">(</span><span class="fu">final</span><span class="op">(</span><span class="va">seats</span><span class="op">)</span>, <span class="fu">final</span><span class="op">(</span><span class="va">x11</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="25-seats_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="864"></p>
 </div>
@@ -580,6 +593,19 @@ X_t =
 <p>Overall, X-11 and SEATS seasonal adjustments are very similar for many series. SEATS adjustments are often smoother than X-11 seasonal adjustments. For some series, the variance can be different based on the month or season. For example, U.S. Housing Starts is more variable in the winter months than in the summer due to the differences in warm and cold winters. ARIMA model-based seasonal adjustment does not handle this situation very well and assumes a constant variance and the SEATS adjustment wont compensate for this.</p>
 <section id="reasons-for-using-seats-or-x11-work-in-progress" class="level3" data-number="7.10.1"><h3 data-number="7.10.1" class="anchored" data-anchor-id="reasons-for-using-seats-or-x11-work-in-progress">
 <span class="header-section-number">7.10.1</span> Reasons for using SEATS or X11 (Work in progress)</h3>
+<div class="callout-note callout callout-style-simple callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+TODO
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Add Table with pros and cons</p>
+</div>
+</div>
 <ul>
 <li><p>When applied properly (good ARIMA model, filters are not too narrow), it produces a seasonal component that is more stable. This leads to less revisions in the resulting series.</p></li>
 <li><p>When applied improperly (bad ARIMA model, narrow filters), it produces an unpredictable seasonal component and an overly smooth seasonally adjusted series.</p></li>
