@@ -41,6 +41,16 @@ As will be shown later on, SEATS sometimes choose a filter that is too narrow, a
 -   requires more statistical machinery
 :::
 
+
+
+::: callout-note
+## TODO
+
+Plots of X-11 filters vs SEATS filters
+:::
+
+
+
 Given a certain ARIMA model (such as the "Airline" (0 1 1)(0 1 1) model which is appropriate for the description of the `AirPassengers` time series), SEATS decomposes the model into separate models for the trend, the seasonal and the irregular component.
 This is done by the *Canonical Decomposition* and will be discussed in @sec-canonical-decomposition.
 
@@ -250,6 +260,17 @@ Housing Starts is more variable in the winter months than in the summer due to t
 ARIMA model-based seasonal adjustment does not handle this situation very well and assumes a constant variance and the SEATS adjustment wont compensate for this.
 
 ### Reasons for using SEATS or X11 (Work in progress)
+
+::: callout-note
+## TODO
+
+Add Table with pros and cons
+:::
+
+
+
+
+
 
 -   When applied properly (good ARIMA model, filters are not too narrow), it produces a seasonal component that is more stable.
     This leads to less revisions in the resulting series.
