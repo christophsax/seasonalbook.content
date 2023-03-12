@@ -18,6 +18,69 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1.6em;
   vertical-align: middle;
 }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -241,11 +304,10 @@ ul.task-list li input[type="checkbox"] {
   <ul>
 <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="toc-section-number">10.1</span>  Introduction</a></li>
   <li><a href="#level-shift" id="toc-level-shift" class="nav-link" data-scroll-target="#level-shift"><span class="toc-section-number">10.2</span>  Level Shift</a></li>
-  <li><a href="#level-shift-1" id="toc-level-shift-1" class="nav-link" data-scroll-target="#level-shift-1"><span class="toc-section-number">10.3</span>  Level Shift</a></li>
-  <li><a href="#additive-outliers" id="toc-additive-outliers" class="nav-link" data-scroll-target="#additive-outliers"><span class="toc-section-number">10.4</span>  Additive Outliers</a></li>
-  <li><a href="#identifiying-outliers" id="toc-identifiying-outliers" class="nav-link" data-scroll-target="#identifiying-outliers"><span class="toc-section-number">10.5</span>  Identifiying Outliers</a></li>
-  <li><a href="#additional-tools-to-identify-outliers" id="toc-additional-tools-to-identify-outliers" class="nav-link" data-scroll-target="#additional-tools-to-identify-outliers"><span class="toc-section-number">10.6</span>  Additional tools to identify outliers</a></li>
-  <li><a href="#confirming-the-reason-for-the-level-shifts-or-the-additive-outliers" id="toc-confirming-the-reason-for-the-level-shifts-or-the-additive-outliers" class="nav-link" data-scroll-target="#confirming-the-reason-for-the-level-shifts-or-the-additive-outliers"><span class="toc-section-number">10.7</span>  Confirming the reason for the level shifts or the additive outliers</a></li>
+  <li><a href="#additive-outliers" id="toc-additive-outliers" class="nav-link" data-scroll-target="#additive-outliers"><span class="toc-section-number">10.3</span>  Additive Outliers</a></li>
+  <li><a href="#manually-identifiying-outliers" id="toc-manually-identifiying-outliers" class="nav-link" data-scroll-target="#manually-identifiying-outliers"><span class="toc-section-number">10.4</span>  Manually Identifiying Outliers</a></li>
+  <li><a href="#additional-tools-to-identify-outliers" id="toc-additional-tools-to-identify-outliers" class="nav-link" data-scroll-target="#additional-tools-to-identify-outliers"><span class="toc-section-number">10.5</span>  Additional tools to identify outliers</a></li>
+  <li><a href="#confirming-the-reason-for-the-level-shifts-or-the-additive-outliers" id="toc-confirming-the-reason-for-the-level-shifts-or-the-additive-outliers" class="nav-link" data-scroll-target="#confirming-the-reason-for-the-level-shifts-or-the-additive-outliers"><span class="toc-section-number">10.6</span>  Confirming the reason for the level shifts or the additive outliers</a></li>
   </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/33-outliers.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
@@ -279,7 +341,7 @@ ul.task-list li input[type="checkbox"] {
 <!-- -   Additive outliers, level shifts, temporary changes -->
 <section id="introduction" class="level2" data-number="10.1"><h2 data-number="10.1" class="anchored" data-anchor-id="introduction">
 <span class="header-section-number">10.1</span> Introduction</h2>
-<p>Exceptional data value, or outliers may constitute a problem both for the ARIMA model building as well as for the sesonal filtering. When analyzing time series data, outlier values are common. In some cases, these issues can be linked to actual events in the real world, such as:</p>
+<p>Exceptional data values, or <em>outliers</em>, constitute a problem both for the ARIMA model building as well as for the seasonal filtering. When analyzing time series data, outlier values are common. In some cases, these issues can be linked to actual events in the real world, such as:</p>
 <ul>
 <li>the COVID-19 pandamemic</li>
 <li>the 2008/09 financial market crash</li>
@@ -287,45 +349,187 @@ ul.task-list li input[type="checkbox"] {
 <li>Ukraine crisis</li>
 </ul>
 <p>These events can impact the accuracy of seasonal adjustment. As a result, X-13 tries to remove these inconsistencies before performing seasonal adjustment.</p>
+<p>For example, when running <code>seas()</code> on <code>AirPassengers</code> with default settings, X-13 detects an additive outlier in may 1951. This additive outlier is removed in the regARIMA part but will be readded to the final, seasonally adjusted series.</p>
+<div class="cell">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; seas(x = AirPassengers)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients:</span></span>
+<span><span class="co">#&gt;                     Estimate Std. Error z value Pr(&gt;|z|)    </span></span>
+<span><span class="co">#&gt; Weekday           -0.0029497  0.0005232  -5.638 1.72e-08 ***</span></span>
+<span><span class="co">#&gt; Easter[1]          0.0177674  0.0071580   2.482   0.0131 *  </span></span>
+<span><span class="co">#&gt; AO1951.May         0.1001558  0.0204387   4.900 9.57e-07 ***</span></span>
+<span><span class="co">#&gt; MA-Nonseasonal-01  0.1156204  0.0858588   1.347   0.1781    </span></span>
+<span><span class="co">#&gt; MA-Seasonal-12     0.4973600  0.0774677   6.420 1.36e-10 ***</span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; SEATS adj.  ARIMA: (0 1 1)(0 1 1)  Obs.: 144  Transform: log</span></span>
+<span><span class="co">#&gt; AICc: 947.3, BIC: 963.9  QS (no seasonality in final):    0  </span></span>
+<span><span class="co">#&gt; Box-Ljung (no autocorr.): 26.65   Shapiro (normality): 0.9908</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The <code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code> method highlights the outlier values and marks them accordingly:</p>
+<div class="cell">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="33-outliers_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="864"></p>
+</div>
+</div>
+<p>The default settings discovered a single, additive outlier. Using the <code>outlier.critical</code> argument, we can fine tune the detection prosses. With <code>outlier.critical = 3</code>, we set a lower bar for the detection of outliers. <code>outlier.critical</code> is the z-value of a particular value that is needed to be classified as an outlier. A value of three means that the z-value must be 3 or larger.</p>
+<div class="cell">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_high</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, outlier.critical <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m_high</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; seas(x = AirPassengers, outlier.critical = 3)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients:</span></span>
+<span><span class="co">#&gt;                  Estimate Std. Error z value Pr(&gt;|z|)    </span></span>
+<span><span class="co">#&gt; Weekday        -0.0027692  0.0004187  -6.613 3.76e-11 ***</span></span>
+<span><span class="co">#&gt; Easter[1]       0.0140649  0.0058438   2.407 0.016092 *  </span></span>
+<span><span class="co">#&gt; AO1950.Jan     -0.0629435  0.0174523  -3.607 0.000310 ***</span></span>
+<span><span class="co">#&gt; AO1951.May      0.1081042  0.0165482   6.533 6.46e-11 ***</span></span>
+<span><span class="co">#&gt; LS1953.Jun     -0.0755237  0.0228402  -3.307 0.000944 ***</span></span>
+<span><span class="co">#&gt; AO1954.Feb     -0.0693534  0.0160240  -4.328 1.50e-05 ***</span></span>
+<span><span class="co">#&gt; LS1960.Apr      0.0847557  0.0272119   3.115 0.001842 ** </span></span>
+<span><span class="co">#&gt; MA-Seasonal-12  0.4967116  0.0749535   6.627 3.43e-11 ***</span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; SEATS adj.  ARIMA: (0 1 0)(0 1 1)  Obs.: 144  Transform: log</span></span>
+<span><span class="co">#&gt; AICc: 910.7, BIC: 935.1  QS (no seasonality in final):    0  </span></span>
+<span><span class="co">#&gt; Box-Ljung (no autocorr.): 29.07   Shapiro (normality): 0.9911  </span></span>
+<span><span class="co">#&gt; Messages generated by X-13:</span></span>
+<span><span class="co">#&gt; Warnings:</span></span>
+<span><span class="co">#&gt; - At least one visually significant trading day peak has been</span></span>
+<span><span class="co">#&gt;   found in one or more of the estimated spectra.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>With <code>outlier.critical = 3</code>, we see additive outliers in January 1950, May 1951 and February 1954. In addition, we also see level shifts in June 1953 and April 1960. Note that all z-values are larger than 3.</p>
 <p>X-13 offers several ways to model outliers. In this chapter, we will focus on two most important types of effects that can occur in time series data: level shifts and additive outliers. By understanding these effects and how to address them, analysts can improve the quality of their analyses and draw more accurate conclusions from the data.</p>
 </section><section id="level-shift" class="level2" data-number="10.2"><h2 data-number="10.2" class="anchored" data-anchor-id="level-shift">
 <span class="header-section-number">10.2</span> Level Shift</h2>
-<p>The first outlier category we look at are level shifts. Level shifts refers to a sudden and sustained change in the underlying level of a time series. Theree can be various causes of level shifts in time series data, such as changes in concepts or definitions of the survey population, alterations in the method of data collection, shifts in economic behavior, changes in legislation, etc. Below is an example of a level shift:</p>
-<p>TODO</p>
-<p>Level shifts are a problem for seasonal adjustment because they will distort the estimation of the seasonal factors.</p>
-<p>Within X-13, the initial trend is calculated by applying a moving average to the series. If there is an abrupt change in the level of the series, the estimates will be distorted. The estimates before the level shift will be underestimated, and those after will be overestimated. As the calculation of the irregular and seasonal components follow on from this initial trend-cycle estimation, they may be distorted as well.</p>
-<p>TODO explain example</p>
-</section><section id="level-shift-1" class="level2" data-number="10.3"><h2 data-number="10.3" class="anchored" data-anchor-id="level-shift-1">
-<span class="header-section-number">10.3</span> Level Shift</h2>
-<p>The first outlier category we look at are level shifts. Level shifts refers to a sudden and sustained change in the underlying level of a time series. Theree can be various causes of level shifts in time series data, such as changes in concepts or definitions of the survey population, alterations in the method of data collection, shifts in economic behavior, changes in legislation, etc. Below is an example of a level shift:</p>
-<p>TODO</p>
-<p>Level shifts are a problem for seasonal adjustment because they will distort the estimation of the seasonal factors.</p>
-<p>Within X-13, the initial trend is calculated by applying a moving average to the series. If there is an abrupt change in the level of the series, the estimates will be distorted. The estimates before the level shift will be underestimated, and those after will be overestimated. As the calculation of the irregular and seasonal components follow on from this initial trend-cycle estimation, they may be distorted as well.</p>
-<p>TODO explain example</p>
-</section><section id="additive-outliers" class="level2" data-number="10.4"><h2 data-number="10.4" class="anchored" data-anchor-id="additive-outliers">
-<span class="header-section-number">10.4</span> Additive Outliers</h2>
+<p>The first outlier category we look at are level shifts. Level shifts refers to a sudden and sustained change in the underlying level of a time series. There can be various causes of level shifts in time series data, such as changes in concepts or definitions of the survey population, alterations in the method of data collection, shifts in economic behavior, changes in legislation, etc. Level shifts are a problem for seasonal adjustment because they will distort the estimation of the seasonal factors.</p>
+<p>Below is an example of a manually specified level shift:</p>
+<div class="cell">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_level_shift</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span></span>
+<span>  <span class="va">AirPassengers</span>,</span>
+<span>  regression.variables <span class="op">=</span> <span class="st">"ls1953.Jun"</span>,</span>
+<span>  outlier <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m_level_shift</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; seas(x = AirPassengers, outlier = NULL, regression.variables = "ls1953.Jun")</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients:</span></span>
+<span><span class="co">#&gt;                     Estimate Std. Error z value Pr(&gt;|z|)    </span></span>
+<span><span class="co">#&gt; LS1953.Jun        -0.0782358  0.0270308  -2.894 0.003800 ** </span></span>
+<span><span class="co">#&gt; Weekday           -0.0024659  0.0006125  -4.026 5.67e-05 ***</span></span>
+<span><span class="co">#&gt; Easter[1]          0.0205837  0.0084022   2.450 0.014294 *  </span></span>
+<span><span class="co">#&gt; MA-Nonseasonal-01  0.3020780  0.0823400   3.669 0.000244 ***</span></span>
+<span><span class="co">#&gt; MA-Seasonal-12     0.5241174  0.0756816   6.925 4.35e-12 ***</span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; SEATS adj.  ARIMA: (0 1 1)(0 1 1)  Obs.: 144  Transform: log</span></span>
+<span><span class="co">#&gt; AICc: 959.8, BIC: 976.4  QS (no seasonality in final):    0  </span></span>
+<span><span class="co">#&gt; Box-Ljung (no autocorr.):  26.8   Shapiro (normality): 0.9807 *</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We use the <code>regression.variables</code> argument to manually specify a levelshift. Since we want to deactivate the automated outlier detection from above, we speficy <code>outlier = NULL</code>.</p>
+<p>Level shifts are a problem for seasonal adjustment because they will distort the estimation of the seasonal factors. Within X-13, the initial trend is calculated by applying a moving average to the series. If there is an abrupt change in the level of the series, the estimates will be distorted. The estimates before the level shift will be underestimated, and those after will be overestimated. As the calculation of the irregular and seasonal components follow on from this initial trend-cycle estimation, they may be distorted as well.</p>
+</section><section id="additive-outliers" class="level2" data-number="10.3"><h2 data-number="10.3" class="anchored" data-anchor-id="additive-outliers">
+<span class="header-section-number">10.3</span> Additive Outliers</h2>
 <p>An additive outlier is a data point that falls outside the general pattern of the trend and seasonal component in a time series. Outliers can be caused by random effects, such as an extreme irregular point, or by identifiable factors, such as a strike or bad weather.</p>
 <p>Additive outliers pose a significant challenge to seasonal adjustment methods, which rely on moving averages. The crux of the problem lies in the inherent sensitivity of averages to the presence of extreme values or outliers. When unusual data points are included, the average can become unrepresentative of the underlying pattern in the series. Without proper adjustments or allowances for outliers, estimates for all the components in a time series can become distorted. As such, addressing additive outliers is critical to maintaining the integrity of seasonal adjustment techniques and ensuring accurate analyses.</p>
-<p>TODO example</p>
-<p>Seasonally adjusting the data above, without allowing for the outliers, gives the following results:</p>
-<p>TODO</p>
-</section><section id="identifiying-outliers" class="level2" data-number="10.5"><h2 data-number="10.5" class="anchored" data-anchor-id="identifiying-outliers">
-<span class="header-section-number">10.5</span> Identifiying Outliers</h2>
-<p>X-13 contains an outomated outlier detection procedure that works well in most circumstances and can be used as a starting poing. Plotting the series may add additional information on wheter outliers should be adjusted or not.</p>
-<p>TODO</p>
-<p>series{title=“Example of level shift and outlier search” start=1994.1 period=4 file=“mydata.txt”} arima{model=(0,1,1)(0,1,1)} outlier{types=(ao ls) span=(2002.2, ) x11{mode=mult}</p>
-<p>The outlier specification in the arima model allows for automatic detection of level shifts and additive outliers, either individually or in combination. Once identified, the outliers are incorporated into the model as “Automatically Identified Outliers” along with appropriate regression variables.</p>
-<p>It’s important to note that this specification has some limitations. Specifically, it can only detect outliers with a high critical value for their t-statistics. The critical value used depends on the number of observations searched for outliers. For instance, if the search is conducted for the last year of data, the critical value is 3.16, which is higher than the standard critical value of 1.96. Consequently, outliers with t-statistics between 1.96 and 3.16 may not be detected with this option.</p>
-<p>Therefore, it’s crucial to conduct visual checks of the NSA and SA series to identify any outliers that might have been missed by the automatic detection process. For more information on the default critical values for outlier identification, refer to the X-13 Reference Manual.</p>
-</section><section id="additional-tools-to-identify-outliers" class="level2" data-number="10.6"><h2 data-number="10.6" class="anchored" data-anchor-id="additional-tools-to-identify-outliers">
-<span class="header-section-number">10.6</span> Additional tools to identify outliers</h2>
+<p>Below is an example of a manually specified additive outlier:</p>
+<div class="cell">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_additive_outlier</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span></span>
+<span>  <span class="va">AirPassengers</span>,</span>
+<span>  regression.variables <span class="op">=</span> <span class="st">"ao1954.Feb"</span>,</span>
+<span>  outlier <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m_additive_outlier</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; seas(x = AirPassengers, outlier = NULL, regression.variables = "ao1954.Feb")</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients:</span></span>
+<span><span class="co">#&gt;                     Estimate Std. Error z value Pr(&gt;|z|)    </span></span>
+<span><span class="co">#&gt; AO1954.Feb        -0.0733392  0.0217684  -3.369 0.000754 ***</span></span>
+<span><span class="co">#&gt; Weekday           -0.0026730  0.0005682  -4.705 2.54e-06 ***</span></span>
+<span><span class="co">#&gt; Easter[1]          0.0222881  0.0079155   2.816 0.004866 ** </span></span>
+<span><span class="co">#&gt; MA-Nonseasonal-01  0.2014840  0.0844582   2.386 0.017051 *  </span></span>
+<span><span class="co">#&gt; MA-Seasonal-12     0.5483430  0.0750706   7.304 2.79e-13 ***</span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; SEATS adj.  ARIMA: (0 1 1)(0 1 1)  Obs.: 144  Transform: log</span></span>
+<span><span class="co">#&gt; AICc: 956.7, BIC: 973.3  QS (no seasonality in final):    0  </span></span>
+<span><span class="co">#&gt; Box-Ljung (no autocorr.): 32.09   Shapiro (normality): 0.9819 .</span></span>
+<span><span class="co">#&gt; Messages generated by X-13:</span></span>
+<span><span class="co">#&gt; Warnings:</span></span>
+<span><span class="co">#&gt; - At least one visually significant trading day peak has been</span></span>
+<span><span class="co">#&gt;   found in one or more of the estimated spectra.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Again, we use the <code>regression.variables</code> argument to manually specify an addtive outlier. Since we want to deactivate the automated outlier detection from above, we speficy <code>outlier = NULL</code>.</p>
+</section><section id="manually-identifiying-outliers" class="level2" data-number="10.4"><h2 data-number="10.4" class="anchored" data-anchor-id="manually-identifiying-outliers">
+<span class="header-section-number">10.4</span> Manually Identifiying Outliers</h2>
+<p>X-13 contains an outomated outlier detection procedure that works well in most circumstances and can be used as a starting poing. Plotting the series may add additional information on wheter outliers should be adjusted or not. The <code><a href="https://rdrr.io/r/graphics/identify.html">identify()</a></code> method opens a window that allows you to manually identify outliers. Select or deselect outliers by point and click. To quit and return the call, press ESC. Click several times to loop through different outlier types.</p>
+<div class="cell">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span></span>
+<span>  <span class="va">AirPassengers</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/identify.html">identify</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; seas(x = AirPassengers)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients:</span></span>
+<span><span class="co">#&gt;                     Estimate Std. Error z value Pr(&gt;|z|)    </span></span>
+<span><span class="co">#&gt; Weekday           -0.0029497  0.0005232  -5.638 1.72e-08 ***</span></span>
+<span><span class="co">#&gt; Easter[1]          0.0177674  0.0071580   2.482   0.0131 *  </span></span>
+<span><span class="co">#&gt; AO1951.May         0.1001558  0.0204387   4.900 9.57e-07 ***</span></span>
+<span><span class="co">#&gt; MA-Nonseasonal-01  0.1156204  0.0858588   1.347   0.1781    </span></span>
+<span><span class="co">#&gt; MA-Seasonal-12     0.4973600  0.0774677   6.420 1.36e-10 ***</span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; SEATS adj.  ARIMA: (0 1 1)(0 1 1)  Obs.: 144  Transform: log</span></span>
+<span><span class="co">#&gt; AICc: 947.3, BIC: 963.9  QS (no seasonality in final):    0  </span></span>
+<span><span class="co">#&gt; Box-Ljung (no autocorr.): 26.65   Shapiro (normality): 0.9908</span></span>
+<span><span class="co">#&gt; seas(</span></span>
+<span><span class="co">#&gt;   x = AirPassengers,</span></span>
+<span><span class="co">#&gt;   regression.variables = c("td1coef", "easter[1]", "ao1951.May"),</span></span>
+<span><span class="co">#&gt;   arima.model = "(0 1 1)(0 1 1)",</span></span>
+<span><span class="co">#&gt;   regression.aictest = NULL,</span></span>
+<span><span class="co">#&gt;   outlier = NULL,</span></span>
+<span><span class="co">#&gt;   transform.function = "log"</span></span>
+<span><span class="co">#&gt; )</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; seas(x = AirPassengers)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients:</span></span>
+<span><span class="co">#&gt;           Weekday          Easter[1]         AO1951.May  MA-Nonseasonal-01  </span></span>
+<span><span class="co">#&gt;          -0.00295            0.01777            0.10016            0.11562  </span></span>
+<span><span class="co">#&gt;    MA-Seasonal-12  </span></span>
+<span><span class="co">#&gt;           0.49736</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="33-outliers_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="864"></p>
+</div>
+</div>
+</section><section id="additional-tools-to-identify-outliers" class="level2" data-number="10.5"><h2 data-number="10.5" class="anchored" data-anchor-id="additional-tools-to-identify-outliers">
+<span class="header-section-number">10.5</span> Additional tools to identify outliers</h2>
 <p>Idenfifying level shifts and additive outliers is no always as obvious as in the example above. The following tables may help to identify the level shifts and additive outliers</p>
 <p>TODO (From ONS Manual)</p>
 <ul>
 <li><p>Look at Table E5 and E6 in the output? These tables show the month- on-month (or quarter-on-quarter) changes in the original and seasonally adjusted estimates. In fact, a level shift will appear as a sudden large increase which is not followed by a corresponding decrease (or vice versa) in Table E5 and E6. The adjustment for the level shift effectively attempts to remove this sudden change in the level.</p></li>
 <li><p>Additive outliers can be detected by analysing Table C17 and D13 in addition to Table E5 and E6 in the output. In fact, an additive outlier will appear as one or more zeros in the period of the outlier in Table C17, which gives the final weights for the irregular component, and as a residual pattern of the irregular component presented in Table D13. In addition to inspecting these four output tables, M1, M2 and M3 statistics should be checked. M1, M2 and M3 each measure the level of the irregular component in the series compared to the trend and the seasonal components. If these fail it may indicate that outliers need to be replaced as temporary prior adjustments.</p></li>
-</ul></section><section id="confirming-the-reason-for-the-level-shifts-or-the-additive-outliers" class="level2" data-number="10.7"><h2 data-number="10.7" class="anchored" data-anchor-id="confirming-the-reason-for-the-level-shifts-or-the-additive-outliers">
-<span class="header-section-number">10.7</span> Confirming the reason for the level shifts or the additive outliers</h2>
+</ul></section><section id="confirming-the-reason-for-the-level-shifts-or-the-additive-outliers" class="level2" data-number="10.6"><h2 data-number="10.6" class="anchored" data-anchor-id="confirming-the-reason-for-the-level-shifts-or-the-additive-outliers">
+<span class="header-section-number">10.6</span> Confirming the reason for the level shifts or the additive outliers</h2>
 <p>TODO (From ONS Manual)</p>
 <p>If the X-12-ARIMA test and the graphs of the NSA and SA series lead you to suspect a level shift or an outlier, then check which months/quarters it appears in. Question if there is any evidence for suspecting a level shift or outlier at this time point. If there is not a methodological, social or economic reason to explain the presence of the suspected level shift or outlier then do not adjust for it.</p>
 
