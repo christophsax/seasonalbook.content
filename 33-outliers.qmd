@@ -42,6 +42,9 @@ plot(m)
 ```
 
 The default settings discovered a single, additive outlier.
+By default, X-13 uses a formula that interpolates critical values for numbers of observations between 3 and 99 (Table 7.22 in the Manual).
+For standard time series, this results in a critical value around 4.
+
 Using the `outlier.critical` argument, we can fine tune the detection prosses.
 With `outlier.critical = 3`, we set a lower bar for the detection of outliers.
 `outlier.critical` is the z-value of a particular value that is needed to be classified as an outlier.
@@ -59,6 +62,33 @@ Note that all z-values are larger than 3.
 X-13 offers several ways to model outliers.
 In this chapter, we will focus on two most important types of effects that can occur in time series data: level shifts and additive outliers.
 By understanding these effects and how to address them, analysts can improve the quality of their analyses and draw more accurate conclusions from the data.
+
++--------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------+
+| Argument           | Description                                                                                                                                                                    | Default                                                                                  |
++====================+================================================================================================================================================================================+==========================================================================================+
+| `outlier.critical` | Sets the value to which the absolute values of the outlier t-statistics are compared to                                                                                        | Obtained by a                                                                            |
+|                    | detect outliers.                                                                                                                                                               | modification of the asymptotic formula of Ljung (1993) that interpolates critical values |
+|                    |                                                                                                                                                                                | for numbers of observations between 3 and 99.                                            |
+|                    | If only one value is given for this argument, then this critical value is                                                                                                      |                                                                                          |
+|                    | used for all types of outliers. If a list of up to three values is given, different values are used for additive outliers, level shift outliers and temporary change outliers. |                                                                                          |
++--------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------+
+| `outlier.method`   | Determines how the program successively adds detected outliers to the model. The                                                                                               | `"addone".`                                                                              |
+|                    | choices are `"addone"` or `"addall"`.                                                                                                                                          |                                                                                          |
+|                    |                                                                                                                                                                                |                                                                                          |
+|                    | `"addone"` calculates t-statistics for each type of                                                                                                                            |                                                                                          |
+|                    | outlier specified at all time points.                                                                                                                                          |                                                                                          |
+|                    |                                                                                                                                                                                |                                                                                          |
+|                    | `"addall"` follows the same general steps as the addone method, except it adds to the model *all* outliers with absolute t-statistics exceeding the critical value.            |                                                                                          |
++--------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------+
+| `outlier.span`     | Specifies start and end dates of a span of the time series to be searched for outliers. The start and end dates of the span must both lie within the series.                   | None.                                                                                    |
++--------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------+
+| `outlier.types`    | Specifies the types of outliers to detect. The choices are: `"ao"` (additive outliers), `"ls"` (level shifts), `"tc"` (temporary                                               | The default is `c("ao", "ls")`.                                                          |
+|                    | change), `"all"`: (detect all three of the above types simultaneously),                                                                                                        |                                                                                          |
+|                    | and `"none"` (turn off outlier detection, but not t-statistics for temporary level                                                                                             |                                                                                          |
+|                    | shifts).                                                                                                                                                                       |                                                                                          |
++--------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------+
+
+: Arguments to the \`outlier\` spec
 
 ## Level Shift
 
@@ -127,6 +157,8 @@ m <- seas(
 )
 identify(m)
 ```
+
+```{=html}
 <!--
 
 ## Additional tools to identify outliers
@@ -156,3 +188,4 @@ Question if there is any evidence for suspecting a level shift or outlier at thi
 If there is not a methodological, social or economic reason to explain the presence of the suspected level shift or outlier then do not adjust for it.
 
 -->
+```

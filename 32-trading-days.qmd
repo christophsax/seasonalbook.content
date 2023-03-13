@@ -30,7 +30,8 @@ Contrary to the regression spec, the transform spec performs a 1:1 adjustment, w
 
 As with most adjustments, X-13 offers a built in automated adjustment that works well in most circumstances.
 We start the chapter by looking at the automated procedures.
-Sometimes, you want to rely on a user defined specification of trading days, a topic covered @sec-user-defined-regressors. Finally, in @sec-replicate-x-13-trading-days-adjustment, we link the two sections by replicating the built-in regressors in R.
+Sometimes, you want to rely on a user defined specification of trading days, a topic covered @sec-user-defined-regressors.
+Finally, in @sec-replicate-x-13-trading-days-adjustment, we link the two sections by replicating the built-in regressors in R.
 
 ## Built-in trading day adjustment
 
