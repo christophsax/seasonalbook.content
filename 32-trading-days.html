@@ -302,13 +302,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
-<li><a href="#replicate-x-13-trading-days-adjustment" id="toc-replicate-x-13-trading-days-adjustment" class="nav-link active" data-scroll-target="#replicate-x-13-trading-days-adjustment"><span class="toc-section-number">9.1</span>  Replicate X-13 trading days adjustment</a></li>
+<li><a href="#why-should-we-adjust-for-trading-day-effects" id="toc-why-should-we-adjust-for-trading-day-effects" class="nav-link active" data-scroll-target="#why-should-we-adjust-for-trading-day-effects"><span class="toc-section-number">9.1</span>  Why should we adjust for trading day effects</a></li>
+  <li><a href="#built-in-trading-day-adjustment" id="toc-built-in-trading-day-adjustment" class="nav-link" data-scroll-target="#built-in-trading-day-adjustment"><span class="toc-section-number">9.2</span>  Built-in trading day adjustment</a></li>
+  <li><a href="#sec-user-defined-regressors" id="toc-sec-user-defined-regressors" class="nav-link" data-scroll-target="#sec-user-defined-regressors"><span class="toc-section-number">9.3</span>  User defined regressors</a></li>
+  <li><a href="#sec-replicate-x-13-trading-days-adjustment" id="toc-sec-replicate-x-13-trading-days-adjustment" class="nav-link" data-scroll-target="#sec-replicate-x-13-trading-days-adjustment"><span class="toc-section-number">9.4</span>  Replicate X-13 trading days adjustment</a></li>
   <li>
-<a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples"><span class="toc-section-number">9.2</span>  Examples</a>
+<a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples"><span class="toc-section-number">9.5</span>  Examples</a>
   <ul class="collapse">
-<li><a href="#constructing-weekday-regressors" id="toc-constructing-weekday-regressors" class="nav-link" data-scroll-target="#constructing-weekday-regressors"><span class="toc-section-number">9.2.1</span>  Constructing weekday regressors</a></li>
-  <li><a href="#single-coef" id="toc-single-coef" class="nav-link" data-scroll-target="#single-coef"><span class="toc-section-number">9.2.2</span>  Single coef</a></li>
-  <li><a href="#all-coefs" id="toc-all-coefs" class="nav-link" data-scroll-target="#all-coefs"><span class="toc-section-number">9.2.3</span>  All coefs</a></li>
+<li><a href="#constructing-weekday-regressors" id="toc-constructing-weekday-regressors" class="nav-link" data-scroll-target="#constructing-weekday-regressors"><span class="toc-section-number">9.5.1</span>  Constructing weekday regressors</a></li>
+  <li><a href="#single-coef" id="toc-single-coef" class="nav-link" data-scroll-target="#single-coef"><span class="toc-section-number">9.5.2</span>  Single coef</a></li>
+  <li><a href="#all-coefs" id="toc-all-coefs" class="nav-link" data-scroll-target="#all-coefs"><span class="toc-section-number">9.5.3</span>  All coefs</a></li>
   </ul>
 </li>
   </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/32-trading-days.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
@@ -340,26 +343,97 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 </div>
+<!--
+-   Why should we adjust for trading day effects
+
+-   Seven or two coefficient trading day
+
+-   Using country specific calendars
+
+-   Case Study: Movie tickets (or another series with very clear trading day effects)
+
+ -->
+<section id="why-should-we-adjust-for-trading-day-effects" class="level2" data-number="9.1"><h2 data-number="9.1" class="anchored" data-anchor-id="why-should-we-adjust-for-trading-day-effects">
+<span class="header-section-number">9.1</span> Why should we adjust for trading day effects</h2>
+<p>Months and quarters may differ in their overall length, or, more importantly may differ in the number of weekdays. Similar to the holiday adjustments, X-13 offers various tools to deal with differences in the number of days or weekdays.</p>
+<p>Trading day effects, as weekday effects are called in X-13, constitute a predictable movement in a time series, and therefore should not be part of the seasonally adjusted series. Trading day effects are usually removed by the regression spec, although some adjustments can be also done by the transform spec. Contrary to the regression spec, the transform spec performs a 1:1 adjustment, while the regression spec estimates the size of the effect from the data.</p>
+<p>As with most adjustments, X-13 offers a built in automated adjustment that works well in most circumstances. We start the chapter by looking at the automated procedures. Sometimes, you want to rely on a user defined specification of trading days, a topic covered <a href="#sec-user-defined-regressors"><span>Section&nbsp;9.3</span></a>. Finally, in <a href="#sec-replicate-x-13-trading-days-adjustment"><span>Section&nbsp;9.4</span></a>, we link the two sections by replicating the built-in regressors in R.</p>
+</section><section id="built-in-trading-day-adjustment" class="level2" data-number="9.2"><h2 data-number="9.2" class="anchored" data-anchor-id="built-in-trading-day-adjustment">
+<span class="header-section-number">9.2</span> Built-in trading day adjustment</h2>
+<p>In a default run of <code><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas()</a></code>, X-13 uses a familiar AICc test to decide between a number of potential trading day adjustments. Form the various models, it uses the one with the lowest AICc as the best model. By default, the following models are evaluated:</p>
 <ul>
-<li><p>Why should we adjust for trading day effects</p></li>
-<li><p>Seven or two coefficient trading day</p></li>
-<li><p>Using country specific calendars</p></li>
-<li><p>Case Study: Movie tickets (or another series with very clear trading day effects)</p></li>
+<li><p><code>td1coef</code>: A single coefficient trading day adjustment</p></li>
+<li><p><code>td</code>: A six day coefficients trading day adjustment</p></li>
 </ul>
-<section id="replicate-x-13-trading-days-adjustment" class="level2" data-number="9.1"><h2 data-number="9.1" class="anchored" data-anchor-id="replicate-x-13-trading-days-adjustment">
-<span class="header-section-number">9.1</span> Replicate X-13 trading days adjustment</h2>
+<p>The first model distinguishes between weekday and weekends, while the second model treats every day as it’s own. The first model is appropriate for many economic time series, where variables behave differently during the week than during the weekend. In some series, there may be large differences between weekdays, or even between Saturday and Sunday. Retail sales, for example, usually peak towards the end of the week and are weak on Sunday.</p>
+<p>Using the built-in trading day adjustment in X-13 is straightforward:</p>
+<div class="cell">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; seas(x = AirPassengers)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients:</span></span>
+<span><span class="co">#&gt;                     Estimate Std. Error z value Pr(&gt;|z|)    </span></span>
+<span><span class="co">#&gt; Weekday           -0.0029497  0.0005232  -5.638 1.72e-08 ***</span></span>
+<span><span class="co">#&gt; Easter[1]          0.0177674  0.0071580   2.482   0.0131 *  </span></span>
+<span><span class="co">#&gt; AO1951.May         0.1001558  0.0204387   4.900 9.57e-07 ***</span></span>
+<span><span class="co">#&gt; MA-Nonseasonal-01  0.1156204  0.0858588   1.347   0.1781    </span></span>
+<span><span class="co">#&gt; MA-Seasonal-12     0.4973600  0.0774677   6.420 1.36e-10 ***</span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; SEATS adj.  ARIMA: (0 1 1)(0 1 1)  Obs.: 144  Transform: log</span></span>
+<span><span class="co">#&gt; AICc: 947.3, BIC: 963.9  QS (no seasonality in final):    0  </span></span>
+<span><span class="co">#&gt; Box-Ljung (no autocorr.): 26.65   Shapiro (normality): 0.9908</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The procedure has opted for a one coefficient model. During weekdays, the number of air passengers was lower during the period of the example series, by about 0.3% (note we are looking at a logarithmic, multiplicative model).</p>
+<p>We can manipulate the automated model. To enforce a six coefficient model, <code>regression.variables</code> can be specified as <code>"td"</code> (as opposed to <code>"td1coef")</code>:</p>
+<div class="cell">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_td</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, regression.variables <span class="op">=</span> <span class="st">"td"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m_td</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; seas(x = AirPassengers, regression.variables = "td")</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients:</span></span>
+<span><span class="co">#&gt;                 Estimate Std. Error z value Pr(&gt;|z|)    </span></span>
+<span><span class="co">#&gt; Mon            -0.001527   0.003458  -0.442   0.6588    </span></span>
+<span><span class="co">#&gt; Tue            -0.007677   0.003607  -2.129   0.0333 *  </span></span>
+<span><span class="co">#&gt; Wed            -0.001125   0.003465  -0.325   0.7453    </span></span>
+<span><span class="co">#&gt; Thu            -0.005350   0.003425  -1.562   0.1183    </span></span>
+<span><span class="co">#&gt; Fri             0.004676   0.003447   1.357   0.1749    </span></span>
+<span><span class="co">#&gt; Sat             0.003025   0.003568   0.848   0.3965    </span></span>
+<span><span class="co">#&gt; Easter[1]       0.017999   0.007246   2.484   0.0130 *  </span></span>
+<span><span class="co">#&gt; AO1951.May      0.109256   0.019651   5.560 2.70e-08 ***</span></span>
+<span><span class="co">#&gt; MA-Seasonal-12  0.500775   0.077252   6.482 9.03e-11 ***</span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; SEATS adj.  ARIMA: (0 1 0)(0 1 1)  Obs.: 144  Transform: log</span></span>
+<span><span class="co">#&gt; AICc: 949.5, BIC: 976.4  QS (no seasonality in final):    0  </span></span>
+<span><span class="co">#&gt; Box-Ljung (no autocorr.): 28.05   Shapiro (normality): 0.9902</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Note that the resulting AICc is higher (949.5) than for the one coefficient model (947.3). That is why the automated procedure has opted for the simpler model.</p>
+</section><section id="sec-user-defined-regressors" class="level2" data-number="9.3"><h2 data-number="9.3" class="anchored" data-anchor-id="sec-user-defined-regressors">
+<span class="header-section-number">9.3</span> User defined regressors</h2>
+<p>‘Trading day adjustment’ removes the effect of the weekdays, and but does not include holidays, such as Christmas or Easter. These are handled separately (Easter) or dealt with by standard seasonal adjustment (Christmas).</p>
+<p>Sometimes, users may want to specify user defined trading day regressors, in order to incorporate country specific trading day patterns. In <a href="#sec-replicate-x-13-trading-days-adjustment"><span>Section&nbsp;9.4</span></a>, we replicate the built-in regressors. These regressors simply use the number of weekdays, and do not pay any reference to a country specific calendar. If you want to deviate from them, a good way is to start with the replicated values, and adjust from there.</p>
+</section><section id="sec-replicate-x-13-trading-days-adjustment" class="level2" data-number="9.4"><h2 data-number="9.4" class="anchored" data-anchor-id="sec-replicate-x-13-trading-days-adjustment">
+<span class="header-section-number">9.4</span> Replicate X-13 trading days adjustment</h2>
 <p>Replication is possible. Adding the regressors to seasonal may be useful.</p>
 <div class="cell">
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/tsbox/">tsbox</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.seasonal.website">seasonal</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section><section id="examples" class="level2" data-number="9.2"><h2 data-number="9.2" class="anchored" data-anchor-id="examples">
-<span class="header-section-number">9.2</span> Examples</h2>
-<section id="constructing-weekday-regressors" class="level3" data-number="9.2.1"><h3 data-number="9.2.1" class="anchored" data-anchor-id="constructing-weekday-regressors">
-<span class="header-section-number">9.2.1</span> Constructing weekday regressors</h3>
+</section><section id="examples" class="level2" data-number="9.5"><h2 data-number="9.5" class="anchored" data-anchor-id="examples">
+<span class="header-section-number">9.5</span> Examples</h2>
+<section id="constructing-weekday-regressors" class="level3" data-number="9.5.1"><h3 data-number="9.5.1" class="anchored" data-anchor-id="constructing-weekday-regressors">
+<span class="header-section-number">9.5.1</span> Constructing weekday regressors</h3>
 <div class="cell">
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">dates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span><span class="op">(</span><span class="st">"1931-01-01"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span><span class="op">(</span><span class="st">"2030-12-31"</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"day"</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">dates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span><span class="op">(</span><span class="st">"1931-01-01"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span><span class="op">(</span><span class="st">"2030-12-31"</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"day"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">first_of_month</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span></span>
@@ -373,15 +447,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <dl>
 <dt>td1nolpyear</dt>
 <dd>
-Include the weekday-weekend contrast variable (monthly and quarterly flow eries only): (no. of weekdays) −(5/2) (no. of Saturdays and Sundays).
+<p>Include the weekday-weekend contrast variable (monthly and quarterly flow eries only): (no. of weekdays) −(5/2) (no. of Saturdays and Sundays).</p>
 </dd>
 <dt>tdnolpyear</dt>
 <dd>
-Include the six day-of-week contrast variables (monthly and quarterly flow series only): (no. of Mondays) − (no. of Sundays), . . . , (no. of Saturdays) − (no. of Sundays).
+<p>Include the six day-of-week contrast variables (monthly and quarterly flow series only): (no. of Mondays) − (no. of Sundays), . . . , (no. of Saturdays) − (no. of Sundays).</p>
 </dd>
 </dl>
 <div class="cell">
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">td_m_tbl</span> <span class="op">&lt;-</span></span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">td_m_tbl</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span><span class="va">dates</span>, wd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html">as.POSIXlt</a></span><span class="op">(</span><span class="va">dates</span><span class="op">)</span><span class="op">$</span><span class="va">wday</span>, name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/weekday.POSIXt.html">weekdays</a></span><span class="op">(</span><span class="va">dates</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span>time <span class="op">=</span> <span class="fu">first_of_month</span><span class="op">(</span><span class="va">dates</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span></span>
@@ -408,7 +482,7 @@ Include the six day-of-week contrast variables (monthly and quarterly flow serie
 </div>
 <p>‘Trading day adjustment’ removes the effect of the weekdays, and but does not include holidays, such as Christmas or Easter. These are handled separately (Easter) or dealt with by standard seasonal adjustment (Christmas).</p>
 <div class="cell">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">td1nolpyear</span> <span class="op">&lt;-</span></span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">td1nolpyear</span> <span class="op">&lt;-</span></span>
 <span>  <span class="va">td_m_tbl</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">time</span>, value <span class="op">=</span> <span class="va">td1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://docs.ropensci.org/tsbox/reference/ts_ts.html">ts_ts</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -419,17 +493,17 @@ Include the six day-of-week contrast variables (monthly and quarterly flow serie
 <span>  <span class="fu"><a href="https://docs.ropensci.org/tsbox/reference/ts_long.html">ts_long</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://docs.ropensci.org/tsbox/reference/ts_ts.html">ts_ts</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section><section id="single-coef" class="level3" data-number="9.2.2"><h3 data-number="9.2.2" class="anchored" data-anchor-id="single-coef">
-<span class="header-section-number">9.2.2</span> Single coef</h3>
+</section><section id="single-coef" class="level3" data-number="9.5.2"><h3 data-number="9.5.2" class="anchored" data-anchor-id="single-coef">
+<span class="header-section-number">9.5.2</span> Single coef</h3>
 <div class="cell">
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span></span>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_td1coef</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span></span>
 <span>  <span class="va">AirPassengers</span>,</span>
 <span>  xreg <span class="op">=</span> <span class="va">td1nolpyear</span>,</span>
 <span>  regression.aictest <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  outlier <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  regression.usertype <span class="op">=</span> <span class="st">"td"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m1</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m_td1coef</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; seas(x = AirPassengers, xreg = td1nolpyear, regression.aictest = NULL, </span></span>
@@ -448,13 +522,13 @@ Include the six day-of-week contrast variables (monthly and quarterly flow serie
 <span><span class="co">#&gt; Box-Ljung (no autocorr.): 24.86   Shapiro (normality): 0.9805 *</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span></span>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_td1coef_built_in</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span></span>
 <span>  <span class="va">AirPassengers</span>,</span>
 <span>  regression.aictest <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  outlier <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  regression.variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"td1nolpyear"</span>, outlier <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m_td1coef_built_in</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; seas(x = AirPassengers, regression.aictest = NULL, outlier = NULL, </span></span>
@@ -472,17 +546,17 @@ Include the six day-of-week contrast variables (monthly and quarterly flow serie
 <span><span class="co">#&gt; AICc: 976.6, BIC: 987.7  QS (no seasonality in final):    0  </span></span>
 <span><span class="co">#&gt; Box-Ljung (no autocorr.): 24.86   Shapiro (normality): 0.9805 *</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section><section id="all-coefs" class="level3" data-number="9.2.3"><h3 data-number="9.2.3" class="anchored" data-anchor-id="all-coefs">
-<span class="header-section-number">9.2.3</span> All coefs</h3>
+</section><section id="all-coefs" class="level3" data-number="9.5.3"><h3 data-number="9.5.3" class="anchored" data-anchor-id="all-coefs">
+<span class="header-section-number">9.5.3</span> All coefs</h3>
 <div class="cell">
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span></span>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_td</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span></span>
 <span>  <span class="va">AirPassengers</span>,</span>
 <span>  xreg <span class="op">=</span> <span class="va">tdnolpyear</span>,</span>
 <span>  regression.aictest <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  outlier <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  regression.usertype <span class="op">=</span> <span class="st">"td"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m3</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m_td</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; seas(x = AirPassengers, xreg = tdnolpyear, regression.aictest = NULL, </span></span>
@@ -506,13 +580,13 @@ Include the six day-of-week contrast variables (monthly and quarterly flow serie
 <span><span class="co">#&gt; Box-Ljung (no autocorr.): 29.43   Shapiro (normality): 0.9781 *</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span></span>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_td_built_in</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span></span>
 <span>  <span class="va">AirPassengers</span>,</span>
 <span>  regression.aictest <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  outlier <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  regression.variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"tdnolpyear"</span>, outlier <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m4</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m_td_built_in</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; seas(x = AirPassengers, regression.aictest = NULL, outlier = NULL, </span></span>
