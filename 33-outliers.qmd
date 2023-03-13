@@ -127,6 +127,7 @@ m <- seas(
 )
 identify(m)
 ```
+<!--
 
 ## Additional tools to identify outliers
 
@@ -153,3 +154,5 @@ TODO (From ONS Manual)
 If the X-13 test and the graphs of the adjusted and non-adjusted series lead you to suspect a level shift or an outlier, then check which months/quarters it appears in.
 Question if there is any evidence for suspecting a level shift or outlier at this time point.
 If there is not a methodological, social or economic reason to explain the presence of the suspected level shift or outlier then do not adjust for it.
+
+-->
