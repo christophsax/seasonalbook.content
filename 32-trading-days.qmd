@@ -30,8 +30,7 @@ Contrary to the regression spec, the transform spec performs a 1:1 adjustment, w
 
 As with most adjustments, X-13 offers a built in automated adjustment that works well in most circumstances.
 We start the chapter by looking at the automated procedures.
-Sometimes, you want to rely on a user defined specification of trading days, a topic covered in section ....
-Finally, in section, ... we link the two sections by replicating the built-in regressors in R.
+Sometimes, you want to rely on a user defined specification of trading days, a topic covered @sec-user-defined-regressors. Finally, in @sec-replicate-x-13-trading-days-adjustment, we link the two sections by replicating the built-in regressors in R.
 
 ## Built-in trading day adjustment
 
@@ -69,17 +68,17 @@ summary(m_td)
 Note that the resulting AICc is higher (949.5) than for the one coefficient model (947.3).
 That is why the automated procedure has opted for the simpler model.
 
-## User defined regressors
+## User defined regressors {#sec-user-defined-regressors}
 
 'Trading day adjustment' removes the effect of the weekdays, and but does not include holidays, such as Christmas or Easter.
 These are handled separately (Easter) or dealt with by standard seasonal adjustment (Christmas).
 
 Sometimes, users may want to specify user defined trading day regressors, in order to incorporate country specific trading day patterns.
-In section, ..., we replicate the built-in regressors.
+In @sec-replicate-x-13-trading-days-adjustment, we replicate the built-in regressors.
 These regressors simply use the number of weekdays, and do not pay any reference to a country specific calendar.
 If you want to deviate from them, a good way is to start with the replicated values, and adjust from there.
 
-## Replicate X-13 trading days adjustment
+## Replicate X-13 trading days adjustment {#sec-replicate-x-13-trading-days-adjustment}
 
 Replication is possible.
 Adding the regressors to seasonal may be useful.

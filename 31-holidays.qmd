@@ -6,6 +6,8 @@
 source("_common.R")
 status("drafting", "2023-01-21", section = "Holidays")  # drafting, polishing, complete
 ```
+
+```{=html}
 <!--
 -   Why should we adjust for holiday effects
 
@@ -16,87 +18,102 @@ status("drafting", "2023-01-21", section = "Holidays")  # drafting, polishing, c
 -   Case Study: How to adjust for Ramadan (which is connected with some additional challenges)
 
  -->
-
-
+```
 ## Why should we adjust for holiday effects
 
+Easter is based on the lunar cycles of the Jewish calendar.
+As such, the Easter dates change from year to year.
+Depending on the year, Easter is either in March or April.
+In quarterly data, Easter fall either in the first or in the second quarter.
 
-## Easter Adjustments
+For the interpretation of many time series, this constitutes problem.
+Retails sales, for example, are usually reduced during the Easter holiday.
+If March values are compared between years, their interpretation depends on the exact day of Easter.
+If Easter falls into March, we would expect lower retail sales in this month.
+Conversely, if it falls into April we would expect April numbers to be lower.
 
+## Automated Adjustment
+
+By default, `seas()` calls the automated routines to detect Easter effects in a series.
+For example, the default call detects an Easter effect with a length of one in the air passengers time series:
+
+```{r}
+m <- seas(AirPassengers)
+summary(m)
+```
+
+X-13 tests various lengths of an Easter effect and picks the one model with the lowest AICc.
+`Easter[1`\] indicates that a length of one day has been chosen.
+I.e., the Easter holiday period is thought to start on Easter day and last for only one day.
+Alternatively, `Easter[8`\] starts at Easter day and lasts for the eight subsequent days.
+If we want to enforce an eight day Easter holiday, we can specify the call as follows:
+
+```{r}
+m_easter_8 <- seas(AirPassengers, regression.variables = "easter[8]")
+summary(m_easter_8)
+```
+
+Not surprisingly, the 8 day Easter model has a lower AICc than the one day model.
+This is why the one day model has been chosen in the beginning.
 
 ## Case Study: Chinese New Year
 
-The Lunar New Year is the most important holiday in China and many other
-Asian countries. Traditionally, the holiday starts on Lunar New Year’s
-Eve, and lasts to the Lantern Festival on the 15th day of the first month of
-the lunisolar calendar. The Chinese New Year is celebrated either in January
-or in February of the Gregorian calendar.
+The Lunar New Year is the most important holiday in China and many other Asian countries.
+Traditionally, the holiday starts on Lunar New Year's Eve, and lasts to the Lantern Festival on the 15th day of the first month of the lunisolar calendar.
+The Chinese New Year is celebrated either in January or in February of the Gregorian calendar.
 
-Because of its importance, Chinese New Year seriously distorts monthly time
-series, which are usually reported according to the Gregorian calendar.
-Unlike Easter, Chinese New Year does not affect quarterly time series, as it
-always falls in the first quarter.
+Because of its importance, Chinese New Year seriously distorts monthly time series, which are usually reported according to the Gregorian calendar.
+Unlike Easter, Chinese New Year does not affect quarterly time series, as it always falls in the first quarter.
 
-X-13-ARIMA-SEATS has a built-in adjustment procedure for Easter holiday, but
-not for Chinese New Year. However, all packages allow for the inclusion of
-user-defined variables, and the Chinese New Year can be modeled as such.
+X-13-ARIMA-SEATS has a built-in adjustment procedure for Easter holiday, but not for Chinese New Year.
+However, all packages allow for the inclusion of user-defined variables, and the Chinese New Year can be modeled as such.
 
 With the R package seasonal, generating and including such a series is easy.
-We will use it in the following to seasonally adjust and remove Chinese New
-Year effects from the nominal dollar value of imports to China. seasonal is
-an interface to X-13ARIMA-SEATS; for more information and installation
-details, see here.
+We will use it in the following to seasonally adjust and remove Chinese New Year effects from the nominal dollar value of imports to China.
+seasonal is an interface to X-13ARIMA-SEATS; for more information and installation details, see here.
 
 ### Imports of Goods to China
 
-Chinese imports are included as an example series in seasonal, both with and
-without the official seasonal adjustment.
+Chinese imports are included as an example series in seasonal, both with and without the official seasonal adjustment.
 
-````{r }
+```{r }
 library(tsbox)
 ts_plot(imp_cn)
-````
+```
 
-The series has a very different seasonal pattern before 2000, we focus on the
-later period. (Adjusting the whole series in one step is possible, but for
-good results one should manually model the seasonal break.)
+The series has a very different seasonal pattern before 2000, we focus on the later period.
+(Adjusting the whole series in one step is possible, but for good results one should manually model the seasonal break.)
 
-````{r }
+```{r }
 imp_cn_2000 <- ts_span(imp_cn, start = 2000)
-````
+```
 
 `ts_dygraphs()` works similar to `ts_plot()`, but allows for zooming:
 
-````{r }
+```{r }
 ts_dygraphs(imp_cn_2000)
-````
+```
 
-
-::: {.callout-note}
-
+::: callout-note
 ### How to read data from FRED into R
 
-{fredr} provides access to the
-[Federal Reserve of Economic Data](https://fred.stlouisfed.org)
-(FRED), provided by the Federal Reserve Bank of St. Louis. To use fredr and
-the FRED API in general, you must first obtain a FRED API key. Have a look
-at the [Documentation](https://cran.r-project.org/web/packages/fredr/vignettes/fredr.html)
-for details.
+{fredr} provides access to the [Federal Reserve of Economic Data](https://fred.stlouisfed.org) (FRED), provided by the Federal Reserve Bank of St. Louis.
+To use fredr and the FRED API in general, you must first obtain a FRED API key.
+Have a look at the [Documentation](https://cran.r-project.org/web/packages/fredr/vignettes/fredr.html) for details.
 
-The core function in this package is `fredr()`, which fetches observations
-for a FRED series.
+The core function in this package is `fredr()`, which fetches observations for a FRED series.
 
 We can use `purrr::map_dfr()` to download multiple series at once:
 
-````{r }
+```{r }
 #| eval = FALSE
 library(fredr)
 imp_cn_raw <- purrr::map_dfr(c("XTIMVA01CNM667S", "XTIMVA01CNM667N"), fredr)
-````
+```
 
 A bit of tidying:
 
-````{r }
+```{r }
 #| eval = FALSE
 imp_cn_tidy <-
   imp_cn_raw %>%
@@ -106,47 +123,44 @@ imp_cn_tidy <-
     XTIMVA01CNM667S = "sa",
     XTIMVA01CNM667N = "nsa"
   ))
-````
+```
 
 Use the tsbox package to convert the data frame into ts objects.
 
-````{r }
+```{r }
 #| eval = FALSE
 library(tsbox)
 imp_cn_sa <- ts_ts(ts_pick(imp_cn_tidy, "sa"))
 imp_cn <- ts_ts(ts_pick(imp_cn_tidy, "nsa"))
 
-````
+```
+
 Both time series are included in the book package.
 
-````{r }
+```{r }
 #| eval = FALSE
 library(seasonalbook)
 imp_cn_sa
 imp_cn
-````
-
-
+```
 :::
 
-seasonal includes the genhol() function, a R version of the equally named
-software utility by the U.S. Census Bureau. Using the dates of the Chinese
-New Year as an input, it produces a time series with the deviations from the
-monthly means. Here we are assuming that the holiday starts on New Year’s Eve
-and lasts for one week.
+seasonal includes the genhol() function, a R version of the equally named software utility by the U.S.
+Census Bureau.
+Using the dates of the Chinese New Year as an input, it produces a time series with the deviations from the monthly means.
+Here we are assuming that the holiday starts on New Year's Eve and lasts for one week.
 
-````{r }
+```{r }
 reg_cny <- genhol(cny, start = -1, end = 6, center = "calendar")
 tsbox::ts_dygraphs(reg_cny)
-````
+```
 
 ### Including user-defined regressors
 
-The time series `reg_cny` can be included in the main seasonal adjustment. The
-automated procedures of X-13ARIMA-SEATS can be applied to the imp series in
-the following way:
+The time series `reg_cny` can be included in the main seasonal adjustment.
+The automated procedures of X-13ARIMA-SEATS can be applied to the imp series in the following way:
 
-````{r }
+```{r }
 m1 <- seas(
   imp_cn,
   xreg = reg_cny,
@@ -155,27 +169,20 @@ m1 <- seas(
 )
 summary(m1)
 plot(m1)
-````
+```
 
-With `xreg`, arbitrary user-defined regressors can be included,
-regression.usertype = "holiday" ensures that the final series does not
-include the regression effect. We also have chosen X11 as the decomposition
-method.
+With `xreg`, arbitrary user-defined regressors can be included, regression.usertype = "holiday" ensures that the final series does not include the regression effect.
+We also have chosen X11 as the decomposition method.
 
-Unsurprisingly, the summary reveals a highly significant Chinese New Year
-effect. As the automatic model has been estimated on the logarithmic series,
-the coefficient of -0.17 indicates that New Year in 2023 will lower imports
-in January, by approximately 0.74 * 17 ~ 13% (compared to average January),
-and increase it by the same amount in February. The automatic procedure has
-also detected weekday effects and a level shift during the financial
-crisis.
+Unsurprisingly, the summary reveals a highly significant Chinese New Year effect.
+As the automatic model has been estimated on the logarithmic series, the coefficient of -0.17 indicates that New Year in 2023 will lower imports in January, by approximately 0.74 \* 17 \~ 13% (compared to average January), and increase it by the same amount in February.
+The automatic procedure has also detected weekday effects and a level shift during the financial crisis.
 
 ### Multiple regressors
 
-We can do even better by using more than one user-defined regressors, one for
-the pre-New-Year period and one for the post-New-Year period:
+We can do even better by using more than one user-defined regressors, one for the pre-New-Year period and one for the post-New-Year period:
 
-````{r }
+```{r }
 pre_cny <- genhol(cny, start = -6, end = -1, frequency = 12, center = "calendar")
 post_cny <- genhol(cny, start = 0, end = 6, frequency = 12, center = "calendar")
 m2 <- seas(
@@ -186,16 +193,14 @@ m2 <- seas(
 )
 summary(m2)
 plot(m2)
-````
+```
 
 ### Compare with official adjustments
 
-I haven't done any research on how the officially seasonally adjusted rates
-are computed, but they seem very close to a default call to `seas()`.
-Our models (both `m1`, but especially `m2`), does a much better job of
-adjusting to Chinese New Year.
+I haven't done any research on how the officially seasonally adjusted rates are computed, but they seem very close to a default call to `seas()`.
+Our models (both `m1`, but especially `m2`), does a much better job of adjusting to Chinese New Year.
 
-````{r }
+```{r }
 ts_dygraphs(
   ts_c(
     cny = ts_span(reg_cny * 1e11 + 1e11, start = 2000, end = 2024),
@@ -204,5 +209,4 @@ ts_dygraphs(
     final(m2)
   )
 )
-````
-
+```
