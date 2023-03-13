@@ -306,8 +306,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#level-shift" id="toc-level-shift" class="nav-link" data-scroll-target="#level-shift"><span class="toc-section-number">10.2</span>  Level Shift</a></li>
   <li><a href="#additive-outliers" id="toc-additive-outliers" class="nav-link" data-scroll-target="#additive-outliers"><span class="toc-section-number">10.3</span>  Additive Outliers</a></li>
   <li><a href="#manually-identifying-outliers" id="toc-manually-identifying-outliers" class="nav-link" data-scroll-target="#manually-identifying-outliers"><span class="toc-section-number">10.4</span>  Manually Identifying Outliers</a></li>
-  <li><a href="#additional-tools-to-identify-outliers" id="toc-additional-tools-to-identify-outliers" class="nav-link" data-scroll-target="#additional-tools-to-identify-outliers"><span class="toc-section-number">10.5</span>  Additional tools to identify outliers</a></li>
-  <li><a href="#confirming-the-reason-for-the-level-shifts-or-the-additive-outliers" id="toc-confirming-the-reason-for-the-level-shifts-or-the-additive-outliers" class="nav-link" data-scroll-target="#confirming-the-reason-for-the-level-shifts-or-the-additive-outliers"><span class="toc-section-number">10.6</span>  Confirming the reason for the level shifts or the additive outliers</a></li>
   </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/33-outliers.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
@@ -378,7 +376,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><img src="33-outliers_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="864"></p>
 </div>
 </div>
-<p>The default settings discovered a single, additive outlier. Using the <code>outlier.critical</code> argument, we can fine tune the detection prosses. With <code>outlier.critical = 3</code>, we set a lower bar for the detection of outliers. <code>outlier.critical</code> is the z-value of a particular value that is needed to be classified as an outlier. A value of three means that the z-value must be 3 or larger.</p>
+<p>The default settings discovered a single, additive outlier. By default, X-13 uses a formula that interpolates critical values for numbers of observations between 3 and 99 (Table 7.22 in the Manual). For standard time series, this results in a critical value around 4.</p>
+<p>Using the <code>outlier.critical</code> argument, we can fine tune the detection prosses. With <code>outlier.critical = 3</code>, we set a lower bar for the detection of outliers. <code>outlier.critical</code> is the z-value of a particular value that is needed to be classified as an outlier. A value of three means that the z-value must be 3 or larger.</p>
 <div class="cell">
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_high</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, outlier.critical <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m_high</span><span class="op">)</span></span>
@@ -409,7 +408,48 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>With <code>outlier.critical = 3</code>, we see additive outliers in January 1950, May 1951 and February 1954. In addition, we also see level shifts in June 1953 and April 1960. Note that all z-values are larger than 3.</p>
 <p>X-13 offers several ways to model outliers. In this chapter, we will focus on two most important types of effects that can occur in time series data: level shifts and additive outliers. By understanding these effects and how to address them, analysts can improve the quality of their analyses and draw more accurate conclusions from the data.</p>
-</section><section id="level-shift" class="level2" data-number="10.2"><h2 data-number="10.2" class="anchored" data-anchor-id="level-shift">
+<table class="table">
+<caption>Arguments to the `outlier` spec</caption>
+<colgroup>
+<col style="width: 7%">
+<col style="width: 61%">
+<col style="width: 31%">
+</colgroup>
+<thead><tr class="header">
+<th>Argument</th>
+<th>Description</th>
+<th>Default</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code>outlier.critical</code></td>
+<td>
+<p>Sets the value to which the absolute values of the outlier t-statistics are compared to detect outliers.</p>
+<p>If only one value is given for this argument, then this critical value is used for all types of outliers. If a list of up to three values is given, different values are used for additive outliers, level shift outliers and temporary change outliers.</p>
+</td>
+<td>Obtained by a modification of the asymptotic formula of Ljung (1993) that interpolates critical values for numbers of observations between 3 and 99.</td>
+</tr>
+<tr class="even">
+<td><code>outlier.method</code></td>
+<td>
+<p>Determines how the program successively adds detected outliers to the model. The choices are <code>"addone"</code> or <code>"addall"</code>.</p>
+<p><code>"addone"</code> calculates t-statistics for each type of outlier specified at all time points.</p>
+<p><code>"addall"</code> follows the same general steps as the addone method, except it adds to the model <em>all</em> outliers with absolute t-statistics exceeding the critical value.</p>
+</td>
+<td><code>"addone".</code></td>
+</tr>
+<tr class="odd">
+<td><code>outlier.span</code></td>
+<td>Specifies start and end dates of a span of the time series to be searched for outliers. The start and end dates of the span must both lie within the series.</td>
+<td>None.</td>
+</tr>
+<tr class="even">
+<td><code>outlier.types</code></td>
+<td>Specifies the types of outliers to detect. The choices are: <code>"ao"</code> (additive outliers), <code>"ls"</code> (level shifts), <code>"tc"</code> (temporary change), <code>"all"</code>: (detect all three of the above types simultaneously), and <code>"none"</code> (turn off outlier detection, but not t-statistics for temporary level shifts).</td>
+<td>The default is <code>c("ao", "ls")</code>.</td>
+</tr>
+</tbody>
+</table></section><section id="level-shift" class="level2" data-number="10.2"><h2 data-number="10.2" class="anchored" data-anchor-id="level-shift">
 <span class="header-section-number">10.2</span> Level Shift</h2>
 <p>The first outlier category we look at are level shifts. Level shifts refers to a sudden and sustained change in the underlying level of a time series. There can be various causes of level shifts in time series data, such as changes in concepts or definitions of the survey population, alterations in the method of data collection, shifts in economic behavior, changes in legislation, etc. Level shifts are a problem for seasonal adjustment because they will distort the estimation of the seasonal factors.</p>
 <p>Below is an example of a manually specified level shift:</p>
@@ -521,17 +561,36 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><img src="33-outliers_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="864"></p>
 </div>
 </div>
-</section><section id="additional-tools-to-identify-outliers" class="level2" data-number="10.5"><h2 data-number="10.5" class="anchored" data-anchor-id="additional-tools-to-identify-outliers">
-<span class="header-section-number">10.5</span> Additional tools to identify outliers</h2>
-<p>Identifying level shifts and additive outliers is not always as obvious as in the example above. The following tables may help to identify the level shifts and additive outliers</p>
-<p>TODO (From ONS Manual)</p>
-<ul>
-<li><p>Look at Table E5 and E6 in the output? These tables show the month- on-month (or quarter-on-quarter) changes in the original and seasonally adjusted estimates. In fact, a level shift will appear as a sudden large increase which is not followed by a corresponding decrease (or vice versa) in Table E5 and E6. The adjustment for the level shift effectively attempts to remove this sudden change in the level.</p></li>
-<li><p>Additive outliers can be detected by analyzing Table C17 and D13 in addition to Table E5 and E6 in the output. In fact, an additive outlier will appear as one or more zeros in the period of the outlier in Table C17, which gives the final weights for the irregular component, and as a residual pattern of the irregular component presented in Table D13. In addition to inspecting these four output tables, M1, M2 and M3 statistics should be checked. M1, M2 and M3 each measure the level of the irregular component in the series compared to the trend and the seasonal components. If these fail it may indicate that outliers need to be replaced as temporary prior adjustments.</p></li>
-</ul></section><section id="confirming-the-reason-for-the-level-shifts-or-the-additive-outliers" class="level2" data-number="10.6"><h2 data-number="10.6" class="anchored" data-anchor-id="confirming-the-reason-for-the-level-shifts-or-the-additive-outliers">
-<span class="header-section-number">10.6</span> Confirming the reason for the level shifts or the additive outliers</h2>
-<p>TODO (From ONS Manual)</p>
-<p>If the X-13 test and the graphs of the adjusted and non-adjusted series lead you to suspect a level shift or an outlier, then check which months/quarters it appears in. Question if there is any evidence for suspecting a level shift or outlier at this time point. If there is not a methodological, social or economic reason to explain the presence of the suspected level shift or outlier then do not adjust for it.</p>
+
+<!--
+
+## Additional tools to identify outliers
+
+Identifying level shifts and additive outliers is not always as obvious as in the example above.
+The following tables may help to identify the level shifts and additive outliers
+
+TODO (From ONS Manual)
+
+-   Look at Table E5 and E6 in the output?
+    These tables show the month- on-month (or quarter-on-quarter) changes in the original and seasonally adjusted estimates.
+    In fact, a level shift will appear as a sudden large increase which is not followed by a corresponding decrease (or vice versa) in Table E5 and E6.
+    The adjustment for the level shift effectively attempts to remove this sudden change in the level.
+
+-   Additive outliers can be detected by analyzing Table C17 and D13 in addition to Table E5 and E6 in the output.
+    In fact, an additive outlier will appear as one or more zeros in the period of the outlier in Table C17, which gives the final weights for the irregular component, and as a residual pattern of the irregular component presented in Table D13.
+    In addition to inspecting these four output tables, M1, M2 and M3 statistics should be checked.
+    M1, M2 and M3 each measure the level of the irregular component in the series compared to the trend and the seasonal components.
+    If these fail it may indicate that outliers need to be replaced as temporary prior adjustments.
+
+## Confirming the reason for the level shifts or the additive outliers
+
+TODO (From ONS Manual)
+
+If the X-13 test and the graphs of the adjusted and non-adjusted series lead you to suspect a level shift or an outlier, then check which months/quarters it appears in.
+Question if there is any evidence for suspecting a level shift or outlier at this time point.
+If there is not a methodological, social or economic reason to explain the presence of the suspected level shift or outlier then do not adjust for it.
+
+-->
 
 
 </section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
