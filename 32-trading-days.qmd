@@ -1,4 +1,4 @@
-## Trading days {#sec-trading-days}
+# Trading days {#sec-trading-days}
 
 ```{r}
 #| results: "asis"
@@ -7,6 +7,8 @@ source("_common.R")
 status("drafting")  # drafting, polishing, complete
 ```
 
+```{=html}
+<!--
 -   Why should we adjust for trading day effects
 
 -   Seven or two coefficient trading day
@@ -15,12 +17,72 @@ status("drafting")  # drafting, polishing, complete
 
 -   Case Study: Movie tickets (or another series with very clear trading day effects)
 
+ -->
+```
+## Why should we adjust for trading day effects
 
+Months and quarters may differ in their overall length, or, more importantly may differ in the number of weekdays.
+Similar to the holiday adjustments, X-13 offers various tools to deal with differences in the number of days or weekdays.
+
+Trading day effects, as weekday effects are called in X-13, constitute a predictable movement in a time series, and therefore should not be part of the seasonally adjusted series.
+Trading day effects are usually removed by the regression spec, although some adjustments can be also done by the transform spec.
+Contrary to the regression spec, the transform spec performs a 1:1 adjustment, while the regression spec estimates the size of the effect from the data.
+
+As with most adjustments, X-13 offers a built in automated adjustment that works well in most circumstances.
+We start the chapter by looking at the automated procedures.
+Sometimes, you want to rely on a user defined specification of trading days, a topic covered in section ....
+Finally, in section, ... we link the two sections by replicating the built-in regressors in R.
+
+## Built-in trading day adjustment
+
+In a default run of `seas()`, X-13 uses a familiar AICc test to decide between a number of potential trading day adjustments.
+Form the various models, it uses the one with the lowest AICc as the best model.
+By default, the following models are evaluated:
+
+-   `td1coef`: A single coefficient trading day adjustment
+
+-   `td`: A six day coefficients trading day adjustment
+
+The first model distinguishes between weekday and weekends, while the second model treats every day as it's own.
+The first model is appropriate for many economic time series, where variables behave differently during the week than during the weekend.
+In some series, there may be large differences between weekdays, or even between Saturday and Sunday.
+Retail sales, for example, usually peak towards the end of the week and are weak on Sunday.
+
+Using the built-in trading day adjustment in X-13 is straightforward:
+
+```{r}
+m <- seas(AirPassengers)
+summary(m)
+```
+
+The procedure has opted for a one coefficient model.
+During weekdays, the number of air passengers was lower during the period of the example series, by about 0.3% (note we are looking at a logarithmic, multiplicative model).
+
+We can manipulate the automated model.
+To enforce a six coefficient model, `regression.variables` can be specified as `"td"` (as opposed to `"td1coef")`:
+
+```{r}
+m_td <- seas(AirPassengers, regression.variables = "td")
+summary(m_td)
+```
+
+Note that the resulting AICc is higher (949.5) than for the one coefficient model (947.3).
+That is why the automated procedure has opted for the simpler model.
+
+## User defined regressors
+
+'Trading day adjustment' removes the effect of the weekdays, and but does not include holidays, such as Christmas or Easter.
+These are handled separately (Easter) or dealt with by standard seasonal adjustment (Christmas).
+
+Sometimes, users may want to specify user defined trading day regressors, in order to incorporate country specific trading day patterns.
+In section, ..., we replicate the built-in regressors.
+These regressors simply use the number of weekdays, and do not pay any reference to a country specific calendar.
+If you want to deviate from them, a good way is to start with the replicated values, and adjust from there.
 
 ## Replicate X-13 trading days adjustment
 
-Replication is possible. Adding the regressors to seasonal may be
-useful.
+Replication is possible.
+Adding the regressors to seasonal may be useful.
 
 ```{r}
 suppressPackageStartupMessages(library(tidyverse))
@@ -46,14 +108,13 @@ first_of_month <- function(x) {
 ```
 
 td1nolpyear
-: Include the weekday-weekend contrast variable (monthly and quarterly
-flow eries only): (no. of weekdays) −(5/2) (no. of Saturdays and
-Sundays).
+
+:   Include the weekday-weekend contrast variable (monthly and quarterly flow eries only): (no. of weekdays) −(5/2) (no. of Saturdays and Sundays).
 
 tdnolpyear
-: Include the six day-of-week contrast variables (monthly and quarterly
-flow series only): (no. of Mondays) − (no. of Sundays), . . . , (no. of
-Saturdays) − (no. of Sundays).
+
+:   Include the six day-of-week contrast variables (monthly and quarterly flow series only): (no. of Mondays) − (no. of Sundays), .
+    . . , (no. of Saturdays) − (no. of Sundays).
 
 ```{r}
 td_m_tbl <-
@@ -72,10 +133,8 @@ td_m_tbl <-
 td_m_tbl
 ```
 
-‘Trading day adjustment’ removes the effect of the weekdays, and but
-does not include holidays, such as Christmas or Easter. These are
-handled separately (Easter) or dealt with by standard seasonal
-adjustment (Christmas).
+'Trading day adjustment' removes the effect of the weekdays, and but does not include holidays, such as Christmas or Easter.
+These are handled separately (Easter) or dealt with by standard seasonal adjustment (Christmas).
 
 ```{r}
 td1nolpyear <-
@@ -93,45 +152,45 @@ tdnolpyear <-
 ### Single coef
 
 ```{r}
-m1 <- seas(
+m_td1coef <- seas(
   AirPassengers,
   xreg = td1nolpyear,
   regression.aictest = NULL,
   outlier = NULL,
   regression.usertype = "td"
 )
-summary(m1)
+summary(m_td1coef)
 ```
 
 ```{r}
-m2 <- seas(
+m_td1coef_built_in <- seas(
   AirPassengers,
   regression.aictest = NULL,
   outlier = NULL,
   regression.variables = c("td1nolpyear", outlier = NULL)
 )
-summary(m2)
+summary(m_td1coef_built_in)
 ```
 
 ### All coefs
 
 ```{r}
-m3 <- seas(
+m_td <- seas(
   AirPassengers,
   xreg = tdnolpyear,
   regression.aictest = NULL,
   outlier = NULL,
   regression.usertype = "td"
 )
-summary(m3)
+summary(m_td)
 ```
 
 ```{r}
-m4 <- seas(
+m_td_built_in <- seas(
   AirPassengers,
   regression.aictest = NULL,
   outlier = NULL,
   regression.variables = c("tdnolpyear", outlier = NULL)
 )
-summary(m4)
+summary(m_td_built_in)
 ```
