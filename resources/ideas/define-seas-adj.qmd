@@ -1,0 +1,190 @@
+---
+title: "Defining Seasonal Adjustment"
+---
+
+I have an intuitive idea of how I would define seasonal adjustment.
+But I never read it that way, so I am uncertain if anyone agrees with me.
+Let's try to write it down and get some clarity.
+
+## A Definition of Seasonal Adjustment
+
+### Strong formulation (forecast only)
+
+$$
+E(Y_{1...t...T}|Y_{1,...t-1-STW}, C_{1...t...T})=S_t+T_t
+$$
+
+What I try to say: The trend and the seasonal component at a certain point in time should be equal to the expected value of a time series after a certain "short-term window", which could be a year or so.
+
+So, $S_t+T_t$ is the best prediction of a time series that uses all available information on the calendar$C_{1...t...T}$.
+
+The role of the "short-term window": The very recent short short-term developments of a time series should not be used. If we are in a crisis, we expect the next day to be low again, but this should not be part of the seasonal component. No idea how to specify, but "one year", seems to be a starting point.
+
+
+### Weak formulation (forecast and backcast)
+
+A weaker formulation may include not only past but also future values of $Y$:
+
+$$
+E(Y_{1...t...T}|Y_{1,...t-1-STW,t+1+STW,...T}, C_{1...t...T})=S_t+T_t
+$$
+Crucially, the model is not allowed to use the concurrent information on $Y$ (plus / minus the "short-term window" specified above).
+
+This is probably close to our current understanding of a good seasonal adjustment. Should this be the main definition?
+
+
+### Trend-Seasonal decomposition
+
+In the example above, we estimate the TS component. To do seasonal adjustment, we need them separated (since $SA = Y - S$).
+
+I have no idea how to do this best, but I suspect that many methods could do, and the choice of the method wouldn't affect the results too much. But it's an unresolved topic.
+
+
+## Why is the definition relevant?
+
+Some proper SEATS decomposition are contradicting it, but I never saw a proper argument against these. For example, if you have a very narrow filter (let's say 1x1), the above definition does not allow this.
+
+
+## Why is the definition useful?
+
+- We can use every forecasting/backcasting tool to compute $E()$.
+- We can use RMSE etc. to evaluate various forecasting/backcasting tools objectively
+
+
+
+
+## AirPassengers Example
+
+Following the strong (forecast only) formulation, using `forecast::forecast()` to produce a forecast.
+
+
+```{r}
+
+ap <- AirPassengers
+
+library(tsbox)
+library(tidyverse)
+library(forecast)
+library(seasonal)
+
+train_dates <-
+  ts_tbl(ap) |>
+  dplyr::filter(time >= "1951-01-01")
+
+# parallelization
+library(furrr)
+library(purrr)
+plan(multisession, workers = availableCores())
+
+train_samples <- future_map(setNames(train_dates$time, train_dates$time), \(x) ts_span(ap, end = x))
+fcts <- future_map(train_samples, \(x) predict(forecast::forecast(log(x), h = 72))$mean)
+
+
+ts_component <-
+  fcts |>
+  lapply(ts_tbl) |>
+  bind_rows(.id = "ref_period") |>
+  summarize(.by = time, value = mean(value))
+
+ts_plot(ts_c(exp(ts_ts(ts_component)), AirPassengers))
+
+```
+
+#### Compare with X-13
+
+
+```{r}
+m <- seas(AirPassengers)
+ts_plot(exp(ts_ts(ts_component)), trend(m) * seasonal(m), AirPassengers)
+
+```
+
+Not sure what it means, but the TS component from X-13 is much closer to the actual series. In other words, the $I$ component is much smaller.
+
+Using backcasts as well would probably reduce the $I$ component as well.
+
+Ultimate check would be: which one has lower RMSE in the test but not train window. TODO.
+
+
+### Example 2: Daily adjustment
+
+If we ever manage to structure the things above to get something paper-like, this could be an example that demonstrates the above has some real practical benefit.
+
+The following is not worked out, but I think the forecast is so good that we can produce an adjusted series that has some nice qualities.
+
+
+```{r}
+stopifnot(packageVersion("seasonalbook") >= "0.0.1")
+library(seasonalbook)  # contains casualties example
+ts_dygraphs(casualties)
+
+
+
+library(prophet)
+library(modeltime)
+library(tidymodels)
+
+casualties_train <- ts_span(casualties, end = "2015-12-31")
+casualties_test <- ts_span(casualties, start = "2016-01-01")
+
+# basic prophet, to compare to
+model_fit_prophet <-
+  prophet_reg(seasonality_daily = FALSE, seasonality_weekly = TRUE) %>%
+  set_engine(engine = "prophet") %>%
+  fit(value ~ time, data = casualties_train)
+
+
+# XGBoost
+model_boosted <-
+  prophet_boost(seasonality_daily = FALSE, seasonality_weekly = TRUE) %>%
+  set_engine(engine = "prophet_xgboost")
+
+recipe_spec <-
+  recipes::recipe(value ~ time, data = casualties_train) %>%
+  timetk::step_timeseries_signature(time)
+
+
+model_fit_prophet_boosted_with_features <-
+  workflows::workflow() |>
+  workflows::add_model(model_boosted) |>
+  workflows::add_recipe(recipe_spec) %>%
+  fit(casualties_train)
+
+
+# Compare both models
+models_tbl <- modeltime_table(
+  model_fit_prophet,
+  model_fit_prophet_boosted_with_features
+)
+
+#' ## Calibrate the model
+
+calibration_tbl <-
+  models_tbl %>%
+  modeltime_calibrate(new_data = casualties_test)
+
+
+#' ## Evaluation
+#'
+#'
+#' ### Accuracy measures
+
+calibration_tbl %>%
+    modeltime_accuracy()
+
+#' ### Visualizing out-of-sample forecasts
+
+models_tbl %>%
+  modeltime_forecast(
+      new_data    = casualties_test,
+      actual_data = casualties
+  ) %>%
+  select(.model_desc, .key, time = .index, value = .value) |>
+  ts_dygraphs()
+```
+
+What am I trying to say here? The out-of sample forecast of prophet + XGBoost is excellent (I had a series with transaction data where it was even better). Having a good TS component estimation should allow us to do a good seasonal adjustment.
+
+
+
+
