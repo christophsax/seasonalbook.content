@@ -7,7 +7,7 @@ source("_common.R")
 status("polishing", "2023-03-24", section = "Holidays")  # drafting, polishing, complete
 ```
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, include = FALSE}
 library(tidyverse, quietly = TRUE)
 library(tsbox, quietly = TRUE)
 ```
@@ -66,6 +66,9 @@ Conversely, if it falls into April we would expect April numbers to be lower.
 | `qddate-date`     | Quadratic ramp effect that begins and ends on the given dates, e.g., `"qd1998.may-2000.aug"`. The rate of change during the ramp for this regression variable is decreasing in magnitude. More than one quadratic ramp effect may be specified. All dates of the ramps must occur within the series. Quadratic ramps can overlap other ramps, TLs, AOs, and level shifts.                                                                                                                                                                                                                                    |
 | `qidate-date`     | Quadratic ramp effect that begins and ends on the given dates, e.g., `"qi2010.apr-2011.oct"`. The rate of change during the ramp for this regression variable is increasing in magnitude. More than one quadratic ramp effect may be specified. All dates of the ramps must occur within the series. Quadratic ramps can overlap other ramps, TLs, AOs, and level shifts.                                                                                                                                                                                                                                    |
 | `tldate-date`     | Temporary level change effect which begins and ends on the given dates, e.g., `"tl1983.jul-1984.nov"`. More than one temporary level shift effect may be specified. All dates of the temporary level shift regressor must occur within the series.                                                                                                                                                                                                                                                                                                                                                           |
+: Possible values for `regression.variables` {#tbl-regression-arguments tbl-colwidths="[20,80]"}
+
+
 
 ## Automated Adjustment
 
@@ -94,6 +97,40 @@ This is why the one day model has been chosen in the beginning.
 Including holiday effects can have a dramatic effect on a final seasonal adjustment.
 Consider the monthly retail sales from Hobby, toy, and game stores.
 The data can be found at the [US Census Time Series repository](https://www.census.gov/econ/currentdata/?programCode=MARTS&startYear=1992&endYear=2023&categories[]=44X72&dataType=SM&geoLevel=US&adjusted=1&notAdjusted=1&errorData=0).
+
+
+::: callout-note
+### How to read data from CENSUS into R
+
+```{r }
+#| eval = FALSE
+get_census_time_series <- function(url) {
+  tf <- tempfile(fileext = ".txt")
+  download.file(census_url, tf)
+  ans <- readr::read_csv(tf, skip = 6, col_types = cols(
+    Period = col_character(),
+    Value = col_double()
+  ))
+
+  ans |>
+    mutate(
+      month.abb = gsub("\\-.+$", "", Period),
+      year = gsub("^.+\\-", "", Period)
+    ) |>
+    left_join(tibble(month.abb, month = seq(month.abb)), by = join_by(month.abb)) |>
+    mutate(time = as.Date(paste(year, month, 1, sep = "-"))) |>
+    select(time, value = Value) |>
+    filter(!is.na(value)) |>
+    tsbox::ts_ts()
+}
+
+census_url <- "https://www.census.gov/econ_export/?format=csv&adjusted=true&notAdjusted=false&errorData=false&mode=report&default=&errormode=Dep&charttype=&chartmode=&chartadjn=&submit=GET+DATA&program=MARTS&startYear=1992&endYear=2023&categories%5B0%5D=44X72&dataType=SM&geoLevel=US"
+
+get_census_time_series(census_url)
+```
+:::
+
+
 
 ```{r, echo=FALSE}
 hobby_toy_game <- 
