@@ -19,10 +19,10 @@ Like X-11, SEATS uses a forecast extended series, in order to obtain unbiased re
 Unlike X-11, however, SEATS filters are derived from the ARIMA model of the time series.
 While X-11 filters are predefined and fixed, the SEATS filters are different for each ARIMA model.
 
-While X-11 offers a finite set of filters (in fact, there are seven seasonal filters available), SEATS offers an infinte set of filters.
-Overall, they cover a broader set of possilbe filter lengths, which makes SEATS a more flexilble option than X-11.
+While X-11 offers a finite set of filters (in fact, there are seven seasonal filters available), SEATS offers an infinite set of filters.
+Overall, they cover a broader set of possible filter lengths, which makes SEATS a more flexible option than X-11.
 **The available set filter lengths is the most crucial difference between X-11 and SEATS**.
-At the same time, the additional flexibility may lead at times to filters that are undedesirable.
+At the same time, the additional flexibility may lead at times to filters that are undesirable.
 As will be shown later on, SEATS sometimes choose a filter that is too narrow, and produces an overly volatile seasonal component.
 
 ::: callout-note
@@ -41,15 +41,11 @@ As will be shown later on, SEATS sometimes choose a filter that is too narrow, a
 -   requires more statistical machinery
 :::
 
-
-
 ::: callout-note
 ## TODO
 
 Plots of X-11 filters vs SEATS filters
 :::
-
-
 
 Given a certain ARIMA model (such as the "Airline" (0 1 1)(0 1 1) model which is appropriate for the description of the `AirPassengers` time series), SEATS decomposes the model into separate models for the trend, the seasonal and the irregular component.
 This is done by the *Canonical Decomposition* and will be discussed in @sec-canonical-decomposition.
@@ -103,7 +99,7 @@ From a SEATS perspective, this makes sense: Given an ARIMA model with a very wea
 From a practical perspective, the resulting seasonal component is undesirable.
 It is too volatile, essentially catching much of the irregular component and making the resulting seasonally adjusted series too smooth.
 
-Additionally, the filters that are 
+Additionally, the filters that are
 
 ## Transitory component
 
@@ -263,10 +259,10 @@ ARIMA model-based seasonal adjustment does not handle this situation very well a
 
 ### SEATS filters from `seas` output
 
-The trend filter and seasonal adjustment filter can be extracted from the output of a `seasonal` run. 
-This is done via the **save** argument in the seats spec. 
+The trend filter and seasonal adjustment filter can be extracted from the output of a `seasonal` run.
+This is done via the **save** argument in the seats spec.
 In the following example the symmetric trend filter is saved and then exported.
-Note the `finite='yes'` argument must be specified to save filter weights. 
+Note the `finite='yes'` argument must be specified to save filter weights.
 
 ```{r}
 m <- seas(AirPassengers, 
@@ -284,11 +280,12 @@ plot(-72:71, w[,2], type = "l",
 ```
 
 The default SEATS output tables do not allow users to save the seasonal filter, only the seasonal adjustment and trend filters.
-Some additional work can be done to calculate the seasonal filters via the canonical decomposition implied models and the Wiener-Kolmogorov algorithm. 
+Some additional work can be done to calculate the seasonal filters via the canonical decomposition implied models and the Wiener-Kolmogorov algorithm.
 The code provided here is a bit complicated and will be improved/modularized in subsequent version of this textbook.
-It involves outputting the `mdc` table and the using the `grep` functions to extract salient features for each model component. 
+It involves outputting the `mdc` table and the using the `grep` functions to extract salient features for each model component.
 The naming conventions for the `mdc` table follow the Wald decomposition notation where moving average components appear in the numerator and differencing and/or autoregressive components appear in the denominator.
-The following assumes there are no AR components and anything appearing in the denominator is attributed to the differencing operator. 
+The following assumes there are no AR components and anything appearing in the denominator is attributed to the differencing operator.
+
 ```{r}
 m <- seas(AirPassengers, 
           outlier = NULL, 
@@ -328,22 +325,28 @@ sadjDiff <- decomp.m[grep('^saden', decomp.m$V1),'V2']
 ```
 
 To further understand these components the implied trend model is the following:
+
 ```{r}
 macoefs
 ```
-which tells us the trend is an MA(2) with coefficients $\theta_1 = 0.04751813$ and $\theta_2 = -0.95248187$. 
+
+which tells us the trend is an MA(2) with coefficients $\theta_1 = 0.04751813$ and $\theta_2 = -0.95248187$.
 The variance of the innovations, $\sigma$ is
+
 ```{r}
 trend.var
 ```
-and the differencing is 
+
+and the differencing is
+
 ```{r}
 trendDiff
 ```
+
 which is second differencing, i.e. $\delta(B) = 1 - 2B + B^2 = (1-B)^2$.
 
-We can use these component models to apply the WK algorithm and get the seasonal filter weights. 
-The details of this complex operation are omitted here but a plot of the seasonal filter weights is given in Figure ???. 
+We can use these component models to apply the WK algorithm and get the seasonal filter weights.
+The details of this complex operation are omitted here but a plot of the seasonal filter weights is given in Figure ???.
 
 ```{r, eval=TRUE, echo=FALSE}
 fw <- c(0.00956552692576638, -0.00274727619388826, -0.00188080728374881, 
@@ -418,7 +421,7 @@ legend('topright', legend = c('SEATS', 'X11 3x5', 'X11 3x9'), col = c(1, 3, 2), 
 
 ```
 
-### Reasons for using SEATS or X11 (Work in progress)
+### Reasons for using SEATS or X11 
 
 ::: callout-note
 ## TODO
@@ -426,19 +429,30 @@ legend('topright', legend = c('SEATS', 'X11 3x5', 'X11 3x9'), col = c(1, 3, 2), 
 Add Table with pros and cons
 :::
 
+First off, there does not exist a simple flow chat that tells each individual users whether they should use SEATS or X-11. 
+For most well-behaved series both methods will produce suitable seasonal adjustments that will work for the majority of use cases. 
+The ultimate decision between the two comes down to a few questions.
 
-
-
-
+1. What will you be doing with these seasonal adjustments?
+1. How often is your data revised?
+1. Does your agency have a policy to freeze data/seasonal adjustment revisions after a fixed period of time?
+1. How much time can be devoted to development of initial spec files?
+1. How much time can be devoted to maintenance of spec files?
+1. What is your maintenance schedule? (yearly, monthly, etc)
+1. What are the consequences of a poor adjustment?
+1. What are the consequences of large revisions?
+1. Will your agency be publishing original series, just SA, trends, seasonal factors?
+1. Is there an emphasis on deep methodological understanding of the procedures?
+1. Is there an emphasis on training users of released data to have a methodological understanding of the SA process?
 
 -   When applied properly (good ARIMA model, filters are not too narrow), it produces a seasonal component that is more stable.
     This leads to less revisions in the resulting series.
 
 -   When applied improperly (bad ARIMA model, narrow filters), it produces an unpredictable seasonal component and an overly smooth seasonally adjusted series.
 
--   X-11 is more 'robust': If applied without additional checks, it is probably the better option.
+-   X-11 is more 'robust': If applied without additional checks.
+    If this is desirable it may be a better option.
 
--   If you check SEATS models carefully, it may produce a more stable adjstument.
+-   If you check SEATS models carefully, it may produce a more stable adjustment.
 
-To sum op, wheter you should use SEATS or X11 also depends on how much work you are willing to invest in a series.
-SEATS needs more love, etc.
+To sum up, whether you should use SEATS or X11 also depends on how much work you are willing to invest in a series.
