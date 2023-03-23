@@ -172,7 +172,7 @@ Chinese imports are included as an example series in seasonal, both with and wit
 
 ```{r }
 library(tsbox)
-imp_cn <- imp
+stopifnot(packageVersion("seasonalbook") >= "0.0.2")
 ts_plot(imp_cn)
 ```
 
