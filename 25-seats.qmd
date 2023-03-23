@@ -103,6 +103,8 @@ From a SEATS perspective, this makes sense: Given an ARIMA model with a very wea
 From a practical perspective, the resulting seasonal component is undesirable.
 It is too volatile, essentially catching much of the irregular component and making the resulting seasonally adjusted series too smooth.
 
+Additionally, the filters that are 
+
 ## Transitory component
 
 Sometimes SEATS includes a transitory component in its decomposition:
@@ -258,6 +260,163 @@ For some series, the variance can be different based on the month or season.
 For example, U.S.
 Housing Starts is more variable in the winter months than in the summer due to the differences in warm and cold winters.
 ARIMA model-based seasonal adjustment does not handle this situation very well and assumes a constant variance and the SEATS adjustment wont compensate for this.
+
+### SEATS filters from `seas` output
+
+The trend filter and seasonal adjustment filter can be extracted from the output of a `seasonal` run. 
+This is done via the **save** argument in the seats spec. 
+In the following example the symmetric trend filter is saved and then exported.
+Note the `finite='yes'` argument must be specified to save filter weights. 
+
+```{r}
+m <- seas(AirPassengers, 
+          seats.finite = 'yes',
+          seats.save   = 'ftf', # symmetric finite trend filter
+          out          = TRUE)
+ftf_file <- file.path(m$wdir, 'iofile.ftf')
+# reads in filter weights from ftf_file
+w <- read.delim(textConnection(readLines(ftf_file)[-2]),
+                header = TRUE, stringsAsFactors = FALSE)
+plot(-72:71, w[,2], type = "l", 
+     xlab = "", 
+     ylab = "weights", 
+     main = "SEATS trend filter")
+```
+
+The default SEATS output tables do not allow users to save the seasonal filter, only the seasonal adjustment and trend filters.
+Some additional work can be done to calculate the seasonal filters via the canonical decomposition implied models and the Wiener-Kolmogorov algorithm. 
+The code provided here is a bit complicated and will be improved/modularized in subsequent version of this textbook.
+It involves outputting the `mdc` table and the using the `grep` functions to extract salient features for each model component. 
+The naming conventions for the `mdc` table follow the Wald decomposition notation where moving average components appear in the numerator and differencing and/or autoregressive components appear in the denominator.
+The following assumes there are no AR components and anything appearing in the denominator is attributed to the differencing operator. 
+```{r}
+m <- seas(AirPassengers, 
+          outlier = NULL, 
+          regression.aictest = NULL,
+          arima.model = '(0 1 1)(0 1 1)',
+          seats.save = 'mdc', 
+          out = TRUE)
+
+summary(m)
+
+decomp.m <- read.delim(file.path(m$wdir, 'iofile.mdc'), sep = ':',
+                       stringsAsFactors = FALSE, header = FALSE)
+print(decomp.m)
+
+# trend-cycle model
+macoefs <- decomp.m[grep('^tcnum', decomp.m$V1),'V2'][-1]
+trend.var <- decomp.m[decomp.m$V1 == 'tcvar','V2']
+trendDiff <- decomp.m[grep('^tcden', decomp.m$V1),'V2']
+
+# seasonal model
+seasonal.macoefs <- decomp.m[grep('^snum', decomp.m$V1),'V2'][-1]
+seasonal.var <- decomp.m[decomp.m$V1 == 'svar','V2']
+seasonalDiff <- decomp.m[grep('^sden', decomp.m$V1),'V2']
+
+# irregular variance
+irr.var <- decomp.m[decomp.m$V1 == 'irrvar','V2']
+
+# transitory model (usually not needed)
+trans.macoefs <- decomp.m[grep('^trnum', decomp.m$V1),'V2'][-1]
+trans.var <- decomp.m[decomp.m$V1 == 'trvar','V2']
+transDiff <- decomp.m[grep('^trden', decomp.m$V1),'V2']
+
+# seasonally adjusted model
+sadj.macoefs <- decomp.m[grep('^sanum', decomp.m$V1),'V2'][-1]
+sadj.var <- decomp.m[decomp.m$V1 == 'savar','V2']
+sadjDiff <- decomp.m[grep('^saden', decomp.m$V1),'V2']
+```
+
+To further understand these components the implied trend model is the following:
+```{r}
+macoefs
+```
+which tells us the trend is an MA(2) with coefficients $\theta_1 = 0.04751813$ and $\theta_2 = -0.95248187$. 
+The variance of the innovations, $\sigma$ is
+```{r}
+trend.var
+```
+and the differencing is 
+```{r}
+trendDiff
+```
+which is second differencing, i.e. $\delta(B) = 1 - 2B + B^2 = (1-B)^2$.
+
+We can use these component models to apply the WK algorithm and get the seasonal filter weights. 
+The details of this complex operation are omitted here but a plot of the seasonal filter weights is given in Figure ???. 
+
+```{r, eval=TRUE, echo=FALSE}
+fw <- c(0.00956552692576638, -0.00274727619388826, -0.00188080728374881, 
+-0.00157641397678636, -0.00149801928067724, -0.00151081133797857, 
+-0.00156118547095051, -0.00162900607708162, -0.0017096746540415, 
+-0.00181003459214481, -0.00195446558853261, -0.00220659523541729, 
+0.019229165863672, -0.0011872897724425, -0.00152782360394282, 
+-0.00172383721349435, -0.00186198724713144, -0.001977399429168, 
+-0.0020849500680648, -0.00219251431918478, -0.00230797944438408, 
+-0.00244626891662387, -0.00264263262430528, -0.00298403900836074, 
+0.0293780531621944, -0.00257399457527579, -0.00272918779570106, 
+-0.00288701341719907, -0.00304622872422657, -0.00320682861151727, 
+-0.00337004100935546, -0.0035394204590024, -0.00372401360975988, 
+-0.00394641582694833, -0.00426289366955524, -0.00481349361513796, 
+0.0498812120016985, -0.00486795626363904, -0.00489248040543202, 
+-0.00506773338978908, -0.0053041255594562, -0.00556651532555663, 
+-0.00584291348445426, -0.00613380614622446, -0.00645258762044093, 
+-0.00683748886470009, -0.00738562438897464, -0.00833947848864793, 
+0.0879651536698458, -0.00887764371836037, -0.00878014235384082, 
+-0.00903459105136617, -0.00943147699490281, -0.00988813615150383, 
+-0.0103751360726832, -0.0108900645492654, -0.0114553814064586, 
+-0.0121384202964276, -0.0131113533044853, -0.014804520360688, 
+0.157053218249434, -0.0160149379363951, -0.0157590434545534, 
+-0.0161773841902343, -0.0168622414274719, -0.0176432451043688, 
+-0.0184356492983448, -0.0191648608671602, -0.0197000099546059, 
+-0.019737402540734, -0.018530063067005, -0.0142225084534422, 
+0.211318774793622, -0.0140864598336031, -0.0184754535208136, 
+-0.0197155990392415, -0.0196915951908584, -0.0191623409966496, 
+-0.0184367802274008, -0.0176490339921908, -0.0168778436208376, 
+-0.0162166943646363, -0.0158570696439896, -0.0162589782571106, 
+0.157334041476404, -0.0147285126974924, -0.0130809131031503, 
+-0.0121264387583282, -0.0114511882636044, -0.0108899255601401, 
+-0.0103789274591928, -0.00989923436751466, -0.0094597656577513, 
+-0.00910526288757988, -0.00895613481108483, -0.00931568848314211, 
+0.0886257771126413, -0.00829672265316354, -0.00736862479221523, 
+-0.0068311063609374, -0.00645113821270646, -0.00613599905134524, 
+-0.00585070161397506, -0.00558683446927849, -0.00535507111588482, 
+-0.00519467538850876, -0.00520846820004705, -0.00565439566403268, 
+0.0511544743746994, -0.00478892018486581, -0.00425334311850445, 
+-0.00394338282490519, -0.00372479708905327, -0.00354471815432786, 
+-0.00338457083148406, -0.00324353022601475, -0.00313778708824834, 
+-0.00311496666618348, -0.0032965417726257, -0.00398601153416262, 
+0.0317127196167608, -0.0029689869841078, -0.00263716494893945, 
+-0.00244551630198261, -0.00231127164269655, -0.00220278322759373, 
+-0.00211134075659429, -0.00204341436589488, -0.0020264166355632, 
+-0.00213311514374545, -0.00254643626626461, -0.00372237195500053, 
+0.0234485494199315, -0.00219463252010391, -0.00194834895249063, 
+-0.00180431680906984, -0.00169926370054469, -0.0016046303831841, 
+-0.00150113704082987, -0.0013616134945194, -0.00112680252535651, 
+-0.000652587845103192, 0.000418350003536461, 0.00297474772180491
+)
+plot(-72:71, fw, col = 1, type = 'l', xlab = "", 
+     ylab = "weights", main = "Comparison of SEATS vs X-11 Seasonal Filter"); abline(h = 0, lty = 'dotted')
+
+# cairo_pdf(file.path(ourdir, 'seasfilter_sigex_x11.pdf'), width = 7, height = 5, )
+z11 <- rep(NA, 11)
+f3x5 <- c(1, z11, 2, z11, 3, z11, 3, z11, 3, z11, 2, z11, 1) / 15
+f3x9 <- c(1, z11, 2, z11, 3, z11, 3, z11, 3, z11, 3, z11, 3, z11, 3, z11, 3, z11, 2, z11, 1) / 27
+points(-((length(f3x5)-1)/2):((length(f3x5)-1)/2), f3x5, col = 3, pch = 19)
+points(-((length(f3x9)-1)/2):((length(f3x9)-1)/2), f3x9, col = 2, pch = 19)
+
+legend('topright', legend = c('SEATS', 'X11 3x5', 'X11 3x9'), col = c(1, 3, 2), lwd = 1, pch = 19)
+
+
+# ts_dygraphs(
+#   ts_c(
+#     SEATS_seasonal = ts(fw,   start = -72, frequency = 1),
+#     x11_3x5        = ts(f3x5, start = -36, frequency = 1),
+#     x11_3x9        = ts(f3x9, start = -60, frequency = 1)
+#   )
+# )
+
+```
 
 ### Reasons for using SEATS or X11 (Work in progress)
 
