@@ -334,7 +334,8 @@ div.csl-indent {
   <li>
 <a href="#sec-comparing" id="toc-sec-comparing" class="nav-link" data-scroll-target="#sec-comparing"><span class="toc-section-number">7.10</span>  Comparing X-11 and SEATS</a>
   <ul class="collapse">
-<li><a href="#reasons-for-using-seats-or-x11-work-in-progress" id="toc-reasons-for-using-seats-or-x11-work-in-progress" class="nav-link" data-scroll-target="#reasons-for-using-seats-or-x11-work-in-progress"><span class="toc-section-number">7.10.1</span>  Reasons for using SEATS or X11 (Work in progress)</a></li>
+<li><a href="#seats-filters-from-seas-output" id="toc-seats-filters-from-seas-output" class="nav-link" data-scroll-target="#seats-filters-from-seas-output"><span class="toc-section-number">7.10.1</span>  SEATS filters from <code>seas</code> output</a></li>
+  <li><a href="#reasons-for-using-seats-or-x11" id="toc-reasons-for-using-seats-or-x11" class="nav-link" data-scroll-target="#reasons-for-using-seats-or-x11"><span class="toc-section-number">7.10.2</span>  Reasons for using SEATS or X11</a></li>
   </ul>
 </li>
   </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/25-seats.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
@@ -378,7 +379,7 @@ Hillmer, S. C., and G. C. Tiao. 1982. <span>“An ARIMA-Model-Based Approach to 
 Maravall, Agustin. 1986. <span>“Revisions in ARIMA Signal Extraction.”</span> <em>Journal of the American Statistical Association</em> 81 (395): 736–40. <a href="http://www.jstor.org/stable/2289005">http://www.jstor.org/stable/2289005</a>.
 </div></div><p>Like X-11, SEATS applies a series of filters to an observed time series, as described in <a href="24-x11.html#sec-seasonal-decomposition"><span>Section&nbsp;6.1</span></a>. Like X-11, SEATS uses a forecast extended series, in order to obtain unbiased results at the margin.</p>
 <p>Unlike X-11, however, SEATS filters are derived from the ARIMA model of the time series. While X-11 filters are predefined and fixed, the SEATS filters are different for each ARIMA model.</p>
-<p>While X-11 offers a finite set of filters (in fact, there are seven seasonal filters available), SEATS offers an infinte set of filters. Overall, they cover a broader set of possilbe filter lengths, which makes SEATS a more flexilble option than X-11. <strong>The available set filter lengths is the most crucial difference between X-11 and SEATS</strong>. At the same time, the additional flexibility may lead at times to filters that are undedesirable. As will be shown later on, SEATS sometimes choose a filter that is too narrow, and produces an overly volatile seasonal component.</p>
+<p>While X-11 offers a finite set of filters (in fact, there are seven seasonal filters available), SEATS offers an infinite set of filters. Overall, they cover a broader set of possible filter lengths, which makes SEATS a more flexible option than X-11. <strong>The available set filter lengths is the most crucial difference between X-11 and SEATS</strong>. At the same time, the additional flexibility may lead at times to filters that are undesirable. As will be shown later on, SEATS sometimes choose a filter that is too narrow, and produces an overly volatile seasonal component.</p>
 <div class="callout-note callout callout-style-simple callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -465,6 +466,7 @@ Planas, Christophe, and Raoul Depoutot. 2002. <span>“Controlling Revisions in 
 <p>Values of <span class="math inline">\(\Theta\)</span> close to one yield a seasonal adjustment filter that has seasonal factors that change slowly over time. This provides less smoothing but relatively small revisions. Any revisions that do occur will last for a longer period of time due to the longer filters.</p>
 <p>Overall, we may think of SEATS filters as a broader, more flexible set of filters than X-11 filers. While we have just seven filters in X-11, we have an infite numer of filters in SEATS. They cover a larger range of filters spans, ranging from filters that are much narrower than X-11 to filters that are much wider.</p>
 <p>SEATS greatest stength is also its greatest weakness. As we will see in the example below, SEATS sometimes chooses a filter that is very narrow. From a SEATS perspective, this makes sense: Given an ARIMA model with a very weak seasonality, the filter lengths should be chooses narrowly. From a practical perspective, the resulting seasonal component is undesirable. It is too volatile, essentially catching much of the irregular component and making the resulting seasonally adjusted series too smooth.</p>
+<p>Additionally, the filters that are</p>
 </section><section id="transitory-component" class="level2" data-number="7.3"><h2 data-number="7.3" class="anchored" data-anchor-id="transitory-component">
 <span class="header-section-number">7.3</span> Transitory component</h2>
 <p>Sometimes SEATS includes a transitory component in its decomposition:</p>
@@ -591,8 +593,156 @@ X_t =
 <p>The Bureau of Labor Statistics formed a group to do a comparison study between X-11 and model-based seasonal adjustments (CITE BLS 2007). The examined a cross section of 87 BLS series with X-11, SEATS, and STAMP using spectral, revisions history, model adequacy and sliding spans diagnostics. They found that SEATS seasonal factors are usually more stable than X-11 and X-11 trend component is usually more stable than SEATS. Also, among series that were seasonal, residual seasonality almost never appears using either method.</p>
 <p>The only exception being a small number of SEATS runs where model inadequacy for the full span of data was present. This manifested as SEATS having difficulty identifying a usable model for decomposition and falling back on the airline model. They found even in these situations the SEATS seasonal adjustment is usually reasonable.</p>
 <p>Overall, X-11 and SEATS seasonal adjustments are very similar for many series. SEATS adjustments are often smoother than X-11 seasonal adjustments. For some series, the variance can be different based on the month or season. For example, U.S. Housing Starts is more variable in the winter months than in the summer due to the differences in warm and cold winters. ARIMA model-based seasonal adjustment does not handle this situation very well and assumes a constant variance and the SEATS adjustment wont compensate for this.</p>
-<section id="reasons-for-using-seats-or-x11-work-in-progress" class="level3" data-number="7.10.1"><h3 data-number="7.10.1" class="anchored" data-anchor-id="reasons-for-using-seats-or-x11-work-in-progress">
-<span class="header-section-number">7.10.1</span> Reasons for using SEATS or X11 (Work in progress)</h3>
+<section id="seats-filters-from-seas-output" class="level3" data-number="7.10.1"><h3 data-number="7.10.1" class="anchored" data-anchor-id="seats-filters-from-seas-output">
+<span class="header-section-number">7.10.1</span> SEATS filters from <code>seas</code> output</h3>
+<p>The trend filter and seasonal adjustment filter can be extracted from the output of a <code>seasonal</code> run. This is done via the <strong>save</strong> argument in the seats spec. In the following example the symmetric trend filter is saved and then exported. Note the <code>finite='yes'</code> argument must be specified to save filter weights.</p>
+<div class="cell">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, </span>
+<span>          seats.finite <span class="op">=</span> <span class="st">'yes'</span>,</span>
+<span>          seats.save   <span class="op">=</span> <span class="st">'ftf'</span>, <span class="co"># symmetric finite trend filter</span></span>
+<span>          out          <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">ftf_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">m</span><span class="op">$</span><span class="va">wdir</span>, <span class="st">'iofile.ftf'</span><span class="op">)</span></span>
+<span><span class="co"># reads in filter weights from ftf_file</span></span>
+<span><span class="va">w</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.delim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/textconnections.html">textConnection</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/readLines.html">readLines</a></span><span class="op">(</span><span class="va">ftf_file</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span>,</span>
+<span>                header <span class="op">=</span> <span class="cn">TRUE</span>, stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="op">-</span><span class="fl">72</span><span class="op">:</span><span class="fl">71</span>, <span class="va">w</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span>, type <span class="op">=</span> <span class="st">"l"</span>, </span>
+<span>     xlab <span class="op">=</span> <span class="st">""</span>, </span>
+<span>     ylab <span class="op">=</span> <span class="st">"weights"</span>, </span>
+<span>     main <span class="op">=</span> <span class="st">"SEATS trend filter"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="25-seats_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="864"></p>
+</div>
+</div>
+<p>The default SEATS output tables do not allow users to save the seasonal filter, only the seasonal adjustment and trend filters. Some additional work can be done to calculate the seasonal filters via the canonical decomposition implied models and the Wiener-Kolmogorov algorithm. The code provided here is a bit complicated and will be improved/modularized in subsequent version of this textbook. It involves outputting the <code>mdc</code> table and the using the <code>grep</code> functions to extract salient features for each model component. The naming conventions for the <code>mdc</code> table follow the Wald decomposition notation where moving average components appear in the numerator and differencing and/or autoregressive components appear in the denominator. The following assumes there are no AR components and anything appearing in the denominator is attributed to the differencing operator.</p>
+<div class="cell">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, </span>
+<span>          outlier <span class="op">=</span> <span class="cn">NULL</span>, </span>
+<span>          regression.aictest <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>          arima.model <span class="op">=</span> <span class="st">'(0 1 1)(0 1 1)'</span>,</span>
+<span>          seats.save <span class="op">=</span> <span class="st">'mdc'</span>, </span>
+<span>          out <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; seas(x = AirPassengers, regression.aictest = NULL, outlier = NULL, </span></span>
+<span><span class="co">#&gt;     out = TRUE, arima.model = "(0 1 1)(0 1 1)", seats.save = "mdc")</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients:</span></span>
+<span><span class="co">#&gt;                   Estimate Std. Error z value Pr(&gt;|z|)    </span></span>
+<span><span class="co">#&gt; MA-Nonseasonal-01  0.40182    0.07887   5.095 3.49e-07 ***</span></span>
+<span><span class="co">#&gt; MA-Seasonal-12     0.55694    0.07626   7.303 2.80e-13 ***</span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; SEATS adj.  ARIMA: (0 1 1)(0 1 1)  Obs.: 144  Transform: log</span></span>
+<span><span class="co">#&gt; AICc: 987.4, BIC: 995.8  QS (no seasonality in final):    0  </span></span>
+<span><span class="co">#&gt; Box-Ljung (no autocorr.): 28.04   Shapiro (normality): 0.9886  </span></span>
+<span><span class="co">#&gt; Messages generated by X-13:</span></span>
+<span><span class="co">#&gt; Warnings:</span></span>
+<span><span class="co">#&gt; - At least one visually significant seasonal peak has been</span></span>
+<span><span class="co">#&gt;   found in the estimated spectrum of the regARIMA residuals.</span></span>
+<span><span class="co">#&gt; - At least one visually significant trading day peak has been</span></span>
+<span><span class="co">#&gt;   found in one or more of the estimated spectra.</span></span>
+<span></span>
+<span><span class="va">decomp.m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.delim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">m</span><span class="op">$</span><span class="va">wdir</span>, <span class="st">'iofile.mdc'</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">':'</span>,</span>
+<span>                       stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span>, header <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">decomp.m</span><span class="op">)</span></span>
+<span><span class="co">#&gt;           V1           V2</span></span>
+<span><span class="co">#&gt; 1     ntcnum  3.000000000</span></span>
+<span><span class="co">#&gt; 2  tcnum.000  1.000000000</span></span>
+<span><span class="co">#&gt; 3  tcnum.001  0.047518134</span></span>
+<span><span class="co">#&gt; 4  tcnum.002 -0.952481866</span></span>
+<span><span class="co">#&gt; 5     ntcden  3.000000000</span></span>
+<span><span class="co">#&gt; 6  tcden.000  1.000000000</span></span>
+<span><span class="co">#&gt; 7  tcden.001 -2.000000000</span></span>
+<span><span class="co">#&gt; 8  tcden.002  1.000000000</span></span>
+<span><span class="co">#&gt; 9      tcvar  0.054007671</span></span>
+<span><span class="co">#&gt; 10     nsnum 12.000000000</span></span>
+<span><span class="co">#&gt; 11  snum.000  1.000000000</span></span>
+<span><span class="co">#&gt; 12  snum.001  1.412938279</span></span>
+<span><span class="co">#&gt; 13  snum.002  1.485031335</span></span>
+<span><span class="co">#&gt; 14  snum.003  1.412580521</span></span>
+<span><span class="co">#&gt; 15  snum.004  1.216865960</span></span>
+<span><span class="co">#&gt; 16  snum.005  0.970661608</span></span>
+<span><span class="co">#&gt; 17  snum.006  0.704452210</span></span>
+<span><span class="co">#&gt; 18  snum.007  0.440934873</span></span>
+<span><span class="co">#&gt; 19  snum.008  0.218194121</span></span>
+<span><span class="co">#&gt; 20  snum.009  0.009565283</span></span>
+<span><span class="co">#&gt; 21  snum.010 -0.126641925</span></span>
+<span><span class="co">#&gt; 22  snum.011 -0.415452995</span></span>
+<span><span class="co">#&gt; 23     nsden 12.000000000</span></span>
+<span><span class="co">#&gt; 24  sden.000  1.000000000</span></span>
+<span><span class="co">#&gt; 25  sden.001  1.000000000</span></span>
+<span><span class="co">#&gt; 26  sden.002  1.000000000</span></span>
+<span><span class="co">#&gt; 27  sden.003  1.000000000</span></span>
+<span><span class="co">#&gt; 28  sden.004  1.000000000</span></span>
+<span><span class="co">#&gt; 29  sden.005  1.000000000</span></span>
+<span><span class="co">#&gt; 30  sden.006  1.000000000</span></span>
+<span><span class="co">#&gt; 31  sden.007  1.000000000</span></span>
+<span><span class="co">#&gt; 32  sden.008  1.000000000</span></span>
+<span><span class="co">#&gt; 33  sden.009  1.000000000</span></span>
+<span><span class="co">#&gt; 34  sden.010  1.000000000</span></span>
+<span><span class="co">#&gt; 35  sden.011  1.000000000</span></span>
+<span><span class="co">#&gt; 36      svar  0.054246235</span></span>
+<span><span class="co">#&gt; 37    nsanum  3.000000000</span></span>
+<span><span class="co">#&gt; 38 sanum.000  1.000000000</span></span>
+<span><span class="co">#&gt; 39 sanum.001 -1.365780650</span></span>
+<span><span class="co">#&gt; 40 sanum.002  0.393702700</span></span>
+<span><span class="co">#&gt; 41    nsaden  3.000000000</span></span>
+<span><span class="co">#&gt; 42 saden.000  1.000000000</span></span>
+<span><span class="co">#&gt; 43 saden.001 -2.000000000</span></span>
+<span><span class="co">#&gt; 44 saden.002  1.000000000</span></span>
+<span><span class="co">#&gt; 45     savar  0.625661730</span></span>
+<span><span class="co">#&gt; 46    irrvar  0.297766039</span></span>
+<span></span>
+<span><span class="co"># trend-cycle model</span></span>
+<span><span class="va">macoefs</span> <span class="op">&lt;-</span> <span class="va">decomp.m</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">grep</a></span><span class="op">(</span><span class="st">'^tcnum'</span>, <span class="va">decomp.m</span><span class="op">$</span><span class="va">V1</span><span class="op">)</span>,<span class="st">'V2'</span><span class="op">]</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span></span>
+<span><span class="va">trend.var</span> <span class="op">&lt;-</span> <span class="va">decomp.m</span><span class="op">[</span><span class="va">decomp.m</span><span class="op">$</span><span class="va">V1</span> <span class="op">==</span> <span class="st">'tcvar'</span>,<span class="st">'V2'</span><span class="op">]</span></span>
+<span><span class="va">trendDiff</span> <span class="op">&lt;-</span> <span class="va">decomp.m</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">grep</a></span><span class="op">(</span><span class="st">'^tcden'</span>, <span class="va">decomp.m</span><span class="op">$</span><span class="va">V1</span><span class="op">)</span>,<span class="st">'V2'</span><span class="op">]</span></span>
+<span></span>
+<span><span class="co"># seasonal model</span></span>
+<span><span class="va">seasonal.macoefs</span> <span class="op">&lt;-</span> <span class="va">decomp.m</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">grep</a></span><span class="op">(</span><span class="st">'^snum'</span>, <span class="va">decomp.m</span><span class="op">$</span><span class="va">V1</span><span class="op">)</span>,<span class="st">'V2'</span><span class="op">]</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span></span>
+<span><span class="va">seasonal.var</span> <span class="op">&lt;-</span> <span class="va">decomp.m</span><span class="op">[</span><span class="va">decomp.m</span><span class="op">$</span><span class="va">V1</span> <span class="op">==</span> <span class="st">'svar'</span>,<span class="st">'V2'</span><span class="op">]</span></span>
+<span><span class="va">seasonalDiff</span> <span class="op">&lt;-</span> <span class="va">decomp.m</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">grep</a></span><span class="op">(</span><span class="st">'^sden'</span>, <span class="va">decomp.m</span><span class="op">$</span><span class="va">V1</span><span class="op">)</span>,<span class="st">'V2'</span><span class="op">]</span></span>
+<span></span>
+<span><span class="co"># irregular variance</span></span>
+<span><span class="va">irr.var</span> <span class="op">&lt;-</span> <span class="va">decomp.m</span><span class="op">[</span><span class="va">decomp.m</span><span class="op">$</span><span class="va">V1</span> <span class="op">==</span> <span class="st">'irrvar'</span>,<span class="st">'V2'</span><span class="op">]</span></span>
+<span></span>
+<span><span class="co"># transitory model (usually not needed)</span></span>
+<span><span class="va">trans.macoefs</span> <span class="op">&lt;-</span> <span class="va">decomp.m</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">grep</a></span><span class="op">(</span><span class="st">'^trnum'</span>, <span class="va">decomp.m</span><span class="op">$</span><span class="va">V1</span><span class="op">)</span>,<span class="st">'V2'</span><span class="op">]</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span></span>
+<span><span class="va">trans.var</span> <span class="op">&lt;-</span> <span class="va">decomp.m</span><span class="op">[</span><span class="va">decomp.m</span><span class="op">$</span><span class="va">V1</span> <span class="op">==</span> <span class="st">'trvar'</span>,<span class="st">'V2'</span><span class="op">]</span></span>
+<span><span class="va">transDiff</span> <span class="op">&lt;-</span> <span class="va">decomp.m</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">grep</a></span><span class="op">(</span><span class="st">'^trden'</span>, <span class="va">decomp.m</span><span class="op">$</span><span class="va">V1</span><span class="op">)</span>,<span class="st">'V2'</span><span class="op">]</span></span>
+<span></span>
+<span><span class="co"># seasonally adjusted model</span></span>
+<span><span class="va">sadj.macoefs</span> <span class="op">&lt;-</span> <span class="va">decomp.m</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">grep</a></span><span class="op">(</span><span class="st">'^sanum'</span>, <span class="va">decomp.m</span><span class="op">$</span><span class="va">V1</span><span class="op">)</span>,<span class="st">'V2'</span><span class="op">]</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span></span>
+<span><span class="va">sadj.var</span> <span class="op">&lt;-</span> <span class="va">decomp.m</span><span class="op">[</span><span class="va">decomp.m</span><span class="op">$</span><span class="va">V1</span> <span class="op">==</span> <span class="st">'savar'</span>,<span class="st">'V2'</span><span class="op">]</span></span>
+<span><span class="va">sadjDiff</span> <span class="op">&lt;-</span> <span class="va">decomp.m</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">grep</a></span><span class="op">(</span><span class="st">'^saden'</span>, <span class="va">decomp.m</span><span class="op">$</span><span class="va">V1</span><span class="op">)</span>,<span class="st">'V2'</span><span class="op">]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>To further understand these components the implied trend model is the following:</p>
+<div class="cell">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">macoefs</span></span>
+<span><span class="co">#&gt; [1]  0.04751813 -0.95248187</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>which tells us the trend is an MA(2) with coefficients <span class="math inline">\(\theta_1 = 0.04751813\)</span> and <span class="math inline">\(\theta_2 = -0.95248187\)</span>. The variance of the innovations, <span class="math inline">\(\sigma\)</span> is</p>
+<div class="cell">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">trend.var</span></span>
+<span><span class="co">#&gt; [1] 0.05400767</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>and the differencing is</p>
+<div class="cell">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">trendDiff</span></span>
+<span><span class="co">#&gt; [1]  1 -2  1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>which is second differencing, i.e.&nbsp;<span class="math inline">\(\delta(B) = 1 - 2B + B^2 = (1-B)^2\)</span>.</p>
+<p>We can use these component models to apply the WK algorithm and get the seasonal filter weights. The details of this complex operation are omitted here but a plot of the seasonal filter weights is given in Figure ???.</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="25-seats_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="864"></p>
+</div>
+</div>
+</section><section id="reasons-for-using-seats-or-x11" class="level3" data-number="7.10.2"><h3 data-number="7.10.2" class="anchored" data-anchor-id="reasons-for-using-seats-or-x11">
+<span class="header-section-number">7.10.2</span> Reasons for using SEATS or X11</h3>
 <div class="callout-note callout callout-style-simple callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -606,13 +756,27 @@ TODO
 <p>Add Table with pros and cons</p>
 </div>
 </div>
+<p>First off, there does not exist a simple flow chat that tells each individual users whether they should use SEATS or X-11. For most well-behaved series both methods will produce suitable seasonal adjustments that will work for the majority of use cases. The ultimate decision between the two comes down to a few questions.</p>
+<ol type="1">
+<li>What will you be doing with these seasonal adjustments?</li>
+<li>How often is your data revised?</li>
+<li>Does your agency have a policy to freeze data/seasonal adjustment revisions after a fixed period of time?</li>
+<li>How much time can be devoted to development of initial spec files?</li>
+<li>How much time can be devoted to maintenance of spec files?</li>
+<li>What is your maintenance schedule? (yearly, monthly, etc)</li>
+<li>What are the consequences of a poor adjustment?</li>
+<li>What are the consequences of large revisions?</li>
+<li>Will your agency be publishing original series, just SA, trends, seasonal factors?</li>
+<li>Is there an emphasis on deep methodological understanding of the procedures?</li>
+<li>Is there an emphasis on training users of released data to have a methodological understanding of the SA process?</li>
+</ol>
 <ul>
 <li><p>When applied properly (good ARIMA model, filters are not too narrow), it produces a seasonal component that is more stable. This leads to less revisions in the resulting series.</p></li>
 <li><p>When applied improperly (bad ARIMA model, narrow filters), it produces an unpredictable seasonal component and an overly smooth seasonally adjusted series.</p></li>
-<li><p>X-11 is more ‘robust’: If applied without additional checks, it is probably the better option.</p></li>
-<li><p>If you check SEATS models carefully, it may produce a more stable adjstument.</p></li>
+<li><p>X-11 is more ‘robust’: If applied without additional checks. If this is desirable it may be a better option.</p></li>
+<li><p>If you check SEATS models carefully, it may produce a more stable adjustment.</p></li>
 </ul>
-<p>To sum op, wheter you should use SEATS or X11 also depends on how much work you are willing to invest in a series. SEATS needs more love, etc.</p>
+<p>To sum up, whether you should use SEATS or X11 also depends on how much work you are willing to invest in a series.</p>
 
 
 
