@@ -24,6 +24,17 @@ status("polishing", "2023-03-24", section = "Holidays")  # drafting, polishing, 
 Months and quarters may differ in their overall length, or, more importantly may differ in the number of weekdays.
 Similar to the holiday adjustments, X-13 offers various tools to deal with differences in the number of days or weekdays.
 
+
+::: {#fig-mini-cal layout-ncol=2}
+
+![January, 2022](img/mini-cal-22.png){#fig-mini-cal-22}
+
+![January, 2023](img/mini-cal-23.png){#fig-mini-cal-23}
+
+The number of weekdays differ between months
+:::
+
+
 Trading day effects, as weekday effects are called in X-13, constitute a predictable movement in a time series, and therefore should not be part of the seasonally adjusted series.
 Trading day effects are usually removed by the regression spec, although some adjustments can be also done by the transform spec.
 Contrary to the regression spec, the transform spec performs a 1:1 adjustment, while the regression spec estimates the size of the effect from the data.
@@ -69,7 +80,48 @@ summary(m_td)
 Note that the resulting AICc is higher (949.5) than for the one coefficient model (947.3).
 That is why the automated procedure has opted for the simpler model.
 
-## User defined regressors {#sec-user-defined-regressors}
+
+
+## Case Study: Hobby Toy Game
+
+
+```{r}
+m <- seas(hobby_toy_game)
+summary(m)
+
+static(m)
+
+m0 <- seas(
+  x = hobby_toy_game,
+  regression.variables = c("td", "easter[8]", "ao1996.May", "ao1996.Dec"),
+  arima.model = "(0 1 2)(0 1 1)",
+  regression.aictest = NULL,
+  outlier = NULL,
+  transform.function = "log"
+)
+summary(m0)
+
+
+
+m1 <- seas(
+  x = hobby_toy_game,
+  regression.variables = c("td1coef", "easter[8]", "ao1996.May", "ao1996.Dec"),
+  arima.model = "(0 1 2)(0 1 1)",
+  regression.aictest = NULL,
+  outlier = NULL,
+  transform.function = "log"
+)
+summary(m1)
+
+library(tsbox)
+ts_dygraphs(ts_c(
+  final(m0),
+  final(m1)
+))
+```
+
+## Case Study: Replicate X-13 trading days adjustment
+
 
 'Trading day adjustment' removes the effect of the weekdays, and but does not include holidays, such as Christmas or Easter.
 These are handled separately (Easter) or dealt with by standard seasonal adjustment (Christmas).
@@ -79,18 +131,12 @@ In @sec-replicate-x-13-trading-days-adjustment, we replicate the built-in regres
 These regressors simply use the number of weekdays, and do not pay any reference to a country specific calendar.
 If you want to deviate from them, a good way is to start with the replicated values, and adjust from there.
 
-## Replicate X-13 trading days adjustment {#sec-replicate-x-13-trading-days-adjustment}
-
-Replication is possible.
-Adding the regressors to seasonal may be useful.
-
 ```{r}
 suppressPackageStartupMessages(library(tidyverse))
 library(tsbox)
 library(seasonal)
 ```
 
-## Examples
 
 ### Constructing weekday regressors
 
@@ -130,7 +176,7 @@ td_m_tbl <-
     sat = sum(wd == 6) - sum(wd == 0)
   )
 
-td_m_tbl
+head(as.data.frame(td_m_tbl), 10)
 ```
 
 'Trading day adjustment' removes the effect of the weekdays, and but does not include holidays, such as Christmas or Easter.
