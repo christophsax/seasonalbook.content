@@ -7,4 +7,144 @@ source("_common.R")
 status("drafting")  # drafting, polishing, complete
 ```
 
--   Should the subcomponents of a series be adjusted separately?
+Seasonally adjusted series of aggregates can be derived in two ways: either directly by adjusting the aggregates or indirectly by aggregating seasonally adjusted data of the component series.
+Generally, the results will differ, sometimes significantly.
+Conceptually, neither the direct approach nor the indirect approach is optimal, and we will discuss some arguments later on.
+
+Before we go into the details of the distinction between direct and indirect adjustment, let's take a look at how *seasonal* can handle multiple time series.
+
+### Multiple Series adjustmtent
+
+Since [seasonal version 1.8](https://cran.r-project.org/package=seasonal), it is now possible to seasonally adjust multiple series in a single call to `seas()`.
+This is done by using the built-in batch mode of X-13.
+It removes the need for loops or `lapply()` in such cases and finally brings one missing feature of X-13 to seasonal -- the *composite* spec.
+
+Multiple adjustments can be performed by supplying multiple time series as an `"mts"` object:
+
+```{r}
+library(seasonal)
+m <- seas(cbind(fdeaths, mdeaths), x11 = "")
+final(m)
+```
+
+This will perform two seasonal adjustments, one for `fdeaths` and one for `mdeaths`.
+X-13 spec-argument combinations can be applied in the usual way, such as `x11 = ""`.
+Note that if entered that way, they will apply to both series.
+The [vignette on multiple adjustments](https://cran.r-project.org/web/packages/seasonal/vignettes/multiple.html) describes how to specify options for individual series.
+
+### Backend
+
+X-13 ships with a batch mode that allows multiple adjustments in a single call to X-13.
+This is now the default in seasonal (`multimode = "x13"`).
+Alternatively, X-13 can be called for each series (`multimode = "R"`).
+The results should be usually the same, but switching to `multimode = "R"` may be useful for debugging:
+
+```{r}
+seas(cbind(fdeaths, mdeaths), multimode = "x13")
+seas(cbind(fdeaths, mdeaths), multimode = "R")
+```
+
+In general, `multimode = "x13"` is faster.
+The following comparison on a MacBook Pro shows a modest speed gain, but more significant differences have been observed on other systems:
+
+``` r
+many <- rep(list(fdeaths), 100)
+system.time(seas(many, multimode = "x13"))
+ #   user  system elapsed
+ # 13.342   0.406  13.766
+system.time(seas(many, multimode = "R"))
+ #   user  system elapsed
+ # 15.819   0.814  16.958
+```
+
+The return value of `system.time` tells you how much time has been used for the operation.
+The first number measures the time spent in the current session, while 'elapsed' measures the overall time, as measured by the clock.
+`system` measures the operating system overhead.
+The distinction between these numbers is not too significant here; simply focus on 'elapsed', the details will be more interesting in the parallel examples.
+
+### Parallelization
+
+In principle, R is single threaded, and operations are normally performed on a single core.
+While there are many ways to perform parallel operations in R, their details often depend on the platform.
+So, currently, it is not possible to call parallelized operations directly from seasonal.
+Here is an example that computes the operations below on an 8 core Mac.
+The [furrrr](https://furrr.futureverse.org) and the future package save a lot of the complications arising around parallelization.
+
+### All Platforms
+
+On Windows, Mac and Linux, you can use the *multisession* strategy, which essentially starts a separate session of R for any of the available cores.
+In the following, we use an 8 core Mac and gain a more than 4 times speed gain.
+
+``` r
+library(furrr)
+plan(multisession, workers = future::nbrOfWorkers())
+system.time(future_map(many, seas))
+#   user  system elapsed
+#  0.171   0.008   4.081
+```
+
+### Non-Window Platform
+
+Mac and Linux allow forking parallelization, which is easier to set up.
+Here, multiple cores share the same memory, without having to start separate sessions:
+
+``` r
+library(furrr)
+plan(multicore, workers = future::nbrOfWorkers())
+system.time(future_map(many, seas))
+#   user  system elapsed
+# 23.389   1.704   3.508
+```
+
+### composite spec
+
+Support for the X-13 batch mode makes it finally possible to use the *composite* spec -- the one feature of X-13 that was missing in seasonal.
+Sometimes, one has to decide whether seasonal adjustment should be performed on a granular level or on an aggregated level.
+The *composite* spec helps you to analyze the problem and to compare the direct and the indirect adjustments.
+
+The `composite` argument is a list with an X-13 specification that is applied on the aggregated series.
+Specification works identically for other series in `seas()`, including the application of the defaults.
+If you provide an empty list, the usual defaults of `seas()` are used.
+A minimal composite call looks like this:
+
+```{r}
+seas(
+  cbind(mdeaths, fdeaths),
+  composite = list(),
+  series.comptype = "add"
+)
+```
+
+You can verify that the composite refers to the total of `mdeaths` and `fdeaths` by running:
+
+```{r}
+seas(ldeaths)
+```
+
+where `ldeaths` is the sum of `mdeaths` and `fdeaths`.
+
+### Indirect vs direct adjusmtent
+
+What we have seen above is an example of indirect vs direct ajustment.
+How to judge which one is better?
+
+The choice between direct and indirect seasonal adjustment may be guided by the expected uses of seasonally adjusted data.
+For some uses, preserving accounting and aggregation relationships in the data may be crucial, while for other uses, the time-series properties of the derived estimates may be more important.
+
+There is no single standard in what's the best practice.
+Some countries obtain the seasonally adjusted aggregates as the sum of adjusted components, while others prefer to adjust the totals independently.
+This can result in discrepancies between the seasonally adjusted total and the sum of the seasonally adjusted component series.
+
+According to the IMF Manual, Allocating discrepancies on components to achieve consistency should be avoided.
+
+### Accounting relationships
+
+If the differences are insignificant, accounting and aggregation relationships in the seasonally adjusted data should be guaranteed.
+
+## Built-in tools
+
+When the indirect approach is considered, seasonally adjusted aggregates should be checked to exclude the presence of residual seasonality using the F-test available in X-13.
+
+X-13 offers various diagnostic tools to evaluate the direct and indirect adjustment of aggregates.
+The program calculates seasonally adjusted aggregates using the direct and indirect approach and provides in output a set of statistics to compare the results (M diagnostics, measures of smoothness, frequency spectrum diagnostics, etc.).
+Furthermore, sliding spans and revision history diagnostics can be requested to assess which of the two approaches provides more stable and reliable seasonally adjusted results.
