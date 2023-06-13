@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.269">
+<meta name="generator" content="quarto-1.3.336">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="James Livsey and Christoph Sax">
 <title>Seasonal Adjustment in R - 14&nbsp; Indirect vs direct adjustment</title>
@@ -15,8 +15,42 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
   width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -60,20 +94,25 @@ ul.task-list li input[type="checkbox"] {
 <body class="nav-sidebar floating">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Indirect vs direct adjustment</span></h1>
-      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
-        <i class="bi bi-chevron-right"></i>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./40-part-other-issues.html">Other Issues</a></li><li class="breadcrumb-item"><a href="./43-indirect-vs-direct.html"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Indirect vs direct adjustment</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
       </button>
     </div>
   </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Seasonal Adjustment in R</a> 
         <div class="sidebar-tools-main">
-    <a href="https://github.com/christophsax/seasonalbook.content" title="Source Code" class="sidebar-tool px-1"><i class="bi bi-github"></i></a>
-  <a href="" class="quarto-reader-toggle sidebar-tool" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+    <a href="https://github.com/christophsax/seasonalbook.content" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
   <div class="quarto-reader-toggle-btn">
   <i class="bi"></i>
   </div>
@@ -81,166 +120,203 @@ ul.task-list li input[type="checkbox"] {
 </div>
     </div>
       </div>
-      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="mt-2 flex-shrink-0 align-items-center">
         <div class="sidebar-search">
         <div id="quarto-search" class="" title="Search"></div>
         </div>
-      </div>
+        </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
 <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./index.html" class="sidebar-item-text sidebar-link">Welcome</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Welcome</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./10-introduction.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a>
+  <a href="./10-introduction.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./11-getting-started.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Getting started</span></a>
+  <a href="./11-getting-started.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Getting started</span></span></a>
   </div>
 </li>
       </ul>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./20-part-basics.html" class="sidebar-item-text sidebar-link">Basics</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+            <a href="./20-part-basics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Basics</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./21-overview.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The fundamentals of X-13</span></a>
+  <a href="./21-overview.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The fundamentals of X-13</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./22-transform.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Transform</span></a>
+  <a href="./22-transform.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Transform</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./23-regARIMA.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">regARIMA Model</span></a>
+  <a href="./23-regARIMA.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">regARIMA Model</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./24-x11.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">X-11</span></a>
+  <a href="./24-x11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">X-11</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./25-seats.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">SEATS</span></a>
+  <a href="./25-seats.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">SEATS</span></span></a>
   </div>
 </li>
       </ul>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./30-part-data-problems.html" class="sidebar-item-text sidebar-link">Data Problems</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+            <a href="./30-part-data-problems.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Problems</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./31-holidays.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Irregular holidays</span></a>
+  <a href="./31-holidays.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Irregular holidays</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./32-trading-days.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Trading days</span></a>
+  <a href="./32-trading-days.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Trading days</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./33-outliers.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Outliers</span></a>
+  <a href="./33-outliers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Outliers</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./34-seasonal-breaks.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Seasonal breaks</span></a>
+  <a href="./34-seasonal-breaks.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Seasonal breaks</span></span></a>
   </div>
 </li>
       </ul>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./40-part-other-issues.html" class="sidebar-item-text sidebar-link">Other Issues</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+            <a href="./40-part-other-issues.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Other Issues</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./41-presence-of-seasonality.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Presence of seasonality</span></a>
+  <a href="./41-presence-of-seasonality.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Presence of seasonality</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./42-annual-constraining.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Annual constraining</span></a>
+  <a href="./42-annual-constraining.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Annual constraining</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./43-indirect-vs-direct.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Indirect vs direct adjustment</span></a>
+  <a href="./43-indirect-vs-direct.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Indirect vs direct adjustment</span></span></a>
   </div>
 </li>
       </ul>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./50-part-quality-assessment.html" class="sidebar-item-text sidebar-link">Quality assessment</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
+            <a href="./50-part-quality-assessment.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Quality assessment</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./51-quality-measures.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Quality measures</span></a>
+  <a href="./51-quality-measures.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Quality measures</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./52-revisions.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Revisions</span></a>
+  <a href="./52-revisions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Revisions</span></span></a>
   </div>
 </li>
       </ul>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./60-part-future.html" class="sidebar-item-text sidebar-link">The future of seasonal adjustment</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true">
+            <a href="./60-part-future.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">The future of seasonal adjustment</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./99-status.html" class="sidebar-item-text sidebar-link">Status of the book</a>
+  <a href="./99-status.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Status of the book</span></a>
   </div>
 </li>
       </ul>
 </li>
     </ul>
 </div>
-</nav><!-- margin-sidebar --><div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+</nav><div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+<li><a href="#multiple-series-adjustmtent" id="toc-multiple-series-adjustmtent" class="nav-link active" data-scroll-target="#multiple-series-adjustmtent"><span class="header-section-number">14.0.1</span> Multiple Series adjustmtent</a></li>
+  <li><a href="#backend" id="toc-backend" class="nav-link" data-scroll-target="#backend"><span class="header-section-number">14.0.2</span> Backend</a></li>
+  <li><a href="#parallelization" id="toc-parallelization" class="nav-link" data-scroll-target="#parallelization"><span class="header-section-number">14.0.3</span> Parallelization</a></li>
+  <li><a href="#all-platforms" id="toc-all-platforms" class="nav-link" data-scroll-target="#all-platforms"><span class="header-section-number">14.0.4</span> All Platforms</a></li>
+  <li><a href="#non-window-platform" id="toc-non-window-platform" class="nav-link" data-scroll-target="#non-window-platform"><span class="header-section-number">14.0.5</span> Non-Window Platform</a></li>
+  <li><a href="#composite-spec" id="toc-composite-spec" class="nav-link" data-scroll-target="#composite-spec"><span class="header-section-number">14.0.6</span> composite spec</a></li>
+  <li><a href="#indirect-vs-direct-adjusmtent" id="toc-indirect-vs-direct-adjusmtent" class="nav-link" data-scroll-target="#indirect-vs-direct-adjusmtent"><span class="header-section-number">14.0.7</span> Indirect vs direct adjusmtent</a></li>
+  <li><a href="#accounting-relationships" id="toc-accounting-relationships" class="nav-link" data-scroll-target="#accounting-relationships"><span class="header-section-number">14.0.8</span> Accounting relationships</a></li>
+  <li><a href="#built-in-tools" id="toc-built-in-tools" class="nav-link" data-scroll-target="#built-in-tools"><span class="header-section-number">14.1</span> Built-in tools</a></li>
+  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/43-indirect-vs-direct.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
-<h1 class="title"><span id="sec-indirect-vs-direct-adjustment" class="quarto-section-identifier d-none d-lg-block"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Indirect vs direct adjustment</span></span></h1>
+<h1 class="title"><span id="sec-indirect-vs-direct-adjustment" class="quarto-section-identifier"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Indirect vs direct adjustment</span></span></h1>
 </div>
 
 
@@ -254,7 +330,7 @@ ul.task-list li input[type="checkbox"] {
   
 
 </header><div class="status">
-<div class="callout-important callout callout-style-simple">
+<div class="callout callout-style-simple callout-important">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -265,13 +341,256 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </div>
-<ul>
-<li>Should the subcomponents of a series be adjusted separately?</li>
-</ul>
+<p>Seasonally adjusted series of aggregates can be derived in two ways: either directly by adjusting the aggregates or indirectly by aggregating seasonally adjusted data of the component series. Generally, the results will differ, sometimes significantly. Conceptually, neither the direct approach nor the indirect approach is optimal, and we will discuss some arguments later on.</p>
+<p>Before we go into the details of the distinction between direct and indirect adjustment, let’s take a look at how <em>seasonal</em> can handle multiple time series.</p>
+<section id="multiple-series-adjustmtent" class="level3" data-number="14.0.1"><h3 data-number="14.0.1" class="anchored" data-anchor-id="multiple-series-adjustmtent">
+<span class="header-section-number">14.0.1</span> Multiple Series adjustmtent</h3>
+<p>Since <a href="https://cran.r-project.org/package=seasonal">seasonal version 1.8</a>, it is now possible to seasonally adjust multiple series in a single call to <code><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas()</a></code>. This is done by using the built-in batch mode of X-13. It removes the need for loops or <code><a href="https://rdrr.io/r/base/lapply.html">lapply()</a></code> in such cases and finally brings one missing feature of X-13 to seasonal – the <em>composite</em> spec.</p>
+<p>Multiple adjustments can be performed by supplying multiple time series as an <code>"mts"</code> object:</p>
+<div class="cell">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.seasonal.website">seasonal</a></span><span class="op">)</span></span>
+<span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">fdeaths</span>, <span class="va">mdeaths</span><span class="op">)</span>, x11 <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/final.html">final</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
+<span><span class="co">#&gt;           fdeaths  mdeaths</span></span>
+<span><span class="co">#&gt; Jan 1974 614.1235 1598.740</span></span>
+<span><span class="co">#&gt; Feb 1974 542.3500 1492.127</span></span>
+<span><span class="co">#&gt; Mar 1974 613.5029 1443.238</span></span>
+<span><span class="co">#&gt; Apr 1974 591.5725 1694.643</span></span>
+<span><span class="co">#&gt; May 1974 607.4970 1696.021</span></span>
+<span><span class="co">#&gt; Jun 1974 543.8415 1558.886</span></span>
+<span><span class="co">#&gt; Jul 1974 597.0745 1663.176</span></span>
+<span><span class="co">#&gt; Aug 1974 587.0533 1623.498</span></span>
+<span><span class="co">#&gt; Sep 1974 588.2693 1741.394</span></span>
+<span><span class="co">#&gt; Oct 1974 735.6666 1735.516</span></span>
+<span><span class="co">#&gt; Nov 1974 602.0218 1665.590</span></span>
+<span><span class="co">#&gt; Dec 1974 496.3985 1394.097</span></span>
+<span><span class="co">#&gt; Jan 1975 564.0055 1560.605</span></span>
+<span><span class="co">#&gt; Feb 1975 591.0320 1708.763</span></span>
+<span><span class="co">#&gt; Mar 1975 585.7739 1652.994</span></span>
+<span><span class="co">#&gt; Apr 1975 581.5294 1671.265</span></span>
+<span><span class="co">#&gt; May 1975 537.8055 1588.605</span></span>
+<span><span class="co">#&gt; Jun 1975 584.3284 1600.979</span></span>
+<span><span class="co">#&gt; Jul 1975 566.4872 1541.099</span></span>
+<span><span class="co">#&gt; Aug 1975 617.1197 1623.445</span></span>
+<span><span class="co">#&gt; Sep 1975 516.4781 1521.497</span></span>
+<span><span class="co">#&gt; Oct 1975 559.0481 1577.200</span></span>
+<span><span class="co">#&gt; Nov 1975 561.6315 1602.659</span></span>
+<span><span class="co">#&gt; Dec 1975 580.9778 1569.692</span></span>
+<span><span class="co">#&gt; Jan 1976 519.8106 1477.855</span></span>
+<span><span class="co">#&gt; Feb 1976 882.3725 2180.616</span></span>
+<span><span class="co">#&gt; Mar 1976 674.5057 1744.114</span></span>
+<span><span class="co">#&gt; Apr 1976 467.4502 1366.628</span></span>
+<span><span class="co">#&gt; May 1976 509.7854 1344.809</span></span>
+<span><span class="co">#&gt; Jun 1976 553.5233 1434.662</span></span>
+<span><span class="co">#&gt; Jul 1976 503.2795 1447.952</span></span>
+<span><span class="co">#&gt; Aug 1976 494.2373 1383.932</span></span>
+<span><span class="co">#&gt; Sep 1976 529.1840 1453.496</span></span>
+<span><span class="co">#&gt; Oct 1976 570.4128 1435.912</span></span>
+<span><span class="co">#&gt; Nov 1976 590.4285 1540.551</span></span>
+<span><span class="co">#&gt; Dec 1976 587.0971 1572.631</span></span>
+<span><span class="co">#&gt; Jan 1977 583.2427 1607.153</span></span>
+<span><span class="co">#&gt; Feb 1977 498.9514 1287.403</span></span>
+<span><span class="co">#&gt; Mar 1977 500.4632 1306.324</span></span>
+<span><span class="co">#&gt; Apr 1977 569.2076 1685.581</span></span>
+<span><span class="co">#&gt; May 1977 565.6470 1405.231</span></span>
+<span><span class="co">#&gt; Jun 1977 509.3196 1432.968</span></span>
+<span><span class="co">#&gt; Jul 1977 548.4062 1414.216</span></span>
+<span><span class="co">#&gt; Aug 1977 523.6985 1444.945</span></span>
+<span><span class="co">#&gt; Sep 1977 563.3014 1402.720</span></span>
+<span><span class="co">#&gt; Oct 1977 495.6653 1427.458</span></span>
+<span><span class="co">#&gt; Nov 1977 453.9859 1307.828</span></span>
+<span><span class="co">#&gt; Dec 1977 502.3045 1268.618</span></span>
+<span><span class="co">#&gt; Jan 1978 535.2658 1415.724</span></span>
+<span><span class="co">#&gt; Feb 1978 633.7605 1790.002</span></span>
+<span><span class="co">#&gt; Mar 1978 559.2936 1469.883</span></span>
+<span><span class="co">#&gt; Apr 1978 485.5062 1343.715</span></span>
+<span><span class="co">#&gt; May 1978 590.4080 1509.166</span></span>
+<span><span class="co">#&gt; Jun 1978 574.4467 1464.288</span></span>
+<span><span class="co">#&gt; Jul 1978 571.2263 1428.398</span></span>
+<span><span class="co">#&gt; Aug 1978 542.3579 1424.622</span></span>
+<span><span class="co">#&gt; Sep 1978 551.2099 1422.428</span></span>
+<span><span class="co">#&gt; Oct 1978 557.6905 1399.404</span></span>
+<span><span class="co">#&gt; Nov 1978 479.8979 1199.762</span></span>
+<span><span class="co">#&gt; Dec 1978 550.4253 1397.023</span></span>
+<span><span class="co">#&gt; Jan 1979 548.9834 1557.853</span></span>
+<span><span class="co">#&gt; Feb 1979 576.9922 1425.717</span></span>
+<span><span class="co">#&gt; Mar 1979 549.3468 1393.788</span></span>
+<span><span class="co">#&gt; Apr 1979 546.4590 1449.784</span></span>
+<span><span class="co">#&gt; May 1979 525.9881 1359.843</span></span>
+<span><span class="co">#&gt; Jun 1979 550.2481 1330.113</span></span>
+<span><span class="co">#&gt; Jul 1979 533.7558 1373.156</span></span>
+<span><span class="co">#&gt; Aug 1979 566.6884 1381.653</span></span>
+<span><span class="co">#&gt; Sep 1979 552.6500 1377.175</span></span>
+<span><span class="co">#&gt; Oct 1979 533.9571 1337.640</span></span>
+<span><span class="co">#&gt; Nov 1979 557.9707 1414.101</span></span>
+<span><span class="co">#&gt; Dec 1979 475.5049 1038.506</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This will perform two seasonal adjustments, one for <code>fdeaths</code> and one for <code>mdeaths</code>. X-13 spec-argument combinations can be applied in the usual way, such as <code>x11 = ""</code>. Note that if entered that way, they will apply to both series. The <a href="https://cran.r-project.org/web/packages/seasonal/vignettes/multiple.html">vignette on multiple adjustments</a> describes how to specify options for individual series.</p>
+</section><section id="backend" class="level3" data-number="14.0.2"><h3 data-number="14.0.2" class="anchored" data-anchor-id="backend">
+<span class="header-section-number">14.0.2</span> Backend</h3>
+<p>X-13 ships with a batch mode that allows multiple adjustments in a single call to X-13. This is now the default in seasonal (<code>multimode = "x13"</code>). Alternatively, X-13 can be called for each series (<code>multimode = "R"</code>). The results should be usually the same, but switching to <code>multimode = "R"</code> may be useful for debugging:</p>
+<div class="cell">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">fdeaths</span>, <span class="va">mdeaths</span><span class="op">)</span>, multimode <span class="op">=</span> <span class="st">"x13"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; $fdeaths</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; seas(x = cbind(fdeaths, mdeaths), multimode = "x13")</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients:</span></span>
+<span><span class="co">#&gt;       Constant      AO1976.Feb  MA-Seasonal-12  </span></span>
+<span><span class="co">#&gt;       -0.01578         0.43345         0.63119  </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $mdeaths</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; seas(x = cbind(fdeaths, mdeaths), multimode = "x13")</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients:</span></span>
+<span><span class="co">#&gt;        AO1976.Feb         LS1976.Apr         AO1977.Apr         AO1978.Feb  </span></span>
+<span><span class="co">#&gt;            0.3319            -0.1330             0.1957             0.2305  </span></span>
+<span><span class="co">#&gt;        AO1979.Dec  MA-Nonseasonal-01     MA-Seasonal-12  </span></span>
+<span><span class="co">#&gt;           -0.3149            -0.3854             0.6120  </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $call</span></span>
+<span><span class="co">#&gt; seas(x = cbind(fdeaths, mdeaths), multimode = "x13")</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; attr(,"class")</span></span>
+<span><span class="co">#&gt; [1] "seas_multi" "list"</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">fdeaths</span>, <span class="va">mdeaths</span><span class="op">)</span>, multimode <span class="op">=</span> <span class="st">"R"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; $fdeaths</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; seas(x = cbind(fdeaths, mdeaths), multimode = "R")</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients:</span></span>
+<span><span class="co">#&gt;       Constant      AO1976.Feb  MA-Seasonal-12  </span></span>
+<span><span class="co">#&gt;       -0.01578         0.43345         0.63119  </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $mdeaths</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; seas(x = cbind(fdeaths, mdeaths), multimode = "R")</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients:</span></span>
+<span><span class="co">#&gt;        AO1976.Feb         LS1976.Apr         AO1977.Apr         AO1978.Feb  </span></span>
+<span><span class="co">#&gt;            0.3319            -0.1330             0.1957             0.2305  </span></span>
+<span><span class="co">#&gt;        AO1979.Dec  MA-Nonseasonal-01     MA-Seasonal-12  </span></span>
+<span><span class="co">#&gt;           -0.3149            -0.3854             0.6120  </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $call</span></span>
+<span><span class="co">#&gt; seas(x = cbind(fdeaths, mdeaths), multimode = "R")</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; attr(,"class")</span></span>
+<span><span class="co">#&gt; [1] "seas_multi" "list"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In general, <code>multimode = "x13"</code> is faster. The following comparison on a MacBook Pro shows a modest speed gain, but more significant differences have been observed on other systems:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">many</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">fdeaths</span><span class="op">)</span>, <span class="fl">100</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">many</span>, multimode <span class="op">=</span> <span class="st">"x13"</span><span class="op">)</span><span class="op">)</span></span>
+<span> <span class="co">#   user  system elapsed</span></span>
+<span> <span class="co"># 13.342   0.406  13.766</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">many</span>, multimode <span class="op">=</span> <span class="st">"R"</span><span class="op">)</span><span class="op">)</span></span>
+<span> <span class="co">#   user  system elapsed</span></span>
+<span> <span class="co"># 15.819   0.814  16.958</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The return value of <code>system.time</code> tells you how much time has been used for the operation. The first number measures the time spent in the current session, while ‘elapsed’ measures the overall time, as measured by the clock. <code>system</code> measures the operating system overhead. The distinction between these numbers is not too significant here; simply focus on ‘elapsed’, the details will be more interesting in the parallel examples.</p>
+</section><section id="parallelization" class="level3" data-number="14.0.3"><h3 data-number="14.0.3" class="anchored" data-anchor-id="parallelization">
+<span class="header-section-number">14.0.3</span> Parallelization</h3>
+<p>In principle, R is single threaded, and operations are normally performed on a single core. While there are many ways to perform parallel operations in R, their details often depend on the platform. So, currently, it is not possible to call parallelized operations directly from seasonal. Here is an example that computes the operations below on an 8 core Mac. The <a href="https://furrr.futureverse.org">furrrr</a> and the future package save a lot of the complications arising around parallelization.</p>
+</section><section id="all-platforms" class="level3" data-number="14.0.4"><h3 data-number="14.0.4" class="anchored" data-anchor-id="all-platforms">
+<span class="header-section-number">14.0.4</span> All Platforms</h3>
+<p>On Windows, Mac and Linux, you can use the <em>multisession</em> strategy, which essentially starts a separate session of R for any of the available cores. In the following, we use an 8 core Mac and gain a more than 4 times speed gain.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/DavisVaughan/furrr">furrr</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html">plan</a></span><span class="op">(</span><span class="va">multisession</span>, workers <span class="op">=</span> <span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://future.futureverse.org/reference/nbrOfWorkers.html">nbrOfWorkers</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span><span class="fu"><a href="https://furrr.futureverse.org/reference/future_map.html">future_map</a></span><span class="op">(</span><span class="va">many</span>, <span class="va">seas</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#   user  system elapsed</span></span>
+<span><span class="co">#  0.171   0.008   4.081</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section><section id="non-window-platform" class="level3" data-number="14.0.5"><h3 data-number="14.0.5" class="anchored" data-anchor-id="non-window-platform">
+<span class="header-section-number">14.0.5</span> Non-Window Platform</h3>
+<p>Mac and Linux allow forking parallelization, which is easier to set up. Here, multiple cores share the same memory, without having to start separate sessions:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/DavisVaughan/furrr">furrr</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html">plan</a></span><span class="op">(</span><span class="va">multicore</span>, workers <span class="op">=</span> <span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://future.futureverse.org/reference/nbrOfWorkers.html">nbrOfWorkers</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span><span class="fu"><a href="https://furrr.futureverse.org/reference/future_map.html">future_map</a></span><span class="op">(</span><span class="va">many</span>, <span class="va">seas</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#   user  system elapsed</span></span>
+<span><span class="co"># 23.389   1.704   3.508</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section><section id="composite-spec" class="level3" data-number="14.0.6"><h3 data-number="14.0.6" class="anchored" data-anchor-id="composite-spec">
+<span class="header-section-number">14.0.6</span> composite spec</h3>
+<p>Support for the X-13 batch mode makes it finally possible to use the <em>composite</em> spec – the one feature of X-13 that was missing in seasonal. Sometimes, one has to decide whether seasonal adjustment should be performed on a granular level or on an aggregated level. The <em>composite</em> spec helps you to analyze the problem and to compare the direct and the indirect adjustments.</p>
+<p>The <code>composite</code> argument is a list with an X-13 specification that is applied on the aggregated series. Specification works identically for other series in <code><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas()</a></code>, including the application of the defaults. If you provide an empty list, the usual defaults of <code><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas()</a></code> are used. A minimal composite call looks like this:</p>
+<div class="cell">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">mdeaths</span>, <span class="va">fdeaths</span><span class="op">)</span>,</span>
+<span>  composite <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  series.comptype <span class="op">=</span> <span class="st">"add"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; $mdeaths</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; seas(x = cbind(mdeaths, fdeaths), composite = list(), series.comptype = "add")</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients:</span></span>
+<span><span class="co">#&gt;        AO1976.Feb         LS1976.Apr         AO1977.Apr         AO1978.Feb  </span></span>
+<span><span class="co">#&gt;            0.3319            -0.1330             0.1957             0.2305  </span></span>
+<span><span class="co">#&gt;        AO1979.Dec  MA-Nonseasonal-01     MA-Seasonal-12  </span></span>
+<span><span class="co">#&gt;           -0.3149            -0.3854             0.6120  </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $fdeaths</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; seas(x = cbind(mdeaths, fdeaths), composite = list(), series.comptype = "add")</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients:</span></span>
+<span><span class="co">#&gt;       Constant      AO1976.Feb  MA-Seasonal-12  </span></span>
+<span><span class="co">#&gt;       -0.01578         0.43345         0.63119  </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $composite</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; seas(x = cbind(mdeaths, fdeaths), composite = list(), series.comptype = "add")</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients:</span></span>
+<span><span class="co">#&gt;          Constant         AO1976.Feb  MA-Nonseasonal-01     MA-Seasonal-12  </span></span>
+<span><span class="co">#&gt;          -0.03133            0.31247           -0.43509            0.99937  </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $call</span></span>
+<span><span class="co">#&gt; seas(x = cbind(mdeaths, fdeaths), composite = list(), series.comptype = "add")</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; attr(,"class")</span></span>
+<span><span class="co">#&gt; [1] "seas_multi" "list"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>You can verify that the composite refers to the total of <code>mdeaths</code> and <code>fdeaths</code> by running:</p>
+<div class="cell">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">ldeaths</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; seas(x = ldeaths)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients:</span></span>
+<span><span class="co">#&gt;          Constant         AO1976.Feb  MA-Nonseasonal-01     MA-Seasonal-12  </span></span>
+<span><span class="co">#&gt;          -0.03133            0.31247           -0.43509            0.99937</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>where <code>ldeaths</code> is the sum of <code>mdeaths</code> and <code>fdeaths</code>.</p>
+</section><section id="indirect-vs-direct-adjusmtent" class="level3" data-number="14.0.7"><h3 data-number="14.0.7" class="anchored" data-anchor-id="indirect-vs-direct-adjusmtent">
+<span class="header-section-number">14.0.7</span> Indirect vs direct adjusmtent</h3>
+<p>What we have seen above is an example of indirect vs direct ajustment. How to judge which one is better?</p>
+<p>The choice between direct and indirect seasonal adjustment may be guided by the expected uses of seasonally adjusted data. For some uses, preserving accounting and aggregation relationships in the data may be crucial, while for other uses, the time-series properties of the derived estimates may be more important.</p>
+<p>There is no single standard in what’s the best practice. Some countries obtain the seasonally adjusted aggregates as the sum of adjusted components, while others prefer to adjust the totals independently. This can result in discrepancies between the seasonally adjusted total and the sum of the seasonally adjusted component series.</p>
+<p>According to the IMF Manual, Allocating discrepancies on components to achieve consistency should be avoided.</p>
+</section><section id="accounting-relationships" class="level3" data-number="14.0.8"><h3 data-number="14.0.8" class="anchored" data-anchor-id="accounting-relationships">
+<span class="header-section-number">14.0.8</span> Accounting relationships</h3>
+<p>If the differences are insignificant, accounting and aggregation relationships in the seasonally adjusted data should be guaranteed.</p>
+</section><section id="built-in-tools" class="level2" data-number="14.1"><h2 data-number="14.1" class="anchored" data-anchor-id="built-in-tools">
+<span class="header-section-number">14.1</span> Built-in tools</h2>
+<p>When the indirect approach is considered, seasonally adjusted aggregates should be checked to exclude the presence of residual seasonality using the F-test available in X-13.</p>
+<p>X-13 offers various diagnostic tools to evaluate the direct and indirect adjustment of aggregates. The program calculates seasonally adjusted aggregates using the direct and indirect approach and provides in output a set of statistics to compare the results (M diagnostics, measures of smoothness, frequency spectrum diagnostics, etc.). Furthermore, sliding spans and revision history diagnostics can be requested to assess which of the two approaches provides more stable and reliable seasonally adjusted results.</p>
 
 
-
-</main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
@@ -298,9 +617,23 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     icon: icon
   };
   anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
   const clipboard = new window.ClipboardJS('.code-copy-button', {
-    target: function(trigger) {
-      return trigger.previousElementSibling;
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
     }
   });
   clipboard.on('success', function(e) {
@@ -365,6 +698,92 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return note.innerHTML;
     });
   }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
   const findCites = (el) => {
     const parentEl = el.parentElement;
     if (parentEl) {
@@ -417,6 +836,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div> <!-- /content -->
 <footer class="footer"><div class="nav-footer">
     <div class="nav-footer-left">by James Livsey and Christoph Sax</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
     <div class="nav-footer-right">Seasonal Adjustment in R</div>
   </div>
 </footer>
