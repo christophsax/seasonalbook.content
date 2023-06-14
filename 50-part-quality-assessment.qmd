@@ -10,3 +10,25 @@ status("drafting")  # drafting, polishing, complete
 This section focuses on diagnostic tools for seasonal adjustment.
 This will be written as a stand-alone section as well as a continuance of prior sections.
 The idea here is that many readers may be interested in checking the quality of their adjustments but not need help performing it.
+
+Seasonal Adjustment Diagnostics refers to the process of evaluating and assessing the quality of seasonal adjustments made to time series data using the X-13ARIMA-SEATS software.
+The objectives of these diagnostics are to determine the presence of seasonality in the series, assess the overall quality of the seasonal adjustment, and make decisions regarding adjustments and options.
+The diagnostics include spectral graphs, stability diagnostics, sliding spans, revisions history, and monitoring and quality diagnostics.
+The diagnostics involve analyzing the series in the time and frequency domains, examining spectral graphs, and identifying visually significant peaks.
+Other diagnostic tools include the F test for seasonal regressors and the QS (autocorrelation) test for residual seasonality.
+Sliding spans diagnostic compares adjustments from overlapping subspans of the series to assess stability.
+We can use all this information to help make choice about seasonal adjustment options, such as seasonal filter lengths or sigma limits.
+Let's look back at our flow chart, with a done box added, to see where seasonal adjustment diagnostics fit in.
+Notice there are 3 routes the diagnostics could take us; back to seasonal adjustment, to completion, or all the way back to regARIMA modeling.
+
+```{mermaid}
+flowchart TD
+  A[RegARIMA Modeling] --> B(Model Comparison / Diagnostics)
+  B --> A
+  A --> C[Seasonal Adjustment]
+  C --> D{Seasonal Adjustment Diagnostics}
+  D -.-> C
+  D -.-> A
+  D -.-> E[Done]
+```
+
