@@ -9,12 +9,11 @@ status("drafting")  # drafting, polishing, complete
 
 This chapter will be broken up into relevant pieces that construct a good seasonal adjustment.
 Yet, it is the sum of these parts that ultimately comprise a quality adjustment and it is difficult to completely break them up in a vacuum.
-A Quality of seasonal adjustment should eliminate residual seasonality and calendar effects, exhibit stability and smoothness, and have no significant seasonal or trading day effects.
-Different users have a different definition of 'quality' that depends on their end goals and their end users of a seasonal adjustment. 
+Different users have a different definitions of 'quality' that depends on their end goals and their end users of a seasonal adjustment.
 For example, a federal statistical agency, who is concerned about the users of their seasonal adjustments, may have very different definition of quality compared with a single analyst who is interested in only long-term trend.
+A good starting point is a quality seasonal adjustment should eliminate residual seasonality and calendar effects, exhibit stability and smoothness, and have no significant seasonal or trading day effects.
 
-Another consideration is the span of your series that is required to produce a quality adjustment... 
-
+Another consideration is the span of your series that is required to produce a quality adjustment...
 
 ## Residual Seasonality
 
@@ -30,11 +29,11 @@ Three prominent ones are (I THINK THIS IS A GOOD PLACE TO ADD A REFERENCE TABLE 
 -   QS-statistic
 -   F-test for residual seasonality
 
-### Spectrum 
+### Spectrum
 
-We start with visual inspection of the spectrum of a series. 
-For those unfamiliar with spectral analysis of a time series, the following discussion is intended to be accessable to all trying to perform seasonal adjustment. 
-Hence, we take some liberies with language an interpretation in an effort to make the discussion accessible. 
+We start with visual inspection of the spectrum of a series.
+For those unfamiliar with spectral analysis of a time series, the following discussion is intended to be accessable to all trying to perform seasonal adjustment.
+Hence, we take some liberies with language an interpretation in an effort to make the discussion accessible.
 For example, we use the term spectrum to refer to the theoretical construct as well as the estimated periodogram.
 We note here that we will use a parametric AR representation to estimate the spectrum of a process.
 This is the easiest and most straight forward way to get smooth yet sensible empirical specral estimates for the everyday user.
@@ -45,7 +44,7 @@ For example, looking at the spectrum of the AirPassengers series we see large pe
 spec.ar(AirPassengers, order = 13)
 ```
 
-We know that X-11 with automatic modeling and automatic filter identification performs a good seasonal adjustment. 
+We know that X-11 with automatic modeling and automatic filter identification performs a good seasonal adjustment.
 If we look at the spectrum of the seasonally adjusted series, the peaks have been removed.
 
 ```{r}
@@ -72,12 +71,10 @@ The null hypothesis is that the autocorrelation is zero, indicating no seasonal 
 Hence, a small p-value indicates residual seasonality.
 
 Let $\hat{\gamma}(h)$ be the estimated autocorrelation function of a differenced time series.
-The QS statistic for a montly time series is
-$$
+The QS statistic for a montly time series is $$
 QS = n(n+2)\left(\frac{\hat{\gamma}(12)^2}{n - 12} + \frac{\hat{\gamma}(24)^2}{n - 24}\right)
-$$
-For a quarterly series replace the 12s and 24s with 4s and 8s. 
-The value QS is approximately chi-squared with 2 degrees of freedom. 
+$$ For a quarterly series replace the 12s and 24s with 4s and 8s.
+The value QS is approximately chi-squared with 2 degrees of freedom.
 The seasonal package provides functionality to immediately look at the QS table from the UDG file.
 We will breakdown what all these tests and p-values are
 
@@ -85,3 +82,62 @@ We will breakdown what all these tests and p-values are
 m <- seas(AirPassengers)
 qs(m)
 ```
+
+In the output table we see 14 rows.
+The top 7 rows correspond to the QS statistic
+1. Original series 
+1. Original series, adjusted for extreme values 
+1. Model residuals
+1. Seasonally adjusted series 
+1. Seasonally adjusted series, adjusted for extreme values
+1. Irregular series 
+1. Irregular series, adjusted for extreme values
+The next seven rows are simply the exact same statistics calculated on a (possibly) shorter span of the data. 
+The default span used for the second 7 QS statistics is set to be the same as the spectrum uses, 96 observations or 8 years in a monthly series.
+
+## Stability and smoothness
+
+Next we explore two related concepts and their associated spec.
+First, the stability of a seasonal adjustment which refers to its consistency and reliability over time. 
+It assesses whether the model fits remain consistent as new data becomes available.
+Stability is important as large revisions are a hindrance in a production cycle of seasonal adjustment.
+Again, this is a good example of a situation where a user interested in only a single seasonal adjustment (will never adjust this series again) may not care to read this section. 
+The diagnostics provided in other chapters will more adequately aid them to produce a quality seasonal adjustment.
+However, for those that produce a seasonal adjustment, say monthly, stability is crucial for producing consistent and trustworthy data that can be used for analysis, decision-making, and forecasting. 
+
+
+
+### Sliding spans
+
+The basic diagnostics provide descriptive information about how seasonal adjustments and their month-to-month changes vary when the data span used to calculate them is changed systematically. When comparing two neighboring spans, the extent of their differences depends on whether one starts and ends a year later than the other. The length of the data span is determined by the length of the seasonal filter used for the adjustment. 
+
+```{mermaid}
+gantt
+  title Illustration of Four 8-year spans
+  dateFormat YYYY-MM
+  section Full Data Span
+  Span 1 : des1, 1974-01, 8y
+  Span 2 : des2, 1975-01, 8y
+  Span 3 : des3, 1976-01, 8y
+  Span 4 : des4, 1977-01, 8y
+```
+
+
+For series where all seasonally adjusted values are positive, two important sliding spans statistics, A(%) and MM(%), are viewed as follows.
+
+```{r}
+m <- seas(AirPassengers, 
+          x11.seasonalma = "S3X9",
+          slidingspans.length = 40,
+          slidingspans.numspans = 3
+)
+# Seasonal Factors - Percentage of months flagged as unstable
+SF <- udg(m, "s2.a.per")
+row.names(SF) <- c("Number of months flagged", "Total number of months", "Percent")
+colnames(SF) <- "seasonal factors"
+print(SF)
+# Month-to-Month Changes in SA Series - Percentage of months flagged as unstable
+udg(m, "s2.d.per")
+```
+
+### Histories
