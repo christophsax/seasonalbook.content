@@ -18,6 +18,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -266,7 +300,16 @@ ul.task-list li input[type="checkbox"] {
 </nav><div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+<li>
+<a href="#case-study-imports-of-goods-to-china" id="toc-case-study-imports-of-goods-to-china" class="nav-link active" data-scroll-target="#case-study-imports-of-goods-to-china"><span class="header-section-number">11.1</span> Case Study: Imports of Goods to China</a>
+  <ul class="collapse">
+<li><a href="#identifying-a-seasonal-break" id="toc-identifying-a-seasonal-break" class="nav-link" data-scroll-target="#identifying-a-seasonal-break"><span class="header-section-number">11.1.1</span> Identifying a seasonal break</a></li>
+  </ul>
+</li>
+  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/34-seasonal-breaks.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
@@ -295,15 +338,162 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </div>
-<ul>
-<li><p>Why to care about seasonal breaks?</p></li>
-<li><p>Detection of seasonal breaks</p></li>
-<li><p>Correction for seasonal breaks</p></li>
-</ul>
+<!--
+-   Why to care about seasonal breaks?
+
+-   Detection of seasonal breaks
+
+-   Correction for seasonal breaks
+
+ -->
+<p>Some series have seasonal breaks. Apart from visual inspection of the unadjusted series, a look at monthplot() is usually helpful. If there are seasonal breaks, this leads to a jump in the SI ratio.</p>
+<section id="case-study-imports-of-goods-to-china" class="level2" data-number="11.1"><h2 data-number="11.1" class="anchored" data-anchor-id="case-study-imports-of-goods-to-china">
+<span class="header-section-number">11.1</span> Case Study: Imports of Goods to China</h2>
+<p>We previously used the imports of goods to China, as series that seem to have a pretty obvious seasonal break.</p>
+<p>Chinese imports are included as an example series in seasonal, both with and without the official seasonal adjustment.</p>
+<div class="cell">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/tsbox/">tsbox</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/packageDescription.html">packageVersion</a></span><span class="op">(</span><span class="st">"seasonalbook"</span><span class="op">)</span> <span class="op">&gt;=</span> <span class="st">"0.0.2"</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">seasonalbook</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.seasonal.website">seasonal</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://docs.ropensci.org/tsbox/reference/ts_plot.html">ts_plot</a></span><span class="op">(</span><span class="va">imp_cn</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="34-seasonal-breaks_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="864"></p>
+</div>
+</div>
+<p>The series has a very different seasonal pattern before 2000. In our previous example, we simply cut the data and focused on the later period.</p>
+<div class="cell">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://docs.ropensci.org/tsbox/reference/ts_span.html">ts_span</a></span><span class="op">(</span><span class="va">imp_cn</span>, start <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span></span>
+<span><span class="co">#&gt;               Jan          Feb          Mar          Apr          May</span></span>
+<span><span class="co">#&gt; 2000  15258000000  13428000000  17806000000  18355000000  16966000000</span></span>
+<span><span class="co">#&gt; 2001  15545000000  18226000000  20773000000  21859000000  18809000000</span></span>
+<span><span class="co">#&gt; 2002  18970000000  15918000000  22486000000  25753000000  22435000000</span></span>
+<span><span class="co">#&gt; 2003  31016000000  23780000000  32549000000  34601000000  31604000000</span></span>
+<span><span class="co">#&gt; 2004  35710000000  42020000000  46480000000  49530000000  42980000000</span></span>
+<span><span class="co">#&gt; 2005  44260000000  39900000000  55210000000  57660000000  49400000000</span></span>
+<span><span class="co">#&gt; 2006  55497000000  51684000000  66857000000  66491000000  60110000000</span></span>
+<span><span class="co">#&gt; 2007  70726000000  58358000000  76686000000  80760000000  71644000000</span></span>
+<span><span class="co">#&gt; 2008  90230000000  79130000000  95800000000 102390000000 100770000000</span></span>
+<span><span class="co">#&gt; 2009  51375000000  60058000000  71886000000  78987000000  75689000000</span></span>
+<span><span class="co">#&gt; 2010  95517000000  87110000000 119465000000 118434000000 112213000000</span></span>
+<span><span class="co">#&gt; 2011 144591000000 104270000000 152310000000 144370000000 144120000000</span></span>
+<span><span class="co">#&gt; 2012 122813000000 146394000000 160395000000 144581000000 162863000000</span></span>
+<span><span class="co">#&gt; 2013 159156000000 124450000000 183059000000 168619000000 162160000000</span></span>
+<span><span class="co">#&gt; 2014 175138000000 136846000000 162257000000 169980000000 159537000000</span></span>
+<span><span class="co">#&gt; 2015 140561000000 108485000000 141719000000 142701000000 131646000000</span></span>
+<span><span class="co">#&gt; 2016 112591000000  93633000000 130313000000 126998000000 130996000000</span></span>
+<span><span class="co">#&gt; 2017 131890000000 129500000000 156380000000 141490000000 149230000000</span></span>
+<span><span class="co">#&gt; 2018 180142000000 137630000000 179100000000 171650000000 187950000000</span></span>
+<span><span class="co">#&gt; 2019 179670000000 132371000000 166867000000 180532000000 172773000000</span></span>
+<span><span class="co">#&gt; 2020 156910000000 142327000000 165213108000 154900580000 143886746000</span></span>
+<span><span class="co">#&gt; 2021 198640212000 166975331000 227336197000 221063587000 218382769000</span></span>
+<span><span class="co">#&gt; 2022 241914340000 186832863000 228704260000 222500588000 229490725000</span></span>
+<span><span class="co">#&gt;               Jun          Jul          Aug          Sep          Oct</span></span>
+<span><span class="co">#&gt; 2000  20300000000  19490000000  20785000000  20713000000  18943000000</span></span>
+<span><span class="co">#&gt; 2001  21252000000  20957000000  22162000000  21851000000  18902000000</span></span>
+<span><span class="co">#&gt; 2002  23094000000  26988000000  27206000000  29794000000  25197000000</span></span>
+<span><span class="co">#&gt; 2003  32336000000  36514000000  34621000000  41652000000  35193000000</span></span>
+<span><span class="co">#&gt; 2004  48890000000  48980000000  46820000000  50720000000  45440000000</span></span>
+<span><span class="co">#&gt; 2005  56210000000  54900000000  57780000000  62570000000  56050000000</span></span>
+<span><span class="co">#&gt; 2006  66808000000  65714000000  71970000000  76342000000  64298000000</span></span>
+<span><span class="co">#&gt; 2007  76469000000  83347000000  86224000000  88263000000  80547000000</span></span>
+<span><span class="co">#&gt; 2008 100470000000 111412000000 105999000000 106792000000  92748000000</span></span>
+<span><span class="co">#&gt; 2009  87540000000  95150000000  88243000000 103199000000  86848000000</span></span>
+<span><span class="co">#&gt; 2010 117153000000 116888000000 119475000000 128356000000 109107000000</span></span>
+<span><span class="co">#&gt; 2011 139700000000 145020000000 155390000000 154990000000 140230000000</span></span>
+<span><span class="co">#&gt; 2012 148199000000 151629000000 151467000000 158696000000 143448000000</span></span>
+<span><span class="co">#&gt; 2013 146979000000 168160000000 162321000000 170556000000 154341000000</span></span>
+<span><span class="co">#&gt; 2014 155223841100 165590000000 158629387300 182635508000 161461228100</span></span>
+<span><span class="co">#&gt; 2015 144347000000 151292000000 136473000000 145317000000 130903000000</span></span>
+<span><span class="co">#&gt; 2016 131447000000 132051000000 138601000000 142503000000 128420000000</span></span>
+<span><span class="co">#&gt; 2017 153560000000 146690000000 157090000000 169570000000 150810000000</span></span>
+<span><span class="co">#&gt; 2018 175113000000 187516000000 189440000000 195000000000 182375000000</span></span>
+<span><span class="co">#&gt; 2019 162817000000 177758000000 179959655000 178474843000 169898075000</span></span>
+<span><span class="co">#&gt; 2020 167152978000 175301874000 176333799000 202759047000 178739425000</span></span>
+<span><span class="co">#&gt; 2021 229890607000 226073489000 235984248000 238979506000 215681597000</span></span>
+<span><span class="co">#&gt; 2022 233322854000 231696993000 235527165000 238011751000 213217901000</span></span>
+<span><span class="co">#&gt;               Nov          Dec</span></span>
+<span><span class="co">#&gt; 2000  21641000000  21414000000</span></span>
+<span><span class="co">#&gt; 2001  20846000000  22390000000</span></span>
+<span><span class="co">#&gt; 2002  28735000000  28734000000</span></span>
+<span><span class="co">#&gt; 2003  36893000000  42336000000</span></span>
+<span><span class="co">#&gt; 2004  50970000000  52680000000</span></span>
+<span><span class="co">#&gt; 2005  61660000000  64380000000</span></span>
+<span><span class="co">#&gt; 2006  72926000000  73097000000</span></span>
+<span><span class="co">#&gt; 2007  91203000000  91723000000</span></span>
+<span><span class="co">#&gt; 2008  74657000000  72046000000</span></span>
+<span><span class="co">#&gt; 2009  94691000000 112349000000</span></span>
+<span><span class="co">#&gt; 2010 130970000000 141466000000</span></span>
+<span><span class="co">#&gt; 2011 159770000000 158020000000</span></span>
+<span><span class="co">#&gt; 2012 159776000000 167805000000</span></span>
+<span><span class="co">#&gt; 2013 168390000000 182165000000</span></span>
+<span><span class="co">#&gt; 2014 156966500000 177900668700</span></span>
+<span><span class="co">#&gt; 2015 142616000000 163506000000</span></span>
+<span><span class="co">#&gt; 2016 149317000000 168595000000</span></span>
+<span><span class="co">#&gt; 2017 177170000000 177112000000</span></span>
+<span><span class="co">#&gt; 2018 182670000000 164190000000</span></span>
+<span><span class="co">#&gt; 2019 183411013000 191057245000</span></span>
+<span><span class="co">#&gt; 2020 192673058000 203753955000</span></span>
+<span><span class="co">#&gt; 2021 253813881000 246035373000</span></span>
+<span><span class="co">#&gt; 2022 226252602000 228066200000</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Back then, we said that adjusting the whole series in one step is possible, but for good results one should manually model the seasonal break. Let’s do this now.</p>
+<section id="identifying-a-seasonal-break" class="level3" data-number="11.1.1"><h3 data-number="11.1.1" class="anchored" data-anchor-id="identifying-a-seasonal-break">
+<span class="header-section-number">11.1.1</span> Identifying a seasonal break</h3>
+<p>In part, the seasonal break is visible in the series. It is more straigthforward to spot in the monthplot of the series:</p>
+<div class="cell">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/monthplot.html">monthplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">imp_cn</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="34-seasonal-breaks_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="864"></p>
+</div>
+</div>
+<p>This makes it obvious that there were very strong December effects before 2000. We don’t know anything about the series, but we can speculate thatprior to 2000, custom receipts were counted when they were handed in (at the end of the year), rather than at the date of import.</p>
+<div class="cell">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">imp_cn</span>, regression.variables <span class="op">=</span> <span class="st">"seasonal/2000.jan//"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; seas(x = imp_cn, regression.variables = "seasonal/2000.jan//")</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients:</span></span>
+<span><span class="co">#&gt;                     Estimate Std. Error z value Pr(&gt;|z|)    </span></span>
+<span><span class="co">#&gt; Jan I             -0.1662776  0.0294653  -5.643 1.67e-08 ***</span></span>
+<span><span class="co">#&gt; Feb I             -0.0978000  0.0272530  -3.589 0.000332 ***</span></span>
+<span><span class="co">#&gt; Mar I             -0.0348167  0.0268771  -1.295 0.195182    </span></span>
+<span><span class="co">#&gt; Apr I             -0.0776090  0.0267186  -2.905 0.003676 ** </span></span>
+<span><span class="co">#&gt; May I              0.0797005  0.0266373   2.992 0.002771 ** </span></span>
+<span><span class="co">#&gt; Jun I             -0.0218536  0.0265109  -0.824 0.409755    </span></span>
+<span><span class="co">#&gt; Jul I             -0.0318924  0.0265695  -1.200 0.230007    </span></span>
+<span><span class="co">#&gt; Aug I             -0.0586952  0.0267450  -2.195 0.028191 *  </span></span>
+<span><span class="co">#&gt; Sep I             -0.1054443  0.0268916  -3.921 8.81e-05 ***</span></span>
+<span><span class="co">#&gt; Oct I              0.0505228  0.0269457   1.875 0.060795 .  </span></span>
+<span><span class="co">#&gt; Nov I              0.0161593  0.0267806   0.603 0.546245    </span></span>
+<span><span class="co">#&gt; Weekday            0.0064750  0.0008732   7.415 1.22e-13 ***</span></span>
+<span><span class="co">#&gt; AO1992.Jan        -0.4999959  0.0619702  -8.068 7.13e-16 ***</span></span>
+<span><span class="co">#&gt; AO1993.Jan        -0.6321962  0.0526077 -12.017  &lt; 2e-16 ***</span></span>
+<span><span class="co">#&gt; LS1994.Jan        -0.2743605  0.0533460  -5.143 2.70e-07 ***</span></span>
+<span><span class="co">#&gt; AO1995.Jan        -0.2195211  0.0516319  -4.252 2.12e-05 ***</span></span>
+<span><span class="co">#&gt; AO1999.Dec        -0.4192300  0.0514073  -8.155 3.49e-16 ***</span></span>
+<span><span class="co">#&gt; AO2001.Jan        -0.2615086  0.0497203  -5.260 1.44e-07 ***</span></span>
+<span><span class="co">#&gt; AO2004.Feb         0.2099186  0.0488191   4.300 1.71e-05 ***</span></span>
+<span><span class="co">#&gt; LS2008.Nov        -0.3437454  0.0507702  -6.771 1.28e-11 ***</span></span>
+<span><span class="co">#&gt; AO2009.Jan        -0.2922712  0.0487401  -5.997 2.02e-09 ***</span></span>
+<span><span class="co">#&gt; AO2012.Jan        -0.2063534  0.0484210  -4.262 2.03e-05 ***</span></span>
+<span><span class="co">#&gt; LS2016.Jan        -0.2389579  0.0505957  -4.723 2.33e-06 ***</span></span>
+<span><span class="co">#&gt; MA-Nonseasonal-01  0.5338610  0.0509112  10.486  &lt; 2e-16 ***</span></span>
+<span><span class="co">#&gt; MA-Nonseasonal-02 -0.1686792  0.0509516  -3.311 0.000931 ***</span></span>
+<span><span class="co">#&gt; MA-Seasonal-12     0.8567887  0.0307654  27.849  &lt; 2e-16 ***</span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; SEATS adj.  ARIMA: (0 1 2)(0 1 1)  Obs.: 372  Transform: log</span></span>
+<span><span class="co">#&gt; AICc: 1.684e+04, BIC: 1.694e+04  QS (no seasonality in final):    0  </span></span>
+<span><span class="co">#&gt; Box-Ljung (no autocorr.): 19.61   Shapiro (normality): 0.9922 *</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>A formal test of a seasonal break can be performed by including <code>regression.variables = "seasonal/1999.jan//"</code> into the specification. By default, seasonal outliers are removed from the final series. Therefore, this can be used to model a seasonal break. Modeling a seasonal break is usually preferable to a separation of the time series in two parts.</p>
 
 
-
-</main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+</section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
@@ -551,7 +741,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     <div class="nav-footer-left">by James Livsey and Christoph Sax</div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/34-seasonal-breaks.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></div>
+    </div>
     <div class="nav-footer-right">Seasonal Adjustment in R</div>
   </div>
 </footer>

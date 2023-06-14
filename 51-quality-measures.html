@@ -18,6 +18,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -56,6 +90,7 @@ ul.task-list li input[type="checkbox"] {
     "search-submit-button-title": "Submit"
   }
 }</script><meta name="robots" content="noindex">
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 </head>
 <body class="nav-sidebar floating">
 
@@ -266,7 +301,17 @@ ul.task-list li input[type="checkbox"] {
 </nav><div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+<li>
+<a href="#residual-seasonality" id="toc-residual-seasonality" class="nav-link active" data-scroll-target="#residual-seasonality"><span class="header-section-number">15.1</span> Residual Seasonality</a>
+  <ul class="collapse">
+<li><a href="#spectrum" id="toc-spectrum" class="nav-link" data-scroll-target="#spectrum"><span class="header-section-number">15.1.1</span> Spectrum</a></li>
+  <li><a href="#qs-statistc" id="toc-qs-statistc" class="nav-link" data-scroll-target="#qs-statistc"><span class="header-section-number">15.1.2</span> QS statistc</a></li>
+  </ul>
+</li>
+  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/51-quality-measures.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
@@ -295,15 +340,72 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </div>
+<p>This chapter will be broken up into relevant pieces that construct a good seasonal adjustment. Yet, it is the sum of these parts that ultimately comprise a quality adjustment and it is difficult to completely break them up in a vacuum. A Quality of seasonal adjustment should eliminate residual seasonality and calendar effects, exhibit stability and smoothness, and have no significant seasonal or trading day effects. Different users have a different definition of ‘quality’ that depends on their end goals and their end users of a seasonal adjustment. For example, a federal statistical agency, who is concerned about the users of their seasonal adjustments, may have very different definition of quality compared with a single analyst who is interested in only long-term trend.</p>
+<p>Another consideration is the span of your series that is required to produce a quality adjustment…</p>
+<section id="residual-seasonality" class="level2" data-number="15.1"><h2 data-number="15.1" class="anchored" data-anchor-id="residual-seasonality">
+<span class="header-section-number">15.1</span> Residual Seasonality</h2>
+<p>Residual seasonality plays a crucial role in determining the quality of a seasonal adjustment. Residual seasonality refers to the presence of remaining seasonal patterns or fluctuations in the seasonally adjusted series or its residuals. It indicates that the seasonal adjustment may not have fully removed all the seasonal effects from the data. If residual seasonality is present in the adjusted series, it can lead to biased or misleading analysis and forecasts. It implies that there are still systematic patterns or cycles left in the data, which can hinder accurate interpretation and decision-making. There are many ways to test for residual seasonality. Three prominent ones are (I THINK THIS IS A GOOD PLACE TO ADD A REFERENCE TABLE THAT LISTS THESE THREE METHODS ALONG WITH PROS, CONS, IMMEDIATE INTERPRETATIONS. I THINK MANY READERS WILL JUST WANT TO KNOW HOW TO IDENTIFY RESIDUAL SEASONALITY AND MATCH UP A TEST WITH THEIR SKILL-SET AND THEN SEE HOW TO APPLY IT)</p>
 <ul>
-<li><p>What is a good seasonal adjustment?</p></li>
-<li><p>M statistics</p></li>
-<li><p>Other statistics available in X13</p></li>
+<li>Visual inspection of the spectrum</li>
+<li>QS-statistic</li>
+<li>F-test for residual seasonality</li>
 </ul>
+<section id="spectrum" class="level3" data-number="15.1.1"><h3 data-number="15.1.1" class="anchored" data-anchor-id="spectrum">
+<span class="header-section-number">15.1.1</span> Spectrum</h3>
+<p>We start with visual inspection of the spectrum of a series. For those unfamiliar with spectral analysis of a time series, the following discussion is intended to be accessable to all trying to perform seasonal adjustment. Hence, we take some liberies with language an interpretation in an effort to make the discussion accessible. For example, we use the term spectrum to refer to the theoretical construct as well as the estimated periodogram. We note here that we will use a parametric AR representation to estimate the spectrum of a process. This is the easiest and most straight forward way to get smooth yet sensible empirical specral estimates for the everyday user. Peaks in the spectrum indicate significant influence to your series of a sin/cos curve of the corresponding frequency. For example, looking at the spectrum of the AirPassengers series we see large peaks at frequencies 1/12, 2/12, 3/12, …</p>
+<div class="cell">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/spec.ar.html">spec.ar</a></span><span class="op">(</span><span class="va">AirPassengers</span>, order <span class="op">=</span> <span class="fl">13</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="51-quality-measures_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="864"></p>
+</div>
+</div>
+<p>We know that X-11 with automatic modeling and automatic filter identification performs a good seasonal adjustment. If we look at the spectrum of the seasonally adjusted series, the peaks have been removed.</p>
+<div class="cell">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="va"><a href="http://www.seasonal.website">seasonal</a></span><span class="op">)</span></span>
+<span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">AirPassengers</span>, x11 <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/spec.ar.html">spec.ar</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/final.html">final</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="51-quality-measures_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="864"></p>
+</div>
+</div>
+<p>Let’s intentionally perform a poor seasonal adjustment and see the effect on the spectrum of the seasonally adjusted series.</p>
+<div class="cell">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="va"><a href="http://www.seasonal.website">seasonal</a></span><span class="op">)</span></span>
+<span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">AirPassengers</span>, transform.function <span class="op">=</span> <span class="st">"none"</span>, x11 <span class="op">=</span> <span class="st">""</span>, x11.seasonalma <span class="op">=</span> <span class="st">'stable'</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/spec.ar.html">spec.ar</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/final.html">final</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="51-quality-measures_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="864"></p>
+</div>
+</div>
+<p>Here we see peaks remaining the the final seasonal adjustment. This is a clear indication of lack of quality and something needs to be done to improve the adjustment.</p>
+</section><section id="qs-statistc" class="level3" data-number="15.1.2"><h3 data-number="15.1.2" class="anchored" data-anchor-id="qs-statistc">
+<span class="header-section-number">15.1.2</span> QS statistc</h3>
+<p>The QS statistics check for positive autocorrelation at the seasonal lags. The null hypothesis is that the autocorrelation is zero, indicating no seasonal autocorrelation. Hence, a small p-value indicates residual seasonality.</p>
+<p>Let <span class="math inline">\(\hat{\gamma}(h)\)</span> be the estimated autocorrelation function of a differenced time series. The QS statistic for a montly time series is <span class="math display">\[
+QS = n(n+2)\left(\frac{\hat{\gamma}(12)^2}{n - 12} + \frac{\hat{\gamma}(24)^2}{n - 24}\right)
+\]</span> For a quarterly series replace the 12s and 24s with 4s and 8s. The value QS is approximately chi-squared with 2 degrees of freedom. The seasonal package provides functionality to immediately look at the QS table from the UDG file. We will breakdown what all these tests and p-values are</p>
+<div class="cell">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/udg.html">qs</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
+<span><span class="co">#&gt;                     qs  p-val</span></span>
+<span><span class="co">#&gt; qsori        167.64858 0.0000</span></span>
+<span><span class="co">#&gt; qsorievadj   203.07731 0.0000</span></span>
+<span><span class="co">#&gt; qsrsd          0.00000 1.0000</span></span>
+<span><span class="co">#&gt; qssadj         0.00000 1.0000</span></span>
+<span><span class="co">#&gt; qssadjevadj    0.00000 1.0000</span></span>
+<span><span class="co">#&gt; qsirr          0.00000 1.0000</span></span>
+<span><span class="co">#&gt; qsirrevadj     0.00000 1.0000</span></span>
+<span><span class="co">#&gt; qssori       115.08988 0.0000</span></span>
+<span><span class="co">#&gt; qssorievadj  135.11320 0.0000</span></span>
+<span><span class="co">#&gt; qssrsd         0.36904 0.8315</span></span>
+<span><span class="co">#&gt; qsssadj        0.00000 1.0000</span></span>
+<span><span class="co">#&gt; qsssadjevadj   0.00000 1.0000</span></span>
+<span><span class="co">#&gt; qssirr         0.00000 1.0000</span></span>
+<span><span class="co">#&gt; qssirrevadj    0.00000 1.0000</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 
 
-
-</main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+</section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
@@ -551,7 +653,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     <div class="nav-footer-left">by James Livsey and Christoph Sax</div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/51-quality-measures.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></div>
+    </div>
     <div class="nav-footer-right">Seasonal Adjustment in R</div>
   </div>
 </footer>

@@ -342,7 +342,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>Seasonally adjusted series of aggregates can be derived in two ways: either directly by adjusting the aggregates or indirectly by aggregating seasonally adjusted data of the component series. Generally, the results will differ, sometimes significantly. Conceptually, neither the direct approach nor the indirect approach is optimal, and we will discuss some arguments later on.</p>
+<p>Intuitively, indirect adjustment is generally better when the components have - Distinct seasonal patterns - Adjustments of good quality</p>
+<p>Direct generally is generally better when the components have - Similar seasonal patterns (summing the series may cancel some noise)</p>
 <p>Before we go into the details of the distinction between direct and indirect adjustment, let’s take a look at how <em>seasonal</em> can handle multiple time series.</p>
+<p>https://github.com/jlivsey/CR-SAclass/blob/master/slides/_11SeasAdjDiags.pdf</p>
 <section id="multiple-series-adjustmtent" class="level3" data-number="14.0.1"><h3 data-number="14.0.1" class="anchored" data-anchor-id="multiple-series-adjustmtent">
 <span class="header-section-number">14.0.1</span> Multiple Series adjustmtent</h3>
 <p>Since <a href="https://cran.r-project.org/package=seasonal">seasonal version 1.8</a>, it is now possible to seasonally adjust multiple series in a single call to <code><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas()</a></code>. This is done by using the built-in batch mode of X-13. It removes the need for loops or <code><a href="https://rdrr.io/r/base/lapply.html">lapply()</a></code> in such cases and finally brings one missing feature of X-13 to seasonal – the <em>composite</em> spec.</p>
@@ -586,6 +589,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>If the differences are insignificant, accounting and aggregation relationships in the seasonally adjusted data should be guaranteed.</p>
 </section><section id="built-in-tools" class="level2" data-number="14.1"><h2 data-number="14.1" class="anchored" data-anchor-id="built-in-tools">
 <span class="header-section-number">14.1</span> Built-in tools</h2>
+<p>X-13 offers various diagnostics to Compare Direct and Indirect Adjustments</p>
+<ul>
+<li>Spectral graphs</li>
+<li>Sliding spans
+<ul>
+<li>Set the same sliding spans length for all components</li>
+</ul>
+</li>
+<li>Revisions history
+<ul>
+<li>Set the same history span for all components</li>
+</ul>
+</li>
+<li>Smoothness measures (Statistics Canada introduced in X-11-ARIMA)
+<ul>
+<li>(We don’t use these much)</li>
+</ul>
+</li>
+</ul>
 <p>When the indirect approach is considered, seasonally adjusted aggregates should be checked to exclude the presence of residual seasonality using the F-test available in X-13.</p>
 <p>X-13 offers various diagnostic tools to evaluate the direct and indirect adjustment of aggregates. The program calculates seasonally adjusted aggregates using the direct and indirect approach and provides in output a set of statistics to compare the results (M diagnostics, measures of smoothness, frequency spectrum diagnostics, etc.). Furthermore, sliding spans and revision history diagnostics can be requested to assess which of the two approaches provides more stable and reliable seasonally adjusted results.</p>
 
