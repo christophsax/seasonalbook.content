@@ -7,6 +7,51 @@ source("_common.R")
 status("drafting")  # drafting, polishing, complete
 ```
 
+<!-- -   Should the annual values be restrained?
+
+-   How to use the force spec
+ -->
+
+
+
+### The Problem
+
+Seasonal adjustment may affect the annual values of a series.
+The yearly total of an adjusted series usually differs from the total fo an unadjusted series. By applying the Denton Method, the adjustment procedure used by the SECO enforces the totals to be equal. In seasonal, this can be performed with the option `force.type = "denton"`.
+
+
+### Re-adjusting annual values
+
+```{r}
+m <- seas(AirPassengers)
+```
+
+```{r}
+library(tsbox)
+
+ts_plot(
+  ts_frequency(final(seas(AirPassengers)), aggregate = "sum"),
+  ts_frequency(AirPassengers, aggregate = "sum")
+)
+```
+
+
+
+```{r}
+
+ts_frequency(final(seas(AirPassengers, force.type = "denton")), aggregate = "sum")
+
+ts_frequency(AirPassengers, aggregate = "sum")
+
+```
+
+### Should the annual values be restrained?
+
+
+
+<!--
 -   Should the annual values be restrained?
 
 -   How to use the force spec
+ -->
+
