@@ -117,20 +117,72 @@ If you provide an empty list, the usual defaults of `seas()` are used.
 A minimal composite call looks like this:
 
 ```{r}
-seas(
+m_composite <- seas(
   cbind(mdeaths, fdeaths),
   composite = list(),
   series.comptype = "add"
 )
 ```
 
+The `final()` command now returns three series, with one adjustmen for each series, and one for the composite (direct) adjustment:
+
+```{r}
+head(final(m_composite))
+```
+
 You can verify that the composite refers to the total of `mdeaths` and `fdeaths` by running:
 
 ```{r}
-seas(ldeaths)
+
+m_direct <- seas(ldeaths)
 ```
 
-where `ldeaths` is the sum of `mdeaths` and `fdeaths`.
+where`ldeaths` (which is also shipped with R, see `?ldeaths` for an explanation on the data) is the sum of `mdeaths` and `fdeaths`:
+
+```{r}
+all.equal(ldeaths, mdeaths + fdeaths)
+```
+
+```{r}
+all.equal(final(m_direct), final(m_composite)[, 'composite'])
+```
+
+
+### Analyzing the Composite Adjustment
+
+The composite adjustment contains all the information that is needed to analyse
+the direct vs the indirect adjustment.
+
+
+```{r}
+
+ts_plot(
+  indirect = final(m_composite)[, 'mdeaths'] + final(m_composite)[, 'fdeaths'],
+  direct = final(m_composite)[, 'composite']
+)
+
+```
+
+
+
+## Built-in tools
+
+X-13 offers various diagnostics to compare direct and indirect adjustments
+
+-   Spectral graphs
+-   Sliding spans
+    -   Set the same sliding spans length for all components
+-   Revisions history
+    -   Set the same history span for all components
+-   Smoothness measures (Statistics Canada introduced in X-11-ARIMA)
+    -   (We don't use these much)
+
+Some additional statistics can found in the X-13 output.
+
+```{r}
+out(m_composite)
+```
+
 
 ### Indirect vs direct adjusmtent
 
@@ -144,23 +196,9 @@ There is no single standard in what's the best practice.
 Some countries obtain the seasonally adjusted aggregates as the sum of adjusted components, while others prefer to adjust the totals independently.
 This can result in discrepancies between the seasonally adjusted total and the sum of the seasonally adjusted component series.
 
-According to the IMF Manual, Allocating discrepancies on components to achieve consistency should be avoided.
-
-### Accounting relationships
+According to @lee20187, allocating discrepancies on components to achieve consistency should be avoided.
 
 If the differences are insignificant, accounting and aggregation relationships in the seasonally adjusted data should be guaranteed.
-
-## Built-in tools
-
-X-13 offers various diagnostics to Compare Direct and Indirect Adjustments
-
--   Spectral graphs
--   Sliding spans
-    -   Set the same sliding spans length for all components
--   Revisions history
-    -   Set the same history span for all components
--   Smoothness measures (Statistics Canada introduced in X-11-ARIMA)
-    -   (We don't use these much)
 
 When the indirect approach is considered, seasonally adjusted aggregates should be checked to exclude the presence of residual seasonality using the F-test available in X-13.
 
