@@ -49,9 +49,9 @@ book:
         - 51-quality-measures.qmd
         - 52-revisions.qmd
 
-    - part: 60-part-future.qmd
-      chapters:
-        - 99-status.qmd
+    # - part: 60-part-future.qmd
+    #   chapters:
+    #     - 99-status.qmd
 
 bibliography: references.bib
 
