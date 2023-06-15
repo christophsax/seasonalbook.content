@@ -147,12 +147,9 @@ all.equal(ldeaths, mdeaths + fdeaths)
 all.equal(final(m_direct), final(m_composite)[, 'composite'])
 ```
 
-
 ### Analyzing the Composite Adjustment
 
-The composite adjustment contains all the information that is needed to analyse
-the direct vs the indirect adjustment.
-
+The composite adjustment contains all the information that is needed to analyse the direct vs the indirect adjustment.
 
 ```{r}
 
@@ -162,8 +159,6 @@ ts_plot(
 )
 
 ```
-
-
 
 ## Built-in tools
 
@@ -182,7 +177,6 @@ Some additional statistics can found in the X-13 output.
 ```{r}
 out(m_composite)
 ```
-
 
 ### Indirect vs direct adjusmtent
 
