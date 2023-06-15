@@ -11,13 +11,16 @@ Seasonally adjusted series of aggregates can be derived in two ways: either dire
 Generally, the results will differ, sometimes significantly.
 Conceptually, neither the direct approach nor the indirect approach is optimal, and we will discuss some arguments later on.
 
-Intuitively, indirect adjustment is generally better when the components have - Distinct seasonal patterns - Adjustments of good quality
+Intuitively, indirect adjustment is generally better when the components have:
 
-Direct generally is generally better when the components have - Similar seasonal patterns (summing the series may cancel some noise)
+-   Distinct seasonal patterns
+-   Adjustments of good quality
+
+Direct generally is generally better when the components have:
+
+-   Similar seasonal patterns (summing the series may cancel some noise)
 
 Before we go into the details of the distinction between direct and indirect adjustment, let's take a look at how *seasonal* can handle multiple time series.
-
-https://github.com/jlivsey/CR-SAclass/blob/master/slides/\_11SeasAdjDiags.pdf
 
 ### Multiple Series adjustmtent
 
