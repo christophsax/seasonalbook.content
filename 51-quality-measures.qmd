@@ -32,7 +32,7 @@ Three prominent ones are (I THINK THIS IS A GOOD PLACE TO ADD A REFERENCE TABLE 
 ### Spectrum
 
 We start with visual inspection of the spectrum of a series.
-For those unfamiliar with spectral analysis of a time series, the following discussion is intended to be accessable to all trying to perform seasonal adjustment.
+For those unfamiliar with spectral analysis of a time series, the following discussion is intended to be accessible to all trying to perform seasonal adjustment.
 Hence, we take some liberies with language an interpretation in an effort to make the discussion accessible.
 For example, we use the term spectrum to refer to the theoretical construct as well as the estimated periodogram.
 We note here that we will use a parametric AR representation to estimate the spectrum of a process.
@@ -97,19 +97,24 @@ The default span used for the second 7 QS statistics is set to be the same as th
 
 ## Stability and smoothness
 
-Next we explore two related concepts and their associated spec.
+We explore two related concepts and their associated specs.
 First, the stability of a seasonal adjustment which refers to its consistency and reliability over time. 
 It assesses whether the model fits remain consistent as new data becomes available.
 Stability is important as large revisions are a hindrance in a production cycle of seasonal adjustment.
 Again, this is a good example of a situation where a user interested in only a single seasonal adjustment (will never adjust this series again) may not care to read this section. 
 The diagnostics provided in other chapters will more adequately aid them to produce a quality seasonal adjustment.
 However, for those that produce a seasonal adjustment, say monthly, stability is crucial for producing consistent and trustworthy data that can be used for analysis, decision-making, and forecasting. 
+This is discussed in the following subsection.
+
+Secondly, in the following chapter, we will discuss the history spec and revisions. 
 
 
 
 ### Sliding spans
 
-The basic diagnostics provide descriptive information about how seasonal adjustments and their month-to-month changes vary when the data span used to calculate them is changed systematically. When comparing two neighboring spans, the extent of their differences depends on whether one starts and ends a year later than the other. The length of the data span is determined by the length of the seasonal filter used for the adjustment. 
+The sliding span spec and diagnostics provide descriptive information about how seasonal adjustments and their month-to-month changes vary when the data span used to calculate them is changed systematically. 
+Quoting the seminal paper (Findley, et al 1990) "A minimal requirement of the output of any smoothing or adjustment procedure is stability: Appending or deleting a small number of series values should not substantially change the smoothed values-otherwise, what reliable interpretation can they have?"
+When comparing two neighboring spans, the extent of their differences depends on whether one starts and ends a year later than the other. The default length of the data span is determined by the length of the seasonal filter used for the adjustment. 
 
 ```{mermaid}
 gantt
@@ -123,13 +128,23 @@ gantt
 ```
 
 
-For series where all seasonally adjusted values are positive, two important sliding spans statistics, A(%) and MM(%), are viewed as follows.
+For series where all seasonally adjusted values are positive, two important sliding spans statistics, A(%) and MM(%), are viewed as follows. Let $A_t^{(j)}$ be the seasonally adjusted value at time $t$ calculated from data in span $j$. Then A(%) denotes the percent of month such that:
+$$
+\frac{\max_j A_t^{(j)} - \min_j A_t^{(j)}}{\min_j A_t^{(j)}} > .03
+$$
+MM(%) denotes the percent of months the seasonally adjusted month-to-month percent change" is unstable, which is defined as:
+$$
+\max_j \frac{A_t^{(j)}}{A_{t-1}^{(j)}} - 
+\min_j \frac{A_t^{(j)}}{A_{t-1}^{(j)}} > .03
+$$
+
+The recommendation provided in the X13 manual indicate A(%) > 15 is problematic and A(%) > 25 should not be used. MM(%) > 35 is problematic and MM(%) > 40 should not be used. 
+Why a different ranges?
+Sometimes, the causes of high values in A(%) or MM(%) can be identified and determined to be relatively unproblematic. This is particularly true when the months with unstable adjustments or changes are predominantly concentrated in a well-known problematic period that occurred several years ago or in one or two specific calendar months each year. These months are typically acknowledged by all data users as potentially troublesome, such as winter months in datasets known to be highly sensitive to variations in winter weather conditions. The sliding spans output is instrumental in identifying such concentrations, making it effortless to spot these patterns.
 
 ```{r}
 m <- seas(AirPassengers, 
-          x11.seasonalma = "S3X9",
-          slidingspans.length = 40,
-          slidingspans.numspans = 3
+          slidingspans.numspans = 4
 )
 # Seasonal Factors - Percentage of months flagged as unstable
 SF <- udg(m, "s2.a.per")
@@ -139,5 +154,24 @@ print(SF)
 # Month-to-Month Changes in SA Series - Percentage of months flagged as unstable
 udg(m, "s2.d.per")
 ```
+Let's return to our example where we intentionally make a poor seasonal adjustment. 
+Now we need to take a log transform which will certainly improve the results from the prior run.
 
-### Histories
+```{r}
+m <- seas(AirPassengers, transform.function = "log", x11 = "", x11.seasonalma = 'stable', slidingspans.numspans = 4)
+# Seasonal Factors - Percentage of months flagged as unstable
+SF <- udg(m, "s2.a.per")
+row.names(SF) <- c("Number of months flagged", "Total number of months", "Percent")
+colnames(SF) <- "seasonal factors"
+print(SF)
+# Month-to-Month Changes in SA Series - Percentage of months flagged as unstable
+udg(m, "s2.d.per")
+```
+We see the A(%) value of 16.667 falls squarely in the problematic range. 
+
+
+
+
+
+
+
