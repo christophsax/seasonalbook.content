@@ -18,7 +18,60 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
@@ -57,7 +110,7 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script><meta name="robots" content="noindex">
 </head>
-<body class="nav-sidebar floating">
+<body class="nav-sidebar floating slimcontent">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
@@ -244,23 +297,6 @@ ul.task-list li input[type="checkbox"] {
 </li>
       </ul>
 </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a href="./60-part-future.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">The future of seasonal adjustment</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">
-<li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./99-status.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Status of the book</span></a>
-  </div>
-</li>
-      </ul>
-</li>
     </ul>
 </div>
 </nav><div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
@@ -269,13 +305,15 @@ ul.task-list li input[type="checkbox"] {
         <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
-<li><a href="#avalabele-tests" id="toc-avalabele-tests" class="nav-link active" data-scroll-target="#avalabele-tests"><span class="header-section-number">12.0.1</span> Avalabele Tests</a></li>
-  <li><a href="#ids-test" id="toc-ids-test" class="nav-link" data-scroll-target="#ids-test"><span class="header-section-number">12.0.2</span> ids test</a></li>
-  <li><a href="#case-study" id="toc-case-study" class="nav-link" data-scroll-target="#case-study"><span class="header-section-number">12.0.3</span> Case Study</a></li>
+<li><a href="#basic-principle" id="toc-basic-principle" class="nav-link active" data-scroll-target="#basic-principle"><span class="header-section-number">12.0.1</span> Basic Principle</a></li>
+  <li><a href="#available-tests" id="toc-available-tests" class="nav-link" data-scroll-target="#available-tests"><span class="header-section-number">12.0.2</span> Available Tests</a></li>
+  <li><a href="#qs-test" id="toc-qs-test" class="nav-link" data-scroll-target="#qs-test"><span class="header-section-number">12.0.3</span> QS Test</a></li>
+  <li><a href="#identifiable-seasonality-test" id="toc-identifiable-seasonality-test" class="nav-link" data-scroll-target="#identifiable-seasonality-test"><span class="header-section-number">12.0.4</span> Identifiable Seasonality Test</a></li>
+  <li><a href="#case-study" id="toc-case-study" class="nav-link" data-scroll-target="#case-study"><span class="header-section-number">12.0.5</span> Case Study</a></li>
   </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/41-presence-of-seasonality.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<main class="content page-columns page-full" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
 <h1 class="title"><span id="sec-presence-of-seasonality" class="quarto-section-identifier"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Presence of seasonality</span></span></h1>
 </div>
 
@@ -290,46 +328,187 @@ ul.task-list li input[type="checkbox"] {
   
 
 </header><div class="status">
-<div class="callout callout-style-simple callout-important">
+<div class="callout callout-style-simple callout-note">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-body-container">
-<p>You are reading an early draft of <em>Seasonal Adjustment in R</em>. This chapter is currently a dumping ground for ideas, and we don’t recommend reading it.</p>
+<p>You are reading an early draft of <em>Seasonal Adjustment in R</em>. This chapter should be readable but needs polishing.</p>
 </div>
 </div>
 </div>
 </div>
 <p>Should a series be seasonally adjusted at all?</p>
-<p>X-13AS removes seasonality from series, even if a series is not seasonal from the beginneing. If a series is not seasonal, the resulting series may be bad.</p>
-<p>Fortunatly, X-13 contains a few tests that help users to decide if a series is is seasnal or not.</p>
-<p>Before appying X-13AS ist may be necessary to descide if the series is seasonal.</p>
-<section id="avalabele-tests" class="level3" data-number="12.0.1"><h3 data-number="12.0.1" class="anchored" data-anchor-id="avalabele-tests">
-<span class="header-section-number">12.0.1</span> Avalabele Tests</h3>
-<p>X13 offers has several formal checks:</p>
+<p>X-13 removes seasonality from the series, even if a series is not seasonal from the beginning. If a series is not seasonal, the resulting series may be bad.</p>
+<p>Fortunately, X-13 contains a few tests that help users decide if a series is seasonal.</p>
+<p>Before applying X-13, deciding if the series is seasonal may be necessary. This section discusses how to decide whether a series should be adjusted.</p>
+<section id="basic-principle" class="level3" data-number="12.0.1"><h3 data-number="12.0.1" class="anchored" data-anchor-id="basic-principle">
+<span class="header-section-number">12.0.1</span> Basic Principle</h3>
+<p>In general, adjusting a non-seasonal series is less of a problem than not adjusting a seasonal series. So, unless you have good reasons to believe that a series is not-seasonal, adjust it. <em>If in doubt, adjust!</em></p>
+</section><section id="available-tests" class="level3" data-number="12.0.2"><h3 data-number="12.0.2" class="anchored" data-anchor-id="available-tests">
+<span class="header-section-number">12.0.2</span> Available Tests</h3>
+<p>To help you to make a good decision, X-13 offers a few formal checks:</p>
 <ul>
-<li>qs test</li>
-<li>ids</li>
-<li>m7</li>
+<li><p>The QS test is the primary test to evaluate seasonality both the original or in the adjusted series. It will be discussed in more detail in <a href="51-quality-measures.html"><span>Chapter&nbsp;15</span></a>.</p></li>
+<li><p>The Identifiable Seasonality Test (IDS) gives a simple yes or no answer to whether a series is seasonal or not. It is available for X11 adjustments only.</p></li>
+<li><p>The M7 statistic applies critical values to the Identifiable Seasonality Test (IDS) and returns a simple yes or no answer.</p></li>
 </ul>
-<p>The <em>ids</em> test is closely connected to <em>m7</em>, but the <em>QS</em> test is quite different. Which tests are preferrable, and how should a user descide if the tests are not aligned?</p>
-</section><section id="ids-test" class="level3" data-number="12.0.2"><h3 data-number="12.0.2" class="anchored" data-anchor-id="ids-test">
-<span class="header-section-number">12.0.2</span> ids test</h3>
-<p><a href="http://www.ons.gov.uk/ons/guide-method/method-quality/general-methodology/time-series-analysis/guide-to-seasonal-adjustment.pdf" class="uri">http://www.ons.gov.uk/ons/guide-method/method-quality/general-methodology/time-series-analysis/guide-to-seasonal-adjustment.pdf</a></p>
-<blockquote class="blockquote">
-<p>From ONS 18.2 A general criterion for existence of seasonality</p>
-<p>Empirical research showed that the most appropriate test for seasonality is the “Combined test for the presence of identifiable seasonality”, given after table D8 of the output. In particular, one of the following statements will always appear:</p>
-<ol type="1">
-<li>IDENTIFIABLE SEASONALITY PRESENT</li>
-<li>IDENTIFIABLE SEASONALITY PROBABLY NOT PRESEN</li>
-<li>IDENTIFIABLE SEASONALITY NOT PRESENT</li>
-</ol>
-<p>It is recommended that a series is adjusted in the first two cases and not adjusted in the last one. However there are two cases where one might need to deviate from this practice:</p>
-</blockquote>
-<p>This is the ids test shown below</p>
-</section><section id="case-study" class="level3" data-number="12.0.3"><h3 data-number="12.0.3" class="anchored" data-anchor-id="case-study">
-<span class="header-section-number">12.0.3</span> Case Study</h3>
+<p>Which tests are preferable, and how should a user decide if the tests are not aligned?</p>
+</section><section id="qs-test" class="level3" data-number="12.0.3"><h3 data-number="12.0.3" class="anchored" data-anchor-id="qs-test">
+<span class="header-section-number">12.0.3</span> QS Test</h3>
+<p>The QS test has a few advantages compared to the IDS statistics and is generally preferable. It is available both with X11 and SEATS.</p>
+<p>You can retrieve the results of the QS test by the <code><a href="https://rdrr.io/pkg/seasonal/man/udg.html">qs()</a></code> function. (We will say more about the QS statistic in <a href="51-quality-measures.html"><span>Chapter&nbsp;15</span></a>).</p>
+<div class="cell">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">qs</span><span class="op">(</span><span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;                     qs  p-val</span></span>
+<span><span class="co">#&gt; qsori        167.64858 0.0000</span></span>
+<span><span class="co">#&gt; qsorievadj   203.07731 0.0000</span></span>
+<span><span class="co">#&gt; qsrsd          0.00000 1.0000</span></span>
+<span><span class="co">#&gt; qssadj         0.00000 1.0000</span></span>
+<span><span class="co">#&gt; qssadjevadj    0.00000 1.0000</span></span>
+<span><span class="co">#&gt; qsirr          0.00000 1.0000</span></span>
+<span><span class="co">#&gt; qsirrevadj     0.00000 1.0000</span></span>
+<span><span class="co">#&gt; qssori       115.08988 0.0000</span></span>
+<span><span class="co">#&gt; qssorievadj  135.11320 0.0000</span></span>
+<span><span class="co">#&gt; qssrsd         0.36904 0.8315</span></span>
+<span><span class="co">#&gt; qsssadj        0.00000 1.0000</span></span>
+<span><span class="co">#&gt; qsssadjevadj   0.00000 1.0000</span></span>
+<span><span class="co">#&gt; qssirr         0.00000 1.0000</span></span>
+<span><span class="co">#&gt; qssirrevadj    0.00000 1.0000</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The QS Statistic shows the degree of seasonality in various components of the seasonal adjustment. For our purposes, the first line is the most interesting. It shows that the QS value of the original series is 168, which comes with a p-value of essentially 0. This reads as there is a 0 probability that the null-hypothesis of seasonality in the original series can be rejected.</p>
+<p>In other words, <code>AirPassengers</code> is a clearly seasonal series, which should not come as a surprise at this point.</p>
+</section><section id="identifiable-seasonality-test" class="level3 page-columns page-full" data-number="12.0.4"><h3 data-number="12.0.4" class="anchored" data-anchor-id="identifiable-seasonality-test">
+<span class="header-section-number">12.0.4</span> Identifiable Seasonality Test</h3>
+<p>A second test for seasonality is the Identifiable Seasonality Test. It is only available in X11.</p>
+<p>According to <span class="citation" data-cites="ONS07">UK Office for National Statistics (<a href="#ref-ONS07" role="doc-biblioref">2007</a>)</span>, a value lower than 1.150 (monthly series) or lower than 0.900 (quarterly series) indicates that seasonality is clearly present.</p>
+<div class="no-row-height column-margin column-container"><div id="ref-ONS07" class="csl-entry" role="listitem">
+UK Office for National Statistics. 2007. <em>Guide to Seasonal Adjustment with x-12-ARIMA</em>. <a href="http://www.ons.gov.uk/ons/guide-method/method-quality/general-methodology/time-series-analysis/guide-to-seasonal-adjustment.pdf">http://www.ons.gov.uk/ons/guide-method/method-quality/general-methodology/time-series-analysis/guide-to-seasonal-adjustment.pdf</a>.
+</div></div><p>At the same time, a value between 1.150 and 1.250 (monthly series) or between 0.900 and 1.050 (quarterly series) indicates that seasonality may be present.</p>
+<p>Values above 1.250 (monthly series) or 1.050 (quarterly series) point to non-seasonal series.</p>
+<p>As we have stated above, the recommendation is to adjust the series unless you have clear evidence that a series is not seasonal.</p>
+<p>Let’s try <code>AirPassengers</code>:</p>
+<div class="cell">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">udg</span><span class="op">(</span><span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, x11 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>, <span class="st">"f3.m07"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; f3.m07 </span></span>
+<span><span class="co">#&gt;  0.203</span></span>
+<span><span class="fu">udg</span><span class="op">(</span><span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, x11 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>, <span class="st">"f2.idseasonal"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; f2.idseasonal </span></span>
+<span><span class="co">#&gt;         "yes"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The M7 value is way below the critical values. Accordingly, the Identifiable Seasonality Test indicates seasonality in the series.</p>
+</section><section id="case-study" class="level3" data-number="12.0.5"><h3 data-number="12.0.5" class="anchored" data-anchor-id="case-study">
+<span class="header-section-number">12.0.5</span> Case Study</h3>
+<p>Consider the following less clear-cut series:</p>
+<div class="cell">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/tsbox/">tsbox</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.seasonal.website">seasonal</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/ts.html">ts</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span></span>
+<span>    <span class="fl">1070.67782091276</span>, <span class="fl">1074.85048025033</span>, <span class="fl">1057.22943663105</span>, <span class="fl">1054.83329692382</span>,</span>
+<span>    <span class="fl">1035.00741277933</span>, <span class="fl">1014.37654341674</span>, <span class="fl">1016.01971482192</span>, <span class="fl">1031.5736998743</span>,</span>
+<span>    <span class="fl">1055.97206482734</span>, <span class="fl">1069.14603895638</span>, <span class="fl">1054.70695712307</span>, <span class="fl">1033.65404358999</span>,</span>
+<span>    <span class="fl">988.507205808669</span>, <span class="fl">957.755772336067</span>, <span class="fl">936.185046914472</span>, <span class="fl">939.221279279722</span>,</span>
+<span>    <span class="fl">962.250799500941</span>, <span class="fl">984.056833428967</span>, <span class="fl">999.390633761089</span>, <span class="fl">1033.68786613334</span>,</span>
+<span>    <span class="fl">1055.87289736274</span>, <span class="fl">1097.92353618165</span>, <span class="fl">1114.50822274577</span>, <span class="fl">1148.65763657244</span>,</span>
+<span>    <span class="fl">1199.32404772514</span>, <span class="fl">1208.39317300933</span>, <span class="fl">1185.13960320363</span>, <span class="fl">1154.58521771845</span>,</span>
+<span>    <span class="fl">1101.7137166423</span>, <span class="fl">1053.89252948544</span>, <span class="fl">996.495317493457</span>, <span class="fl">926.283479008456</span>,</span>
+<span>    <span class="fl">850.048912454291</span>, <span class="fl">809.84549670808</span>, <span class="fl">772.216576162406</span>, <span class="fl">784.114051995134</span>,</span>
+<span>    <span class="fl">806.261273184001</span>, <span class="fl">820.618967152661</span>, <span class="fl">815.649757299053</span>, <span class="fl">812.501547645406</span>,</span>
+<span>    <span class="fl">809.899692888929</span>, <span class="fl">823.778177350232</span>, <span class="fl">811.211453993884</span>, <span class="fl">814.868987237855</span>,</span>
+<span>    <span class="fl">829.047528533717</span>, <span class="fl">831.891817984415</span>, <span class="fl">843.653707473654</span>, <span class="fl">895.684951210102</span>,</span>
+<span>    <span class="fl">926.544452180194</span>, <span class="fl">949.41125175328</span>, <span class="fl">950.333376822119</span>, <span class="fl">994.228127170556</span>,</span>
+<span>    <span class="fl">999.697246815797</span>, <span class="fl">1008.00877350773</span>, <span class="fl">1006.7566419533</span>, <span class="fl">990.419046839283</span>,</span>
+<span>    <span class="fl">962.941704204873</span>, <span class="fl">947.541756501729</span>, <span class="fl">929.161895739204</span>, <span class="fl">910.588436791225</span>,</span>
+<span>    <span class="fl">1248.42457644542</span>, <span class="fl">1266.67760866087</span>, <span class="fl">1248.78020047598</span>, <span class="fl">1290.47101093513</span>,</span>
+<span>    <span class="fl">1328.51898051507</span>, <span class="fl">1356.02796471527</span>, <span class="fl">1363.37837075383</span>, <span class="fl">1398.27679451834</span>,</span>
+<span>    <span class="fl">1399.20602270507</span>, <span class="fl">1391.19336700805</span>, <span class="fl">1387.13912745033</span>, <span class="fl">1346.03774501977</span>,</span>
+<span>    <span class="fl">1370.73051832038</span>, <span class="fl">1346.29966480321</span>, <span class="fl">1340.09701324613</span>, <span class="fl">1331.07456050929</span>,</span>
+<span>    <span class="fl">1321.82409348173</span>, <span class="fl">1343.5116656349</span>, <span class="fl">1366.41043298961</span>, <span class="fl">1363.10871463069</span>,</span>
+<span>    <span class="fl">1391.84216974474</span>, <span class="fl">1417.38495449438</span>, <span class="fl">1432.17468812037</span>, <span class="fl">1394.40194160954</span>,</span>
+<span>    <span class="fl">1385.72476381292</span>, <span class="fl">1388.23802327199</span>, <span class="fl">1354.10595421438</span>, <span class="fl">1345.15701390051</span>,</span>
+<span>    <span class="fl">960.801527083357</span>, <span class="fl">941.027878841707</span>, <span class="fl">887.618178201697</span>, <span class="fl">842.12961787775</span>,</span>
+<span>    <span class="fl">795.717159404159</span>, <span class="fl">757.35803147815</span>, <span class="fl">724.93681522789</span>, <span class="fl">716.66515476601</span>,</span>
+<span>    <span class="fl">708.682334791168</span>, <span class="fl">689.925785264133</span>, <span class="fl">687.748168972216</span>, <span class="fl">688.809213406042</span>,</span>
+<span>    <span class="fl">664.421326451325</span>, <span class="fl">661.822007527535</span>, <span class="fl">687.161046216216</span>, <span class="fl">684.548292412124</span>,</span>
+<span>    <span class="fl">713.757983905367</span>, <span class="fl">729.917128362926</span>, <span class="fl">750.569868821847</span>, <span class="fl">745.544259228118</span>,</span>
+<span>    <span class="fl">758.516668782925</span>, <span class="fl">758.841495662419</span>, <span class="fl">757.815323362363</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  frequency <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  start <span class="op">=</span> <span class="fl">1995</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://docs.ropensci.org/tsbox/reference/ts_plot.html">ts_plot</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="41-presence-of-seasonality_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="864"></p>
+</div>
+</div>
+<p>If we apply standard SEATS seasonal adjustment, this does not seem to do anything:</p>
+<div class="cell">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="41-presence-of-seasonality_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="864"></p>
+</div>
+</div>
+<p>What do formal statistics say?</p>
+<div class="cell">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/udg.html">qs</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
+<span><span class="co">#&gt;                   qs   p-val</span></span>
+<span><span class="co">#&gt; qsori        0.00000 1.00000</span></span>
+<span><span class="co">#&gt; qsorievadj   0.08751 0.95719</span></span>
+<span><span class="co">#&gt; qsrsd        0.00000 1.00000</span></span>
+<span><span class="co">#&gt; qssadj       0.00000 1.00000</span></span>
+<span><span class="co">#&gt; qssadjevadj  0.08751 0.95719</span></span>
+<span><span class="co">#&gt; qsirr        1.81436 0.40366</span></span>
+<span><span class="co">#&gt; qsirrevadj   1.81436 0.40366</span></span>
+<span><span class="co">#&gt; qssori       0.00000 1.00000</span></span>
+<span><span class="co">#&gt; qssorievadj  0.78501 0.67536</span></span>
+<span><span class="co">#&gt; qssrsd       0.26233 0.87707</span></span>
+<span><span class="co">#&gt; qsssadj      0.00000 1.00000</span></span>
+<span><span class="co">#&gt; qsssadjevadj 0.78501 0.67536</span></span>
+<span><span class="co">#&gt; qssirr       1.92576 0.38179</span></span>
+<span><span class="co">#&gt; qssirrevadj  1.92576 0.38179</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s have a look at the first line. A QS value of 0 has a p-value of 1, meaning the Nul-Hypothesis of seasonality in the orgininal value can be savely rejected. According to this measure, it is clear that this series has no seasonality.</p>
+<p>If we want to consider the M7 values, we need to use X11:</p>
+<div class="cell">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_x11</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">x</span>, x11 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The QS statistic has to be the same for the unadjusted series but not for the adjusted one:</p>
+<div class="cell">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/udg.html">qs</a></span><span class="op">(</span><span class="va">m_x11</span><span class="op">)</span></span>
+<span><span class="co">#&gt;                   qs   p-val</span></span>
+<span><span class="co">#&gt; qsori        0.00000 1.00000</span></span>
+<span><span class="co">#&gt; qsorievadj   0.08751 0.95719</span></span>
+<span><span class="co">#&gt; qsrsd        0.00000 1.00000</span></span>
+<span><span class="co">#&gt; qssadj       0.00000 1.00000</span></span>
+<span><span class="co">#&gt; qssadjevadj  0.00000 1.00000</span></span>
+<span><span class="co">#&gt; qsirr        0.00000 1.00000</span></span>
+<span><span class="co">#&gt; qsirrevadj   0.03306 0.98361</span></span>
+<span><span class="co">#&gt; qssori       0.00000 1.00000</span></span>
+<span><span class="co">#&gt; qssorievadj  0.78501 0.67536</span></span>
+<span><span class="co">#&gt; qssrsd       0.26233 0.87707</span></span>
+<span><span class="co">#&gt; qsssadj      0.00000 1.00000</span></span>
+<span><span class="co">#&gt; qsssadjevadj 0.00000 1.00000</span></span>
+<span><span class="co">#&gt; qssirr       0.00000 1.00000</span></span>
+<span><span class="co">#&gt; qssirrevadj  0.08751 0.95719</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Because we use X11, we can now have a look at the M7 value:</p>
+<div class="cell">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/udg.html">udg</a></span><span class="op">(</span><span class="va">m_x11</span>, <span class="st">"f3.m07"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; f3.m07 </span></span>
+<span><span class="co">#&gt;  1.222</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>If you look for simple answers, the <code>"f2.idseasonal"</code> gives you a simple yes or no answer. From the previous discussion, it should not be surprising that the answer is <em>no</em>.</p>
+<div class="cell">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/udg.html">udg</a></span><span class="op">(</span><span class="va">m_x11</span>, <span class="st">"f2.idseasonal"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; f2.idseasonal </span></span>
+<span><span class="co">#&gt;          "no"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
 
 
 </section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">

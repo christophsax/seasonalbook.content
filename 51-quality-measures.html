@@ -90,6 +90,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-submit-button-title": "Submit"
   }
 }</script><meta name="robots" content="noindex">
+<script src="site_libs/quarto-diagram/mermaid.min.js"></script><script src="site_libs/quarto-diagram/mermaid-init.js"></script><link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 </head>
 <body class="nav-sidebar floating">
@@ -279,23 +280,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
       </ul>
 </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a href="./60-part-future.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">The future of seasonal adjustment</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">
-<li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./99-status.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Status of the book</span></a>
-  </div>
-</li>
-      </ul>
-</li>
     </ul>
 </div>
 </nav><div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
@@ -309,6 +293,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
 <li><a href="#spectrum" id="toc-spectrum" class="nav-link" data-scroll-target="#spectrum"><span class="header-section-number">15.1.1</span> Spectrum</a></li>
   <li><a href="#qs-statistc" id="toc-qs-statistc" class="nav-link" data-scroll-target="#qs-statistc"><span class="header-section-number">15.1.2</span> QS statistc</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#stability-and-smoothness" id="toc-stability-and-smoothness" class="nav-link" data-scroll-target="#stability-and-smoothness"><span class="header-section-number">15.2</span> Stability and smoothness</a>
+  <ul class="collapse">
+<li><a href="#sliding-spans" id="toc-sliding-spans" class="nav-link" data-scroll-target="#sliding-spans"><span class="header-section-number">15.2.1</span> Sliding spans</a></li>
+  <li><a href="#histories" id="toc-histories" class="nav-link" data-scroll-target="#histories"><span class="header-section-number">15.2.2</span> Histories</a></li>
   </ul>
 </li>
   </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/51-quality-measures.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
@@ -340,7 +331,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>This chapter will be broken up into relevant pieces that construct a good seasonal adjustment. Yet, it is the sum of these parts that ultimately comprise a quality adjustment and it is difficult to completely break them up in a vacuum. A Quality of seasonal adjustment should eliminate residual seasonality and calendar effects, exhibit stability and smoothness, and have no significant seasonal or trading day effects. Different users have a different definition of ‘quality’ that depends on their end goals and their end users of a seasonal adjustment. For example, a federal statistical agency, who is concerned about the users of their seasonal adjustments, may have very different definition of quality compared with a single analyst who is interested in only long-term trend.</p>
+<p>This chapter will be broken up into relevant pieces that construct a good seasonal adjustment. Yet, it is the sum of these parts that ultimately comprise a quality adjustment and it is difficult to completely break them up in a vacuum. Different users have a different definitions of ‘quality’ that depends on their end goals and their end users of a seasonal adjustment. For example, a federal statistical agency, who is concerned about the users of their seasonal adjustments, may have very different definition of quality compared with a single analyst who is interested in only long-term trend. A good starting point is a quality seasonal adjustment should eliminate residual seasonality and calendar effects, exhibit stability and smoothness, and have no significant seasonal or trading day effects.</p>
 <p>Another consideration is the span of your series that is required to produce a quality adjustment…</p>
 <section id="residual-seasonality" class="level2" data-number="15.1"><h2 data-number="15.1" class="anchored" data-anchor-id="residual-seasonality">
 <span class="header-section-number">15.1</span> Residual Seasonality</h2>
@@ -403,6 +394,55 @@ QS = n(n+2)\left(\frac{\hat{\gamma}(12)^2}{n - 12} + \frac{\hat{\gamma}(24)^2}{n
 <span><span class="co">#&gt; qssirr         0.00000 1.0000</span></span>
 <span><span class="co">#&gt; qssirrevadj    0.00000 1.0000</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>In the output table we see 14 rows. The top 7 rows correspond to the QS statistic 1. Original series 1. Original series, adjusted for extreme values 1. Model residuals 1. Seasonally adjusted series 1. Seasonally adjusted series, adjusted for extreme values 1. Irregular series 1. Irregular series, adjusted for extreme values The next seven rows are simply the exact same statistics calculated on a (possibly) shorter span of the data. The default span used for the second 7 QS statistics is set to be the same as the spectrum uses, 96 observations or 8 years in a monthly series.</p>
+</section></section><section id="stability-and-smoothness" class="level2" data-number="15.2"><h2 data-number="15.2" class="anchored" data-anchor-id="stability-and-smoothness">
+<span class="header-section-number">15.2</span> Stability and smoothness</h2>
+<p>Next we explore two related concepts and their associated spec. First, the stability of a seasonal adjustment which refers to its consistency and reliability over time. It assesses whether the model fits remain consistent as new data becomes available. Stability is important as large revisions are a hindrance in a production cycle of seasonal adjustment. Again, this is a good example of a situation where a user interested in only a single seasonal adjustment (will never adjust this series again) may not care to read this section. The diagnostics provided in other chapters will more adequately aid them to produce a quality seasonal adjustment. However, for those that produce a seasonal adjustment, say monthly, stability is crucial for producing consistent and trustworthy data that can be used for analysis, decision-making, and forecasting.</p>
+<section id="sliding-spans" class="level3" data-number="15.2.1"><h3 data-number="15.2.1" class="anchored" data-anchor-id="sliding-spans">
+<span class="header-section-number">15.2.1</span> Sliding spans</h3>
+<p>The basic diagnostics provide descriptive information about how seasonal adjustments and their month-to-month changes vary when the data span used to calculate them is changed systematically. When comparing two neighboring spans, the extent of their differences depends on whether one starts and ends a year later than the other. The length of the data span is determined by the length of the seasonal filter used for the adjustment.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<div>
+<pre class="mermaid mermaid-js">gantt
+  title Illustration of Four 8-year spans
+  dateFormat YYYY-MM
+  section Full Data Span
+  Span 1 : des1, 1974-01, 8y
+  Span 2 : des2, 1975-01, 8y
+  Span 3 : des3, 1976-01, 8y
+  Span 4 : des4, 1977-01, 8y
+</pre>
+</div>
+</div>
+</div>
+</div>
+<p>For series where all seasonally adjusted values are positive, two important sliding spans statistics, A(%) and MM(%), are viewed as follows.</p>
+<div class="cell">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">AirPassengers</span>, </span>
+<span>          x11.seasonalma <span class="op">=</span> <span class="st">"S3X9"</span>,</span>
+<span>          slidingspans.length <span class="op">=</span> <span class="fl">40</span>,</span>
+<span>          slidingspans.numspans <span class="op">=</span> <span class="fl">3</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co"># Seasonal Factors - Percentage of months flagged as unstable</span></span>
+<span><span class="va">SF</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/udg.html">udg</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"s2.a.per"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span><span class="op">(</span><span class="va">SF</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Number of months flagged"</span>, <span class="st">"Total number of months"</span>, <span class="st">"Percent"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">SF</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"seasonal factors"</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">SF</span><span class="op">)</span></span>
+<span><span class="co">#&gt;                          seasonal factors</span></span>
+<span><span class="co">#&gt; Number of months flagged                0</span></span>
+<span><span class="co">#&gt; Total number of months                 40</span></span>
+<span><span class="co">#&gt; Percent                                 0</span></span>
+<span><span class="co"># Month-to-Month Changes in SA Series - Percentage of months flagged as unstable</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/udg.html">udg</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"s2.d.per"</span><span class="op">)</span></span>
+<span><span class="co">#&gt;      s2.d.per</span></span>
+<span><span class="co">#&gt; [1,]    2.000</span></span>
+<span><span class="co">#&gt; [2,]   39.000</span></span>
+<span><span class="co">#&gt; [3,]    5.128</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section><section id="histories" class="level3" data-number="15.2.2"><h3 data-number="15.2.2" class="anchored" data-anchor-id="histories">
+<span class="header-section-number">15.2.2</span> Histories</h3>
 
 
 </section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">

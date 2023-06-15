@@ -2,94 +2,86 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://christophsax.github.io/seasonalbook.content/index.html</loc>
-    <lastmod>2023-06-14T09:54:50.972Z</lastmod>
+    <lastmod>2023-06-15T03:27:06.444Z</lastmod>
   </url>
   <url>
     <loc>https://christophsax.github.io/seasonalbook.content/10-introduction.html</loc>
-    <lastmod>2023-06-14T09:54:50.975Z</lastmod>
+    <lastmod>2023-06-15T03:27:06.448Z</lastmod>
   </url>
   <url>
     <loc>https://christophsax.github.io/seasonalbook.content/11-getting-started.html</loc>
-    <lastmod>2023-06-14T09:54:50.981Z</lastmod>
+    <lastmod>2023-06-15T03:27:06.454Z</lastmod>
   </url>
   <url>
     <loc>https://christophsax.github.io/seasonalbook.content/20-part-basics.html</loc>
-    <lastmod>2023-06-14T09:54:50.984Z</lastmod>
+    <lastmod>2023-06-15T03:27:06.456Z</lastmod>
   </url>
   <url>
     <loc>https://christophsax.github.io/seasonalbook.content/21-overview.html</loc>
-    <lastmod>2023-06-14T09:54:50.993Z</lastmod>
+    <lastmod>2023-06-15T03:27:06.464Z</lastmod>
   </url>
   <url>
     <loc>https://christophsax.github.io/seasonalbook.content/22-transform.html</loc>
-    <lastmod>2023-06-14T09:54:50.999Z</lastmod>
+    <lastmod>2023-06-15T03:27:06.471Z</lastmod>
   </url>
   <url>
     <loc>https://christophsax.github.io/seasonalbook.content/23-regARIMA.html</loc>
-    <lastmod>2023-06-14T09:54:51.008Z</lastmod>
+    <lastmod>2023-06-15T03:27:06.478Z</lastmod>
   </url>
   <url>
     <loc>https://christophsax.github.io/seasonalbook.content/24-x11.html</loc>
-    <lastmod>2023-06-14T09:54:51.017Z</lastmod>
+    <lastmod>2023-06-15T03:27:06.488Z</lastmod>
   </url>
   <url>
     <loc>https://christophsax.github.io/seasonalbook.content/25-seats.html</loc>
-    <lastmod>2023-06-14T09:54:51.030Z</lastmod>
+    <lastmod>2023-06-15T03:27:06.499Z</lastmod>
   </url>
   <url>
     <loc>https://christophsax.github.io/seasonalbook.content/30-part-data-problems.html</loc>
-    <lastmod>2023-06-14T09:54:51.033Z</lastmod>
+    <lastmod>2023-06-15T03:27:06.502Z</lastmod>
   </url>
   <url>
     <loc>https://christophsax.github.io/seasonalbook.content/31-holidays.html</loc>
-    <lastmod>2023-06-14T09:54:51.046Z</lastmod>
+    <lastmod>2023-06-15T03:27:06.515Z</lastmod>
   </url>
   <url>
     <loc>https://christophsax.github.io/seasonalbook.content/32-trading-days.html</loc>
-    <lastmod>2023-06-14T09:54:51.058Z</lastmod>
+    <lastmod>2023-06-15T03:27:06.527Z</lastmod>
   </url>
   <url>
     <loc>https://christophsax.github.io/seasonalbook.content/33-outliers.html</loc>
-    <lastmod>2023-06-14T09:54:51.065Z</lastmod>
+    <lastmod>2023-06-15T03:27:06.533Z</lastmod>
   </url>
   <url>
     <loc>https://christophsax.github.io/seasonalbook.content/34-seasonal-breaks.html</loc>
-    <lastmod>2023-06-14T09:54:51.070Z</lastmod>
+    <lastmod>2023-06-15T03:27:06.538Z</lastmod>
   </url>
   <url>
     <loc>https://christophsax.github.io/seasonalbook.content/40-part-other-issues.html</loc>
-    <lastmod>2023-06-14T09:54:51.073Z</lastmod>
+    <lastmod>2023-06-15T03:27:06.541Z</lastmod>
   </url>
   <url>
     <loc>https://christophsax.github.io/seasonalbook.content/41-presence-of-seasonality.html</loc>
-    <lastmod>2023-06-14T09:54:51.076Z</lastmod>
+    <lastmod>2023-06-15T03:27:06.548Z</lastmod>
   </url>
   <url>
     <loc>https://christophsax.github.io/seasonalbook.content/42-annual-constraining.html</loc>
-    <lastmod>2023-06-14T09:54:51.081Z</lastmod>
+    <lastmod>2023-06-15T03:27:06.551Z</lastmod>
   </url>
   <url>
     <loc>https://christophsax.github.io/seasonalbook.content/43-indirect-vs-direct.html</loc>
-    <lastmod>2023-06-14T09:54:51.088Z</lastmod>
+    <lastmod>2023-06-15T03:27:06.560Z</lastmod>
   </url>
   <url>
     <loc>https://christophsax.github.io/seasonalbook.content/50-part-quality-assessment.html</loc>
-    <lastmod>2023-06-14T09:54:51.090Z</lastmod>
+    <lastmod>2023-06-15T03:27:06.562Z</lastmod>
   </url>
   <url>
     <loc>https://christophsax.github.io/seasonalbook.content/51-quality-measures.html</loc>
-    <lastmod>2023-06-14T09:54:51.094Z</lastmod>
+    <lastmod>2023-06-15T03:27:06.567Z</lastmod>
   </url>
   <url>
     <loc>https://christophsax.github.io/seasonalbook.content/52-revisions.html</loc>
-    <lastmod>2023-06-14T09:54:51.104Z</lastmod>
-  </url>
-  <url>
-    <loc>https://christophsax.github.io/seasonalbook.content/60-part-future.html</loc>
-    <lastmod>2023-06-14T09:54:51.111Z</lastmod>
-  </url>
-  <url>
-    <loc>https://christophsax.github.io/seasonalbook.content/99-status.html</loc>
-    <lastmod>2023-06-14T09:54:51.114Z</lastmod>
+    <lastmod>2023-06-15T03:27:06.569Z</lastmod>
   </url>
 </urlset>
