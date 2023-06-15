@@ -12,3 +12,56 @@ status("drafting")  # drafting, polishing, complete
 -   Should a model be re-estimated each period?
 
 -   How to use the slidingspan and history spec
+
+Revision play a major role in seasonal adjustment.
+Their role is multifaceted.
+
+1.  Revisions can tell us about the stability of our adjustment process. Hence, they are in some sense a diagnostic tool to help us decided between two possible models or filters.
+2.  Revisions have the additional role that most users of seasonal adjusted data don't like them. It can be frustrating to get a seasonally adjusted value one month, only to have it change the following month.
+
+We will try to address the first completely.
+The second is a more delicate issue that usually requires a policy decision and will vary person-to-person and agency-to-agency.
+Some will decide to revise all historical seasonal adjustments when a new month of data becomes available, and some may decide to fix historical seasonal adjustments and only release the most current.
+Each policy decision will have its own pros and cons that we will briefly discuss at the end of this chapter.
+
+Let's define a revision.
+Define $A_{t|n}$ to be the seasonally adjusted value of $y_t$ using $y_1, y_2, \ldots, y_n$.
+Assume the full series is of length $T$.
+
+1.  A **concurrent** seasonal adjustment is then $A_{t|t}$
+2.  A \`\`final'' seasonal adjustment is $A_{t|T}$
+3.  A revision is $A_{t|T} - A_{t|t}$
+
+The history spec in X13 reports the percent revision:
+
+$$
+R_t = \frac{A_{t|T} - A_{t|t}}{A_{t|t}}
+$$
+
+Note, if performing an additive adjustment that has negative values, X13 will only report the revision itself ($R_t$ with 1 as a denominator) instead of the percent revision.
+This avoids issues with changing signs.
+
+The analogous quantities are defined for trend and seasonally adjusted series.
+
+NEED TO ADD TREND and MONTH_TO_MONTH CHANGE OUTPUT.
+
+### History Spec
+
+The program conducts multiple runs, iterating over a sequence of expanding intervals, effectively simulating the passage of time.
+Our preference lies with the approach that generates smaller revisions, assuming the final adjustments resulting from different options or methods are equally satisfactory without any remaining seasonal or calendar effects.
+Instead of referring to them as history diagnostics, we use the term "revisions history" to describe these measurements, as they quantify the magnitudes of adjustments made by incorporating series values.
+It's important to note that these diagnostics do not include any changes or revisions to the underlying series values themselves.
+
+We can look at any of the following estimates produced by the program
+
+| Variable to specify | value                                                      |
+|---------------------|------------------------------------------------------------|
+| `sadj` (default)    | seasonally adjusted series                                 |
+| `sadjchng`          | period-to-period changes in the seasonally adjusted series |
+| `trend`             | trend                                                      |
+| `trendchng`         | period-to-period changes in the trend                      |
+| `seasonal`          | final and projected seasonal factors                       |
+| `aic`               | AICCs and maximum log likelihoods for the regARIMA model   |
+| `fcst`              | forecasts and evolving mean square forecast errors         |
+| `arma`              | estimated AR and MA coefficients                           |
+| `td`                | trading day regression coefficients                        |
