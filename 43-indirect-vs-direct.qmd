@@ -1,4 +1,4 @@
-## Indirect vs direct adjustment {#sec-indirect-vs-direct-adjustment}
+# Indirect vs direct adjustment {#sec-indirect-vs-direct-adjustment}
 
 ```{r}
 #| results: "asis"
@@ -7,8 +7,13 @@ source("_common.R")
 status("polishing")  # drafting, polishing, complete
 ```
 
-Seasonally adjusted series of aggregates can be derived in two ways: either directly by adjusting the aggregates or indirectly by aggregating seasonally adjusted data of the component series.
+Seasonally adjusted series of aggregates can be derived in two ways: either *directly* by adjusting the aggregates or *indirectly* by aggregating seasonally adjusted data of the component series.
 Generally, the results will differ, sometimes significantly.
+
+This may be because the individual series have different seasonal patterns, or because of non-linear effects, which may arise, e.g., from multiplicative seasonal adjustment calculations.
+
+In addition, indirect adjustment may make sense if accounting relationships between series shoulb be maintained.
+
 Conceptually, neither the direct approach nor the indirect approach is optimal, and we will discuss some arguments later on.
 
 Intuitively, indirect adjustment is generally better when the components have:
@@ -22,7 +27,7 @@ Direct adjustment is generally better when the components have:
 
 Before we go into the details of the distinction between direct and indirect adjustment, let's take a look at how *seasonal* can handle multiple time series.
 
-### Multiple Series adjustment
+## Multiple series adjustment
 
 Since [seasonal version 1.8](https://cran.r-project.org/package=seasonal), it is now possible to seasonally adjust multiple series in a single call to `seas()`.
 This is done by using the built-in batch mode of X-13.
@@ -32,8 +37,10 @@ Multiple adjustments can be performed by supplying multiple time series as an `"
 
 ```{r}
 library(seasonal)
+library(tsbox)
+
 m <- seas(cbind(fdeaths, mdeaths), x11 = "")
-final(m)
+plot(final(m))
 ```
 
 This will perform two seasonal adjustments, one for `fdeaths` and one for `mdeaths`.
@@ -79,7 +86,7 @@ So, currently, it is not possible to call parallelized operations directly from 
 Here is an example that computes the operations below on an 8 core Mac.
 The [furrrr](https://furrr.futureverse.org) and the future package save a lot of the complications arising around parallelization.
 
-### All Platforms
+#### All Platforms
 
 On Windows, Mac and Linux, you can use the *multisession* strategy, which essentially starts a separate session of R for any of the available cores.
 In the following, we use an 8 core Mac and gain a more than 4 times speed gain.
@@ -92,7 +99,7 @@ system.time(future_map(many, seas))
 #  0.171   0.008   4.081
 ```
 
-### Non-Window Platform
+#### Non-Windows Platforms
 
 Mac and Linux allow forking parallelization, which is easier to set up.
 Here, multiple cores share the same memory, without having to start separate sessions:
@@ -105,7 +112,7 @@ system.time(future_map(many, seas))
 # 23.389   1.704   3.508
 ```
 
-### composite spec
+## The composite spec
 
 Support for the X-13 batch mode makes it finally possible to use the *composite* spec -- the one feature of X-13 that was missing in seasonal.
 Sometimes, one has to decide whether seasonal adjustment should be performed on a granular level or on an aggregated level.
@@ -147,7 +154,7 @@ all.equal(ldeaths, mdeaths + fdeaths)
 all.equal(final(m_direct), final(m_composite)[, 'composite'])
 ```
 
-### Analyzing the Composite Adjustment
+## Indirect vs direct adjustment
 
 The composite adjustment contains all the information that is needed to analyze the direct vs the indirect adjustment.
 
@@ -160,7 +167,11 @@ ts_plot(
 
 ```
 
-## Built-in tools
+What we have seen above is an example of indirect vs direct adjustment.
+How to judge which one is better? Two criteria are often used: smoothness and stability
+
+
+### Built-in tools
 
 X-13 offers various diagnostics to compare direct and indirect adjustments
 
@@ -178,10 +189,23 @@ Some additional statistics can found in the X-13 output.
 out(m_composite)
 ```
 
-### Indirect vs direct adjustment
+### Smoothness
 
-What we have seen above is an example of indirect vs direct adjustment.
-How to judge which one is better?
+In statistical agencies, the choice is often based on characteristics of the
+adjusted series that many data users find desirable. For comparing direct and
+indirect adjustm the property most often employed has been smoothness as
+measured by one or more smoothness measures.
+We will cover smoothness in more detail in @sec-quality-measures.
+
+
+### Sliding Span
+
+To use of a smoothness measure is obviously quite arbitrary. A better way to decide between indirect and direct adjustment may be an examination of the stability of the series, as it can be retrieved from the sliding span spec.
+We have more to say on sliding spans in @sec-quality-measures and @sec-quality-measures and @sec-revisions.
+For now, let's apply the sliding span specs to our series above and decide based on the returned statistics.
+
+
+### Other considerations
 
 The choice between direct and indirect seasonal adjustment may be guided by the expected uses of seasonally adjusted data.
 For some uses, preserving accounting and aggregation relationships in the data may be crucial, while for other uses, the time-series properties of the derived estimates may be more important.
@@ -196,6 +220,7 @@ If the differences are insignificant, accounting and aggregation relationships i
 
 When the indirect approach is considered, seasonally adjusted aggregates should be checked to exclude the presence of residual seasonality using the F-test available in X-13.
 
-X-13 offers various diagnostic tools to evaluate the direct and indirect adjustment of aggregates.
+X-13 offers various additional diagnostic tools to evaluate the direct and indirect adjustment of aggregates.
 The program calculates seasonally adjusted aggregates using the direct and indirect approach and provides in output a set of statistics to compare the results (M diagnostics, measures of smoothness, frequency spectrum diagnostics, etc.).
+
 Furthermore, sliding spans and revision history diagnostics can be requested to assess which of the two approaches provides more stable and reliable seasonally adjusted results.
