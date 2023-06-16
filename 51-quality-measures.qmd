@@ -4,7 +4,7 @@
 #| results: "asis"
 #| echo: false
 source("_common.R")
-status("drafting")  # drafting, polishing, complete
+status("polishing")  # drafting, polishing, complete
 ```
 
 This chapter will be broken up into relevant pieces that construct a good seasonal adjustment.
@@ -23,7 +23,9 @@ It indicates that the seasonal adjustment may not have fully removed all the sea
 If residual seasonality is present in the adjusted series, it can lead to biased or misleading analysis and forecasts.
 It implies that there are still systematic patterns or cycles left in the data, which can hinder accurate interpretation and decision-making.
 There are many ways to test for residual seasonality.
-Three prominent ones are (I THINK THIS IS A GOOD PLACE TO ADD A REFERENCE TABLE THAT LISTS THESE THREE METHODS ALONG WITH PROS, CONS, IMMEDIATE INTERPRETATIONS. I THINK MANY READERS WILL JUST WANT TO KNOW HOW TO IDENTIFY RESIDUAL SEASONALITY AND MATCH UP A TEST WITH THEIR SKILL-SET AND THEN SEE HOW TO APPLY IT)
+Three prominent ones are 
+
+<!-- (I THINK THIS IS A GOOD PLACE TO ADD A REFERENCE TABLE THAT LISTS THESE THREE METHODS ALONG WITH PROS, CONS, IMMEDIATE INTERPRETATIONS. I THINK MANY READERS WILL JUST WANT TO KNOW HOW TO IDENTIFY RESIDUAL SEASONALITY AND MATCH UP A TEST WITH THEIR SKILL-SET AND THEN SEE HOW TO APPLY IT) -->
 
 -   Visual inspection of the spectrum
 -   QS-statistic
@@ -63,6 +65,18 @@ spec.ar(final(m))
 
 Here we see peaks remaining the the final seasonal adjustment.
 This is a clear indication of lack of quality and something needs to be done to improve the adjustment.
+
+When attempting to eliminate persistent peaks in the spectrum, several strategies can be employed. 
+First, consider adjusting the model span, particularly when there are indications of changing patterns. 
+Furthermore, it is essential to carefully examine for any missed outliers and thoroughly review instances that are considered "almost" outliers. 
+Additionally, scrutinize the seasonal filters and sigma limits in X-11 or the model in SEATS to ensure they are appropriately set. 
+Exploring different estimations of the spectrum can also provide insights into potential solutions.
+Here we used the `spec.ar` function which utilizes an AIC test to find an appropriate AR(p) model for the series and plots the associated spectrum.
+This results in a smooth function as apposed to say, `spec.pgram` which will be much rougher.
+It is important to acknowledge that sometimes these peaks may be spurious, making it challenging to ascertain their significance.
+Always try to eliminate peaks at 1/12, 2/12, 3/12, 4/12, or TD 0.348 but be aware that not every situation lends itself to a clear-cut answer.
+When employing X-11 seasonal adjustment, it is crucial to consider that peaks observed in the spectrum of the seasonally adjusted series or irregular component, these are more significance than peaks in the spectrum of the model residuals. 
+In the case of indirect adjustments, it is advisable to prioritize the analysis of the seasonally adjusted series.
 
 ### QS statistc
 
@@ -118,13 +132,13 @@ When comparing two neighboring spans, the extent of their differences depends on
 
 ```{mermaid}
 gantt
-  title Illustration of Four 8-year spans
-  dateFormat YYYY-MM
-  section Full Data Span
-  Span 1 : des1, 1974-01, 8y
-  Span 2 : des2, 1975-01, 8y
-  Span 3 : des3, 1976-01, 8y
-  Span 4 : des4, 1977-01, 8y
+    title Example of four 8-year spans starting in January 2000
+    dateFormat  YYYY-MM-DD
+    section Full Data 
+    First Span       :a1, 2000-01-01, 2920d
+    Second Span     :a2, 2001-01-01, 2920d
+    Third Span :a3, 2002-01-01, 2920d
+    Fourth Span :a4, 2003-01-01, 2920d
 ```
 
 
@@ -135,8 +149,17 @@ $$
 MM(%) denotes the percent of months the seasonally adjusted month-to-month percent change" is unstable, which is defined as:
 $$
 \max_j \frac{A_t^{(j)}}{A_{t-1}^{(j)}} - 
-\min_j \frac{A_t^{(j)}}{A_{t-1}^{(j)}} > .03
+\min_j \frac{A_t^{(j)}}{A_{t-1}^{(j)}} > 0.03
 $$
+
+The 0.03 on the right hand side comes from the default cutoff. 
+Some of the other defaults are as follows
+
+| Series                                          | Default cutoff | spec option     |
+|-------------------------------------------------|----------------|-----------------|
+| Seasonal factors and seasonally adjusted series | 3\%             | `cutseas = 3.0` |
+| month-to-month and year-to-year change          | 3\%             | `cutchng = 3.0` |
+| trading day factors                             | 2\%             | `cuttd = 2.0`   |
 
 The recommendation provided in the X13 manual indicate A(%) > 15 is problematic and A(%) > 25 should not be used. MM(%) > 35 is problematic and MM(%) > 40 should not be used. 
 Why a different ranges?
@@ -150,9 +173,12 @@ m <- seas(AirPassengers,
 SF <- udg(m, "s2.a.per")
 row.names(SF) <- c("Number of months flagged", "Total number of months", "Percent")
 colnames(SF) <- "seasonal factors"
-print(SF)
+knitr::kable(SF)
 # Month-to-Month Changes in SA Series - Percentage of months flagged as unstable
-udg(m, "s2.d.per")
+M2M <- udg(m, "s2.d.per")
+row.names(M2M) <- c("Number of months flagged", "Total number of months", "Percent")
+colnames(M2M) <- "Month-to-Month Changes in SA Series"
+knitr::kable(M2M)
 ```
 Let's return to our example where we intentionally make a poor seasonal adjustment. 
 Now we need to take a log transform which will certainly improve the results from the prior run.
@@ -163,14 +189,64 @@ m <- seas(AirPassengers, transform.function = "log", x11 = "", x11.seasonalma = 
 SF <- udg(m, "s2.a.per")
 row.names(SF) <- c("Number of months flagged", "Total number of months", "Percent")
 colnames(SF) <- "seasonal factors"
-print(SF)
+knitr::kable(SF)
 # Month-to-Month Changes in SA Series - Percentage of months flagged as unstable
-udg(m, "s2.d.per")
+M2M <- udg(m, "s2.d.per")
+row.names(M2M) <- c("Number of months flagged", "Total number of months", "Percent")
+colnames(M2M) <- "Month-to-Month Changes in SA Series"
+knitr::kable(M2M)
 ```
 We see the A(%) value of 16.667 falls squarely in the problematic range. 
+If we were to lower the cutoff threshold we could expect to get even more values being flagged yielding a higher percentage.
 
+```{r}
+m <- seas(AirPassengers, transform.function = "log", x11 = "", x11.seasonalma = 'stable', slidingspans.numspans = 4, slidingspans.cutseas = 2.0)
+# Seasonal Factors - Percentage of months flagged as unstable
+SF <- udg(m, "s2.a.per")
+row.names(SF) <- c("Number of months flagged", "Total number of months", "Percent")
+colnames(SF) <- "seasonal factors"
+knitr::kable(SF)
+# Month-to-Month Changes in SA Series - Percentage of months flagged as unstable
+M2M <- udg(m, "s2.d.per")
+row.names(M2M) <- c("Number of months flagged", "Total number of months", "Percent")
+colnames(M2M) <- "Month-to-Month Changes in SA Series"
+knitr::kable(M2M)
+```
 
+We can also examine the series provied to us
 
+```{r, echo=FALSE}
+old <- ts(c(4834.69696276515, 4849.95279551784, 4891.60651111975, 4594.53218152862, 4508.04739195123, 4428.22147823101, 4155.91263906551, 4277.27732294852, 4314.72714684268, 4357.95842152047, 4525.86400420145, 4235.01307399616, 4234.31347048639, 4331.24968071644, 4269.96397372461, 4124.65109334579, 4036.0495661422, 4444.17945910393, 4481.18280071285, 4560.22493419428, 4288.37787646166, 4542.58828313334, 4187.50575635486, 4477.30867504387, 4404.73759196123, 4735.5572542894, 4608.92570298092, 4029.9443205093, 3665.21379380021, 3929.81159617718, 3874.39444792532, 3672.76153249019, 3621.76139566453, 3586.0688291707, 3539.10636878989, 3296.01063087786, 2867.82749974982, 3132.456244459, 3374.55438380709, 3375.09878530561, 3541.68391197462, 3143.80628657862, 3409.20463221518, 3334.82321270204, 3305.82329779194, 3651.9754084428, 3751.93452300575, 3415.12901433583, 3336.02758998745, 3795.41450201046, 4013.55178626454, 3645.97122999431, 3556.83471985917, 4184.60568792191, 4522.36464754394, 3380.32806845944, 3113.67904992775, 3518.38743103085, 3680.08532367028, 3186.7567219905, 3320.61091971433, 3485.86161873198, 3427.71910340804, 3359.47011807825, 3291.49417084242, 3339.6533659906, 3356.70750775719, 3311.03270788708, 3421.62937737094, 3619.78785274183, 3728.11164869981, 3568.83734758082, 3686.52261186333, 3654.17911110257, 3559.35198444409, 3422.43572235506, 2954.37897070737, 3015.25056639864, 3019.38068843909, 2968.92747841368, 2775.54519919915, 2861.0289396906, 2550.45300589867, 2327.07089479867, 2132.52846235601, 2385.88709598878, 2178.03750309247, 1898.1855342073, 2132.53176396644, 2476.21252299127, 2623.87767699292, 2416.63792466076, 2638.74213991235, 3085.1718593452, 2943.13771994699, 2600.34720843909, 2728.38253443839, 2879.55584743557, 3209.27333879276, 2882.93806149548, 2718.68273555635, 2601.11864981355, 2614.49771755992, 2495.57704172867, 2442.70662519753, 2409.76528414241, 2548.17912864698, 2168.13792822606, 2252.15220171482, 2470.70895832381, 2470.01465466505), start = c(1995, 1), frequency = 4)
+new <- ts(c(4834.69696276515, 4849.95279551784, 4891.60651111975, 4594.53218152862, 4508.04739195123, 4428.22147823101, 4155.91263906551, 4277.27732294852, 4314.72714684268, 4357.95842152047, 4525.86400420145, 4235.01307399616, 4234.31347048639, 4331.24968071644, 4269.96397372461, 4124.65109334579, 4036.0495661422, 4444.17945910393, 4481.18280071285, 4560.22493419428, 4288.37787646166, 4542.58828313334, 4187.50575635486, 4477.30867504387, 4404.73759196123, 4735.5572542894, 4608.92570298092, 4029.9443205093, 3665.21379380021, 3929.81159617718, 3874.39444792532, 3672.76153249019, 3621.76139566453, 3586.0688291707, 3539.10636878989, 3296.01063087786, 2867.82749974982, 3132.456244459, 3374.55438380709, 3375.09878530561, 3541.68391197462, 3143.80628657862, 3409.20463221518, 3334.82321270204, 3305.82329779194, 3651.9754084428, 3751.93452300575, 3415.12901433583, 3336.02758998745, 3795.41450201046, 4013.55178626454, 3645.97122999431, 3556.83471985917, 4184.60568792191, 4522.36464754394, 3380.32806845944, 3113.67904992775, 3518.38743103085, 3680.08532367028, 3186.7567219905, 3320.61091971433, 3485.86161873198, 3427.71910340804, 3359.47011807825, 3291.49417084242, 3339.6533659906, 3356.70750775719, 3311.03270788708, 3421.62937737094, 3619.78785274183, 3728.11164869981, 3568.83734758082, 3686.52261186333, 3654.17911110257, 3559.35198444409, 3422.43572235506, 2954.37897070737, 3015.25056639864, 3019.38068843909, 2968.92747841368, 2775.54519919915, 2861.0289396906, 2550.45300589867, 2327.07089479867, 2132.52846235601, 2385.88709598878, 2178.03750309247, 1898.1855342073, 2132.53176396644, 2476.21252299127, 2623.87767699292, 2416.63792466076, 2638.74213991235, 3085.1718593452, 2943.13771994699, 2600.34720843909, 2728.38253443839, 2879.55584743557, 3209.27333879276, 2882.93806149548, 2718.68273555635, 2601.11864981355, 2614.49771755992, 2495.57704172867, 2442.70662519753, 2409.76528414241, 2548.17912864698, 2168.13792822606, 2252.15220171482, 2470.70895832382, 2436.58349286672, 2114.42931528768), start = c(1995, 1), frequency = 4)
+
+```
+
+```{r}
+old_sa <- seas(
+  x = old,
+  transform.function = "log",
+  regression.aictest = NULL,
+  outlier = NULL,
+  arima.model = "(1 1 1)(0 1 1)",
+  x11 = "",
+  regression.variables = "ls2008.4",
+  slidingspans = ""
+)
+auto_sa <- seas(
+  x = old,
+  x11 = "",
+  slidingspans = ""
+)
+SF <- udg(old_sa, "s2.a.per") |> cbind(udg(auto_sa, "s2.a.per"))
+row.names(SF) <- c("Number of months flagged", "Total number of months", "Percent")
+colnames(SF) <- c("old_sa", "auto_sa")
+knitr::kable(SF, caption = "Seasonal Factors")
+# Month-to-Month Changes in SA Series - Percentage of months flagged as unstable
+M2M <- udg(old_sa, "s2.d.per") |> cbind(udg(auto_sa, "s2.a.per"))
+row.names(M2M) <- c("Number of months flagged", "Total number of months", "Percent")
+colnames(M2M) <- c("old_sa", "auto_sa")
+knitr::kable(M2M, caption = "Month-to-Month Changes in SA Series")
+```
 
 
 

@@ -4,7 +4,7 @@
 #| results: "asis"
 #| echo: false
 source("_common.R")
-status("drafting")  # drafting, polishing, complete
+status("polishing")  # drafting, polishing, complete
 ```
 
 This section focuses on diagnostic tools for seasonal adjustment.
@@ -26,7 +26,7 @@ flowchart TD
   A[RegARIMA Modeling] --> B(Model Comparison / Diagnostics)
   B --> A
   A --> C[Seasonal Adjustment]
-  C --> D{Seasonal Adjustment Diagnostics}
+  C --> D{Seasonal Adjustment <br/> Diagnostics}
   D -.-> C
   D -.-> A
   D -.-> E[Done]

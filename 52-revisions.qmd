@@ -4,7 +4,7 @@
 #| results: "asis"
 #| echo: false
 source("_common.R")
-status("drafting")  # drafting, polishing, complete
+status("polishing")  # drafting, polishing, complete
 ```
 
 -   How to measure revisions?
@@ -55,7 +55,7 @@ It's important to note that these diagnostics do not include any changes or revi
 We can look at any of the following estimates produced by the program
 
 | Variable to specify | value                                                      |
-|---------------------|------------------------------------------------------------|
+|-------------------------------------|-----------------------------------|
 | `sadj` (default)    | seasonally adjusted series                                 |
 | `sadjchng`          | period-to-period changes in the seasonally adjusted series |
 | `trend`             | trend                                                      |
@@ -65,3 +65,94 @@ We can look at any of the following estimates produced by the program
 | `fcst`              | forecasts and evolving mean square forecast errors         |
 | `arma`              | estimated AR and MA coefficients                           |
 | `td`                | trading day regression coefficients                        |
+
+
+```{r, echo=FALSE}
+library(tidyverse)
+library(tsbox)
+library(seasonal)
+
+old <- ts(c(4834.69696276515, 4849.95279551784, 4891.60651111975, 4594.53218152862, 4508.04739195123, 4428.22147823101, 4155.91263906551, 4277.27732294852, 4314.72714684268, 4357.95842152047, 4525.86400420145, 4235.01307399616, 4234.31347048639, 4331.24968071644, 4269.96397372461, 4124.65109334579, 4036.0495661422, 4444.17945910393, 4481.18280071285, 4560.22493419428, 4288.37787646166, 4542.58828313334, 4187.50575635486, 4477.30867504387, 4404.73759196123, 4735.5572542894, 4608.92570298092, 4029.9443205093, 3665.21379380021, 3929.81159617718, 3874.39444792532, 3672.76153249019, 3621.76139566453, 3586.0688291707, 3539.10636878989, 3296.01063087786, 2867.82749974982, 3132.456244459, 3374.55438380709, 3375.09878530561, 3541.68391197462, 3143.80628657862, 3409.20463221518, 3334.82321270204, 3305.82329779194, 3651.9754084428, 3751.93452300575, 3415.12901433583, 3336.02758998745, 3795.41450201046, 4013.55178626454, 3645.97122999431, 3556.83471985917, 4184.60568792191, 4522.36464754394, 3380.32806845944, 3113.67904992775, 3518.38743103085, 3680.08532367028, 3186.7567219905, 3320.61091971433, 3485.86161873198, 3427.71910340804, 3359.47011807825, 3291.49417084242, 3339.6533659906, 3356.70750775719, 3311.03270788708, 3421.62937737094, 3619.78785274183, 3728.11164869981, 3568.83734758082, 3686.52261186333, 3654.17911110257, 3559.35198444409, 3422.43572235506, 2954.37897070737, 3015.25056639864, 3019.38068843909, 2968.92747841368, 2775.54519919915, 2861.0289396906, 2550.45300589867, 2327.07089479867, 2132.52846235601, 2385.88709598878, 2178.03750309247, 1898.1855342073, 2132.53176396644, 2476.21252299127, 2623.87767699292, 2416.63792466076, 2638.74213991235, 3085.1718593452, 2943.13771994699, 2600.34720843909, 2728.38253443839, 2879.55584743557, 3209.27333879276, 2882.93806149548, 2718.68273555635, 2601.11864981355, 2614.49771755992, 2495.57704172867, 2442.70662519753, 2409.76528414241, 2548.17912864698, 2168.13792822606, 2252.15220171482, 2470.70895832381, 2470.01465466505), start = c(1995, 1), frequency = 4)
+new <- ts(c(4834.69696276515, 4849.95279551784, 4891.60651111975, 4594.53218152862, 4508.04739195123, 4428.22147823101, 4155.91263906551, 4277.27732294852, 4314.72714684268, 4357.95842152047, 4525.86400420145, 4235.01307399616, 4234.31347048639, 4331.24968071644, 4269.96397372461, 4124.65109334579, 4036.0495661422, 4444.17945910393, 4481.18280071285, 4560.22493419428, 4288.37787646166, 4542.58828313334, 4187.50575635486, 4477.30867504387, 4404.73759196123, 4735.5572542894, 4608.92570298092, 4029.9443205093, 3665.21379380021, 3929.81159617718, 3874.39444792532, 3672.76153249019, 3621.76139566453, 3586.0688291707, 3539.10636878989, 3296.01063087786, 2867.82749974982, 3132.456244459, 3374.55438380709, 3375.09878530561, 3541.68391197462, 3143.80628657862, 3409.20463221518, 3334.82321270204, 3305.82329779194, 3651.9754084428, 3751.93452300575, 3415.12901433583, 3336.02758998745, 3795.41450201046, 4013.55178626454, 3645.97122999431, 3556.83471985917, 4184.60568792191, 4522.36464754394, 3380.32806845944, 3113.67904992775, 3518.38743103085, 3680.08532367028, 3186.7567219905, 3320.61091971433, 3485.86161873198, 3427.71910340804, 3359.47011807825, 3291.49417084242, 3339.6533659906, 3356.70750775719, 3311.03270788708, 3421.62937737094, 3619.78785274183, 3728.11164869981, 3568.83734758082, 3686.52261186333, 3654.17911110257, 3559.35198444409, 3422.43572235506, 2954.37897070737, 3015.25056639864, 3019.38068843909, 2968.92747841368, 2775.54519919915, 2861.0289396906, 2550.45300589867, 2327.07089479867, 2132.52846235601, 2385.88709598878, 2178.03750309247, 1898.1855342073, 2132.53176396644, 2476.21252299127, 2623.87767699292, 2416.63792466076, 2638.74213991235, 3085.1718593452, 2943.13771994699, 2600.34720843909, 2728.38253443839, 2879.55584743557, 3209.27333879276, 2882.93806149548, 2718.68273555635, 2601.11864981355, 2614.49771755992, 2495.57704172867, 2442.70662519753, 2409.76528414241, 2548.17912864698, 2168.13792822606, 2252.15220171482, 2470.70895832382, 2436.58349286672, 2114.42931528768), start = c(1995, 1), frequency = 4)
+
+```
+
+```{r}
+# We need to use out() to view the history tables. 
+# Currently not much support in seasonal for thest tables
+# X13graph produces a nice suite of graphics if intersted in the history spec and
+#.   the associated revisions
+old_sa <- seas(
+  x = old,
+  transform.function = "log",
+  regression.aictest = NULL,
+  outlier = NULL,
+  arima.model = "(1 1 1)(0 1 1)",
+  x11 = "",
+  regression.variables = "ls2008.4",
+  history = ""
+  # history.estimates = c("fcst")
+)
+auto_sa <- seas(
+  x = old,
+  x11 = "",
+  history = ""
+  # history.estimates = c("fcst")
+)
+# out(old_sa)
+# out(auto_sa)
+```
+
+```{r}
+old_sa <- seas(
+  x = old,
+  transform.function = "log",
+  regression.aictest = NULL,
+  outlier = NULL,
+  arima.model = "(1 1 1)(0 1 1)",
+  x11 = "",
+  regression.variables = "ls2008.4",
+  history.estimates = c("fcst")
+)
+auto_sa <- seas(
+  x = old,
+  x11 = "",
+  history.estimates = c("fcst")
+)
+h1 <- series(old_sa, "fce")
+h2 <- series(auto_sa, "fce")
+diff1 <- h1[,1] - h2[,1]
+diff12 <- h1[,2] - h2[,2]
+sdiff1 <- (diff1 * length(diff1)) / h2[length(h2[,1]),1]
+sdiff12 <- (diff12 * length(diff12)) / h2[length(h2[,2]),2]
+ts_plot(ts_c(sdiff1, sdiff12), title = "Squared Forecast Error Differences, Fixed - Auto")
+abline(h=0, col = "grey")
+```
+
+```{r}
+m1 = seas(AirPassengers, x11 = "", history.estimates = c("fcst"))
+m2 = seas(AirPassengers, x11 = "",  arima.model = "(0 0 1)(0 0 0)", history.estimates = c("fcst"))
+h1 <- series(m1, "fce")
+h2 <- series(m2, "fce")
+diff1 <- h1[,1] - h2[,1]
+diff12 <- h1[,2] - h2[,2]
+sdiff1 <- (diff1 * length(diff1)) / h2[length(h2[,1]),1]
+sdiff12 <- (diff12 * length(diff12)) / h2[length(h2[,2]),2]
+ts_plot(ts_c(sdiff1, sdiff12), title = "Squared Forecast Error Differences, good - bad")
+abline(h=0, col = "grey")
+```
+
+There are no specific pass/fail levels recommended for these results, indicating that there are no predetermined thresholds to determine success or failure. 
+Instead, a comparison approach is suggested, particularly when significant differences emerge among the results. 
+For example, it is expected that the disparity between the concurrent series and the final series diminishes gradually. 
+Therefore, it is reasonable to anticipate a decrease in the average revision across years as the process nears completion.
+In such cases, it becomes crucial to thoroughly analyze and understand the reasons behind these disparities. 
+Additionally, it is advised to exercise caution when utilizing these results as the sole basis for selecting a seasonal filter. 
+Other factors and considerations should be taken into account to make an informed decision. 
+It is worth noting that the diagnostic tends to favor longer filters, implying that the analysis tends to lean towards recommending seasonal filters with larger spans. 
+However, it is important to weigh this tendency against other relevant factors and requirements specific to the context at hand to make the most appropriate choice.
+
+
+
+
+
