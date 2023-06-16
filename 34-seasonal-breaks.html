@@ -290,6 +290,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <a href="#case-study-imports-of-goods-to-china" id="toc-case-study-imports-of-goods-to-china" class="nav-link active" data-scroll-target="#case-study-imports-of-goods-to-china"><span class="header-section-number">11.1</span> Case Study: Imports of Goods to China</a>
   <ul class="collapse">
 <li><a href="#identifying-a-seasonal-break" id="toc-identifying-a-seasonal-break" class="nav-link" data-scroll-target="#identifying-a-seasonal-break"><span class="header-section-number">11.1.1</span> Identifying a seasonal break</a></li>
+  <li><a href="#restricting-model-span" id="toc-restricting-model-span" class="nav-link" data-scroll-target="#restricting-model-span"><span class="header-section-number">11.1.2</span> Restricting model span</a></li>
   </ul>
 </li>
   </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/34-seasonal-breaks.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
@@ -474,6 +475,79 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span><span class="co">#&gt; Box-Ljung (no autocorr.): 19.61   Shapiro (normality): 0.9922 *</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>A formal test of a seasonal break can be performed by including <code>regression.variables = "seasonal/1999.jan//"</code> into the specification. By default, seasonal outliers are removed from the final series. Therefore, this can be used to model a seasonal break. Modeling a seasonal break is usually preferable to a separation of the time series in two parts.</p>
+</section><section id="restricting-model-span" class="level3" data-number="11.1.2"><h3 data-number="11.1.2" class="anchored" data-anchor-id="restricting-model-span">
+<span class="header-section-number">11.1.2</span> Restricting model span</h3>
+<p>In many structural breaks, restricting <code>series.modelspan</code> may be the easiest way to deal with such series. Resticting the model span, uses only part of the series for model estimation, but applies seasonal adjustment to the whole series:</p>
+<div class="cell">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">imp_cn</span>, series.modelspan <span class="op">=</span> <span class="st">"2000.jan,"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; seas(x = imp_cn, series.modelspan = "2000.jan,")</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients:</span></span>
+<span><span class="co">#&gt;                    Estimate Std. Error z value Pr(&gt;|z|)    </span></span>
+<span><span class="co">#&gt; AO2001.Jan        -0.261726   0.043878  -5.965 2.45e-09 ***</span></span>
+<span><span class="co">#&gt; AO2004.Feb         0.218728   0.042608   5.133 2.84e-07 ***</span></span>
+<span><span class="co">#&gt; LS2008.Nov        -0.327482   0.047759  -6.857 7.03e-12 ***</span></span>
+<span><span class="co">#&gt; AO2009.Jan        -0.280528   0.042369  -6.621 3.56e-11 ***</span></span>
+<span><span class="co">#&gt; AO2011.Jan         0.153783   0.042806   3.593 0.000328 ***</span></span>
+<span><span class="co">#&gt; AO2012.Jan        -0.169644   0.043482  -3.901 9.56e-05 ***</span></span>
+<span><span class="co">#&gt; AO2012.Feb         0.174648   0.043120   4.050 5.11e-05 ***</span></span>
+<span><span class="co">#&gt; LS2016.Jan        -0.229816   0.047847  -4.803 1.56e-06 ***</span></span>
+<span><span class="co">#&gt; Weekday            0.006700   0.000806   8.313  &lt; 2e-16 ***</span></span>
+<span><span class="co">#&gt; AR-Nonseasonal-01 -0.426105   0.054515  -7.816 5.44e-15 ***</span></span>
+<span><span class="co">#&gt; MA-Seasonal-12     0.794516   0.040311  19.710  &lt; 2e-16 ***</span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; SEATS adj.  ARIMA: (1 1 0)(0 1 1)  Obs.: 372  Transform: log</span></span>
+<span><span class="co">#&gt; AICc: 1.258e+04, BIC: 1.262e+04  QS (no seasonality in final):    0  </span></span>
+<span><span class="co">#&gt; Box-Ljung (no autocorr.): 31.39   Shapiro (normality): 0.9949</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="fu"><a href="https://docs.ropensci.org/tsbox/reference/ts_span.html">ts_span</a></span><span class="op">(</span><span class="va">imp_cn</span>, <span class="st">"2000-01"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; seas(x = ts_span(imp_cn, "2000-01"))</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients:</span></span>
+<span><span class="co">#&gt;                    Estimate Std. Error z value Pr(&gt;|z|)    </span></span>
+<span><span class="co">#&gt; AO2001.Jan        -0.261726   0.043878  -5.965 2.45e-09 ***</span></span>
+<span><span class="co">#&gt; AO2004.Feb         0.218728   0.042608   5.133 2.84e-07 ***</span></span>
+<span><span class="co">#&gt; LS2008.Nov        -0.327482   0.047759  -6.857 7.03e-12 ***</span></span>
+<span><span class="co">#&gt; AO2009.Jan        -0.280528   0.042369  -6.621 3.56e-11 ***</span></span>
+<span><span class="co">#&gt; AO2011.Jan         0.153783   0.042806   3.593 0.000328 ***</span></span>
+<span><span class="co">#&gt; AO2012.Jan        -0.169644   0.043482  -3.901 9.56e-05 ***</span></span>
+<span><span class="co">#&gt; AO2012.Feb         0.174648   0.043120   4.050 5.11e-05 ***</span></span>
+<span><span class="co">#&gt; LS2016.Jan        -0.229816   0.047847  -4.803 1.56e-06 ***</span></span>
+<span><span class="co">#&gt; Weekday            0.006700   0.000806   8.313  &lt; 2e-16 ***</span></span>
+<span><span class="co">#&gt; AR-Nonseasonal-01 -0.426105   0.054515  -7.816 5.44e-15 ***</span></span>
+<span><span class="co">#&gt; MA-Seasonal-12     0.794516   0.040311  19.710  &lt; 2e-16 ***</span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; SEATS adj.  ARIMA: (1 1 0)(0 1 1)  Obs.: 276  Transform: log</span></span>
+<span><span class="co">#&gt; AICc: 1.258e+04, BIC: 1.262e+04  QS (no seasonality in final):    0  </span></span>
+<span><span class="co">#&gt; Box-Ljung (no autocorr.): 31.39   Shapiro (normality): 0.9949</span></span>
+<span></span>
+<span></span>
+<span><span class="fu"><a href="https://docs.ropensci.org/tsbox/reference/ts_plot.html">ts_plot</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/final.html">final</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">imp_cn</span>, series.modelspan <span class="op">=</span> <span class="st">"2000.jan,"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/final.html">final</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="fu"><a href="https://docs.ropensci.org/tsbox/reference/ts_span.html">ts_span</a></span><span class="op">(</span><span class="va">imp_cn</span>, <span class="st">"2000-01"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="34-seasonal-breaks_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="864"></p>
+</div>
+</div>
+<p>For some reason, this works better with X11 than with SEATS</p>
+<div class="cell">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://docs.ropensci.org/tsbox/reference/ts_plot.html">ts_plot</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/final.html">final</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">imp_cn</span>, series.modelspan <span class="op">=</span> <span class="st">"2000.jan,"</span>, x11 <span class="op">=</span> <span class="st">""</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/final.html">final</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="fu"><a href="https://docs.ropensci.org/tsbox/reference/ts_span.html">ts_span</a></span><span class="op">(</span><span class="va">imp_cn</span>, <span class="st">"2000-01"</span><span class="op">)</span>, x11 <span class="op">=</span> <span class="st">""</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="34-seasonal-breaks_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="864"></p>
+</div>
+</div>
 
 
 </section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">

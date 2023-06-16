@@ -18,6 +18,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -55,6 +89,7 @@ ul.task-list li input[type="checkbox"] {
     "search-submit-button-title": "Submit"
   }
 }</script><meta name="robots" content="noindex">
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 </head>
 <body class="nav-sidebar floating">
 
@@ -248,7 +283,11 @@ ul.task-list li input[type="checkbox"] {
 </nav><div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+<li><a href="#history-spec" id="toc-history-spec" class="nav-link active" data-scroll-target="#history-spec"><span class="header-section-number">16.0.1</span> History Spec</a></li>
+  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/52-revisions.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
@@ -266,13 +305,13 @@ ul.task-list li input[type="checkbox"] {
   
 
 </header><div class="status">
-<div class="callout callout-style-simple callout-important">
+<div class="callout callout-style-simple callout-note">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-body-container">
-<p>You are reading an early draft of <em>Seasonal Adjustment in R</em>. This chapter is currently a dumping ground for ideas, and we don’t recommend reading it.</p>
+<p>You are reading an early draft of <em>Seasonal Adjustment in R</em>. This chapter should be readable but needs polishing.</p>
 </div>
 </div>
 </div>
@@ -282,10 +321,179 @@ ul.task-list li input[type="checkbox"] {
 <li><p>Should a model be re-estimated each period?</p></li>
 <li><p>How to use the slidingspan and history spec</p></li>
 </ul>
+<p>Revision play a major role in seasonal adjustment. Their role is multifaceted.</p>
+<ol type="1">
+<li>Revisions can tell us about the stability of our adjustment process. Hence, they are in some sense a diagnostic tool to help us decided between two possible models or filters.</li>
+<li>Revisions have the additional role that most users of seasonal adjusted data don’t like them. It can be frustrating to get a seasonally adjusted value one month, only to have it change the following month.</li>
+</ol>
+<p>We will try to address the first completely. The second is a more delicate issue that usually requires a policy decision and will vary person-to-person and agency-to-agency. Some will decide to revise all historical seasonal adjustments when a new month of data becomes available, and some may decide to fix historical seasonal adjustments and only release the most current. Each policy decision will have its own pros and cons that we will briefly discuss at the end of this chapter.</p>
+<p>Let’s define a revision. Define <span class="math inline">\(A_{t|n}\)</span> to be the seasonally adjusted value of <span class="math inline">\(y_t\)</span> using <span class="math inline">\(y_1, y_2, \ldots, y_n\)</span>. Assume the full series is of length <span class="math inline">\(T\)</span>.</p>
+<ol type="1">
+<li>A <strong>concurrent</strong> seasonal adjustment is then <span class="math inline">\(A_{t|t}\)</span>
+</li>
+<li>A ``final’’ seasonal adjustment is <span class="math inline">\(A_{t|T}\)</span>
+</li>
+<li>A revision is <span class="math inline">\(A_{t|T} - A_{t|t}\)</span>
+</li>
+</ol>
+<p>The history spec in X13 reports the percent revision:</p>
+<p><span class="math display">\[
+R_t = \frac{A_{t|T} - A_{t|t}}{A_{t|t}}
+\]</span></p>
+<p>Note, if performing an additive adjustment that has negative values, X13 will only report the revision itself (<span class="math inline">\(R_t\)</span> with 1 as a denominator) instead of the percent revision. This avoids issues with changing signs.</p>
+<p>The analogous quantities are defined for trend and seasonally adjusted series.</p>
+<p>NEED TO ADD TREND and MONTH_TO_MONTH CHANGE OUTPUT.</p>
+<section id="history-spec" class="level3" data-number="16.0.1"><h3 data-number="16.0.1" class="anchored" data-anchor-id="history-spec">
+<span class="header-section-number">16.0.1</span> History Spec</h3>
+<p>The program conducts multiple runs, iterating over a sequence of expanding intervals, effectively simulating the passage of time. Our preference lies with the approach that generates smaller revisions, assuming the final adjustments resulting from different options or methods are equally satisfactory without any remaining seasonal or calendar effects. Instead of referring to them as history diagnostics, we use the term “revisions history” to describe these measurements, as they quantify the magnitudes of adjustments made by incorporating series values. It’s important to note that these diagnostics do not include any changes or revisions to the underlying series values themselves.</p>
+<p>We can look at any of the following estimates produced by the program</p>
+<table class="table">
+<colgroup>
+<col style="width: 51%">
+<col style="width: 48%">
+</colgroup>
+<thead><tr class="header">
+<th>Variable to specify</th>
+<th>value</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>
+<code>sadj</code> (default)</td>
+<td>seasonally adjusted series</td>
+</tr>
+<tr class="even">
+<td><code>sadjchng</code></td>
+<td>period-to-period changes in the seasonally adjusted series</td>
+</tr>
+<tr class="odd">
+<td><code>trend</code></td>
+<td>trend</td>
+</tr>
+<tr class="even">
+<td><code>trendchng</code></td>
+<td>period-to-period changes in the trend</td>
+</tr>
+<tr class="odd">
+<td><code>seasonal</code></td>
+<td>final and projected seasonal factors</td>
+</tr>
+<tr class="even">
+<td><code>aic</code></td>
+<td>AICCs and maximum log likelihoods for the regARIMA model</td>
+</tr>
+<tr class="odd">
+<td><code>fcst</code></td>
+<td>forecasts and evolving mean square forecast errors</td>
+</tr>
+<tr class="even">
+<td><code>arma</code></td>
+<td>estimated AR and MA coefficients</td>
+</tr>
+<tr class="odd">
+<td><code>td</code></td>
+<td>trading day regression coefficients</td>
+</tr>
+</tbody>
+</table>
+<div class="cell">
+<pre><code>#&gt; ── [1mAttaching core tidyverse packages[22m ───────────────────── tidyverse 2.0.0 ──
+#&gt; [32m✔[39m [34mdplyr    [39m 1.1.2     [32m✔[39m [34mreadr    [39m 2.1.4
+#&gt; [32m✔[39m [34mforcats  [39m 1.0.0     [32m✔[39m [34mstringr  [39m 1.5.0
+#&gt; [32m✔[39m [34mggplot2  [39m 3.4.2     [32m✔[39m [34mtibble   [39m 3.2.1
+#&gt; [32m✔[39m [34mlubridate[39m 1.9.2     [32m✔[39m [34mtidyr    [39m 1.3.0
+#&gt; [32m✔[39m [34mpurrr    [39m 1.0.1     
+#&gt; ── [1mConflicts[22m ─────────────────────────────────────── tidyverse_conflicts() ──
+#&gt; [31m✖[39m [34mdplyr[39m::[32mfilter()[39m masks [34mstats[39m::filter()
+#&gt; [31m✖[39m [34mdplyr[39m::[32mlag()[39m    masks [34mstats[39m::lag()
+#&gt; [31m✖[39m [34mtibble[39m::[32mview()[39m  masks [34mseasonal[39m::view()
+#&gt; [36mℹ[39m Use the conflicted package ([3m[34m&lt;http://conflicted.r-lib.org/&gt;[39m[23m) to force all conflicts to become errors</code></pre>
+</div>
+<div class="cell">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># We need to use out() to view the history tables. </span></span>
+<span><span class="co"># Currently not much support in seasonal for thest tables</span></span>
+<span><span class="co"># X13graph produces a nice suite of graphics if intersted in the history spec and</span></span>
+<span><span class="co">#.   the associated revisions</span></span>
+<span><span class="va">old_sa</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span></span>
+<span>  x <span class="op">=</span> <span class="va">old</span>,</span>
+<span>  transform.function <span class="op">=</span> <span class="st">"log"</span>,</span>
+<span>  regression.aictest <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  outlier <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  arima.model <span class="op">=</span> <span class="st">"(1 1 1)(0 1 1)"</span>,</span>
+<span>  x11 <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  regression.variables <span class="op">=</span> <span class="st">"ls2008.4"</span>,</span>
+<span>  history <span class="op">=</span> <span class="st">""</span></span>
+<span>  <span class="co"># history.estimates = c("fcst")</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">auto_sa</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span></span>
+<span>  x <span class="op">=</span> <span class="va">old</span>,</span>
+<span>  x11 <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  history <span class="op">=</span> <span class="st">""</span></span>
+<span>  <span class="co"># history.estimates = c("fcst")</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co"># out(old_sa)</span></span>
+<span><span class="co"># out(auto_sa)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">old_sa</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span></span>
+<span>  x <span class="op">=</span> <span class="va">old</span>,</span>
+<span>  transform.function <span class="op">=</span> <span class="st">"log"</span>,</span>
+<span>  regression.aictest <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  outlier <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  arima.model <span class="op">=</span> <span class="st">"(1 1 1)(0 1 1)"</span>,</span>
+<span>  x11 <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  regression.variables <span class="op">=</span> <span class="st">"ls2008.4"</span>,</span>
+<span>  history.estimates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"fcst"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">auto_sa</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span></span>
+<span>  x <span class="op">=</span> <span class="va">old</span>,</span>
+<span>  x11 <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  history.estimates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"fcst"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">h1</span> <span class="op">&lt;-</span> <span class="fu">series</span><span class="op">(</span><span class="va">old_sa</span>, <span class="st">"fce"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; To speed up, extend the `seas()` call (see ?series):</span></span>
+<span><span class="co">#&gt; seas(x = old, transform.function = "log", regression.aictest = NULL, To speed up, extend the `seas()` call (see ?series):</span></span>
+<span><span class="co">#&gt;     outlier = NULL, arima.model = "(1 1 1)(0 1 1)", x11 = "", To speed up, extend the `seas()` call (see ?series):</span></span>
+<span><span class="co">#&gt;     regression.variables = "ls2008.4", history.estimates = c("fcst"), To speed up, extend the `seas()` call (see ?series):</span></span>
+<span><span class="co">#&gt;     history.save = "fce")</span></span>
+<span><span class="va">h2</span> <span class="op">&lt;-</span> <span class="fu">series</span><span class="op">(</span><span class="va">auto_sa</span>, <span class="st">"fce"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; To speed up, extend the `seas()` call (see ?series):</span></span>
+<span><span class="co">#&gt; seas(x = old, x11 = "", history.estimates = c("fcst"), history.save = "fce")</span></span>
+<span><span class="va">diff1</span> <span class="op">&lt;-</span> <span class="va">h1</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span> <span class="op">-</span> <span class="va">h2</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span></span>
+<span><span class="va">diff12</span> <span class="op">&lt;-</span> <span class="va">h1</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span> <span class="op">-</span> <span class="va">h2</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span></span>
+<span><span class="va">sdiff1</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">diff1</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">diff1</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span> <span class="va">h2</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">h2</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>,<span class="fl">1</span><span class="op">]</span></span>
+<span><span class="va">sdiff12</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">diff12</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">diff12</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span> <span class="va">h2</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">h2</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span><span class="op">)</span>,<span class="fl">2</span><span class="op">]</span></span>
+<span><span class="fu">ts_plot</span><span class="op">(</span><span class="fu">ts_c</span><span class="op">(</span><span class="va">sdiff1</span>, <span class="va">sdiff12</span><span class="op">)</span>, title <span class="op">=</span> <span class="st">"Squared Forecast Error Differences, Fixed - Auto"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span>h<span class="op">=</span><span class="fl">0</span>, col <span class="op">=</span> <span class="st">"grey"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="52-revisions_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="864"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m1</span> <span class="op">=</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, x11 <span class="op">=</span> <span class="st">""</span>, history.estimates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"fcst"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">m2</span> <span class="op">=</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, x11 <span class="op">=</span> <span class="st">""</span>,  arima.model <span class="op">=</span> <span class="st">"(0 0 1)(0 0 0)"</span>, history.estimates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"fcst"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">h1</span> <span class="op">&lt;-</span> <span class="fu">series</span><span class="op">(</span><span class="va">m1</span>, <span class="st">"fce"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; To speed up, extend the `seas()` call (see ?series):</span></span>
+<span><span class="co">#&gt; seas(x = AirPassengers, x11 = "", history.estimates = c("fcst"), To speed up, extend the `seas()` call (see ?series):</span></span>
+<span><span class="co">#&gt;     history.save = "fce")</span></span>
+<span><span class="va">h2</span> <span class="op">&lt;-</span> <span class="fu">series</span><span class="op">(</span><span class="va">m2</span>, <span class="st">"fce"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; To speed up, extend the `seas()` call (see ?series):</span></span>
+<span><span class="co">#&gt; seas(x = AirPassengers, x11 = "", arima.model = "(0 0 1)(0 0 0)", To speed up, extend the `seas()` call (see ?series):</span></span>
+<span><span class="co">#&gt;     history.estimates = c("fcst"), history.save = "fce")</span></span>
+<span><span class="va">diff1</span> <span class="op">&lt;-</span> <span class="va">h1</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span> <span class="op">-</span> <span class="va">h2</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span></span>
+<span><span class="va">diff12</span> <span class="op">&lt;-</span> <span class="va">h1</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span> <span class="op">-</span> <span class="va">h2</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span></span>
+<span><span class="va">sdiff1</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">diff1</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">diff1</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span> <span class="va">h2</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">h2</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>,<span class="fl">1</span><span class="op">]</span></span>
+<span><span class="va">sdiff12</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">diff12</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">diff12</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span> <span class="va">h2</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">h2</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span><span class="op">)</span>,<span class="fl">2</span><span class="op">]</span></span>
+<span><span class="fu">ts_plot</span><span class="op">(</span><span class="fu">ts_c</span><span class="op">(</span><span class="va">sdiff1</span>, <span class="va">sdiff12</span><span class="op">)</span>, title <span class="op">=</span> <span class="st">"Squared Forecast Error Differences, good - bad"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span>h<span class="op">=</span><span class="fl">0</span>, col <span class="op">=</span> <span class="st">"grey"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="52-revisions_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="864"></p>
+</div>
+</div>
+<p>There are no specific pass/fail levels recommended for these results, indicating that there are no predetermined thresholds to determine success or failure. Instead, a comparison approach is suggested, particularly when significant differences emerge among the results. For example, it is expected that the disparity between the concurrent series and the final series diminishes gradually. Therefore, it is reasonable to anticipate a decrease in the average revision across years as the process nears completion. In such cases, it becomes crucial to thoroughly analyze and understand the reasons behind these disparities. Additionally, it is advised to exercise caution when utilizing these results as the sole basis for selecting a seasonal filter. Other factors and considerations should be taken into account to make an informed decision. It is worth noting that the diagnostic tends to favor longer filters, implying that the analysis tends to lean towards recommending seasonal filters with larger spans. However, it is important to weigh this tendency against other relevant factors and requirements specific to the context at hand to make the most appropriate choice.</p>
 
 
-
-</main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
@@ -530,7 +738,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     <div class="nav-footer-left">by James Livsey and Christoph Sax</div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/52-revisions.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></div>
+    </div>
     <div class="nav-footer-right">Seasonal Adjustment in R</div>
   </div>
 </footer>

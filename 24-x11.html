@@ -621,7 +621,11 @@ Where does the term “White Noise” come from?
 <div class="cell">
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">=</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, x11 <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
 <span><span class="va">unmodified_SIratio</span> <span class="op">&lt;-</span> <span class="fu">series</span><span class="op">(</span><span class="va">m</span>, <span class="st">"d8"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; To speed up, extend the `seas()` call (see ?series):</span></span>
+<span><span class="co">#&gt; seas(x = AirPassengers, x11 = "", x11.save = "d8")</span></span>
 <span><span class="va">modified_SIratio</span>   <span class="op">&lt;-</span> <span class="fu">series</span><span class="op">(</span><span class="va">m</span>, <span class="st">"d9"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; To speed up, extend the `seas()` call (see ?series):</span></span>
+<span><span class="co">#&gt; seas(x = AirPassengers, x11 = "", x11.save = "d9")</span></span>
 <span><span class="va">seasonal_factors</span> <span class="op">&lt;-</span> <span class="fu">series</span><span class="op">(</span><span class="va">m</span>, <span class="st">"d10"</span><span class="op">)</span></span>
 <span><span class="fu">tsbox</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/tsbox/reference/ts_examples.html">ts_dygraphs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">unmodified_SIratio</span>, <span class="va">modified_SIratio</span>, <span class="va">seasonal_factors</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -632,7 +636,11 @@ Where does the term “White Noise” come from?
 <div class="cell">
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">=</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, x11 <span class="op">=</span> <span class="st">""</span>, x11.sigmalim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">unmodified_SIratio</span> <span class="op">&lt;-</span> <span class="fu">series</span><span class="op">(</span><span class="va">m</span>, <span class="st">"d8"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; To speed up, extend the `seas()` call (see ?series):</span></span>
+<span><span class="co">#&gt; seas(x = AirPassengers, x11 = "", x11.sigmalim = c(1, 2), x11.save = "d8")</span></span>
 <span><span class="va">modified_SIratio</span>   <span class="op">&lt;-</span> <span class="fu">series</span><span class="op">(</span><span class="va">m</span>, <span class="st">"d9"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; To speed up, extend the `seas()` call (see ?series):</span></span>
+<span><span class="co">#&gt; seas(x = AirPassengers, x11 = "", x11.sigmalim = c(1, 2), x11.save = "d9")</span></span>
 <span><span class="va">seasonal_factors</span> <span class="op">&lt;-</span> <span class="fu">series</span><span class="op">(</span><span class="va">m</span>, <span class="st">"d10"</span><span class="op">)</span></span>
 <span><span class="fu">tsbox</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/tsbox/reference/ts_examples.html">ts_dygraphs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">unmodified_SIratio</span>, <span class="va">modified_SIratio</span>, <span class="va">seasonal_factors</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">

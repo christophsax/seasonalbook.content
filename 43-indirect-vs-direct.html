@@ -52,7 +52,26 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
@@ -91,7 +110,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script><meta name="robots" content="noindex">
 </head>
-<body class="nav-sidebar floating">
+<body class="nav-sidebar floating slimcontent">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
@@ -286,19 +305,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
-<li><a href="#multiple-series-adjustmtent" id="toc-multiple-series-adjustmtent" class="nav-link active" data-scroll-target="#multiple-series-adjustmtent"><span class="header-section-number">14.0.1</span> Multiple Series adjustmtent</a></li>
-  <li><a href="#backend" id="toc-backend" class="nav-link" data-scroll-target="#backend"><span class="header-section-number">14.0.2</span> Backend</a></li>
-  <li><a href="#parallelization" id="toc-parallelization" class="nav-link" data-scroll-target="#parallelization"><span class="header-section-number">14.0.3</span> Parallelization</a></li>
-  <li><a href="#all-platforms" id="toc-all-platforms" class="nav-link" data-scroll-target="#all-platforms"><span class="header-section-number">14.0.4</span> All Platforms</a></li>
-  <li><a href="#non-window-platform" id="toc-non-window-platform" class="nav-link" data-scroll-target="#non-window-platform"><span class="header-section-number">14.0.5</span> Non-Window Platform</a></li>
-  <li><a href="#composite-spec" id="toc-composite-spec" class="nav-link" data-scroll-target="#composite-spec"><span class="header-section-number">14.0.6</span> composite spec</a></li>
-  <li><a href="#indirect-vs-direct-adjusmtent" id="toc-indirect-vs-direct-adjusmtent" class="nav-link" data-scroll-target="#indirect-vs-direct-adjusmtent"><span class="header-section-number">14.0.7</span> Indirect vs direct adjusmtent</a></li>
-  <li><a href="#accounting-relationships" id="toc-accounting-relationships" class="nav-link" data-scroll-target="#accounting-relationships"><span class="header-section-number">14.0.8</span> Accounting relationships</a></li>
-  <li><a href="#built-in-tools" id="toc-built-in-tools" class="nav-link" data-scroll-target="#built-in-tools"><span class="header-section-number">14.1</span> Built-in tools</a></li>
+<li>
+<a href="#multiple-series-adjustment" id="toc-multiple-series-adjustment" class="nav-link active" data-scroll-target="#multiple-series-adjustment"><span class="header-section-number">14.1</span> Multiple series adjustment</a>
+  <ul class="collapse">
+<li><a href="#backend" id="toc-backend" class="nav-link" data-scroll-target="#backend"><span class="header-section-number">14.1.1</span> Backend</a></li>
+  <li><a href="#parallelization" id="toc-parallelization" class="nav-link" data-scroll-target="#parallelization"><span class="header-section-number">14.1.2</span> Parallelization</a></li>
+  </ul>
+</li>
+  <li><a href="#the-composite-spec" id="toc-the-composite-spec" class="nav-link" data-scroll-target="#the-composite-spec"><span class="header-section-number">14.2</span> The composite spec</a></li>
+  <li>
+<a href="#indirect-vs-direct-adjustment" id="toc-indirect-vs-direct-adjustment" class="nav-link" data-scroll-target="#indirect-vs-direct-adjustment"><span class="header-section-number">14.3</span> Indirect vs direct adjustment</a>
+  <ul class="collapse">
+<li><a href="#built-in-tools" id="toc-built-in-tools" class="nav-link" data-scroll-target="#built-in-tools"><span class="header-section-number">14.3.1</span> Built-in tools</a></li>
+  <li><a href="#smoothness" id="toc-smoothness" class="nav-link" data-scroll-target="#smoothness"><span class="header-section-number">14.3.2</span> Smoothness</a></li>
+  <li><a href="#sliding-span" id="toc-sliding-span" class="nav-link" data-scroll-target="#sliding-span"><span class="header-section-number">14.3.3</span> Sliding Span</a></li>
+  <li><a href="#other-considerations" id="toc-other-considerations" class="nav-link" data-scroll-target="#other-considerations"><span class="header-section-number">14.3.4</span> Other considerations</a></li>
+  </ul>
+</li>
   </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/43-indirect-vs-direct.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<main class="content page-columns page-full" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
 <h1 class="title"><span id="sec-indirect-vs-direct-adjustment" class="quarto-section-identifier"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Indirect vs direct adjustment</span></span></h1>
 </div>
 
@@ -313,107 +340,48 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   
 
 </header><div class="status">
-<div class="callout callout-style-simple callout-important">
+<div class="callout callout-style-simple callout-note">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-body-container">
-<p>You are reading an early draft of <em>Seasonal Adjustment in R</em>. This chapter is currently a dumping ground for ideas, and we don’t recommend reading it.</p>
+<p>You are reading an early draft of <em>Seasonal Adjustment in R</em>. This chapter should be readable but needs polishing.</p>
 </div>
 </div>
 </div>
 </div>
-<p>Seasonally adjusted series of aggregates can be derived in two ways: either directly by adjusting the aggregates or indirectly by aggregating seasonally adjusted data of the component series. Generally, the results will differ, sometimes significantly. Conceptually, neither the direct approach nor the indirect approach is optimal, and we will discuss some arguments later on.</p>
-<p>Intuitively, indirect adjustment is generally better when the components have - Distinct seasonal patterns - Adjustments of good quality</p>
-<p>Direct generally is generally better when the components have - Similar seasonal patterns (summing the series may cancel some noise)</p>
+<p>Seasonally adjusted series of aggregates can be derived in two ways: either <em>directly</em> by adjusting the aggregates or <em>indirectly</em> by aggregating seasonally adjusted data of the component series. Generally, the results will differ, sometimes significantly.</p>
+<p>This may be because the individual series have different seasonal patterns, or because of non-linear effects, which may arise, e.g., from multiplicative seasonal adjustment calculations.</p>
+<p>In addition, indirect adjustment may make sense if accounting relationships between series shoulb be maintained.</p>
+<p>Conceptually, neither the direct approach nor the indirect approach is optimal, and we will discuss some arguments later on.</p>
+<p>Intuitively, indirect adjustment is generally better when the components have:</p>
+<ul>
+<li>Distinct seasonal patterns</li>
+<li>Adjustments of good quality</li>
+</ul>
+<p>Direct adjustment is generally better when the components have:</p>
+<ul>
+<li>Similar seasonal patterns (summing the series may cancel some noise)</li>
+</ul>
 <p>Before we go into the details of the distinction between direct and indirect adjustment, let’s take a look at how <em>seasonal</em> can handle multiple time series.</p>
-<p>https://github.com/jlivsey/CR-SAclass/blob/master/slides/_11SeasAdjDiags.pdf</p>
-<section id="multiple-series-adjustmtent" class="level3" data-number="14.0.1"><h3 data-number="14.0.1" class="anchored" data-anchor-id="multiple-series-adjustmtent">
-<span class="header-section-number">14.0.1</span> Multiple Series adjustmtent</h3>
+<section id="multiple-series-adjustment" class="level2" data-number="14.1"><h2 data-number="14.1" class="anchored" data-anchor-id="multiple-series-adjustment">
+<span class="header-section-number">14.1</span> Multiple series adjustment</h2>
 <p>Since <a href="https://cran.r-project.org/package=seasonal">seasonal version 1.8</a>, it is now possible to seasonally adjust multiple series in a single call to <code><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas()</a></code>. This is done by using the built-in batch mode of X-13. It removes the need for loops or <code><a href="https://rdrr.io/r/base/lapply.html">lapply()</a></code> in such cases and finally brings one missing feature of X-13 to seasonal – the <em>composite</em> spec.</p>
 <p>Multiple adjustments can be performed by supplying multiple time series as an <code>"mts"</code> object:</p>
 <div class="cell">
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.seasonal.website">seasonal</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/tsbox/">tsbox</a></span><span class="op">)</span></span>
+<span></span>
 <span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">fdeaths</span>, <span class="va">mdeaths</span><span class="op">)</span>, x11 <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/final.html">final</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
-<span><span class="co">#&gt;           fdeaths  mdeaths</span></span>
-<span><span class="co">#&gt; Jan 1974 614.1235 1598.740</span></span>
-<span><span class="co">#&gt; Feb 1974 542.3500 1492.127</span></span>
-<span><span class="co">#&gt; Mar 1974 613.5029 1443.238</span></span>
-<span><span class="co">#&gt; Apr 1974 591.5725 1694.643</span></span>
-<span><span class="co">#&gt; May 1974 607.4970 1696.021</span></span>
-<span><span class="co">#&gt; Jun 1974 543.8415 1558.886</span></span>
-<span><span class="co">#&gt; Jul 1974 597.0745 1663.176</span></span>
-<span><span class="co">#&gt; Aug 1974 587.0533 1623.498</span></span>
-<span><span class="co">#&gt; Sep 1974 588.2693 1741.394</span></span>
-<span><span class="co">#&gt; Oct 1974 735.6666 1735.516</span></span>
-<span><span class="co">#&gt; Nov 1974 602.0218 1665.590</span></span>
-<span><span class="co">#&gt; Dec 1974 496.3985 1394.097</span></span>
-<span><span class="co">#&gt; Jan 1975 564.0055 1560.605</span></span>
-<span><span class="co">#&gt; Feb 1975 591.0320 1708.763</span></span>
-<span><span class="co">#&gt; Mar 1975 585.7739 1652.994</span></span>
-<span><span class="co">#&gt; Apr 1975 581.5294 1671.265</span></span>
-<span><span class="co">#&gt; May 1975 537.8055 1588.605</span></span>
-<span><span class="co">#&gt; Jun 1975 584.3284 1600.979</span></span>
-<span><span class="co">#&gt; Jul 1975 566.4872 1541.099</span></span>
-<span><span class="co">#&gt; Aug 1975 617.1197 1623.445</span></span>
-<span><span class="co">#&gt; Sep 1975 516.4781 1521.497</span></span>
-<span><span class="co">#&gt; Oct 1975 559.0481 1577.200</span></span>
-<span><span class="co">#&gt; Nov 1975 561.6315 1602.659</span></span>
-<span><span class="co">#&gt; Dec 1975 580.9778 1569.692</span></span>
-<span><span class="co">#&gt; Jan 1976 519.8106 1477.855</span></span>
-<span><span class="co">#&gt; Feb 1976 882.3725 2180.616</span></span>
-<span><span class="co">#&gt; Mar 1976 674.5057 1744.114</span></span>
-<span><span class="co">#&gt; Apr 1976 467.4502 1366.628</span></span>
-<span><span class="co">#&gt; May 1976 509.7854 1344.809</span></span>
-<span><span class="co">#&gt; Jun 1976 553.5233 1434.662</span></span>
-<span><span class="co">#&gt; Jul 1976 503.2795 1447.952</span></span>
-<span><span class="co">#&gt; Aug 1976 494.2373 1383.932</span></span>
-<span><span class="co">#&gt; Sep 1976 529.1840 1453.496</span></span>
-<span><span class="co">#&gt; Oct 1976 570.4128 1435.912</span></span>
-<span><span class="co">#&gt; Nov 1976 590.4285 1540.551</span></span>
-<span><span class="co">#&gt; Dec 1976 587.0971 1572.631</span></span>
-<span><span class="co">#&gt; Jan 1977 583.2427 1607.153</span></span>
-<span><span class="co">#&gt; Feb 1977 498.9514 1287.403</span></span>
-<span><span class="co">#&gt; Mar 1977 500.4632 1306.324</span></span>
-<span><span class="co">#&gt; Apr 1977 569.2076 1685.581</span></span>
-<span><span class="co">#&gt; May 1977 565.6470 1405.231</span></span>
-<span><span class="co">#&gt; Jun 1977 509.3196 1432.968</span></span>
-<span><span class="co">#&gt; Jul 1977 548.4062 1414.216</span></span>
-<span><span class="co">#&gt; Aug 1977 523.6985 1444.945</span></span>
-<span><span class="co">#&gt; Sep 1977 563.3014 1402.720</span></span>
-<span><span class="co">#&gt; Oct 1977 495.6653 1427.458</span></span>
-<span><span class="co">#&gt; Nov 1977 453.9859 1307.828</span></span>
-<span><span class="co">#&gt; Dec 1977 502.3045 1268.618</span></span>
-<span><span class="co">#&gt; Jan 1978 535.2658 1415.724</span></span>
-<span><span class="co">#&gt; Feb 1978 633.7605 1790.002</span></span>
-<span><span class="co">#&gt; Mar 1978 559.2936 1469.883</span></span>
-<span><span class="co">#&gt; Apr 1978 485.5062 1343.715</span></span>
-<span><span class="co">#&gt; May 1978 590.4080 1509.166</span></span>
-<span><span class="co">#&gt; Jun 1978 574.4467 1464.288</span></span>
-<span><span class="co">#&gt; Jul 1978 571.2263 1428.398</span></span>
-<span><span class="co">#&gt; Aug 1978 542.3579 1424.622</span></span>
-<span><span class="co">#&gt; Sep 1978 551.2099 1422.428</span></span>
-<span><span class="co">#&gt; Oct 1978 557.6905 1399.404</span></span>
-<span><span class="co">#&gt; Nov 1978 479.8979 1199.762</span></span>
-<span><span class="co">#&gt; Dec 1978 550.4253 1397.023</span></span>
-<span><span class="co">#&gt; Jan 1979 548.9834 1557.853</span></span>
-<span><span class="co">#&gt; Feb 1979 576.9922 1425.717</span></span>
-<span><span class="co">#&gt; Mar 1979 549.3468 1393.788</span></span>
-<span><span class="co">#&gt; Apr 1979 546.4590 1449.784</span></span>
-<span><span class="co">#&gt; May 1979 525.9881 1359.843</span></span>
-<span><span class="co">#&gt; Jun 1979 550.2481 1330.113</span></span>
-<span><span class="co">#&gt; Jul 1979 533.7558 1373.156</span></span>
-<span><span class="co">#&gt; Aug 1979 566.6884 1381.653</span></span>
-<span><span class="co">#&gt; Sep 1979 552.6500 1377.175</span></span>
-<span><span class="co">#&gt; Oct 1979 533.9571 1337.640</span></span>
-<span><span class="co">#&gt; Nov 1979 557.9707 1414.101</span></span>
-<span><span class="co">#&gt; Dec 1979 475.5049 1038.506</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/final.html">final</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="43-indirect-vs-direct_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="864"></p>
+</div>
 </div>
 <p>This will perform two seasonal adjustments, one for <code>fdeaths</code> and one for <code>mdeaths</code>. X-13 spec-argument combinations can be applied in the usual way, such as <code>x11 = ""</code>. Note that if entered that way, they will apply to both series. The <a href="https://cran.r-project.org/web/packages/seasonal/vignettes/multiple.html">vignette on multiple adjustments</a> describes how to specify options for individual series.</p>
-</section><section id="backend" class="level3" data-number="14.0.2"><h3 data-number="14.0.2" class="anchored" data-anchor-id="backend">
-<span class="header-section-number">14.0.2</span> Backend</h3>
+<section id="backend" class="level3" data-number="14.1.1"><h3 data-number="14.1.1" class="anchored" data-anchor-id="backend">
+<span class="header-section-number">14.1.1</span> Backend</h3>
 <p>X-13 ships with a batch mode that allows multiple adjustments in a single call to X-13. This is now the default in seasonal (<code>multimode = "x13"</code>). Alternatively, X-13 can be called for each series (<code>multimode = "R"</code>). The results should be usually the same, but switching to <code>multimode = "R"</code> may be useful for debugging:</p>
 <div class="cell">
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">fdeaths</span>, <span class="va">mdeaths</span><span class="op">)</span>, multimode <span class="op">=</span> <span class="st">"x13"</span><span class="op">)</span></span>
@@ -482,97 +450,78 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span> <span class="co">#   user  system elapsed</span></span>
 <span> <span class="co"># 15.819   0.814  16.958</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The return value of <code>system.time</code> tells you how much time has been used for the operation. The first number measures the time spent in the current session, while ‘elapsed’ measures the overall time, as measured by the clock. <code>system</code> measures the operating system overhead. The distinction between these numbers is not too significant here; simply focus on ‘elapsed’, the details will be more interesting in the parallel examples.</p>
-</section><section id="parallelization" class="level3" data-number="14.0.3"><h3 data-number="14.0.3" class="anchored" data-anchor-id="parallelization">
-<span class="header-section-number">14.0.3</span> Parallelization</h3>
+</section><section id="parallelization" class="level3" data-number="14.1.2"><h3 data-number="14.1.2" class="anchored" data-anchor-id="parallelization">
+<span class="header-section-number">14.1.2</span> Parallelization</h3>
 <p>In principle, R is single threaded, and operations are normally performed on a single core. While there are many ways to perform parallel operations in R, their details often depend on the platform. So, currently, it is not possible to call parallelized operations directly from seasonal. Here is an example that computes the operations below on an 8 core Mac. The <a href="https://furrr.futureverse.org">furrrr</a> and the future package save a lot of the complications arising around parallelization.</p>
-</section><section id="all-platforms" class="level3" data-number="14.0.4"><h3 data-number="14.0.4" class="anchored" data-anchor-id="all-platforms">
-<span class="header-section-number">14.0.4</span> All Platforms</h3>
+<section id="all-platforms" class="level4" data-number="14.1.2.1"><h4 data-number="14.1.2.1" class="anchored" data-anchor-id="all-platforms">
+<span class="header-section-number">14.1.2.1</span> All Platforms</h4>
 <p>On Windows, Mac and Linux, you can use the <em>multisession</em> strategy, which essentially starts a separate session of R for any of the available cores. In the following, we use an 8 core Mac and gain a more than 4 times speed gain.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/DavisVaughan/furrr">furrr</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html">plan</a></span><span class="op">(</span><span class="va">multisession</span>, workers <span class="op">=</span> <span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://future.futureverse.org/reference/nbrOfWorkers.html">nbrOfWorkers</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span><span class="fu"><a href="https://furrr.futureverse.org/reference/future_map.html">future_map</a></span><span class="op">(</span><span class="va">many</span>, <span class="va">seas</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#   user  system elapsed</span></span>
 <span><span class="co">#  0.171   0.008   4.081</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section><section id="non-window-platform" class="level3" data-number="14.0.5"><h3 data-number="14.0.5" class="anchored" data-anchor-id="non-window-platform">
-<span class="header-section-number">14.0.5</span> Non-Window Platform</h3>
+</section><section id="non-windows-platforms" class="level4" data-number="14.1.2.2"><h4 data-number="14.1.2.2" class="anchored" data-anchor-id="non-windows-platforms">
+<span class="header-section-number">14.1.2.2</span> Non-Windows Platforms</h4>
 <p>Mac and Linux allow forking parallelization, which is easier to set up. Here, multiple cores share the same memory, without having to start separate sessions:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/DavisVaughan/furrr">furrr</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html">plan</a></span><span class="op">(</span><span class="va">multicore</span>, workers <span class="op">=</span> <span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://future.futureverse.org/reference/nbrOfWorkers.html">nbrOfWorkers</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span><span class="fu"><a href="https://furrr.futureverse.org/reference/future_map.html">future_map</a></span><span class="op">(</span><span class="va">many</span>, <span class="va">seas</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#   user  system elapsed</span></span>
 <span><span class="co"># 23.389   1.704   3.508</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section><section id="composite-spec" class="level3" data-number="14.0.6"><h3 data-number="14.0.6" class="anchored" data-anchor-id="composite-spec">
-<span class="header-section-number">14.0.6</span> composite spec</h3>
+</section></section></section><section id="the-composite-spec" class="level2" data-number="14.2"><h2 data-number="14.2" class="anchored" data-anchor-id="the-composite-spec">
+<span class="header-section-number">14.2</span> The composite spec</h2>
 <p>Support for the X-13 batch mode makes it finally possible to use the <em>composite</em> spec – the one feature of X-13 that was missing in seasonal. Sometimes, one has to decide whether seasonal adjustment should be performed on a granular level or on an aggregated level. The <em>composite</em> spec helps you to analyze the problem and to compare the direct and the indirect adjustments.</p>
 <p>The <code>composite</code> argument is a list with an X-13 specification that is applied on the aggregated series. Specification works identically for other series in <code><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas()</a></code>, including the application of the defaults. If you provide an empty list, the usual defaults of <code><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas()</a></code> are used. A minimal composite call looks like this:</p>
 <div class="cell">
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span></span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_composite</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">mdeaths</span>, <span class="va">fdeaths</span><span class="op">)</span>,</span>
 <span>  composite <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  series.comptype <span class="op">=</span> <span class="st">"add"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt; $mdeaths</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Call:</span></span>
-<span><span class="co">#&gt; seas(x = cbind(mdeaths, fdeaths), composite = list(), series.comptype = "add")</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Coefficients:</span></span>
-<span><span class="co">#&gt;        AO1976.Feb         LS1976.Apr         AO1977.Apr         AO1978.Feb  </span></span>
-<span><span class="co">#&gt;            0.3319            -0.1330             0.1957             0.2305  </span></span>
-<span><span class="co">#&gt;        AO1979.Dec  MA-Nonseasonal-01     MA-Seasonal-12  </span></span>
-<span><span class="co">#&gt;           -0.3149            -0.3854             0.6120  </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $fdeaths</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Call:</span></span>
-<span><span class="co">#&gt; seas(x = cbind(mdeaths, fdeaths), composite = list(), series.comptype = "add")</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Coefficients:</span></span>
-<span><span class="co">#&gt;       Constant      AO1976.Feb  MA-Seasonal-12  </span></span>
-<span><span class="co">#&gt;       -0.01578         0.43345         0.63119  </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $composite</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Call:</span></span>
-<span><span class="co">#&gt; seas(x = cbind(mdeaths, fdeaths), composite = list(), series.comptype = "add")</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Coefficients:</span></span>
-<span><span class="co">#&gt;          Constant         AO1976.Feb  MA-Nonseasonal-01     MA-Seasonal-12  </span></span>
-<span><span class="co">#&gt;          -0.03133            0.31247           -0.43509            0.99937  </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $call</span></span>
-<span><span class="co">#&gt; seas(x = cbind(mdeaths, fdeaths), composite = list(), series.comptype = "add")</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; attr(,"class")</span></span>
-<span><span class="co">#&gt; [1] "seas_multi" "list"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The <code><a href="https://rdrr.io/pkg/seasonal/man/final.html">final()</a></code> command now returns three series, with one adjustment for each series, and one for the composite (direct) adjustment:</p>
+<div class="cell">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/final.html">final</a></span><span class="op">(</span><span class="va">m_composite</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;       mdeaths  fdeaths composite</span></span>
+<span><span class="co">#&gt; [1,] 1566.633 605.9811  2140.037</span></span>
+<span><span class="co">#&gt; [2,] 1514.975 538.6371  1932.479</span></span>
+<span><span class="co">#&gt; [3,] 1468.244 589.4354  2024.396</span></span>
+<span><span class="co">#&gt; [4,] 1678.065 606.7556  2308.137</span></span>
+<span><span class="co">#&gt; [5,] 1661.425 599.5486  2276.030</span></span>
+<span><span class="co">#&gt; [6,] 1557.990 547.2017  2090.735</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>You can verify that the composite refers to the total of <code>mdeaths</code> and <code>fdeaths</code> by running:</p>
 <div class="cell">
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">ldeaths</span><span class="op">)</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Call:</span></span>
-<span><span class="co">#&gt; seas(x = ldeaths)</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Coefficients:</span></span>
-<span><span class="co">#&gt;          Constant         AO1976.Feb  MA-Nonseasonal-01     MA-Seasonal-12  </span></span>
-<span><span class="co">#&gt;          -0.03133            0.31247           -0.43509            0.99937</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span></span>
+<span><span class="va">m_direct</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">ldeaths</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>where <code>ldeaths</code> is the sum of <code>mdeaths</code> and <code>fdeaths</code>.</p>
-</section><section id="indirect-vs-direct-adjusmtent" class="level3" data-number="14.0.7"><h3 data-number="14.0.7" class="anchored" data-anchor-id="indirect-vs-direct-adjusmtent">
-<span class="header-section-number">14.0.7</span> Indirect vs direct adjusmtent</h3>
-<p>What we have seen above is an example of indirect vs direct ajustment. How to judge which one is better?</p>
-<p>The choice between direct and indirect seasonal adjustment may be guided by the expected uses of seasonally adjusted data. For some uses, preserving accounting and aggregation relationships in the data may be crucial, while for other uses, the time-series properties of the derived estimates may be more important.</p>
-<p>There is no single standard in what’s the best practice. Some countries obtain the seasonally adjusted aggregates as the sum of adjusted components, while others prefer to adjust the totals independently. This can result in discrepancies between the seasonally adjusted total and the sum of the seasonally adjusted component series.</p>
-<p>According to the IMF Manual, Allocating discrepancies on components to achieve consistency should be avoided.</p>
-</section><section id="accounting-relationships" class="level3" data-number="14.0.8"><h3 data-number="14.0.8" class="anchored" data-anchor-id="accounting-relationships">
-<span class="header-section-number">14.0.8</span> Accounting relationships</h3>
-<p>If the differences are insignificant, accounting and aggregation relationships in the seasonally adjusted data should be guaranteed.</p>
-</section><section id="built-in-tools" class="level2" data-number="14.1"><h2 data-number="14.1" class="anchored" data-anchor-id="built-in-tools">
-<span class="header-section-number">14.1</span> Built-in tools</h2>
-<p>X-13 offers various diagnostics to Compare Direct and Indirect Adjustments</p>
+<p>where<code>ldeaths</code> (which is also shipped with R, see <code><a href="https://rdrr.io/r/datasets/UKLungDeaths.html">?ldeaths</a></code> for an explanation on the data) is the sum of <code>mdeaths</code> and <code>fdeaths</code>:</p>
+<div class="cell">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html">all.equal</a></span><span class="op">(</span><span class="va">ldeaths</span>, <span class="va">mdeaths</span> <span class="op">+</span> <span class="va">fdeaths</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html">all.equal</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/final.html">final</a></span><span class="op">(</span><span class="va">m_direct</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/final.html">final</a></span><span class="op">(</span><span class="va">m_composite</span><span class="op">)</span><span class="op">[</span>, <span class="st">'composite'</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section><section id="indirect-vs-direct-adjustment" class="level2 page-columns page-full" data-number="14.3"><h2 data-number="14.3" class="anchored" data-anchor-id="indirect-vs-direct-adjustment">
+<span class="header-section-number">14.3</span> Indirect vs direct adjustment</h2>
+<p>The composite adjustment contains all the information that is needed to analyze the direct vs the indirect adjustment.</p>
+<div class="cell">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span></span>
+<span><span class="fu"><a href="https://docs.ropensci.org/tsbox/reference/ts_plot.html">ts_plot</a></span><span class="op">(</span></span>
+<span>  indirect <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/final.html">final</a></span><span class="op">(</span><span class="va">m_composite</span><span class="op">)</span><span class="op">[</span>, <span class="st">'mdeaths'</span><span class="op">]</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/final.html">final</a></span><span class="op">(</span><span class="va">m_composite</span><span class="op">)</span><span class="op">[</span>, <span class="st">'fdeaths'</span><span class="op">]</span>,</span>
+<span>  direct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/final.html">final</a></span><span class="op">(</span><span class="va">m_composite</span><span class="op">)</span><span class="op">[</span>, <span class="st">'composite'</span><span class="op">]</span></span>
+<span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="43-indirect-vs-direct_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="864"></p>
+</div>
+</div>
+<p>What we have seen above is an example of indirect vs direct adjustment. How to judge which one is better? Two criteria are often used: smoothness and stability</p>
+<section id="built-in-tools" class="level3" data-number="14.3.1"><h3 data-number="14.3.1" class="anchored" data-anchor-id="built-in-tools">
+<span class="header-section-number">14.3.1</span> Built-in tools</h3>
+<p>X-13 offers various diagnostics to compare direct and indirect adjustments</p>
 <ul>
 <li>Spectral graphs</li>
 <li>Sliding spans
@@ -591,11 +540,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 </li>
 </ul>
+<p>Some additional statistics can found in the X-13 output.</p>
+<div class="cell">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/out.html">out</a></span><span class="op">(</span><span class="va">m_composite</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section><section id="smoothness" class="level3" data-number="14.3.2"><h3 data-number="14.3.2" class="anchored" data-anchor-id="smoothness">
+<span class="header-section-number">14.3.2</span> Smoothness</h3>
+<p>In statistical agencies, the choice is often based on characteristics of the adjusted series that many data users find desirable. For comparing direct and indirect adjustm the property most often employed has been smoothness as measured by one or more smoothness measures. We will cover smoothness in more detail in <a href="51-quality-measures.html"><span>Chapter&nbsp;15</span></a>.</p>
+</section><section id="sliding-span" class="level3" data-number="14.3.3"><h3 data-number="14.3.3" class="anchored" data-anchor-id="sliding-span">
+<span class="header-section-number">14.3.3</span> Sliding Span</h3>
+<p>To use of a smoothness measure is obviously quite arbitrary. A better way to decide between indirect and direct adjustment may be an examination of the stability of the series, as it can be retrieved from the sliding span spec. We have more to say on sliding spans in <a href="51-quality-measures.html"><span>Chapter&nbsp;15</span></a> and <a href="51-quality-measures.html"><span>Chapter&nbsp;15</span></a> and <a href="52-revisions.html"><span>Chapter&nbsp;16</span></a>. For now, let’s apply the sliding span specs to our series above and decide based on the returned statistics.</p>
+</section><section id="other-considerations" class="level3 page-columns page-full" data-number="14.3.4"><h3 data-number="14.3.4" class="anchored" data-anchor-id="other-considerations">
+<span class="header-section-number">14.3.4</span> Other considerations</h3>
+<p>The choice between direct and indirect seasonal adjustment may be guided by the expected uses of seasonally adjusted data. For some uses, preserving accounting and aggregation relationships in the data may be crucial, while for other uses, the time-series properties of the derived estimates may be more important.</p>
+<p>There is no single standard for what’s the best practice. Some countries obtain the seasonally adjusted aggregates as the sum of adjusted components, while others prefer to adjust the totals independently. This can result in discrepancies between the seasonally adjusted total and the sum of the seasonally adjusted component series.</p>
+<p>According to <span class="citation" data-cites="lee20187">Lee (<a href="#ref-lee20187" role="doc-biblioref">2018</a>)</span>, allocating discrepancies on components to achieve consistency should be avoided.</p>
+<div class="no-row-height column-margin column-container"><div id="ref-lee20187" class="csl-entry" role="listitem">
+Lee, Kwangwon. 2018. <span>“7. Seasonal Adjustment.”</span> In <em>Quarterly National Accounts Manual (2017 Edition)</em>. International Monetary Fund.
+</div></div><p>If the differences are insignificant, accounting and aggregation relationships in the seasonally adjusted data should be guaranteed.</p>
 <p>When the indirect approach is considered, seasonally adjusted aggregates should be checked to exclude the presence of residual seasonality using the F-test available in X-13.</p>
-<p>X-13 offers various diagnostic tools to evaluate the direct and indirect adjustment of aggregates. The program calculates seasonally adjusted aggregates using the direct and indirect approach and provides in output a set of statistics to compare the results (M diagnostics, measures of smoothness, frequency spectrum diagnostics, etc.). Furthermore, sliding spans and revision history diagnostics can be requested to assess which of the two approaches provides more stable and reliable seasonally adjusted results.</p>
+<p>X-13 offers various additional diagnostic tools to evaluate the direct and indirect adjustment of aggregates. The program calculates seasonally adjusted aggregates using the direct and indirect approach and provides in output a set of statistics to compare the results (M diagnostics, measures of smoothness, frequency spectrum diagnostics, etc.).</p>
+<p>Furthermore, sliding spans and revision history diagnostics can be requested to assess which of the two approaches provides more stable and reliable seasonally adjusted results.</p>
 
 
-</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+
+</section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
