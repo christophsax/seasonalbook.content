@@ -62,3 +62,29 @@ summary(seas(imp_cn, regression.variables = "seasonal/2000.jan//"))
 A formal test of a seasonal break can be performed by including `regression.variables = "seasonal/1999.jan//"` into the specification. By default, seasonal outliers are removed from the final series. Therefore, this can be used to model a seasonal break. Modeling a seasonal break is usually preferable to a separation of the time series in two parts.
 
 
+### Restricting model span
+
+In many structural breaks, restricting `series.modelspan` may be the easiest way to deal with such series. Resticting the model span, uses only part of the series for model estimation, but applies seasonal adjustment to the whole series:
+
+```{r }
+
+summary(seas(imp_cn, series.modelspan = "2000.jan,"))
+summary(seas(ts_span(imp_cn, "2000-01")))
+
+
+ts_plot(
+  final(seas(imp_cn, series.modelspan = "2000.jan,")),
+  final(seas(ts_span(imp_cn, "2000-01")))
+)
+```
+
+For some reason, this works better with X11 than with SEATS
+
+```{r }
+ts_plot(
+  final(seas(imp_cn, series.modelspan = "2000.jan,", x11 = "")),
+  final(seas(ts_span(imp_cn, "2000-01"), x11 = ""))
+)
+```
+
+
