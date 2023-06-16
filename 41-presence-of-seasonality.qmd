@@ -21,7 +21,10 @@ This section discusses how to decide whether a series should be adjusted.
 
 In general, adjusting a non-seasonal series is less of a problem than not adjusting a seasonal series.
 So, unless you have good reasons to believe that a series is not-seasonal, adjust it.
-*If in doubt, adjust!*
+*When in doubt, adjust!*
+
+Controversy?
+IMF Handbook says the opposite?
 
 ### Available Tests
 

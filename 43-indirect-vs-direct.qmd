@@ -168,8 +168,8 @@ ts_plot(
 ```
 
 What we have seen above is an example of indirect vs direct adjustment.
-How to judge which one is better? Two criteria are often used: smoothness and stability
-
+How to judge which one is better?
+Two criteria are often used: smoothness and stability
 
 ### Built-in tools
 
@@ -191,19 +191,16 @@ out(m_composite)
 
 ### Smoothness
 
-In statistical agencies, the choice is often based on characteristics of the
-adjusted series that many data users find desirable. For comparing direct and
-indirect adjustm the property most often employed has been smoothness as
-measured by one or more smoothness measures.
+In statistical agencies, the choice is often based on characteristics of the adjusted series that many data users find desirable.
+For comparing direct and indirect adjustm the property most often employed has been smoothness as measured by one or more smoothness measures.
 We will cover smoothness in more detail in @sec-quality-measures.
-
 
 ### Sliding Span
 
-To use of a smoothness measure is obviously quite arbitrary. A better way to decide between indirect and direct adjustment may be an examination of the stability of the series, as it can be retrieved from the sliding span spec.
+To use of a smoothness measure is obviously quite arbitrary.
+A better way to decide between indirect and direct adjustment may be an examination of the stability of the series, as it can be retrieved from the sliding span spec.
 We have more to say on sliding spans in @sec-quality-measures and @sec-quality-measures and @sec-revisions.
 For now, let's apply the sliding span specs to our series above and decide based on the returned statistics.
-
 
 ### Other considerations
 
