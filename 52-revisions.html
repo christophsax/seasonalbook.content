@@ -342,7 +342,19 @@ R_t = \frac{A_{t|T} - A_{t|t}}{A_{t|t}}
 \]</span></p>
 <p>Note, if performing an additive adjustment that has negative values, X13 will only report the revision itself (<span class="math inline">\(R_t\)</span> with 1 as a denominator) instead of the percent revision. This avoids issues with changing signs.</p>
 <p>The analogous quantities are defined for trend and seasonally adjusted series.</p>
+<div class="callout callout-style-simple callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Todo
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p>NEED TO ADD TREND and MONTH_TO_MONTH CHANGE OUTPUT.</p>
+</div>
+</div>
 <section id="history-spec" class="level3" data-number="16.0.1"><h3 data-number="16.0.1" class="anchored" data-anchor-id="history-spec">
 <span class="header-section-number">16.0.1</span> History Spec</h3>
 <p>The program conducts multiple runs, iterating over a sequence of expanding intervals, effectively simulating the passage of time. Our preference lies with the approach that generates smaller revisions, assuming the final adjustments resulting from different options or methods are equally satisfactory without any remaining seasonal or calendar effects. Instead of referring to them as history diagnostics, we use the term “revisions history” to describe these measurements, as they quantify the magnitudes of adjustments made by incorporating series values. It’s important to note that these diagnostics do not include any changes or revisions to the underlying series values themselves.</p>

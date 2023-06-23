@@ -396,7 +396,17 @@ QS = n(n+2)\left(\frac{\hat{\gamma}(12)^2}{n - 12} + \frac{\hat{\gamma}(24)^2}{n
 <span><span class="co">#&gt; qssirr         0.00000 1.0000</span></span>
 <span><span class="co">#&gt; qssirrevadj    0.00000 1.0000</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>In the output table we see 14 rows. The top 7 rows correspond to the QS statistic 1. Original series 1. Original series, adjusted for extreme values 1. Model residuals 1. Seasonally adjusted series 1. Seasonally adjusted series, adjusted for extreme values 1. Irregular series 1. Irregular series, adjusted for extreme values The next seven rows are simply the exact same statistics calculated on a (possibly) shorter span of the data. The default span used for the second 7 QS statistics is set to be the same as the spectrum uses, 96 observations or 8 years in a monthly series.</p>
+<p>In the output table we see 14 rows. The top 7 rows correspond to the QS statistic</p>
+<ol type="1">
+<li><p>Original series</p></li>
+<li><p>Original series, adjusted for extreme values</p></li>
+<li><p>Model residuals</p></li>
+<li><p>Seasonally adjusted series</p></li>
+<li><p>Seasonally adjusted series, adjusted for extreme values</p></li>
+<li><p>Irregular series</p></li>
+<li><p>Irregular series, adjusted for extreme values</p></li>
+</ol>
+<p>The next seven rows are simply the exact same statistics calculated on a (possibly) shorter span of the data. The default span used for the second 7 QS statistics is set to be the same as the spectrum uses, 96 observations or 8 years in a monthly series.</p>
 </section></section><section id="stability-and-smoothness" class="level2" data-number="15.2"><h2 data-number="15.2" class="anchored" data-anchor-id="stability-and-smoothness">
 <span class="header-section-number">15.2</span> Stability and smoothness</h2>
 <p>We explore two related concepts and their associated specs. First, the stability of a seasonal adjustment which refers to its consistency and reliability over time. It assesses whether the model fits remain consistent as new data becomes available. Stability is important as large revisions are a hindrance in a production cycle of seasonal adjustment. Again, this is a good example of a situation where a user interested in only a single seasonal adjustment (will never adjust this series again) may not care to read this section. The diagnostics provided in other chapters will more adequately aid them to produce a quality seasonal adjustment. However, for those that produce a seasonal adjustment, say monthly, stability is crucial for producing consistent and trustworthy data that can be used for analysis, decision-making, and forecasting. This is discussed in the following subsection.</p>
@@ -430,9 +440,9 @@ QS = n(n+2)\left(\frac{\hat{\gamma}(12)^2}{n - 12} + \frac{\hat{\gamma}(24)^2}{n
 <p>The 0.03 on the right hand side comes from the default cutoff. Some of the other defaults are as follows</p>
 <table class="table">
 <colgroup>
-<col style="width: 59%">
-<col style="width: 19%">
-<col style="width: 20%">
+<col style="width: 55%">
+<col style="width: 22%">
+<col style="width: 22%">
 </colgroup>
 <thead><tr class="header">
 <th>Series</th>
