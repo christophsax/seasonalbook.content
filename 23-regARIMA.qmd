@@ -113,9 +113,11 @@ Now, both the linear trend and seasonal patterns are removed, leaving a stationa
 [^airline]: The "airline model," or the ARIMA(0, 1, 1)(0, 1, 1) model, was popularized by @box1970time through their influential work in the field of time series analysis. This model is often associated with their seminal book "Time Series Analysis: Forecasting and Control." First published in 1970, this book has been a foundational text in the field of time series analysis. The airline model, named for its application in modeling airline passenger data, exemplifies the application of Seasonal ARIMA modeling in practical scenarios.
 
 
+<!-- DISCUSS: not sure how useful for now... -->
+<!--
 
 
-## Fitting SARIMA (optional)
+## Optional: Fitting ARIMA models
 
 Here we present a very oversimplied way to start to understand what values of $p, P, q$ and $Q$ you can investigate for your time series of interest.
 Recall that earlier it was mentioned that using automatic model identification is sufficient for most to get an adequate seasonal adjustment.
@@ -127,7 +129,7 @@ Then a way to build a SARIMA model is to match the sample ACF and the theoretica
 The main point distinguishing an AR($p$) and MA($q$) is how their theoretical ACF behaves.
 An AR($p$) will have ACF the has exponential decay as $h$ increases.
 For example, an AR(1) ACF is $$\rho(h) = \phi^h$$ An MA($q$) models ACF will be non-zero for the first $q$ lags and then cutoff to zero thereafter.
-The ACF of an MA(1) is $$\rho(h) = \begin{cases} 
+The ACF of an MA(1) is $$\rho(h) = \begin{cases}
 ~~1 & h = 0 \\
 \frac{\theta}{1 + \theta^2} & h = 1 \\
 ~~0 & \text{otherwise}
@@ -144,6 +146,9 @@ acf(x_AR, xlab = "h", main = ""); title("ACF of AR(1) model")
 acf(x_MA, xlab = "h", main = ""); title("ACF of MA(1) model")
 par <- op
 ```
+
+ -->
+
 
 ## Regression
 
