@@ -7,6 +7,18 @@ source("_common.R")
 status("polishing", "2022-12-21", section = "regARIMA Model")  # drafting, polishing, complete
 ```
 
+
+<!--
+
+Style Guide ?
+
+X-13
+X-13ARIMA-SEATS
+
+
+
+
+ -->
 An important part of the X13 procedure is regARIMA modeling.
 It sits above seasonal adjustment at the top of the flow chart describing progress towards an adequate adjustment.
 As with all statistical modeling, the process to find the best model is iterative in nature.
