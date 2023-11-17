@@ -14,16 +14,17 @@ Style Guide ?
 
 X-13
 X-13ARIMA-SEATS
+Titles in sentence style
 
 
 
 
  -->
-An important part of the X13 procedure is regARIMA modeling.
-It sits above seasonal adjustment at the top of the flow chart describing progress towards an adequate adjustment.
-As with all statistical modeling, the process to find the best model is iterative in nature.
-This is represented as a loop at the left of our flow chart.
-An analyst can use statistical tools and subject matter expertise to fine tune and create an overall regARIMA model that is satisfactory to be used and proceed to the seasonal adjustment step of our work flow.
+
+An ARIMA model with external regressors (regARIMA) lies at the heart of many of the procedures in X-13. As we have seen in chapter FIXME, regARIMA consists of several interacting specs. Some of the these specs will be further detailed in later chapters (Outlier, Trading Days).
+
+Like most statistical modeling in X-13, the process to find the best model is iterative. Analysts use statistical tools and their expertise to fine-tune the regARIMA model. This iterative process is visualized in the flow chart below.
+
 
 ```{mermaid}
 flowchart TD
@@ -35,18 +36,12 @@ flowchart TD
   D --> A
 ```
 
-Depending on if you ultimately choose to perform a SEATS or X-11 seasonal adjustment, your usage of a regARIMA can differ.
-Both seasonal adjustment methods will use the regARIMA model to forecast the series in order to apply symmetric filters and extract components.
-(but I thought SEATS was model-based? What do you mean SEATS uses filters? More on this in Chapter XXX).
-SEATS will use the ARIMA model to derive components for the trend, seasonal and irregular terms.
-The regARIMA model is also the place to include exogenous information or regressors into your seasonal adjustments.
-Regressors such as holiday effects, additive outliers, levels shifts, or any user-defined effect can be included in your regARIMA model.
-This can be thought of as solely a utility to forecast extend your series or a detection method to do inference.
-In practice it is useful to use regARIMA modeling to answer questions such as, "Does my series have trading day effects?" or "Does this outlier effect my results?".
-Another reason for regARIMA modeling is to include exogenous regression variables in our analysis.
-These include, but are not limited to, moving holiday effects, trading day, outliers and level-shifts.
+Once a satisfiying regARIMA has been found, analysts proceed to the seasonal adjustment step. The regARIMA model is crucial in forecasting the time series for applying symmetric filters and extracting components, whether using SEATS or X-11 for seasonal adjustment. In addition, in SEATS, the ARIMA model is also used to derive trend, seasonal, and irregular components.
 
-## SARIMA model
+The regARIMA model also includes exogenous information or regressors, like holiday effects, additive outliers, and level shifts. These elements help in forecasting and analyzing the series. For example, regARIMA modeling can answer if a series is affected by trading day effects or how outliers impact results. It's also used to integrate external regression variables such as moving holidays and trading day effects into the analysis.
+
+
+## SARIMA model overview
 
 As the name implies, there are two components that one needs to understand when fitting a regARIMA model; namely regression and ARIMA.
 Furthermore, the ARIMA part is made up by a differencing order and the stochastic ARMA portion.
