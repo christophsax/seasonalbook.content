@@ -75,8 +75,9 @@ Each chapter ends with a case study that discusses a real-life example of the to
 
 In official statistics, seasonal adjustment has a long tradition.
 The US Census Bureau developed the original X-11 software in the 1960s, Statistics Canada [@dagum80] continued the development afterward.
-The following software packages by the US Census Bureau were called X-12-ARIMA [@findley98] and X-13ARIMA-SEATS (or X-13, for short) [@monsell07].
-X-11 is still used as a name for filter-based seasonal adjustment methods within X-13.
+The following the X-11 software, the US Census Bureau released X-12-ARIMA [@findley98] and X-13ARIMA-SEATS (or X-13, for short) [@monsell07].
+X-11 is still used as a name for filter-based seasonal adjustment methods within X-13. 
+This distinction is a point of confusion for those unfamiliar with X-13ARIMA-SEATS and the nomenclature. 
 Meanwhile, TRAMO-SEATS, developed by the Bank of Spain [@caporello01], offers an alternative model-based approach to seasonal adjustment.
 
 In its most recent version, X-13 offers these two seasonal adjustment methods in a single command-line tool written in Fortran.

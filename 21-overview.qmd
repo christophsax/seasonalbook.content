@@ -30,16 +30,25 @@ Other specs are mutually exclusive.
 You can choose `x11` or `seats` to decompose a time series, but not both.
 @tbl-main-specs lists the main specs of X-13 and describes what they do.
 
++--------------+---------------------------------------------------------------------------------------------------------------+-------------------------------------------------+
 | Spec name    | What it does                                                                                                  | Chapter                                         |
-|--------------|---------------------------------------------------------------------------------------------------------------|-------------------------------------------------|
++==============+===============================================================================================================+=================================================+
 | `estimate`   | Estimates the regARIMA model specified by the `regression` and `arima` specs.                                 | @sec-regarima                                   |
++--------------+---------------------------------------------------------------------------------------------------------------+-------------------------------------------------+
 | `arima`      | Specifies the ARIMA part of the regARIMA model.                                                               | @sec-regarima                                   |
++--------------+---------------------------------------------------------------------------------------------------------------+-------------------------------------------------+
 | `regression` | Specification for including regression variables in a regARIMA model.                                         | @sec-regarima, @sec-holidays, @sec-trading-days |
++--------------+---------------------------------------------------------------------------------------------------------------+-------------------------------------------------+
 | `automdl`    | Specifies the ARIMA part of the regARIMA model using an automatic procedure.                                  | @sec-regarima                                   |
++--------------+---------------------------------------------------------------------------------------------------------------+-------------------------------------------------+
 | `outlier`    | Specification to perform automatic detection of additive (point) outliers.                                    | @sec-outliers                                   |
++--------------+---------------------------------------------------------------------------------------------------------------+-------------------------------------------------+
 | `seats`      | Invoke the production of model-based signal extraction using SEATS. Default in the R seasonal package.        | @sec-seats                                      |
++--------------+---------------------------------------------------------------------------------------------------------------+-------------------------------------------------+
 | `x11`        | An optional spec for invoking seasonal adjustment by the X-11 methodology.                                    | @sec-x11                                        |
++--------------+---------------------------------------------------------------------------------------------------------------+-------------------------------------------------+
 | `forecast`   | Specification to forecast and/or backcast the time series given in the series spec using the estimated model. | @sec-regarima                                   |
++--------------+---------------------------------------------------------------------------------------------------------------+-------------------------------------------------+
 
 : Important specs that are used in most seasonal adjustment models {#tbl-main-specs}
 
@@ -105,13 +114,19 @@ For example, the `history` spec produces a sequence of runs from a sequence of t
 The `slidingspans` spec models various parts of the time series and has a similar purpose as `history`.
 All diagnostics specs are listed in @tbl-diagnosics-specs.
 
++----------------+----------------------------------------------------------------------------------------------------------------------------------------+----------------+
 | Spec name      | What it does                                                                                                                           | Chapter        |
-|----------------|----------------------------------------------------------------------------------------------------------------------------------------|----------------|
++================+========================================================================================================================================+================+
 | `history`      | Requesting a sequence of runs from a sequence of truncated versions of the time series for the purpose of creating historical records. | @sec-revisions |
++----------------+----------------------------------------------------------------------------------------------------------------------------------------+----------------+
 | `slidingspans` | Providing sliding spans stability analysis.                                                                                            | @sec-revisions |
++----------------+----------------------------------------------------------------------------------------------------------------------------------------+----------------+
 | `identify`     | Produce tables and line printer plots of sample ACFs and PACFs.                                                                        |                |
++----------------+----------------------------------------------------------------------------------------------------------------------------------------+----------------+
 | `spectrum`     | Provides a choice between two spectrum diagnostics to detect seasonality or trading day effects.                                       |                |
++----------------+----------------------------------------------------------------------------------------------------------------------------------------+----------------+
 | `check`        | Produce statistics for diagnostic checking of residuals from the estimated model.                                                      |                |
++----------------+----------------------------------------------------------------------------------------------------------------------------------------+----------------+
 
 : Diagnostic specs {#tbl-diagnosics-specs}
 
@@ -120,10 +135,13 @@ The former enforces the yearly totals of the seasonally adjusted series to be eq
 The latter allows a comparison of indirect and direct seasonal adjustments.
 @tbl-diagnosics-specs gives an overview of the special-purpose specs.
 
++-------------+-----------------------------------------------------------------------------------------------------------------------------+------------------------------------+
 | Spec name   | What it does                                                                                                                |                                    |
-|-------------|-----------------------------------------------------------------------------------------------------------------------------|------------------------------------|
++=============+=============================================================================================================================+====================================+
 | `force`     | Allow users to force yearly totals of the seasonally adjusted series to equal those of the original series for convenience. | @sec-annual-constraining           |
++-------------+-----------------------------------------------------------------------------------------------------------------------------+------------------------------------+
 | `composite` | Obtaining both indirect and direct adjustments of a composite series.                                                       | @sec-indirect-vs-direct-adjustment |
++-------------+-----------------------------------------------------------------------------------------------------------------------------+------------------------------------+
 
 : Special purpose specs {#tbl-diagnosics-specs}
 
@@ -134,12 +152,17 @@ Other specs have a purely technical purpose.
 For example, the `series` spec provides X-13 with the data, starting date, and frequency.
 In R, this is handled by seasonal and will not be covered.
 
++-----------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
 | Spec name       | What it does                                                                                                                                    |
-|-----------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
++=================+=================================================================================================================================================+
 | `x11regression` | Alternative to `regression`. Can only be used with X11.                                                                                         |
++-----------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
 | `pickmdl`       | Alternative to `automdl`. Can only be used with X11.                                                                                            |
++-----------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
 | `series`        | Provides X-13 with the data, the starting date and the frequency. In R, this is handled by seasonal and will not be covered.                    |
++-----------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
 | `metadata`      | Specification that allows users to insert metadata into the diagnostic summary file. In R, this is handled by seasonal and will not be covered. |
++-----------------+-------------------------------------------------------------------------------------------------------------------------------------------------+
 
 : Vintage and technical specs that won't be covered in this book) {#tbl-vintage-specs}
 
@@ -178,7 +201,7 @@ If more than one mutually exclusive spec is included in `seas()`, specs are over
 
 This is why the default SEATS procedure in the introductory example was overwritten by the specification of `x11 = ""`.
 
-### Turning off auto modeling
+### Turning off automatic ARIMA modeling
 
 By default, the `automdl` spec finds a good ARIMA model.
 By specifying the `model` argument of the `arima` spec, the automated modeling is deactivated.
@@ -189,7 +212,7 @@ m_arima <- seas(AirPassengers, arima.model = c(1, 1, 0, 1, 1, 0))
 summary(m_arima)
 ```
 
-### Turning off AIC testing and Outlier detection
+### Turning off AIC testing for outlier detection and regressors
 
 By default, `seas()` evaluates the presence of weekday and Easter effects and checks for outliers in the data.
 Both can be turned off:
