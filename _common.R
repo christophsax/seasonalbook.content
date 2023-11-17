@@ -27,6 +27,7 @@ ggplot2::theme_set(ggplot2::theme_gray(12))
 
 # status("drafting", Sys.Date())
 status <- function(type, date = as.Date(NA), section = "") {
+  return(invisible(NULL))
   status <- switch(type,
     polishing = "should be readable but needs polishing",
     restructuring = "is undergoing heavy restructuring and may be confusing or incomplete",
