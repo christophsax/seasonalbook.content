@@ -9,22 +9,15 @@ status("polishing", "2023-11-20", section = "regARIMA Model")  # drafting, polis
 
 ```{=html}
 <!--
-
-Style Guide ?
-
+Style Guide:
 X-13
 X-13ARIMA-SEATS
 Titles in sentence style
-
-
-
-
-
  -->
 ```
 An ARIMA model with external regressors (regARIMA) lies at the heart of many of the procedures in X-13.
-As we have seen in chapter FIXME, regARIMA consists of several interacting specs.
-Some of the these specs will be further detailed in later chapters (Outlier, Trading Days).
+As we have seen in @sec-overwiew, regARIMA consists of several interacting specs.
+Some of the these specs will be further detailed in @sec-holidays, @sec-trading-days, and @sec-outliers (Holidays, Trading Days, and Outliers).
 
 Like most statistical modeling in X-13, the process of finding the best model is iterative.
 Analysts use statistical tools and their expertise to fine-tune the regARIMA model.

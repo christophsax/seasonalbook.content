@@ -25,4 +25,3 @@ This presentation allows the academic level to be quite broad; understood by und
 -   Fundamental theoretical material is referenced throughout (mainly as an option)
 
 -   For each example given the book will give answers, code and provide data
-

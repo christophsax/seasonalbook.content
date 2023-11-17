@@ -1,7 +1,9 @@
 set.seed(1014)
 
-library(seasonal)
-library(seasonalbook)
+suppressMessages(library(tibble))
+suppressMessages(library(dplyr))
+suppressMessages(library(seasonal))
+suppressMessages(library(seasonalbook))
 
 knitr::opts_chunk$set(
   comment = "#>",
