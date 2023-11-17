@@ -152,33 +152,45 @@ par <- op
 
 ## Regression
 
-We have discussed SARIMA modeling (both the SARMA and differencing), now we see how exogenous regression variables come into play.
+After ARIMA and differencing, the final element of regARIMA is the regression component. The regression component describes the effect of exogenous variables on the residuals of an ARIMA model.
 
-The regARIMA model takes the form $$ f\left(\frac{Y_t}{D_t} \right) = \boldsymbol{\beta}^\prime {\mathbf X}_t + Z_t .$$ Here $Y_t$ is the observed time series.
-The function $f$ represents a transformation, most commonly used is the log transform ie $f(x) = \log(x)$.
-$D_t$ is any intervention that has taken place prior to any transformation or modeling.
-This intervention is usually subjective and customized for individual series on an as-needed basis.
-For example, if a soybean farmer strike occurred and the soybean export series suffered for its duration.
-This type of event might adversely affect the seasonal adjustment filters and automatic model identification routines and can be mediated as an initial step.
-If no transformation or intervention is needed the model form is: $$ Y_t = \underbrace{\boldsymbol{\beta}^\prime {\mathbf X}_t}_{\text{Regression}} + \underbrace{Z_t}_{\text{ARIMA}} .$$
 
-The regression variables appear in the columns of the design matrix ${\mathbf X}_t$ and $Z_t$ is an ARIMA process.
-This last assumption on $Z_t$ is what distinguished a regARIMA model from more classic linear models and multiple linear regression where error terms are assumed uncorrelated.
 
-In order to achieve a suitable seasonal adjustment it is important to get the regARIMA model correct.
-For most dataset the built in automatic modeling features of the X13 program will be suitable to detect a reasonable model.
-This can be used as a starting point for more rigorous regARIMA model development or used as the final regARIMA modeling choice for your seasonal adjustment needs.
-We evoke automatic model identification through the XXX spec.
-The default behavior of the R seasonal package is XXX which includes automatic model identification.
+We have discussed both the ARIMA modeling (both the SARMA and differencing), now we see how exogenous regression variables come into play.
+
+If no transformation or intervention is needed, the regARIMA model takes the following form:[^transform]
+
+$$
+Y_t = \underbrace{\boldsymbol{\beta}^\prime {\mathbf X}_t}_{\text{regression}} + \underbrace{Z_t}_{\text{ARIMA}}
+$$
+
+[^transform]: The left hand side of an regARIMA can be transformed and adjusted for subjective interventions. In such cases, the regARIMA formula extends to:
+
+    $$
+    f\left(\frac{Y_t}{D_t} \right) = \boldsymbol{\beta}^\prime {\mathbf X}_t + Z_t
+    $$
+
+    The function $f$ represents a transformation, with the logarithmic transformation ($f(x) = \log(x)$) being a common choice. $D_t$ represents any interventions applied before transformation or modeling. These interventions are often specific to each time series and are applied based on the unique circumstances of the data. For example, if an event like a soybean farmer strike affects the data series, this intervention can help adjust the data before further analysis.
+
+
+In this model, $Y_t$ is the observed time series.
+The regression component is ${\mathbf X}_t$ and $Z_t$ represents the ARIMA process.
+The key difference between a regARIMA model and classical linear models is the assumption about $Z_t$. In regARIMA, $Z_t$ is an ARIMA process, where in classic models the error terms are typically assumed to be uncorrelated.
+
+
+
+
+For effective seasonal adjustment, it's crucial to accurately specify the regARIMA model. In many cases, the automated modeling capabilities of X-13 are sufficient for determining a suitable model. This auto-generated model can also act as an starting point for further refinement of the regARIMA model. The *seasonal* package incorporates the automatic identification feature by default, and makes the process user-friendly and streamlined.
+
 
 ::: callout-tip
 ## Automatic and manual model choice
 
-As an aside, the general rule is to not use automatic modeling in production.
-This mean, if you are going to include seasonal adjustment as part of a large scale data processing that occurs regularly (say monthly), then it is not advisable to have automatic model identification run every month.
-Instead, an alternative process, is to run automodel once and then fix the model choice in the XXX spec file.
-This does not need to be done manually since the `static()` function from the seasonal package can do this for you.
+In production, the general rule is to *not* use automatic modeling.
+This implies that if you plan to include seasonal adjustment as part of a regular, large-scale data processing routine (such as monthly operations), it's not recommended to run automatic model identification each month. A better approach is to use automatic model selection once and then set the chosen model permanently in the specification. The `static()` function from the *seasonal* package can automate this process.
 :::
+
+
 
 | Outlier Type                | Automatic Detection Available? |
 |-----------------------------|--------------------------------|
