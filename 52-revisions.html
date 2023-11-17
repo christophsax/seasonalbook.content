@@ -304,13 +304,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
   
 
-</header><pre><code>Loading required package: tibble</code></pre>
-<pre><code>
-Attaching package: 'tibble'</code></pre>
-<pre><code>The following object is masked from 'package:seasonal':
-
-    view</code></pre>
-<ul>
+</header><ul>
 <li><p>How to measure revisions?</p></li>
 <li><p>Should a model be re-estimated each period?</p></li>
 <li><p>How to use the slidingspan and history spec</p></li>
@@ -433,18 +427,18 @@ Todo
 </table>
 <div class="cell">
 <pre><code>#&gt; ── [1mAttaching core tidyverse packages[22m ───────────────────── tidyverse 2.0.0 ──
-#&gt; [32m✔[39m [34mdplyr    [39m 1.1.3     [32m✔[39m [34mpurrr    [39m 1.0.2
 #&gt; [32m✔[39m [34mforcats  [39m 1.0.0     [32m✔[39m [34mreadr    [39m 2.1.4
 #&gt; [32m✔[39m [34mggplot2  [39m 3.4.4     [32m✔[39m [34mstringr  [39m 1.5.0
 #&gt; [32m✔[39m [34mlubridate[39m 1.9.3     [32m✔[39m [34mtidyr    [39m 1.3.0
+#&gt; [32m✔[39m [34mpurrr    [39m 1.0.2     
 #&gt; ── [1mConflicts[22m ─────────────────────────────────────── tidyverse_conflicts() ──
-#&gt; [31m✖[39m [34mdplyr[39m::[32mfilter()[39m masks [34mstats[39m::filter()
-#&gt; [31m✖[39m [34mdplyr[39m::[32mlag()[39m    masks [34mstats[39m::lag()
-#&gt; [31m✖[39m [34mtibble[39m::[32mview()[39m  masks [34mseasonal[39m::view()
+#&gt; [31m✖[39m [34mdplyr[39m::[32mfilter()[39m  masks [34mstats[39m::filter()
+#&gt; [31m✖[39m [34mdplyr[39m::[32mlag()[39m     masks [34mstats[39m::lag()
+#&gt; [31m✖[39m [34mseasonal[39m::[32mview()[39m masks [34mtibble[39m::view()
 #&gt; [36mℹ[39m Use the conflicted package ([3m[34m&lt;http://conflicted.r-lib.org/&gt;[39m[23m) to force all conflicts to become errors</code></pre>
 </div>
 <div class="cell">
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># We need to use out() to view the history tables. </span></span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># We need to use out() to view the history tables. </span></span>
 <span><span class="co"># Currently not much support in seasonal for thest tables</span></span>
 <span><span class="co"># X13graph produces a nice suite of graphics if intersted in the history spec and</span></span>
 <span><span class="co">#.   the associated revisions</span></span>
@@ -469,7 +463,7 @@ Todo
 <span><span class="co"># out(auto_sa)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">old_sa</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span></span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">old_sa</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span></span>
 <span>  x <span class="op">=</span> <span class="va">old</span>,</span>
 <span>  transform.function <span class="op">=</span> <span class="st">"log"</span>,</span>
 <span>  regression.aictest <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -497,7 +491,7 @@ Todo
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m1</span> <span class="op">=</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, x11 <span class="op">=</span> <span class="st">""</span>, history.estimates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"fcst"</span><span class="op">)</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m1</span> <span class="op">=</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, x11 <span class="op">=</span> <span class="st">""</span>, history.estimates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"fcst"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">m2</span> <span class="op">=</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, x11 <span class="op">=</span> <span class="st">""</span>,  arima.model <span class="op">=</span> <span class="st">"(0 0 1)(0 0 0)"</span>, history.estimates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"fcst"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">h1</span> <span class="op">&lt;-</span> <span class="fu">series</span><span class="op">(</span><span class="va">m1</span>, <span class="st">"fce"</span><span class="op">)</span></span>
 <span><span class="va">h2</span> <span class="op">&lt;-</span> <span class="fu">series</span><span class="op">(</span><span class="va">m2</span>, <span class="st">"fce"</span><span class="op">)</span></span>

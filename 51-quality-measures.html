@@ -318,13 +318,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
   
 
-</header><pre><code>Loading required package: tibble</code></pre>
-<pre><code>
-Attaching package: 'tibble'</code></pre>
-<pre><code>The following object is masked from 'package:seasonal':
-
-    view</code></pre>
-<p>This chapter will be broken up into relevant pieces that construct a good seasonal adjustment. Yet, it is the sum of these parts that ultimately comprise a quality adjustment and it is difficult to completely break them up in a vacuum. Different users have a different definitions of ‘quality’ that depends on their end goals and their end users of a seasonal adjustment. For example, a federal statistical agency, who is concerned about the users of their seasonal adjustments, may have very different definition of quality compared with a single analyst who is interested in only long-term trend. A good starting point is a quality seasonal adjustment should eliminate residual seasonality and calendar effects, exhibit stability and smoothness, and have no significant seasonal or trading day effects.</p>
+</header><p>This chapter will be broken up into relevant pieces that construct a good seasonal adjustment. Yet, it is the sum of these parts that ultimately comprise a quality adjustment and it is difficult to completely break them up in a vacuum. Different users have a different definitions of ‘quality’ that depends on their end goals and their end users of a seasonal adjustment. For example, a federal statistical agency, who is concerned about the users of their seasonal adjustments, may have very different definition of quality compared with a single analyst who is interested in only long-term trend. A good starting point is a quality seasonal adjustment should eliminate residual seasonality and calendar effects, exhibit stability and smoothness, and have no significant seasonal or trading day effects.</p>
 <p>Another consideration is the span of your series that is required to produce a quality adjustment…</p>
 <section id="residual-seasonality" class="level2" data-number="15.1"><h2 data-number="15.1" class="anchored" data-anchor-id="residual-seasonality">
 <span class="header-section-number">15.1</span> Residual Seasonality</h2>
@@ -340,14 +334,14 @@ Attaching package: 'tibble'</code></pre>
 <span class="header-section-number">15.1.1</span> Spectrum</h3>
 <p>We start with visual inspection of the spectrum of a series. For those unfamiliar with spectral analysis of a time series, the following discussion is intended to be accessible to all trying to perform seasonal adjustment. Hence, we take some liberies with language an interpretation in an effort to make the discussion accessible. For example, we use the term spectrum to refer to the theoretical construct as well as the estimated periodogram. We note here that we will use a parametric AR representation to estimate the spectrum of a process. This is the easiest and most straight forward way to get smooth yet sensible empirical specral estimates for the everyday user. Peaks in the spectrum indicate significant influence to your series of a sin/cos curve of the corresponding frequency. For example, looking at the spectrum of the AirPassengers series we see large peaks at frequencies 1/12, 2/12, 3/12, …</p>
 <div class="cell">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/spec.ar.html">spec.ar</a></span><span class="op">(</span><span class="va">AirPassengers</span>, order <span class="op">=</span> <span class="fl">13</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/spec.ar.html">spec.ar</a></span><span class="op">(</span><span class="va">AirPassengers</span>, order <span class="op">=</span> <span class="fl">13</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="51-quality-measures_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="864"></p>
 </div>
 </div>
 <p>We know that X-11 with automatic modeling and automatic filter identification performs a good seasonal adjustment. If we look at the spectrum of the seasonally adjusted series, the peaks have been removed.</p>
 <div class="cell">
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="va"><a href="http://www.seasonal.website">seasonal</a></span><span class="op">)</span></span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="va"><a href="http://www.seasonal.website">seasonal</a></span><span class="op">)</span></span>
 <span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">AirPassengers</span>, x11 <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/spec.ar.html">spec.ar</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/final.html">final</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -356,7 +350,7 @@ Attaching package: 'tibble'</code></pre>
 </div>
 <p>Let’s intentionally perform a poor seasonal adjustment and see the effect on the spectrum of the seasonally adjusted series.</p>
 <div class="cell">
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="va"><a href="http://www.seasonal.website">seasonal</a></span><span class="op">)</span></span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="va"><a href="http://www.seasonal.website">seasonal</a></span><span class="op">)</span></span>
 <span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">AirPassengers</span>, transform.function <span class="op">=</span> <span class="st">"none"</span>, x11 <span class="op">=</span> <span class="st">""</span>, x11.seasonalma <span class="op">=</span> <span class="st">'stable'</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/spec.ar.html">spec.ar</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/final.html">final</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -372,7 +366,7 @@ Attaching package: 'tibble'</code></pre>
 QS = n(n+2)\left(\frac{\hat{\gamma}(12)^2}{n - 12} + \frac{\hat{\gamma}(24)^2}{n - 24}\right)
 \]</span> For a quarterly series replace the 12s and 24s with 4s and 8s. The value QS is approximately chi-squared with 2 degrees of freedom. The seasonal package provides functionality to immediately look at the QS table from the UDG file. We will breakdown what all these tests and p-values are</p>
 <div class="cell">
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/udg.html">qs</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                     qs  p-val</span></span>
 <span><span class="co">#&gt; qsori        167.64858 0.0000</span></span>
@@ -463,7 +457,7 @@ QS = n(n+2)\left(\frac{\hat{\gamma}(12)^2}{n - 12} + \frac{\hat{\gamma}(24)^2}{n
 </table>
 <p>The recommendation provided in the X13 manual indicate A(%) &gt; 15 is problematic and A(%) &gt; 25 should not be used. MM(%) &gt; 35 is problematic and MM(%) &gt; 40 should not be used. Why a different ranges? Sometimes, the causes of high values in A(%) or MM(%) can be identified and determined to be relatively unproblematic. This is particularly true when the months with unstable adjustments or changes are predominantly concentrated in a well-known problematic period that occurred several years ago or in one or two specific calendar months each year. These months are typically acknowledged by all data users as potentially troublesome, such as winter months in datasets known to be highly sensitive to variations in winter weather conditions. The sliding spans output is instrumental in identifying such concentrations, making it effortless to spot these patterns.</p>
 <div class="cell">
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">AirPassengers</span>, </span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">AirPassengers</span>, </span>
 <span>          slidingspans.numspans <span class="op">=</span> <span class="fl">4</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co"># Seasonal Factors - Percentage of months flagged as unstable</span></span>
@@ -493,7 +487,7 @@ QS = n(n+2)\left(\frac{\hat{\gamma}(12)^2}{n - 12} + \frac{\hat{\gamma}(24)^2}{n
 </tbody>
 </table>
 </div>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Month-to-Month Changes in SA Series - Percentage of months flagged as unstable</span></span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Month-to-Month Changes in SA Series - Percentage of months flagged as unstable</span></span>
 <span><span class="va">M2M</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/udg.html">udg</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"s2.d.per"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span><span class="op">(</span><span class="va">M2M</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Number of months flagged"</span>, <span class="st">"Total number of months"</span>, <span class="st">"Percent"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">M2M</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"Month-to-Month Changes in SA Series"</span></span>
@@ -523,7 +517,7 @@ QS = n(n+2)\left(\frac{\hat{\gamma}(12)^2}{n - 12} + \frac{\hat{\gamma}(24)^2}{n
 </div>
 <p>Let’s return to our example where we intentionally make a poor seasonal adjustment. Now we need to take a log transform which will certainly improve the results from the prior run.</p>
 <div class="cell">
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">AirPassengers</span>, transform.function <span class="op">=</span> <span class="st">"log"</span>, x11 <span class="op">=</span> <span class="st">""</span>, x11.seasonalma <span class="op">=</span> <span class="st">'stable'</span>, slidingspans.numspans <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">AirPassengers</span>, transform.function <span class="op">=</span> <span class="st">"log"</span>, x11 <span class="op">=</span> <span class="st">""</span>, x11.seasonalma <span class="op">=</span> <span class="st">'stable'</span>, slidingspans.numspans <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
 <span><span class="co"># Seasonal Factors - Percentage of months flagged as unstable</span></span>
 <span><span class="va">SF</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/udg.html">udg</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"s2.a.per"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span><span class="op">(</span><span class="va">SF</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Number of months flagged"</span>, <span class="st">"Total number of months"</span>, <span class="st">"Percent"</span><span class="op">)</span></span>
@@ -551,7 +545,7 @@ QS = n(n+2)\left(\frac{\hat{\gamma}(12)^2}{n - 12} + \frac{\hat{\gamma}(24)^2}{n
 </tbody>
 </table>
 </div>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Month-to-Month Changes in SA Series - Percentage of months flagged as unstable</span></span>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Month-to-Month Changes in SA Series - Percentage of months flagged as unstable</span></span>
 <span><span class="va">M2M</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/udg.html">udg</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"s2.d.per"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span><span class="op">(</span><span class="va">M2M</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Number of months flagged"</span>, <span class="st">"Total number of months"</span>, <span class="st">"Percent"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">M2M</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"Month-to-Month Changes in SA Series"</span></span>
@@ -581,7 +575,7 @@ QS = n(n+2)\left(\frac{\hat{\gamma}(12)^2}{n - 12} + \frac{\hat{\gamma}(24)^2}{n
 </div>
 <p>We see the A(%) value of 16.667 falls squarely in the problematic range. If we were to lower the cutoff threshold we could expect to get even more values being flagged yielding a higher percentage.</p>
 <div class="cell">
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">AirPassengers</span>, transform.function <span class="op">=</span> <span class="st">"log"</span>, x11 <span class="op">=</span> <span class="st">""</span>, x11.seasonalma <span class="op">=</span> <span class="st">'stable'</span>, slidingspans.numspans <span class="op">=</span> <span class="fl">4</span>, slidingspans.cutseas <span class="op">=</span> <span class="fl">2.0</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">AirPassengers</span>, transform.function <span class="op">=</span> <span class="st">"log"</span>, x11 <span class="op">=</span> <span class="st">""</span>, x11.seasonalma <span class="op">=</span> <span class="st">'stable'</span>, slidingspans.numspans <span class="op">=</span> <span class="fl">4</span>, slidingspans.cutseas <span class="op">=</span> <span class="fl">2.0</span><span class="op">)</span></span>
 <span><span class="co"># Seasonal Factors - Percentage of months flagged as unstable</span></span>
 <span><span class="va">SF</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/udg.html">udg</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"s2.a.per"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span><span class="op">(</span><span class="va">SF</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Number of months flagged"</span>, <span class="st">"Total number of months"</span>, <span class="st">"Percent"</span><span class="op">)</span></span>
@@ -609,7 +603,7 @@ QS = n(n+2)\left(\frac{\hat{\gamma}(12)^2}{n - 12} + \frac{\hat{\gamma}(24)^2}{n
 </tbody>
 </table>
 </div>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Month-to-Month Changes in SA Series - Percentage of months flagged as unstable</span></span>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Month-to-Month Changes in SA Series - Percentage of months flagged as unstable</span></span>
 <span><span class="va">M2M</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/udg.html">udg</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"s2.d.per"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span><span class="op">(</span><span class="va">M2M</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Number of months flagged"</span>, <span class="st">"Total number of months"</span>, <span class="st">"Percent"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">M2M</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"Month-to-Month Changes in SA Series"</span></span>
@@ -639,7 +633,7 @@ QS = n(n+2)\left(\frac{\hat{\gamma}(12)^2}{n - 12} + \frac{\hat{\gamma}(24)^2}{n
 </div>
 <p>We can also examine the series provied to us</p>
 <div class="cell">
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">old_sa</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span></span>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">old_sa</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span></span>
 <span>  x <span class="op">=</span> <span class="va">old</span>,</span>
 <span>  transform.function <span class="op">=</span> <span class="st">"log"</span>,</span>
 <span>  regression.aictest <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -685,7 +679,7 @@ QS = n(n+2)\left(\frac{\hat{\gamma}(12)^2}{n - 12} + \frac{\hat{\gamma}(24)^2}{n
 </tbody>
 </table>
 </div>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Month-to-Month Changes in SA Series - Percentage of months flagged as unstable</span></span>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Month-to-Month Changes in SA Series - Percentage of months flagged as unstable</span></span>
 <span><span class="va">M2M</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/udg.html">udg</a></span><span class="op">(</span><span class="va">old_sa</span>, <span class="st">"s2.d.per"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/udg.html">udg</a></span><span class="op">(</span><span class="va">auto_sa</span>, <span class="st">"s2.a.per"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span><span class="op">(</span><span class="va">M2M</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Number of months flagged"</span>, <span class="st">"Total number of months"</span>, <span class="st">"Percent"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">M2M</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"old_sa"</span>, <span class="st">"auto_sa"</span><span class="op">)</span></span>

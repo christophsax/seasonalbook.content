@@ -334,19 +334,12 @@ div.csl-indent {
   </div>
   
 
-</header><pre><code>Loading required package: tibble</code></pre>
-<pre><code>
-Attaching package: 'tibble'</code></pre>
-<pre><code>The following object is masked from 'package:seasonal':
-
-    view</code></pre>
-<!--
+</header><!--
 -   How to use the X11 spec
 
 -   Case Study: Changing the length of trend and/or seasonal filter
 
- -->
-<p>One of the two main methods available in X-13ARIMA-SEATS to extract trend and seasonal components is the X-11 method. This is a nonparametric procedure that works by passing moving-average filters over the data to extract the intended components. Since both X-11 and SEATS apply filters to time-series, we start with a general discussion on seasonal decomposition that applies both to X-11 and STEATS. SEATS will be discussed in greater detail in <a href="25-seats.html"><span>Chapter&nbsp;7</span></a>.</p>
+ --><p>One of the two main methods available in X-13ARIMA-SEATS to extract trend and seasonal components is the X-11 method. This is a nonparametric procedure that works by passing moving-average filters over the data to extract the intended components. Since both X-11 and SEATS apply filters to time-series, we start with a general discussion on seasonal decomposition that applies both to X-11 and STEATS. SEATS will be discussed in greater detail in <a href="25-seats.html"><span>Chapter&nbsp;7</span></a>.</p>
 <section id="sec-seasonal-decomposition" class="level2 page-columns page-full" data-number="6.1"><h2 data-number="6.1" class="anchored" data-anchor-id="sec-seasonal-decomposition">
 <span class="header-section-number">6.1</span> Seasonal decomposition</h2>
 <p>As we have seen in the previous chapters, the core of seasonal adjustment is the decomposition of a time series into a <strong>trend</strong>, a <strong>seasonal</strong> and and <strong>irregular</strong> component. As we have seen in <a href="22-transform.html#sec-additive-and-multiplicative-adjustment"><span>Section&nbsp;4.2</span></a>, we write the fundamental identity as:</p>
@@ -373,7 +366,7 @@ A_t = X_t - S_t
 <span class="header-section-number">6.2</span> A simple decomposition in R</h2>
 <p>In order to better understand the X-11 method, it will be helpful to first perform a basic seasonal adjustment procedure “by-hand”. A basic trend filter could be a simple 2x12 moving average. This filter has weights 1/24, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/24. We use these weights to estimate the trend of the <code>AirPassengers</code> series.</p>
 <div class="cell">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">observed</span> <span class="op">&lt;-</span> <span class="va">AirPassengers</span>         </span>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">observed</span> <span class="op">&lt;-</span> <span class="va">AirPassengers</span>         </span>
 <span><span class="va">filter_trend</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">24</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">12</span>, <span class="fl">11</span><span class="op">)</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">24</span><span class="op">)</span>     </span>
 <span><span class="va">trend</span> <span class="op">=</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">observed</span>, filter <span class="op">=</span> <span class="va">filter_trend</span>, sides <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="fu">tsbox</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/tsbox/reference/ts_plot.html">ts_plot</a></span><span class="op">(</span><span class="va">observed</span>, <span class="va">trend</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -383,7 +376,7 @@ A_t = X_t - S_t
 </div>
 <p>After estimating the trend we now can estimate the seasonal component of the detrended series using a 3x3 seasonal filter that has weights (1,2,3,2,1)/9 applied to the same season.</p>
 <div class="cell">
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">detrended</span> <span class="op">&lt;-</span> <span class="va">observed</span> <span class="op">-</span> <span class="va">trend</span></span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">detrended</span> <span class="op">&lt;-</span> <span class="va">observed</span> <span class="op">-</span> <span class="va">trend</span></span>
 <span><span class="va">filter_seas</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">11</span><span class="op">)</span>, <span class="fl">2</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">11</span><span class="op">)</span>, <span class="fl">3</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">11</span><span class="op">)</span>, <span class="fl">2</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">11</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">/</span> <span class="fl">9</span></span>
 <span><span class="va">seasonal</span> <span class="op">=</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">detrended</span>, filter <span class="op">=</span> <span class="va">filter_seas</span>, sides <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="fu">tsbox</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/tsbox/reference/ts_plot.html">ts_plot</a></span><span class="op">(</span><span class="va">detrended</span>, <span class="va">seasonal</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -393,7 +386,7 @@ A_t = X_t - S_t
 </div>
 <p>By subtracting this seasonal estimate we have our crude seasonal adjustment.</p>
 <div class="cell">
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">adjusted</span> <span class="op">=</span> <span class="va">observed</span> <span class="op">-</span> <span class="va">seasonal</span></span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">adjusted</span> <span class="op">=</span> <span class="va">observed</span> <span class="op">-</span> <span class="va">seasonal</span></span>
 <span><span class="fu">tsbox</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/tsbox/reference/ts_plot.html">ts_plot</a></span><span class="op">(</span><span class="va">observed</span>, <span class="va">adjusted</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="24-x11_files/figure-html/x11-seasonal-adj-1.png" class="img-fluid" width="864"></p>
@@ -406,7 +399,7 @@ A_t = X_t - S_t
 <p>In order to use symmetric moving average filters at the end of the time series (current value), a regARIMA model is used to forecast extend the series. This regARIMA model is where users can test for or specify outliers, trading day and moving holiday regressors in their adjustment. The forecast extended series is then used to filter.</p>
 <p>Additionally, X-11 has a built in extreme value procedure included. This procedure identifies extremes and replaces. This results in a robust procedure that can automatically choose filters and identify extreme values without much user intervention. All that needs to be evoked beyond the default <code>seas()</code> call is to turn on the X11 spec option.</p>
 <div class="cell">
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, x11 <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, x11 <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Call:</span></span>
@@ -493,7 +486,7 @@ Where does the term “White Noise” come from?
 <p>There is some mathematical machinery needed when understanding exactly what the square-gain function, <span class="math inline">\(\lvert W(e^{2\pi i \nu}) \rvert^2\)</span>, is. However, for the sake of this text we just know that it tells us exactly the frequencies of <span class="math inline">\(X_t\)</span> that amplified in the output <span class="math inline">\(Y_t\)</span> as well as the frequencies of <span class="math inline">\(X_t\)</span> that will be annihilated (when the square-gain function equals 0).</p>
 <p>Let’s look at an example spectrum for the airline model. Instead of deriving the result, the following code simulates observations from an airline model with <span class="math inline">\(\theta = .5\)</span> and <span class="math inline">\(\Theta = .9\)</span>. The spectrum is then estimated using a parametric estimator using the <code>spec.ar</code> function. Details of this estimation can be found in (Brockwell and Davis).</p>
 <div class="cell">
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://pkg.robjhyndman.com/forecast/">forecast</a></span><span class="op">)</span></span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://pkg.robjhyndman.com/forecast/">forecast</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; Registered S3 method overwritten by 'quantmod':</span></span>
 <span><span class="co">#&gt;   method            from</span></span>
 <span><span class="co">#&gt;   as.zoo.data.frame zoo</span></span>
@@ -612,7 +605,7 @@ Where does the term “White Noise” come from?
 </div>
 <p>Users can change the multiples of <span class="math inline">\(\sigma\)</span> that are converted to extreme values. This is done with the <code>sigmalim</code> option within the <code>x11</code> spec. This option should be a vector of length 2 that specifies when weighting should begin and when full weight of zero should be applied. Between the endpoints of the specified vector a linear weight will be applied. SI ratios are replaced with an average of the two nearest SI ratios from the same month/quarter. One caveat being that only fully weighted SI ratios are used for SI ratio replacement. Hence, if too small of a <span class="math inline">\(\sigma\)</span> limit is used the SI ratios used to replace an extreme value should be many years away.</p>
 <div class="cell">
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">=</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, x11 <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">=</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, x11 <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
 <span><span class="va">unmodified_SIratio</span> <span class="op">&lt;-</span> <span class="fu">series</span><span class="op">(</span><span class="va">m</span>, <span class="st">"d8"</span><span class="op">)</span></span>
 <span><span class="va">modified_SIratio</span>   <span class="op">&lt;-</span> <span class="fu">series</span><span class="op">(</span><span class="va">m</span>, <span class="st">"d9"</span><span class="op">)</span></span>
 <span><span class="va">seasonal_factors</span> <span class="op">&lt;-</span> <span class="fu">series</span><span class="op">(</span><span class="va">m</span>, <span class="st">"d10"</span><span class="op">)</span></span>
@@ -623,7 +616,7 @@ Where does the term “White Noise” come from?
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">=</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, x11 <span class="op">=</span> <span class="st">""</span>, x11.sigmalim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">=</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, x11 <span class="op">=</span> <span class="st">""</span>, x11.sigmalim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">unmodified_SIratio</span> <span class="op">&lt;-</span> <span class="fu">series</span><span class="op">(</span><span class="va">m</span>, <span class="st">"d8"</span><span class="op">)</span></span>
 <span><span class="va">modified_SIratio</span>   <span class="op">&lt;-</span> <span class="fu">series</span><span class="op">(</span><span class="va">m</span>, <span class="st">"d9"</span><span class="op">)</span></span>
 <span><span class="va">seasonal_factors</span> <span class="op">&lt;-</span> <span class="fu">series</span><span class="op">(</span><span class="va">m</span>, <span class="st">"d10"</span><span class="op">)</span></span>
@@ -656,7 +649,7 @@ SI ratio / SI difference
 </section><section id="case-study" class="level2" data-number="6.8"><h2 data-number="6.8" class="anchored" data-anchor-id="case-study">
 <span class="header-section-number">6.8</span> Case study</h2>
 <div class="cell">
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span></span>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span></span>
 <span><span class="fu">tsbox</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/tsbox/reference/ts_plot.html">ts_plot</a></span><span class="op">(</span></span>
 <span>  s3x1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, x11.seasonalma <span class="op">=</span> <span class="st">"s3x1"</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  s3x15 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, x11.seasonalma <span class="op">=</span> <span class="st">"s3x15"</span><span class="op">)</span><span class="op">)</span></span>

@@ -326,17 +326,10 @@ div.csl-indent {
   </div>
   
 
-</header><pre><code>Loading required package: tibble</code></pre>
-<pre><code>
-Attaching package: 'tibble'</code></pre>
-<pre><code>The following object is masked from 'package:seasonal':
-
-    view</code></pre>
-<!-- -   Should the annual values be restrained?
+</header><!-- -   Should the annual values be restrained?
 
 -   How to use the force spec
- -->
-<section id="the-problem" class="level3" data-number="13.0.1"><h3 data-number="13.0.1" class="anchored" data-anchor-id="the-problem">
+ --><section id="the-problem" class="level3" data-number="13.0.1"><h3 data-number="13.0.1" class="anchored" data-anchor-id="the-problem">
 <span class="header-section-number">13.0.1</span> The Problem</h3>
 <p>Seasonal adjustment may affect the annual values of a series. The yearly total of an adjusted series usually differs from the total of an unadjusted series. By applying the Denton Method, the adjustment procedure can be used to enforce the totals to be equal. In seasonal, this can be performed with the option <code>force.type = "denton"</code>.</p>
 </section><section id="annual-constraining" class="level3" data-number="13.0.2"><h3 data-number="13.0.2" class="anchored" data-anchor-id="annual-constraining">
@@ -349,11 +342,11 @@ Attaching package: 'tibble'</code></pre>
 <span class="header-section-number">13.0.3</span> Re-adjusting annual values</h3>
 <p>Let’s start with a SEATS adjustment of <code>AirPassengers</code>:</p>
 <div class="cell">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The tsbox package can be used to compute annual totals. As for <code>AirPassengers</code>, the annual total is the sum of the monthly values, but it sometimes makes sense to use <code>"mean"</code> as an aggregation function:</p>
 <div class="cell">
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/tsbox/">tsbox</a></span><span class="op">)</span></span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/tsbox/">tsbox</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://docs.ropensci.org/tsbox/reference/ts_frequency.html">ts_frequency</a></span><span class="op">(</span><span class="fu">final</span><span class="op">(</span><span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span><span class="op">)</span>, aggregate <span class="op">=</span> <span class="st">"sum"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Time Series:</span></span>
 <span><span class="co">#&gt; Start = 1949 </span></span>
@@ -370,7 +363,7 @@ Attaching package: 'tibble'</code></pre>
 </div>
 <p>As we can see, there are minor differences between the series. However, in this case, the differences are rather small, and at most as large as half a percentage point:</p>
 <div class="cell">
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fl">100</span> <span class="op">*</span> <span class="op">(</span><span class="fu"><a href="https://docs.ropensci.org/tsbox/reference/ts_frequency.html">ts_frequency</a></span><span class="op">(</span><span class="fu">final</span><span class="op">(</span><span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span><span class="op">)</span>, aggregate <span class="op">=</span> <span class="st">"sum"</span><span class="op">)</span> <span class="op">/</span></span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fl">100</span> <span class="op">*</span> <span class="op">(</span><span class="fu"><a href="https://docs.ropensci.org/tsbox/reference/ts_frequency.html">ts_frequency</a></span><span class="op">(</span><span class="fu">final</span><span class="op">(</span><span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span><span class="op">)</span>, aggregate <span class="op">=</span> <span class="st">"sum"</span><span class="op">)</span> <span class="op">/</span></span>
 <span><span class="fu"><a href="https://docs.ropensci.org/tsbox/reference/ts_frequency.html">ts_frequency</a></span><span class="op">(</span><span class="va">AirPassengers</span>, aggregate <span class="op">=</span> <span class="st">"sum"</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Time Series:</span></span>
 <span><span class="co">#&gt; Start = 1949 </span></span>
@@ -382,7 +375,7 @@ Attaching package: 'tibble'</code></pre>
 </div>
 <p>By applying <code>force.type = "denton"</code>, we constrain the annual values to be the same:</p>
 <div class="cell">
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://docs.ropensci.org/tsbox/reference/ts_frequency.html">ts_frequency</a></span><span class="op">(</span><span class="fu">final</span><span class="op">(</span><span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, force.type <span class="op">=</span> <span class="st">"denton"</span><span class="op">)</span><span class="op">)</span>, aggregate <span class="op">=</span> <span class="st">"sum"</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://docs.ropensci.org/tsbox/reference/ts_frequency.html">ts_frequency</a></span><span class="op">(</span><span class="fu">final</span><span class="op">(</span><span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, force.type <span class="op">=</span> <span class="st">"denton"</span><span class="op">)</span><span class="op">)</span>, aggregate <span class="op">=</span> <span class="st">"sum"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Time Series:</span></span>
 <span><span class="co">#&gt; Start = 1949 </span></span>
 <span><span class="co">#&gt; End = 1960 </span></span>

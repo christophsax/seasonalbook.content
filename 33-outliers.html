@@ -307,15 +307,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
   
 
-</header><pre><code>Loading required package: tibble</code></pre>
-<pre><code>
-Attaching package: 'tibble'</code></pre>
-<pre><code>The following object is masked from 'package:seasonal':
-
-    view</code></pre>
-<!-- -   Why care about outliers? -->
-<!-- -   Additive outliers, level shifts, temporary changes -->
-<section id="introduction" class="level2" data-number="10.1"><h2 data-number="10.1" class="anchored" data-anchor-id="introduction">
+</header><!-- -   Why care about outliers? --><!-- -   Additive outliers, level shifts, temporary changes --><section id="introduction" class="level2" data-number="10.1"><h2 data-number="10.1" class="anchored" data-anchor-id="introduction">
 <span class="header-section-number">10.1</span> Introduction</h2>
 <p>Exceptional data values, or <em>outliers</em>, constitute a problem both for the ARIMA model building as well as for the seasonal filtering. When analyzing time series data, outlier values are common. In some cases, these issues can be linked to actual events in the real world, such as:</p>
 <ul>
@@ -327,7 +319,7 @@ Attaching package: 'tibble'</code></pre>
 <p>These events can impact the accuracy of seasonal adjustment. As a result, X-13 tries to remove these inconsistencies before performing seasonal adjustment.</p>
 <p>For example, when running <code>seas()</code> on <code>AirPassengers</code> with default settings, X-13 detects an additive outlier in may 1951. This additive outlier is removed in the regARIMA part but will be readded to the final, seasonally adjusted series.</p>
 <div class="cell">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Call:</span></span>
@@ -349,7 +341,7 @@ Attaching package: 'tibble'</code></pre>
 </div>
 <p>The <code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code> method highlights the outlier values and marks them accordingly:</p>
 <div class="cell">
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="33-outliers_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="864"></p>
 </div>
@@ -357,7 +349,7 @@ Attaching package: 'tibble'</code></pre>
 <p>The default settings discovered a single, additive outlier. By default, X-13 uses a formula that interpolates critical values for numbers of observations between 3 and 99 (Table 7.22 in the Manual). For standard time series, this results in a critical value around 4.</p>
 <p>Using the <code>outlier.critical</code> argument, we can fine tune the detection prosses. With <code>outlier.critical = 3</code>, we set a lower bar for the detection of outliers. <code>outlier.critical</code> is the z-value of a particular value that is needed to be classified as an outlier. A value of three means that the z-value must be 3 or larger.</p>
 <div class="cell">
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_high</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, outlier.critical <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_high</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, outlier.critical <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m_high</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Call:</span></span>
@@ -432,7 +424,7 @@ Attaching package: 'tibble'</code></pre>
 <p>The first outlier category we look at are level shifts. Level shifts refers to a sudden and sustained change in the underlying level of a time series. There can be various causes of level shifts in time series data, such as changes in concepts or definitions of the survey population, alterations in the method of data collection, shifts in economic behavior, changes in legislation, etc. Level shifts are a problem for seasonal adjustment because they will distort the estimation of the seasonal factors.</p>
 <p>Below is an example of a manually specified level shift:</p>
 <div class="cell">
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_level_shift</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span></span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_level_shift</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span></span>
 <span>  <span class="va">AirPassengers</span>,</span>
 <span>  regression.variables <span class="op">=</span> <span class="st">"ls1953.Jun"</span>,</span>
 <span>  outlier <span class="op">=</span> <span class="cn">NULL</span></span>
@@ -464,7 +456,7 @@ Attaching package: 'tibble'</code></pre>
 <p>Additive outliers pose a significant challenge to seasonal adjustment methods, which rely on moving averages. The crux of the problem lies in the inherent sensitivity of averages to the presence of extreme values or outliers. When unusual data points are included, the average can become unrepresentative of the underlying pattern in the series. Without proper adjustments or allowances for outliers, estimates for all the components in a time series can become distorted. As such, addressing additive outliers is critical to maintaining the integrity of seasonal adjustment techniques and ensuring accurate analyses.</p>
 <p>Below is an example of a manually specified additive outlier:</p>
 <div class="cell">
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_additive_outlier</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span></span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_additive_outlier</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span></span>
 <span>  <span class="va">AirPassengers</span>,</span>
 <span>  regression.variables <span class="op">=</span> <span class="st">"ao1954.Feb"</span>,</span>
 <span>  outlier <span class="op">=</span> <span class="cn">NULL</span></span>
@@ -497,7 +489,7 @@ Attaching package: 'tibble'</code></pre>
 <span class="header-section-number">10.4</span> Manually Identifying Outliers</h2>
 <p>X-13 contains an automated outlier detection procedure that works well in most circumstances and can be used as a starting point. Plotting the series may add additional information on whether outliers should be adjusted or not. The <code><a href="https://rdrr.io/r/graphics/identify.html">identify()</a></code> method opens a window that allows you to manually identify outliers. Select or deselect outliers by point and click. To quit and return the call, press ESC. Click several times to loop through different outlier types.</p>
 <div class="cell">
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span></span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span></span>
 <span>  <span class="va">AirPassengers</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/identify.html">identify</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>

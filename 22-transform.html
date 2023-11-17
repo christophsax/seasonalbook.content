@@ -310,13 +310,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
   
 
-</header><pre><code>Loading required package: tibble</code></pre>
-<pre><code>
-Attaching package: 'tibble'</code></pre>
-<pre><code>The following object is masked from 'package:seasonal':
-
-    view</code></pre>
-<!--
+</header><!--
 -   Discuss multiplicative vs additive adjustment
 
 -   How to use the transform spec
@@ -326,14 +320,13 @@ Attaching package: 'tibble'</code></pre>
 -   This is our first chance to mention the idea of test first then hard-code in production
 
 -   Case Study idea: Decide between log vs non-log transformation
- -->
-<p>One of the first choices to make when modeling a time series is whether or not it needs to be transformed before modeling. Two types of transformation types typically occur within X-13, <em>prior modifications</em> and <em>transformations</em>.</p>
+ --><p>One of the first choices to make when modeling a time series is whether or not it needs to be transformed before modeling. Two types of transformation types typically occur within X-13, <em>prior modifications</em> and <em>transformations</em>.</p>
 <section id="prior-modifications-and-transformations" class="level2" data-number="4.1"><h2 data-number="4.1" class="anchored" data-anchor-id="prior-modifications-and-transformations">
 <span class="header-section-number">4.1</span> Prior modifications and transformations</h2>
 <p>The first is a prior modification. A prior modification scales each observation for known fixed effects. These effects can be well-known and established, such as the length of a period or leap-year effects, or they can be more subjective such as a modification for a workers’ strike. We will see how this comes into the regARIMA model in <a href="23-regARIMA.html"><span>Chapter&nbsp;5</span></a>. We can think of prior-modification factors as events or corrections made to your data that are fixed throughout the adjustment process. These prior modification factors can also be permanent (default) or temporary. Permanent modifications are excluded from the final seasonal adjustment. Temporary modifications are removed while calculating seasonal factors but added back to the seasonally adjusted series.</p>
 <p>The second type is a nonlinear transformation applied to the observations. This is typically a choice between logarithmic transform and no transformation but for modeling can be any power of the Box-Cox transformation.</p>
 <div class="cell">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_none</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, transform.function <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_none</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, transform.function <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span>
 <span><span class="va">m_log</span>  <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, transform.function <span class="op">=</span> <span class="st">"log"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="sec-additive-and-multiplicative-adjustment" class="level2" data-number="4.2"><h2 data-number="4.2" class="anchored" data-anchor-id="sec-additive-and-multiplicative-adjustment">
@@ -354,7 +347,7 @@ Attaching package: 'tibble'</code></pre>
 <div class="page-columns page-full"><p>X-13 has a built-in statistical test to decide between log and no transformation. The choice is made by comparing the AICc<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> value of an ARIMA (0 1 1)(0 1 1) model fit, or a user-specified ARIMA model, to the log-transformed series and the original series.</p><div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup>&nbsp;With small sample sizes, a standard AIC test may select models with too many parameters. AICc tackles this problem by correcting for sample size.</p></li></div></div>
 <p>For most practical purposes, this is an effective choice and can be left to the program to decide. If your series has negative values, it can not be log-transformed, and automatic selection is performed. Other restrictions on the allowed transformations exist, but these situations are rare. We can look at the results of the transformation tests by looking at specific statistics. The <code>udg()</code> function provides access to a large number of diagnostical statistics.The <code>qs()</code> function and the <code><a href="https://rdrr.io/r/stats/AIC.html">AIC()</a></code>, <code><a href="https://rdrr.io/r/stats/AIC.html">BIC()</a></code> and <code><a href="https://rdrr.io/r/stats/logLik.html">logLik()</a></code> methods are wrappers that use <code>udg()</code> to access some specific diagnostical statistics.</p>
 <div class="cell">
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span></span>
 <span><span class="fu">udg</span><span class="op">(</span><span class="va">m</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"aictest.trans.aicc.nolog"</span>, <span class="st">"aictest.trans.aicc.log"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; aictest.trans.aicc.nolog   aictest.trans.aicc.log </span></span>
 <span><span class="co">#&gt;                1021.1919                 987.3845</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -372,7 +365,7 @@ X-13 HTML Output
 <div class="callout-body-container callout-body">
 <p>X-13ARIMA-SEATAS has a built-in HTML output that offers an extensive summary of a seasonal adjustment process. In R, this can be accessed using the <code>out()</code> function. E.g.,</p>
 <div class="cell">
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">out</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">out</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -422,12 +415,12 @@ X-13 HTML Output
 </h2>
 <p>An increasing variance, also known as <em>heteroskadasticity</em> is one sign of requiring a logarithmic transform. We have already seen that this is present in <code>AirPassengers</code>. Let’s verify that the automatic transformation identifies this.</p>
 <div class="cell">
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">transformfunction</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">transformfunction</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "log"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>This is also a good place to get our first look at the seasonal factors. The <code><a href="https://rdrr.io/r/stats/monthplot.html">monthplot()</a></code> method offers a convenient way to look at these:</p>
 <div class="cell">
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/monthplot.html">monthplot</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/monthplot.html">monthplot</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="22-transform_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="864"></p>
 </div>
@@ -435,12 +428,12 @@ X-13 HTML Output
 <p>Like the R base <code><a href="https://rdrr.io/r/stats/monthplot.html">monthplot()</a></code> function that can be applied on any time series (also on quarterly time series!), this groups time series data by months. If you look at the January (<code>J</code>), entry, the blue bars show the evolution of the detrended data from 1949 to 1960. The red bar shows the average seasonal factor over these years. The smooth red lines show the seasonal factors as estimated by the model.</p>
 <p>As you can see from the plot, there are more passengers during the summer months and fewer in the winter. The seasonal factors change over time. The summer peak becomes more pronounced in later years, while the local peak in February and March disappears over time.</p>
 <p>If you want to extract the seasonal factor directly into R, you can use the <code>series()</code> function:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">series</span><span class="op">(</span><span class="va">m</span>, <span class="st">"seats.seasonal"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">series</span><span class="op">(</span><span class="va">m</span>, <span class="st">"seats.seasonal"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section><section id="case-study-more-difficult-decision" class="level2" data-number="4.6"><h2 data-number="4.6" class="anchored" data-anchor-id="case-study-more-difficult-decision">
 <span class="header-section-number">4.6</span> Case Study: More difficult decision</h2>
 <p>Consider the situation where you are trying to decide on transform choices for monthly retail grocery store data. The series <code>grocery</code> is part of the <em>seasonalbook</em> package.</p>
 <div class="cell">
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">seasonalbook</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">seasonalbook</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">grocery</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="22-transform_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="864"></p>
@@ -448,19 +441,19 @@ X-13 HTML Output
 </div>
 <p>Visual inspection of the series shows no immediate reason to think we need to perform a logarithmic transform. There is possible seasonal heteroskadasity which could be mitigated by taking logs. Perform an X-11 adjustment with all the defaults of <em>seasonal</em></p>
 <div class="cell">
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">grocery</span>, x11 <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">grocery</span>, x11 <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
 <span><span class="fu">udg</span><span class="op">(</span><span class="va">m</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"aictest.trans.aicc.nolog"</span>, <span class="st">"aictest.trans.aicc.log"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; aictest.trans.aicc.nolog   aictest.trans.aicc.log </span></span>
 <span><span class="co">#&gt;                 4202.960                 4201.042</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>This is interesting since the AICc for no transformation is lower than the AICc for log transform.</p>
 <div class="cell">
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">transformfunction</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">transformfunction</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "log"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The default value for transform.aicdiff is -2, meaning the program slightly prefers log transform, and the difference between the AICc values must exceed 2. In this situation, the difference between the AICc values is -1.917597. Suppose you were to change this option to <code>transform.aicdiff = 0</code>, then the program selects no transform.</p>
 <div class="cell">
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">grocery</span>, x11 <span class="op">=</span> <span class="st">""</span>, transform.aicdiff <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">grocery</span>, x11 <span class="op">=</span> <span class="st">""</span>, transform.aicdiff <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="fu">transformfunction</span><span class="op">(</span><span class="va">m2</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "none"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>

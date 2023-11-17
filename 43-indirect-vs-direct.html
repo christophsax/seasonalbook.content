@@ -339,13 +339,7 @@ div.csl-indent {
   </div>
   
 
-</header><pre><code>Loading required package: tibble</code></pre>
-<pre><code>
-Attaching package: 'tibble'</code></pre>
-<pre><code>The following object is masked from 'package:seasonal':
-
-    view</code></pre>
-<p>Seasonally adjusted series of aggregates can be derived in two ways: either <em>directly</em> by adjusting the aggregates or <em>indirectly</em> by aggregating seasonally adjusted data of the component series. Generally, the results will differ, sometimes significantly.</p>
+</header><p>Seasonally adjusted series of aggregates can be derived in two ways: either <em>directly</em> by adjusting the aggregates or <em>indirectly</em> by aggregating seasonally adjusted data of the component series. Generally, the results will differ, sometimes significantly.</p>
 <p>This may be because the individual series have different seasonal patterns, or because of non-linear effects, which may arise, e.g., from multiplicative seasonal adjustment calculations.</p>
 <p>In addition, indirect adjustment may make sense if accounting relationships between series shoulb be maintained.</p>
 <p>Conceptually, neither the direct approach nor the indirect approach is optimal, and we will discuss some arguments later on.</p>
@@ -364,7 +358,7 @@ Attaching package: 'tibble'</code></pre>
 <p>Since <a href="https://cran.r-project.org/package=seasonal">seasonal version 1.8</a>, it is now possible to seasonally adjust multiple series in a single call to <code><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas()</a></code>. This is done by using the built-in batch mode of X-13. It removes the need for loops or <code><a href="https://rdrr.io/r/base/lapply.html">lapply()</a></code> in such cases and finally brings one missing feature of X-13 to seasonal – the <em>composite</em> spec.</p>
 <p>Multiple adjustments can be performed by supplying multiple time series as an <code>"mts"</code> object:</p>
 <div class="cell">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.seasonal.website">seasonal</a></span><span class="op">)</span></span>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.seasonal.website">seasonal</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/tsbox/">tsbox</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">fdeaths</span>, <span class="va">mdeaths</span><span class="op">)</span>, x11 <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
@@ -378,7 +372,7 @@ Attaching package: 'tibble'</code></pre>
 <span class="header-section-number">14.1.1</span> Backend</h3>
 <p>X-13 ships with a batch mode that allows multiple adjustments in a single call to X-13. This is now the default in seasonal (<code>multimode = "x13"</code>). Alternatively, X-13 can be called for each series (<code>multimode = "R"</code>). The results should be usually the same, but switching to <code>multimode = "R"</code> may be useful for debugging:</p>
 <div class="cell">
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">fdeaths</span>, <span class="va">mdeaths</span><span class="op">)</span>, multimode <span class="op">=</span> <span class="st">"x13"</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">fdeaths</span>, <span class="va">mdeaths</span><span class="op">)</span>, multimode <span class="op">=</span> <span class="st">"x13"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $fdeaths</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Call:</span></span>
@@ -436,7 +430,7 @@ Attaching package: 'tibble'</code></pre>
 <span><span class="co">#&gt; [1] "seas_multi" "list"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>In general, <code>multimode = "x13"</code> is faster. The following comparison on a MacBook Pro shows a modest speed gain, but more significant differences have been observed on other systems:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">many</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">fdeaths</span><span class="op">)</span>, <span class="fl">100</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">many</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">fdeaths</span><span class="op">)</span>, <span class="fl">100</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">many</span>, multimode <span class="op">=</span> <span class="st">"x13"</span><span class="op">)</span><span class="op">)</span></span>
 <span> <span class="co">#   user  system elapsed</span></span>
 <span> <span class="co"># 13.342   0.406  13.766</span></span>
@@ -450,9 +444,9 @@ Attaching package: 'tibble'</code></pre>
 <section id="all-platforms" class="level4" data-number="14.1.2.1"><h4 data-number="14.1.2.1" class="anchored" data-anchor-id="all-platforms">
 <span class="header-section-number">14.1.2.1</span> All Platforms</h4>
 <p>On Windows, Mac and Linux, you can use the <em>multisession</em> strategy, which essentially starts a separate session of R for any of the available cores. In the following, we use an 8 core Mac and gain a more than 4 times speed gain.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/DavisVaughan/furrr">furrr</a></span><span class="op">)</span></span>
-<span><span class="fu">plan</span><span class="op">(</span><span class="va">multisession</span>, workers <span class="op">=</span> <span class="fl">8</span><span class="op">)</span></span>
-<span><span class="va">ans</span> <span class="op">&lt;-</span> <span class="fu">future_map</span><span class="op">(</span><span class="va">many</span>, \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/udg.html">qs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/DavisVaughan/furrr">furrr</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html">plan</a></span><span class="op">(</span><span class="va">multisession</span>, workers <span class="op">=</span> <span class="fl">8</span><span class="op">)</span></span>
+<span><span class="va">ans</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://furrr.futureverse.org/reference/future_map.html">future_map</a></span><span class="op">(</span><span class="va">many</span>, \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/udg.html">qs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
 <span></span>
 <span></span>
 <span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span></span>
@@ -465,9 +459,9 @@ Attaching package: 'tibble'</code></pre>
 </section><section id="non-windows-platforms" class="level4" data-number="14.1.2.2"><h4 data-number="14.1.2.2" class="anchored" data-anchor-id="non-windows-platforms">
 <span class="header-section-number">14.1.2.2</span> Non-Windows Platforms</h4>
 <p>Mac and Linux allow forking parallelization, which is easier to set up. Here, multiple cores share the same memory, without having to start separate sessions:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/DavisVaughan/furrr">furrr</a></span><span class="op">)</span></span>
-<span><span class="fu">plan</span><span class="op">(</span><span class="va">multicore</span>, workers <span class="op">=</span> <span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://future.futureverse.org/reference/nbrOfWorkers.html">nbrOfWorkers</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span><span class="fu">future_map</span><span class="op">(</span><span class="va">many</span>, <span class="va">seas</span><span class="op">)</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/DavisVaughan/furrr">furrr</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html">plan</a></span><span class="op">(</span><span class="va">multicore</span>, workers <span class="op">=</span> <span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://future.futureverse.org/reference/nbrOfWorkers.html">nbrOfWorkers</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span><span class="fu"><a href="https://furrr.futureverse.org/reference/future_map.html">future_map</a></span><span class="op">(</span><span class="va">many</span>, <span class="va">seas</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span></span>
 <span><span class="co">#   user  system elapsed</span></span>
@@ -477,7 +471,7 @@ Attaching package: 'tibble'</code></pre>
 <p>Support for the X-13 batch mode makes it finally possible to use the <em>composite</em> spec – the one feature of X-13 that was missing in seasonal. Sometimes, one has to decide whether seasonal adjustment should be performed on a granular level or on an aggregated level. The <em>composite</em> spec helps you to analyze the problem and to compare the direct and the indirect adjustments.</p>
 <p>The <code>composite</code> argument is a list with an X-13 specification that is applied on the aggregated series. Specification works identically for other series in <code><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas()</a></code>, including the application of the defaults. If you provide an empty list, the usual defaults of <code><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas()</a></code> are used. A minimal composite call looks like this:</p>
 <div class="cell">
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_composite</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span></span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_composite</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">mdeaths</span>, <span class="va">fdeaths</span><span class="op">)</span>,</span>
 <span>  composite <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  series.comptype <span class="op">=</span> <span class="st">"add"</span></span>
@@ -485,7 +479,7 @@ Attaching package: 'tibble'</code></pre>
 </div>
 <p>The <code><a href="https://rdrr.io/pkg/seasonal/man/final.html">final()</a></code> command now returns three series, with one adjustment for each series, and one for the composite (direct) adjustment:</p>
 <div class="cell">
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/final.html">final</a></span><span class="op">(</span><span class="va">m_composite</span><span class="op">)</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/final.html">final</a></span><span class="op">(</span><span class="va">m_composite</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;       mdeaths  fdeaths composite</span></span>
 <span><span class="co">#&gt; [1,] 1566.633 605.9811  2140.037</span></span>
 <span><span class="co">#&gt; [2,] 1514.975 538.6371  1932.479</span></span>
@@ -496,23 +490,23 @@ Attaching package: 'tibble'</code></pre>
 </div>
 <p>You can verify that the composite refers to the total of <code>mdeaths</code> and <code>fdeaths</code> by running:</p>
 <div class="cell">
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span></span>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span></span>
 <span><span class="va">m_direct</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">ldeaths</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>where<code>ldeaths</code> (which is also shipped with R, see <code><a href="https://rdrr.io/r/datasets/UKLungDeaths.html">?ldeaths</a></code> for an explanation on the data) is the sum of <code>mdeaths</code> and <code>fdeaths</code>:</p>
 <div class="cell">
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html">all.equal</a></span><span class="op">(</span><span class="va">ldeaths</span>, <span class="va">mdeaths</span> <span class="op">+</span> <span class="va">fdeaths</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html">all.equal</a></span><span class="op">(</span><span class="va">ldeaths</span>, <span class="va">mdeaths</span> <span class="op">+</span> <span class="va">fdeaths</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] TRUE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html">all.equal</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/final.html">final</a></span><span class="op">(</span><span class="va">m_direct</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/final.html">final</a></span><span class="op">(</span><span class="va">m_composite</span><span class="op">)</span><span class="op">[</span>, <span class="st">'composite'</span><span class="op">]</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html">all.equal</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/final.html">final</a></span><span class="op">(</span><span class="va">m_direct</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/final.html">final</a></span><span class="op">(</span><span class="va">m_composite</span><span class="op">)</span><span class="op">[</span>, <span class="st">'composite'</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] TRUE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="indirect-vs-direct-adjustment" class="level2 page-columns page-full" data-number="14.3"><h2 data-number="14.3" class="anchored" data-anchor-id="indirect-vs-direct-adjustment">
 <span class="header-section-number">14.3</span> Indirect vs direct adjustment</h2>
 <p>The composite adjustment contains all the information that is needed to analyze the direct vs the indirect adjustment.</p>
 <div class="cell">
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span></span>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://docs.ropensci.org/tsbox/reference/ts_plot.html">ts_plot</a></span><span class="op">(</span></span>
 <span>  indirect <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/final.html">final</a></span><span class="op">(</span><span class="va">m_composite</span><span class="op">)</span><span class="op">[</span>, <span class="st">'mdeaths'</span><span class="op">]</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/final.html">final</a></span><span class="op">(</span><span class="va">m_composite</span><span class="op">)</span><span class="op">[</span>, <span class="st">'fdeaths'</span><span class="op">]</span>,</span>
 <span>  direct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/final.html">final</a></span><span class="op">(</span><span class="va">m_composite</span><span class="op">)</span><span class="op">[</span>, <span class="st">'composite'</span><span class="op">]</span></span>
@@ -545,7 +539,7 @@ Attaching package: 'tibble'</code></pre>
 </ul>
 <p>Some additional statistics can found in the X-13 output.</p>
 <div class="cell">
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/out.html">out</a></span><span class="op">(</span><span class="va">m_composite</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/out.html">out</a></span><span class="op">(</span><span class="va">m_composite</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="smoothness" class="level3" data-number="14.3.2"><h3 data-number="14.3.2" class="anchored" data-anchor-id="smoothness">
 <span class="header-section-number">14.3.2</span> Smoothness</h3>
