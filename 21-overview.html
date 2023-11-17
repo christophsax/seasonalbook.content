@@ -337,19 +337,12 @@ div.csl-indent {
   </div>
   
 
-</header><div class="status">
-<div class="callout callout-style-simple callout-note">
-<div class="callout-body d-flex">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-body-container">
-<p>You are reading an early draft of <em>Seasonal Adjustment in R</em>. This chapter is complete enough as an education tool and can be used in a course. It needs additional polishing.</p>
-<p><strong>It is part of the course materials intended for Dec 21, 2022</strong>.</p>
-</div>
-</div>
-</div>
-</div>
+</header><pre><code>Loading required package: tibble</code></pre>
+<pre><code>
+Attaching package: 'tibble'</code></pre>
+<pre><code>The following object is masked from 'package:seasonal':
+
+    view</code></pre>
 <!--
 -   History of the software
 
@@ -453,7 +446,7 @@ US Census Bureau. 2017. <em>X-13ARIMA-SEATS Reference Manual</em>. Version 1.1. 
 <span class="header-section-number">3.4</span> Addressing specs from R</h2>
 <p>In the R package seasonal, spec argument combinations can be directly fed to the <code>seas()</code> function. For example, to turn off the log transformation in the <code>AirPassengers</code> example from <a href="11-getting-started.html#sec-a-minimal-example"><span>Section&nbsp;2.2</span></a>, we can specify the following:</p>
 <div class="cell">
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_no_log</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, transform.function <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_no_log</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, transform.function <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m_no_log</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Call:</span></span>
@@ -586,7 +579,7 @@ US Census Bureau. 2017. <em>X-13ARIMA-SEATS Reference Manual</em>. Version 1.1. 
 <span class="header-section-number">3.6.1</span> Using X11</h3>
 <p>While <code>seas()</code> calls SEATS by default, X11 is often easier to use. To perform a seasonal adjustment on <code>AirPassengers</code> with X11, we need to activate the <code>x11</code> spec.</p>
 <div class="cell">
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_x11</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, x11 <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_x11</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, x11 <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>An empty string <code>""</code> tells <code>seas()</code> to use the spec without an argument. Alternatively, you can also use an empty list, <code><a href="https://rdrr.io/r/base/list.html">list()</a></code>. If more than one mutually exclusive spec is included in <code>seas()</code>, specs are overwritten according to the priority rules shown in <a href="#tbl-priority-rules">Table&nbsp;<span>3.5</span></a></p>
 <div id="tbl-priority-rules" class="anchored">
@@ -624,7 +617,7 @@ US Census Bureau. 2017. <em>X-13ARIMA-SEATS Reference Manual</em>. Version 1.1. 
 <span class="header-section-number">3.6.2</span> Turning off auto modeling</h3>
 <p>By default, the <code>automdl</code> spec finds a good ARIMA model. By specifying the <code>model</code> argument of the <code>arima</code> spec, the automated modeling is deactivated. Instead of the automatically chosen (0 1 1)0 1 1) ARIMA model, the following estimates an (1 1 0)1 1 0) model.</p>
 <div class="cell">
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_arima</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, arima.model <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_arima</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, arima.model <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m_arima</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Call:</span></span>
@@ -648,7 +641,7 @@ US Census Bureau. 2017. <em>X-13ARIMA-SEATS Reference Manual</em>. Version 1.1. 
 <span class="header-section-number">3.6.3</span> Turning off AIC testing and Outlier detection</h3>
 <p>By default, <code>seas()</code> evaluates the presence of weekday and Easter effects and checks for outliers in the data. Both can be turned off:</p>
 <div class="cell">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_no_auto</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, regression.aictest <span class="op">=</span> <span class="cn">NULL</span>, outlier <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_no_auto</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, regression.aictest <span class="op">=</span> <span class="cn">NULL</span>, outlier <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m_no_auto</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Call:</span></span>
@@ -670,7 +663,7 @@ US Census Bureau. 2017. <em>X-13ARIMA-SEATS Reference Manual</em>. Version 1.1. 
 <span><span class="co">#&gt;   found in one or more of the estimated spectra.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>In practice, many spec argument combinations can be extracted via the <code>static()</code> functions, which will be demonstrated in the next chapter. Alternatively, the seasonalview package offers a graphical user interface that allows you to click various spec argument combinations.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span></span>
 <span><span class="fu">view</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure"><p><a href="http://www.seasonal.website"><img src="img/seasonalview.png" class="img-fluid figure-img" alt="graphical user interface"></a></p>

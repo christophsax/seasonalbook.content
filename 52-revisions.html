@@ -304,18 +304,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
   
 
-</header><div class="status">
-<div class="callout callout-style-simple callout-note">
-<div class="callout-body d-flex">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-body-container">
-<p>You are reading an early draft of <em>Seasonal Adjustment in R</em>. This chapter should be readable but needs polishing.</p>
-</div>
-</div>
-</div>
-</div>
+</header><pre><code>Loading required package: tibble</code></pre>
+<pre><code>
+Attaching package: 'tibble'</code></pre>
+<pre><code>The following object is masked from 'package:seasonal':
+
+    view</code></pre>
 <ul>
 <li><p>How to measure revisions?</p></li>
 <li><p>Should a model be re-estimated each period?</p></li>
@@ -353,6 +347,35 @@ Todo
 </div>
 <div class="callout-body-container callout-body">
 <p>NEED TO ADD TREND and MONTH_TO_MONTH CHANGE OUTPUT.</p>
+<p><strong>Assignee: james</strong></p>
+</div>
+</div>
+<div class="callout callout-style-simple callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Todo
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Fix todo and add to seasonalbook</p>
+<p><strong>Assignee: christoph</strong></p>
+</div>
+</div>
+<div class="callout callout-style-simple callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Todo
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Move content belwo to regArima</p>
+<p><strong>Assignee: james</strong></p>
 </div>
 </div>
 <section id="history-spec" class="level3" data-number="16.0.1"><h3 data-number="16.0.1" class="anchored" data-anchor-id="history-spec">
@@ -410,11 +433,10 @@ Todo
 </table>
 <div class="cell">
 <pre><code>#&gt; ── [1mAttaching core tidyverse packages[22m ───────────────────── tidyverse 2.0.0 ──
-#&gt; [32m✔[39m [34mdplyr    [39m 1.1.2     [32m✔[39m [34mreadr    [39m 2.1.4
-#&gt; [32m✔[39m [34mforcats  [39m 1.0.0     [32m✔[39m [34mstringr  [39m 1.5.0
-#&gt; [32m✔[39m [34mggplot2  [39m 3.4.2     [32m✔[39m [34mtibble   [39m 3.2.1
-#&gt; [32m✔[39m [34mlubridate[39m 1.9.2     [32m✔[39m [34mtidyr    [39m 1.3.0
-#&gt; [32m✔[39m [34mpurrr    [39m 1.0.1     
+#&gt; [32m✔[39m [34mdplyr    [39m 1.1.3     [32m✔[39m [34mpurrr    [39m 1.0.2
+#&gt; [32m✔[39m [34mforcats  [39m 1.0.0     [32m✔[39m [34mreadr    [39m 2.1.4
+#&gt; [32m✔[39m [34mggplot2  [39m 3.4.4     [32m✔[39m [34mstringr  [39m 1.5.0
+#&gt; [32m✔[39m [34mlubridate[39m 1.9.3     [32m✔[39m [34mtidyr    [39m 1.3.0
 #&gt; ── [1mConflicts[22m ─────────────────────────────────────── tidyverse_conflicts() ──
 #&gt; [31m✖[39m [34mdplyr[39m::[32mfilter()[39m masks [34mstats[39m::filter()
 #&gt; [31m✖[39m [34mdplyr[39m::[32mlag()[39m    masks [34mstats[39m::lag()
@@ -422,7 +444,7 @@ Todo
 #&gt; [36mℹ[39m Use the conflicted package ([3m[34m&lt;http://conflicted.r-lib.org/&gt;[39m[23m) to force all conflicts to become errors</code></pre>
 </div>
 <div class="cell">
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># We need to use out() to view the history tables. </span></span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># We need to use out() to view the history tables. </span></span>
 <span><span class="co"># Currently not much support in seasonal for thest tables</span></span>
 <span><span class="co"># X13graph produces a nice suite of graphics if intersted in the history spec and</span></span>
 <span><span class="co">#.   the associated revisions</span></span>
@@ -447,7 +469,7 @@ Todo
 <span><span class="co"># out(auto_sa)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">old_sa</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span></span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">old_sa</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span></span>
 <span>  x <span class="op">=</span> <span class="va">old</span>,</span>
 <span>  transform.function <span class="op">=</span> <span class="st">"log"</span>,</span>
 <span>  regression.aictest <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -463,14 +485,7 @@ Todo
 <span>  history.estimates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"fcst"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">h1</span> <span class="op">&lt;-</span> <span class="fu">series</span><span class="op">(</span><span class="va">old_sa</span>, <span class="st">"fce"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; To speed up, extend the `seas()` call (see ?series):</span></span>
-<span><span class="co">#&gt; seas(x = old, transform.function = "log", regression.aictest = NULL, To speed up, extend the `seas()` call (see ?series):</span></span>
-<span><span class="co">#&gt;     outlier = NULL, arima.model = "(1 1 1)(0 1 1)", x11 = "", To speed up, extend the `seas()` call (see ?series):</span></span>
-<span><span class="co">#&gt;     regression.variables = "ls2008.4", history.estimates = c("fcst"), To speed up, extend the `seas()` call (see ?series):</span></span>
-<span><span class="co">#&gt;     history.save = "fce")</span></span>
 <span><span class="va">h2</span> <span class="op">&lt;-</span> <span class="fu">series</span><span class="op">(</span><span class="va">auto_sa</span>, <span class="st">"fce"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; To speed up, extend the `seas()` call (see ?series):</span></span>
-<span><span class="co">#&gt; seas(x = old, x11 = "", history.estimates = c("fcst"), history.save = "fce")</span></span>
 <span><span class="va">diff1</span> <span class="op">&lt;-</span> <span class="va">h1</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span> <span class="op">-</span> <span class="va">h2</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span></span>
 <span><span class="va">diff12</span> <span class="op">&lt;-</span> <span class="va">h1</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span> <span class="op">-</span> <span class="va">h2</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span></span>
 <span><span class="va">sdiff1</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">diff1</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">diff1</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span> <span class="va">h2</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">h2</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>,<span class="fl">1</span><span class="op">]</span></span>
@@ -478,20 +493,14 @@ Todo
 <span><span class="fu">ts_plot</span><span class="op">(</span><span class="fu">ts_c</span><span class="op">(</span><span class="va">sdiff1</span>, <span class="va">sdiff12</span><span class="op">)</span>, title <span class="op">=</span> <span class="st">"Squared Forecast Error Differences, Fixed - Auto"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span>h<span class="op">=</span><span class="fl">0</span>, col <span class="op">=</span> <span class="st">"grey"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="52-revisions_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="864"></p>
+<p><img src="52-revisions_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="864"></p>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m1</span> <span class="op">=</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, x11 <span class="op">=</span> <span class="st">""</span>, history.estimates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"fcst"</span><span class="op">)</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m1</span> <span class="op">=</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, x11 <span class="op">=</span> <span class="st">""</span>, history.estimates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"fcst"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">m2</span> <span class="op">=</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, x11 <span class="op">=</span> <span class="st">""</span>,  arima.model <span class="op">=</span> <span class="st">"(0 0 1)(0 0 0)"</span>, history.estimates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"fcst"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">h1</span> <span class="op">&lt;-</span> <span class="fu">series</span><span class="op">(</span><span class="va">m1</span>, <span class="st">"fce"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; To speed up, extend the `seas()` call (see ?series):</span></span>
-<span><span class="co">#&gt; seas(x = AirPassengers, x11 = "", history.estimates = c("fcst"), To speed up, extend the `seas()` call (see ?series):</span></span>
-<span><span class="co">#&gt;     history.save = "fce")</span></span>
 <span><span class="va">h2</span> <span class="op">&lt;-</span> <span class="fu">series</span><span class="op">(</span><span class="va">m2</span>, <span class="st">"fce"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; To speed up, extend the `seas()` call (see ?series):</span></span>
-<span><span class="co">#&gt; seas(x = AirPassengers, x11 = "", arima.model = "(0 0 1)(0 0 0)", To speed up, extend the `seas()` call (see ?series):</span></span>
-<span><span class="co">#&gt;     history.estimates = c("fcst"), history.save = "fce")</span></span>
 <span><span class="va">diff1</span> <span class="op">&lt;-</span> <span class="va">h1</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span> <span class="op">-</span> <span class="va">h2</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span></span>
 <span><span class="va">diff12</span> <span class="op">&lt;-</span> <span class="va">h1</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span> <span class="op">-</span> <span class="va">h2</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span></span>
 <span><span class="va">sdiff1</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">diff1</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">diff1</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span> <span class="va">h2</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">h2</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>,<span class="fl">1</span><span class="op">]</span></span>
@@ -499,7 +508,7 @@ Todo
 <span><span class="fu">ts_plot</span><span class="op">(</span><span class="fu">ts_c</span><span class="op">(</span><span class="va">sdiff1</span>, <span class="va">sdiff12</span><span class="op">)</span>, title <span class="op">=</span> <span class="st">"Squared Forecast Error Differences, good - bad"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span>h<span class="op">=</span><span class="fl">0</span>, col <span class="op">=</span> <span class="st">"grey"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="52-revisions_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="864"></p>
+<p><img src="52-revisions_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="864"></p>
 </div>
 </div>
 <p>There are no specific pass/fail levels recommended for these results, indicating that there are no predetermined thresholds to determine success or failure. Instead, a comparison approach is suggested, particularly when significant differences emerge among the results. For example, it is expected that the disparity between the concurrent series and the final series diminishes gradually. Therefore, it is reasonable to anticipate a decrease in the average revision across years as the process nears completion. In such cases, it becomes crucial to thoroughly analyze and understand the reasons behind these disparities. Additionally, it is advised to exercise caution when utilizing these results as the sole basis for selecting a seasonal filter. Other factors and considerations should be taken into account to make an informed decision. It is worth noting that the diagnostic tends to favor longer filters, implying that the analysis tends to lean towards recommending seasonal filters with larger spans. However, it is important to weigh this tendency against other relevant factors and requirements specific to the context at hand to make the most appropriate choice.</p>

@@ -327,18 +327,12 @@ div.csl-indent {
   </div>
   
 
-</header><div class="status">
-<div class="callout callout-style-simple callout-note">
-<div class="callout-body d-flex">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-body-container">
-<p>You are reading an early draft of <em>Seasonal Adjustment in R</em>. This chapter should be readable but needs polishing.</p>
-</div>
-</div>
-</div>
-</div>
+</header><pre><code>Loading required package: tibble</code></pre>
+<pre><code>
+Attaching package: 'tibble'</code></pre>
+<pre><code>The following object is masked from 'package:seasonal':
+
+    view</code></pre>
 <p>Should a series be seasonally adjusted at all?</p>
 <p>X-13 removes seasonality from the series, even if a series is not seasonal from the beginning. If a series is not seasonal, the resulting series may be bad.</p>
 <p>Fortunately, X-13 contains a few tests that help users decide if a series is seasonal.</p>
@@ -361,7 +355,7 @@ div.csl-indent {
 <p>The QS test has a few advantages compared to the IDS statistics and is generally preferable. It is available both with X11 and SEATS.</p>
 <p>You can retrieve the results of the QS test by the <code><a href="https://rdrr.io/pkg/seasonal/man/udg.html">qs()</a></code> function. (We will say more about the QS statistic in <a href="51-quality-measures.html"><span>Chapter&nbsp;15</span></a>).</p>
 <div class="cell">
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">qs</span><span class="op">(</span><span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">qs</span><span class="op">(</span><span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                     qs  p-val</span></span>
 <span><span class="co">#&gt; qsori        167.64858 0.0000</span></span>
 <span><span class="co">#&gt; qsorievadj   203.07731 0.0000</span></span>
@@ -391,7 +385,7 @@ UK Office for National Statistics. 2007. <em>Guide to Seasonal Adjustment with x
 <p>As we have stated above, the recommendation is to adjust the series unless you have clear evidence that a series is not seasonal.</p>
 <p>Let’s try <code>AirPassengers</code>:</p>
 <div class="cell">
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">udg</span><span class="op">(</span><span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, x11 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>, <span class="st">"f3.m07"</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">udg</span><span class="op">(</span><span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, x11 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>, <span class="st">"f3.m07"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; f3.m07 </span></span>
 <span><span class="co">#&gt;  0.203</span></span>
 <span><span class="fu">udg</span><span class="op">(</span><span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, x11 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>, <span class="st">"f2.idseasonal"</span><span class="op">)</span></span>
@@ -403,7 +397,7 @@ UK Office for National Statistics. 2007. <em>Guide to Seasonal Adjustment with x
 <span class="header-section-number">12.0.5</span> Case Study</h3>
 <p>Consider the following less clear-cut series:</p>
 <div class="cell">
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/tsbox/">tsbox</a></span><span class="op">)</span></span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/tsbox/">tsbox</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.seasonal.website">seasonal</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/ts.html">ts</a></span><span class="op">(</span></span>
@@ -448,7 +442,7 @@ UK Office for National Statistics. 2007. <em>Guide to Seasonal Adjustment with x
 </div>
 <p>If we apply standard SEATS seasonal adjustment, this does not seem to do anything:</p>
 <div class="cell">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="41-presence-of-seasonality_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="864"></p>
@@ -456,7 +450,7 @@ UK Office for National Statistics. 2007. <em>Guide to Seasonal Adjustment with x
 </div>
 <p>What do formal statistics say?</p>
 <div class="cell">
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/udg.html">qs</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/udg.html">qs</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                   qs   p-val</span></span>
 <span><span class="co">#&gt; qsori        0.00000 1.00000</span></span>
 <span><span class="co">#&gt; qsorievadj   0.08751 0.95719</span></span>
@@ -476,11 +470,11 @@ UK Office for National Statistics. 2007. <em>Guide to Seasonal Adjustment with x
 <p>Let’s have a look at the first line. A QS value of 0 has a p-value of 1, meaning the Nul-Hypothesis of seasonality in the orgininal value can be savely rejected. According to this measure, it is clear that this series has no seasonality.</p>
 <p>If we want to consider the M7 values, we need to use X11:</p>
 <div class="cell">
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_x11</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">x</span>, x11 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_x11</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">x</span>, x11 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The QS statistic has to be the same for the unadjusted series but not for the adjusted one:</p>
 <div class="cell">
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/udg.html">qs</a></span><span class="op">(</span><span class="va">m_x11</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/udg.html">qs</a></span><span class="op">(</span><span class="va">m_x11</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                   qs   p-val</span></span>
 <span><span class="co">#&gt; qsori        0.00000 1.00000</span></span>
 <span><span class="co">#&gt; qsorievadj   0.08751 0.95719</span></span>
@@ -499,13 +493,13 @@ UK Office for National Statistics. 2007. <em>Guide to Seasonal Adjustment with x
 </div>
 <p>Because we use X11, we can now have a look at the M7 value:</p>
 <div class="cell">
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/udg.html">udg</a></span><span class="op">(</span><span class="va">m_x11</span>, <span class="st">"f3.m07"</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/udg.html">udg</a></span><span class="op">(</span><span class="va">m_x11</span>, <span class="st">"f3.m07"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; f3.m07 </span></span>
 <span><span class="co">#&gt;  1.222</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>If you look for simple answers, the <code>"f2.idseasonal"</code> gives you a simple yes or no answer. From the previous discussion, it should not be surprising that the answer is <em>no</em>.</p>
 <div class="cell">
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/udg.html">udg</a></span><span class="op">(</span><span class="va">m_x11</span>, <span class="st">"f2.idseasonal"</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/udg.html">udg</a></span><span class="op">(</span><span class="va">m_x11</span>, <span class="st">"f2.idseasonal"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; f2.idseasonal </span></span>
 <span><span class="co">#&gt;          "no"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>

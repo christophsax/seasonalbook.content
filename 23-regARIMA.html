@@ -52,7 +52,26 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
@@ -93,7 +112,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-diagram/mermaid.min.js"></script><script src="site_libs/quarto-diagram/mermaid-init.js"></script><link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 </head>
-<body class="nav-sidebar floating">
+<body class="nav-sidebar floating slimcontent">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
@@ -288,15 +307,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
-<li><a href="#sarima-model" id="toc-sarima-model" class="nav-link active" data-scroll-target="#sarima-model"><span class="header-section-number">5.1</span> SARIMA model</a></li>
+<li><a href="#arima-basics" id="toc-arima-basics" class="nav-link active" data-scroll-target="#arima-basics"><span class="header-section-number">5.1</span> ARIMA Basics</a></li>
   <li><a href="#differencing" id="toc-differencing" class="nav-link" data-scroll-target="#differencing"><span class="header-section-number">5.2</span> Differencing</a></li>
-  <li><a href="#fitting-sarima-optional" id="toc-fitting-sarima-optional" class="nav-link" data-scroll-target="#fitting-sarima-optional"><span class="header-section-number">5.3</span> Fitting SARIMA (optional)</a></li>
+  <li><a href="#automated-arima-modeling" id="toc-automated-arima-modeling" class="nav-link" data-scroll-target="#automated-arima-modeling"><span class="header-section-number">5.3</span> Automated ARIMA modeling</a></li>
   <li><a href="#regression" id="toc-regression" class="nav-link" data-scroll-target="#regression"><span class="header-section-number">5.4</span> Regression</a></li>
-  <li><a href="#case-study-airpassengers" id="toc-case-study-airpassengers" class="nav-link" data-scroll-target="#case-study-airpassengers"><span class="header-section-number">5.5</span> Case Study: AirPassengers</a></li>
+  <li><a href="#automated-regressor-identification" id="toc-automated-regressor-identification" class="nav-link" data-scroll-target="#automated-regressor-identification"><span class="header-section-number">5.5</span> Automated regressor identification</a></li>
+  <li><a href="#case-study-airpassengers" id="toc-case-study-airpassengers" class="nav-link" data-scroll-target="#case-study-airpassengers"><span class="header-section-number">5.6</span> Case Study: <code>AirPassengers</code></a></li>
   </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/23-regARIMA.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<main class="content page-columns page-full" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
 <h1 class="title"><span id="sec-regarima" class="quarto-section-identifier"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">regARIMA Model</span></span></h1>
 </div>
 
@@ -310,25 +330,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
   
 
-</header><div class="status">
-<div class="callout callout-style-simple callout-note">
-<div class="callout-body d-flex">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-body-container">
-<p>You are reading an early draft of <em>Seasonal Adjustment in R</em>. This chapter should be readable but needs polishing.</p>
-<p><strong>It is part of the course materials intended for Dec 21, 2022</strong>.</p>
-</div>
-</div>
-</div>
-</div>
-<p>An important part of the X13 procedure is regARIMA modeling. It sits above seasonal adjustment at the top of the flow chart describing progress towards an adequate adjustment. As with all statistical modeling, the process to find the best model is iterative in nature. This is represented as a loop at the left of our flow chart. An analyst can use statistical tools and subject matter expertise to fine tune and create an overall regARIMA model that is satisfactory to be used and proceed to the seasonal adjustment step of our work flow.</p>
+</header><pre><code>Loading required package: tibble</code></pre>
+<pre><code>
+Attaching package: 'tibble'</code></pre>
+<pre><code>The following object is masked from 'package:seasonal':
+
+    view</code></pre>
+<!--
+
+Style Guide ?
+
+X-13
+X-13ARIMA-SEATS
+Titles in sentence style
+
+
+
+
+
+ -->
+<p>An ARIMA model with external regressors (regARIMA) lies at the heart of many of the procedures in X-13. As we have seen in chapter FIXME, regARIMA consists of several interacting specs. Some of the these specs will be further detailed in later chapters (Outlier, Trading Days).</p>
+<p>Like most statistical modeling in X-13, the process of finding the best model is iterative. Analysts use statistical tools and their expertise to fine-tune the regARIMA model. This iterative process is visualized in the flow chart below.</p>
 <div class="cell">
 <div class="cell-output-display">
-<div>
-<div>
-<pre class="mermaid mermaid-js">flowchart TD
+<div id="fig-arima-interact" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure"><div>
+<pre class="mermaid mermaid-js" data-label="fig-arima-interact">flowchart TD
   A[RegARIMA Modeling] --&gt; B(Model Comparison / Diagnostics)
   B --&gt; A
   A --&gt; C[Seasonal Adjustment]
@@ -337,189 +364,70 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   D --&gt; A
 </pre>
 </div>
+<figcaption class="figure-caption">Figure&nbsp;5.1: Interaction between regARIMA, diagnostics and seasonal adjustment</figcaption></figure>
 </div>
 </div>
 </div>
-<p>Depending on if you ultimately choose to perform a SEATS or X-11 seasonal adjustment, your usage of a regARIMA can differ. Both seasonal adjustment methods will use the regARIMA model to forecast the series in order to apply symmetric filters and extract components. (but I thought SEATS was model-based? What do you mean SEATS uses filters? More on this in Chapter XXX). SEATS will use the ARIMA model to derive components for the trend, seasonal and irregular terms. The regARIMA model is also the place to include exogenous information or regressors into your seasonal adjustments. Regressors such as holiday effects, additive outliers, levels shifts, or any user-defined effect can be included in your regARIMA model. This can be thought of as solely a utility to forecast extend your series or a detection method to do inference. In practice it is useful to use regARIMA modeling to answer questions such as, “Does my series have trading day effects?” or “Does this outlier effect my results?”. Another reason for regARIMA modeling is to include exogenous regression variables in our analysis. These include, but are not limited to, moving holiday effects, trading day, outliers and level-shifts.</p>
-<section id="sarima-model" class="level2" data-number="5.1"><h2 data-number="5.1" class="anchored" data-anchor-id="sarima-model">
-<span class="header-section-number">5.1</span> SARIMA model</h2>
-<p>As the name implies, there are two components that one needs to understand when fitting a regARIMA model; namely regression and ARIMA. Furthermore, the ARIMA part is made up by a differencing order and the stochastic ARMA portion. In this chapter, we try to break these three components down to the most fundamental ingredients without an overly technical exposition. Essentially, providing readers with enough information about each topic to understand the rest of this book and go off and perform satisfactory seasonal adjustment. The interested reader is encouraged to find material devoted to each of these components separately to more fully understand them.</p>
-<p>ARIMA is an acronym describing the three parts of the modeling paradigm. AR = autoregressive, I = integrated (differenced), and MA = moving average. The prefix auto or “self”, explains the AR portion perfectly. We model the current observation with lagged values from the past. This is illustrated with the classic autoregressive model of order 1:</p>
+<p>Once a satisfying regARIMA has been found, one proceeds to the seasonal adjustment step. The regARIMA model is crucial in forecasting the time series for applying symmetric filters and extracting components, whether using SEATS or X-11 for seasonal adjustment. In addition, in SEATS, the ARIMA model is also used to derive trend, seasonal, and irregular components.</p>
+<p>The regARIMA model also includes exogenous information or regressors, like holiday effects, additive outliers, and level shifts. These elements help in forecasting and analyzing the series. For example, regARIMA modeling can answer if a series is affected by trading day effects or how outliers impact results. It’s also used to integrate external regression variables such as moving holidays and trading day effects into the analysis.</p>
+<section id="arima-basics" class="level2 page-columns page-full" data-number="5.1"><h2 data-number="5.1" class="anchored" data-anchor-id="arima-basics">
+<span class="header-section-number">5.1</span> ARIMA Basics</h2>
+<p>The regARIMA model combines two elements: <strong>reg</strong>ression and <strong>ARIMA</strong>. The ARIMA segment itself is composed of a differencing order (the “I”, for “integrated”) and the ARMA part. This chapter aims to simplify these concepts without getting too technical, providing enough understanding for effective seasonal adjustment.</p>
+<p>ARIMA stands for Autoregressive Integrated Moving Average. “Autoregressive” (AR) means the model uses past values of the series to predict the current value. For instance, an AR(1) model uses one lagged value:</p>
 <p><span class="math display">\[ Y_t = \phi Y_{t-1} + a_t \]</span></p>
-<p>where <span class="math inline">\(Y_t\)</span> is the observed time series, <span class="math inline">\(\phi\)</span> is a coefficient to be estimated and <span class="math inline">\(\{a_t\}\)</span> is an uncorrelated sequence of errors similar to that of standard linear regression. This model is notated AR(1). If instead of a single lag we used <span class="math inline">\(p\)</span> lags, the model would be and AR(<span class="math inline">\(p\)</span>) and have structure:</p>
+<div class="page-columns page-full"><p>Here, <span class="math inline">\(Y_t\)</span> is the time series, <span class="math inline">\(\phi\)</span> a coefficient, and <span class="math inline">\(\{a_t\}\)</span> an uncorrelated sequence of errors.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn1">
+<p>An AR(p) model extends this to <span class="math inline">\(p\)</span> lagged values:</p>
 <p><span class="math display">\[ Y_t = \phi_1 Y_{t-1} + \phi_2 Y_{t-2} + \cdots + \phi_p Y_{t-p} + a_t \]</span></p>
 <p>where now we have <span class="math inline">\(p\)</span> coefficients <span class="math inline">\(\phi_1, \phi_2, \ldots, \phi_p\)</span> to be estimated.</p>
-<p>The moving average part of ARIMA model is similar in notation and reflects the number of lagged values of the error sequence should be included. For example, an MA(1) model with coefficient parameter <span class="math inline">\(\theta\)</span> is:</p>
-<p><span class="math display">\[ Y_t = a_t + \theta a_{t-1} \]</span>.</p>
-<p>Note that instead of doing self-regression we include past values of the unobserved errors in the model at time <span class="math inline">\(t\)</span>. If instead of a single lag we wanted <span class="math inline">\(q\)</span> lags of the past error terms, we would have an MA(<span class="math inline">\(q\)</span>) model:</p>
+</li></div></div>
+<p>The “Moving Average” (MA) part uses past errors of the series for prediction. An MA(1) model looks like:</p>
+<p><span class="math display">\[ Y_t = a_t + \theta a_{t-1} \]</span></p>
+<div class="page-columns page-full"><p>and uses the current and one lagged error term.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn2">
+<p>An MA(q) model includes <span class="math inline">\(q\)</span> lagged error terms:</p>
 <p><span class="math display">\[ Y_t = a_t + \theta_1 a_{t-1} + \theta_2 a_{t-2} + \cdots + \theta_q a_{t-q} \]</span>.</p>
-<p>When we combine these two ideas we can model <span class="math inline">\(Y_t\)</span> with <span class="math inline">\(p\)</span> lagged values of itself together with <span class="math inline">\(q\)</span> lagged values of the unobserved errors. Together it makes an ARMA(<span class="math inline">\(p\)</span>, <span class="math inline">\(q\)</span>) model, one of the fundamental ingredients to the regARIMA model. For a practitioner the automatic modeling done in X13 is often sufficient to find an appropriate value for <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span> and hence a well fitting ARMA model. If it more important from a seasonal adjustment perspective to correctly specify the differencing and regression variables in your overall regARIMA model.</p>
-</section><section id="differencing" class="level2" data-number="5.2"><h2 data-number="5.2" class="anchored" data-anchor-id="differencing">
+</li></div></div>
+<p>An ARMA(p, q) model combines these AR and MA components, using <span class="math inline">\(p\)</span> lagged values of the series and <span class="math inline">\(q\)</span> lagged error terms. In practice, X13’s automatic modeling usually finds appropriate <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span> values. However, it is worth paying attention to correctly set the differencing and regression variables for seasonal adjustment.</p>
+</section><section id="differencing" class="level2 page-columns page-full" data-number="5.2"><h2 data-number="5.2" class="anchored" data-anchor-id="differencing">
 <span class="header-section-number">5.2</span> Differencing</h2>
-<p>ARMA models work best for stationary time series. This means the mean does not depend on time (such as increasing trend) or have a correlation structure that changes. Many techniques could be used to take a non-stationary time series and transform it to stationarity, one ubiquitous method is differencing. There is a famous results that states if you difference your series <span class="math inline">\(k\)</span> times it will remove a polynomial trend of degree <span class="math inline">\(k\)</span>. Essentially, if you observe a time series with a linear trend then first differencing will remove the trend. If a time series has quadratic trend (polynomial of order 2) then differencing twice will remove that trend. A similar phenomenon can happen at seasonal lags and often a time series will also require seasonal differencing to reduce it to stationary. The order of differencing, also called the intgreation order, for the non-seaosnal and seasonal parts of our model are usually notated as <span class="math inline">\(d\)</span> and <span class="math inline">\(D\)</span> respectively. When we bring the integration order together with the stocastic model specification we have the notation <span class="math display">\[\text{SARIMA}\underbrace{(p, d, q)}_{\text{non-seasonal }}\underbrace{(P, D, Q)}_{\text{seasonal}}.\]</span> This can be seen easily with an example. Consider the log transformed <code>AirPassengers</code> series.</p>
+<p>ARMA models are most effective with stationary time series, where both the mean and correlation structure do not vary over time. For non-stationary time series, transforming them into stationary ones is essential, and differencing is a widely used method for this purpose. It is known that differencing a series <span class="math inline">\(k\)</span> times can remove a polynomial trend of degree <span class="math inline">\(k\)</span>. Therefore, the first differencing is effective for a series with a linear trend, while the second differencing works for a series with a quadratic trend.</p>
+<div class="page-columns page-full"><p>Seasonal patterns might also require seasonal differencing to achieve stationarity. The orders of differencing for the non-seasonal and seasonal parts are denoted as <span class="math inline">\(d\)</span> and <span class="math inline">\(D\)</span>, respectively. Combining these with the stochastic model specification gives the notation SARIMA(p, d, q)(P, D, Q), where <span class="math inline">\(p\)</span>, <span class="math inline">\(d\)</span>, <span class="math inline">\(q\)</span> are non-seasonal parameters, and <span class="math inline">\(P\)</span>, <span class="math inline">\(D\)</span>, <span class="math inline">\(Q\)</span> are seasonal.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>:</p><div class="no-row-height column-margin column-container"><li id="fn3"><p><sup>3</sup>&nbsp;The “S” in SARIMA stands for seasonal. Since most of the ARIMA models within X-13 are seasonal, we will restrain from using the term and usually refer to an ARIMA model of the structure (p, d, q)(P, D, Q).</p></li></div></div>
+<p><span class="math display">\[\text{SARIMA}\underbrace{(p, d, q)}_{\text{non-seasonal }}\underbrace{(P, D, Q)}_{\text{seasonal}}.\]</span></p>
+<p>Let’s apply this to <code>AirPassengers</code>. A log-transformed version of the series looks as follows:</p>
 <div class="cell">
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="23-regARIMA_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="864"></p>
 </div>
 </div>
-<p>We see a clear increasing trend and seasonal pattern. Let’s call the observed series <span class="math inline">\(X_t\)</span>. We can difference the series to make <span class="math inline">\(Y_t = \Delta X_t = X_t - X_{t-1}\)</span>. A plot of <span class="math inline">\(Y_t\)</span> looks like</p>
+<p>This series exhibits a clear increasing trend and seasonal pattern. Let’s call the log-transformed series <span class="math inline">\(X_t\)</span>. We can now difference the series to make <span class="math inline">\(Y_t = \Delta X_t = X_t - X_{t-1}\)</span>. Which looks like:</p>
 <div class="cell">
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="23-regARIMA_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="864"></p>
 </div>
 </div>
-<p>The trend has been removed however some seasonal trend (strong seasonal patterns) still exist. Apply seasonal differencing to the already first differenced series <span class="math inline">\(Y_t\)</span>:</p>
+<p>The trend is removed, but some seasonal patterns remain. Seasonal differencing is then applied to the already first differenced series <span class="math inline">\(Y_t\)</span>:</p>
 <p><span class="math display">\[ Z_t = Y_t - Y_{t-12} \]</span></p>
 <p>A plot of <span class="math inline">\(Z_t\)</span>:</p>
 <div class="cell">
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span><span class="op">)</span>, <span class="fl">12</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span><span class="op">)</span>, <span class="fl">12</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="23-regARIMA_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="864"></p>
 </div>
 </div>
-<p>Here we can see that both the original linear trend and seasonal pattern are removed and what is left is a stationary process that can adequately be modeled with an SARMA(0, 1)(0, 1) model. When you bring in the integration (differencing) order of one for the seasonal and non-seasonal components, we are left with the model named after this exact time series! The so called ``airline model’’ is the SARIMA(0, 1, 1)(0, 1, 1) and the terminology came to popularity via Box and Jenkins, “Time Series Analysis, Forecasting and Control” textbook.</p>
-</section><section id="fitting-sarima-optional" class="level2" data-number="5.3"><h2 data-number="5.3" class="anchored" data-anchor-id="fitting-sarima-optional">
-<span class="header-section-number">5.3</span> Fitting SARIMA (optional)</h2>
-<p>Here we present a very oversimplied way to start to understand what values of <span class="math inline">\(p, P, q\)</span> and <span class="math inline">\(Q\)</span> you can investigate for your time series of interest. Recall that earlier it was mentioned that using automatic model identification is sufficient for most to get an adequate seasonal adjustment. Hence, this is simply for the interested reader to begin to gain additional intuition into the stochastic structures involved in their series and the types of structures the automatic modeling procedures look at. One of the main tools in a time series analyist tool box is the autocorrelation function (ACF). This is a function that returns the correlation between observations <span class="math inline">\(h\)</span> time units apart throughout the entire sample. So for <span class="math inline">\(h=2\)</span> this means looking at the correlation between the pairs <span class="math inline">\((X_1, X_3), (X_2, X_4), (X_3, X_5), \ldots\)</span>. Then a way to build a SARIMA model is to match the sample ACF and the theoretical ACF of a given model. The main point distinguishing an AR(<span class="math inline">\(p\)</span>) and MA(<span class="math inline">\(q\)</span>) is how their theoretical ACF behaves. An AR(<span class="math inline">\(p\)</span>) will have ACF the has exponential decay as <span class="math inline">\(h\)</span> increases. For example, an AR(1) ACF is <span class="math display">\[\rho(h) = \phi^h\]</span> An MA(<span class="math inline">\(q\)</span>) models ACF will be non-zero for the first <span class="math inline">\(q\)</span> lags and then cutoff to zero thereafter. The ACF of an MA(1) is <span class="math display">\[\rho(h) = \begin{cases}
-~~1 &amp; h = 0 \\
-\frac{\theta}{1 + \theta^2} &amp; h = 1 \\
-~~0 &amp; \text{otherwise}
-\end{cases}
-\]</span> In practice of course the difference between decay and cut-off can be nebulous to detect but the interested reader is encouraged to explore the <code><a href="https://rdrr.io/r/stats/arima.sim.html">arima.sim()</a></code> function the look at the sample ACF with the <code><a href="https://rdrr.io/r/stats/acf.html">acf()</a></code> function. As you increase the sample size it will converge to the theoretical ACF value and you can start to see the structures just discussed.</p>
+<div class="page-columns page-full"><p>Now, both the linear trend and seasonal patterns are removed, leaving a stationary process suitable for modeling with an (0, 0, 1)(0, 0, 1) ARIMA model. When the differencing order for both seasonal and non-seasonal components is included, the model becomes (0, 1, 1)(0, 1, 1), often called the “airline model” after Box and Jenkins’ work.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn4"><p><sup>4</sup>&nbsp;The “airline model,” or the ARIMA(0, 1, 1)(0, 1, 1) model, was popularized by <span class="citation" data-cites="box1970time">Box and Jenkins (<a href="#ref-box1970time" role="doc-biblioref">1970</a>)</span> through their influential work in the field of time series analysis. This model is often associated with their seminal book “Time Series Analysis: Forecasting and Control.” First published in 1970, this book has been a foundational text in the field of time series analysis. The airline model, named for its application in modeling airline passenger data, exemplifies the application of Seasonal ARIMA modeling in practical scenarios.</p><div id="ref-box1970time" class="csl-entry" role="listitem">
+Box, George E. P., and Gwilym M. Jenkins. 1970. <em>Time Series Analysis: Forecasting and Control</em>. San Francisco: Holden-Day.
+</div></li></div></div>
+</section><section id="automated-arima-modeling" class="level2" data-number="5.3"><h2 data-number="5.3" class="anchored" data-anchor-id="automated-arima-modeling">
+<span class="header-section-number">5.3</span> Automated ARIMA modeling</h2>
+<p>By default, <code>seas()</code> invokes the <em>automdl</em> spec to perform an automated ARIMA model search.</p>
+<p>Unsurprisingly, the basic call to <code>seas(AirPassengers)</code> opts for the (0, 1, 1)(0, 1, 1) “airline model” that has its name from the series:</p>
 <div class="cell">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">x_AR</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/arima.sim.html">arima.sim</a></span><span class="op">(</span>model <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>ar <span class="op">=</span> <span class="fl">.75</span><span class="op">)</span>, n <span class="op">=</span> <span class="fl">300</span><span class="op">)</span></span>
-<span><span class="va">x_MA</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/arima.sim.html">arima.sim</a></span><span class="op">(</span>model <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>ma <span class="op">=</span> <span class="fl">.75</span><span class="op">)</span>, n <span class="op">=</span> <span class="fl">300</span><span class="op">)</span></span>
-<span><span class="fu">tsbox</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/tsbox/reference/ts_plot.html">ts_plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">x_AR</span>, <span class="va">x_MA</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">op</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">2</span>, <span class="fl">4</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/stats/acf.html">acf</a></span><span class="op">(</span><span class="va">x_AR</span>, xlab <span class="op">=</span> <span class="st">"h"</span>, main <span class="op">=</span> <span class="st">""</span><span class="op">)</span>; <span class="fu"><a href="https://rdrr.io/r/graphics/title.html">title</a></span><span class="op">(</span><span class="st">"ACF of AR(1) model"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/stats/acf.html">acf</a></span><span class="op">(</span><span class="va">x_MA</span>, xlab <span class="op">=</span> <span class="st">"h"</span>, main <span class="op">=</span> <span class="st">""</span><span class="op">)</span>; <span class="fu"><a href="https://rdrr.io/r/graphics/title.html">title</a></span><span class="op">(</span><span class="st">"ACF of MA(1) model"</span><span class="op">)</span></span>
-<span><span class="va">par</span> <span class="op">&lt;-</span> <span class="va">op</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="23-regARIMA_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="864"></p>
-</div>
-<div class="cell-output-display">
-<p><img src="23-regARIMA_files/figure-html/unnamed-chunk-6-2.png" class="img-fluid" width="864"></p>
-</div>
-</div>
-</section><section id="regression" class="level2" data-number="5.4"><h2 data-number="5.4" class="anchored" data-anchor-id="regression">
-<span class="header-section-number">5.4</span> Regression</h2>
-<p>We have discussed SARIMA modeling (both the SARMA and differencing), now we see how exogenous regression variables come into play.</p>
-<p>The regARIMA model takes the form <span class="math display">\[ f\left(\frac{Y_t}{D_t} \right) = \boldsymbol{\beta}^\prime {\mathbf X}_t + Z_t .\]</span> Here <span class="math inline">\(Y_t\)</span> is the observed time series. The function <span class="math inline">\(f\)</span> represents a transformation, most commonly used is the log transform ie <span class="math inline">\(f(x) = \log(x)\)</span>. <span class="math inline">\(D_t\)</span> is any intervention that has taken place prior to any transformation or modeling. This intervention is usually subjective and customized for individual series on an as-needed basis. For example, if a soybean farmer strike occurred and the soybean export series suffered for its duration. This type of event might adversely affect the seasonal adjustment filters and automatic model identification routines and can be mediated as an initial step. If no transformation or intervention is needed the model form is: <span class="math display">\[ Y_t = \underbrace{\boldsymbol{\beta}^\prime {\mathbf X}_t}_{\text{Regression}} + \underbrace{Z_t}_{\text{ARIMA}} .\]</span></p>
-<p>The regression variables appear in the columns of the design matrix <span class="math inline">\({\mathbf X}_t\)</span> and <span class="math inline">\(Z_t\)</span> is an ARIMA process. This last assumption on <span class="math inline">\(Z_t\)</span> is what distinguished a regARIMA model from more classic linear models and multiple linear regression where error terms are assumed uncorrelated.</p>
-<p>In order to achieve a suitable seasonal adjustment it is important to get the regARIMA model correct. For most dataset the built in automatic modeling features of the X13 program will be suitable to detect a reasonable model. This can be used as a starting point for more rigorous regARIMA model development or used as the final regARIMA modeling choice for your seasonal adjustment needs. We evoke automatic model identification through the XXX spec. The default behavior of the R seasonal package is XXX which includes automatic model identification.</p>
-<div class="callout callout-style-simple callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Automatic and manual model choice
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>As an aside, the general rule is to not use automatic modeling in production. This mean, if you are going to include seasonal adjustment as part of a large scale data processing that occurs regularly (say monthly), then it is not advisable to have automatic model identification run every month. Instead, an alternative process, is to run automodel once and then fix the model choice in the XXX spec file. This does not need to be done manually since the <code><a href="https://rdrr.io/pkg/seasonal/man/static.html">static()</a></code> function from the seasonal package can do this for you.</p>
-</div>
-</div>
-<table class="table">
-<thead><tr class="header">
-<th>Outlier Type</th>
-<th>Automatic Detection Available?</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td>Additive outliers (AO)</td>
-<td>Yes (default)</td>
-</tr>
-<tr class="even">
-<td>Level shifts (LS)</td>
-<td>Yes (default)</td>
-</tr>
-<tr class="odd">
-<td>Temporary level shifts (TL)</td>
-<td>Yes</td>
-</tr>
-<tr class="even">
-<td>Temporary changes (TC)</td>
-<td>No</td>
-</tr>
-<tr class="odd">
-<td>Ramps (RP, QI, QD)</td>
-<td>No</td>
-</tr>
-<tr class="even">
-<td>Seasonal outliers (SO)</td>
-<td>No</td>
-</tr>
-</tbody>
-</table></section><section id="case-study-airpassengers" class="level2" data-number="5.5"><h2 data-number="5.5" class="anchored" data-anchor-id="case-study-airpassengers">
-<span class="header-section-number">5.5</span> Case Study: AirPassengers</h2>
-<p>Consider the default seasonal adjustment:</p>
-<div class="cell">
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.seasonal.website">seasonal</a></span><span class="op">)</span></span>
-<span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">seasonal</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">AirPassengers</span>, x11 <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">m</span><span class="op">$</span><span class="va">spc</span><span class="op">$</span><span class="va">automdl</span><span class="op">)</span></span>
-<span><span class="co">#&gt; $print</span></span>
-<span><span class="co">#&gt; [1] "bestfivemdl"</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">m</span><span class="op">$</span><span class="va">spc</span><span class="op">$</span><span class="va">arima</span><span class="op">)</span></span>
-<span><span class="co">#&gt; NULL</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Notice the value <code>NULL</code> indicates no ARIMA model is specified and the returned arguments for the automdl spec indicate it is active during the X13 run.</p>
-<div class="cell">
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">seasonal</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/udg.html">udg</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"automdl"</span><span class="op">)</span></span>
-<span><span class="co">#&gt;          automdl </span></span>
-<span><span class="co">#&gt; "(0 1 1)(0 1 1)"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Indicates that automatic modeling identified the (0 1 1)(0 1 1) model as the best choice. If we want to hardcode this model for subsequent runs, and turn off automatic model identification, this can be done via</p>
-<div class="cell">
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_call</span> <span class="op">&lt;-</span> <span class="fu">seasonal</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/static.html">static</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
-<span><span class="co">#&gt; seas(</span></span>
-<span><span class="co">#&gt;   x = AirPassengers,</span></span>
-<span><span class="co">#&gt;   x11 = "",</span></span>
-<span><span class="co">#&gt;   regression.variables = c("td1coef", "easter[1]", "ao1951.May"),</span></span>
-<span><span class="co">#&gt;   arima.model = "(0 1 1)(0 1 1)",</span></span>
-<span><span class="co">#&gt;   regression.aictest = NULL,</span></span>
-<span><span class="co">#&gt;   outlier = NULL,</span></span>
-<span><span class="co">#&gt;   transform.function = "log"</span></span>
-<span><span class="co">#&gt; )</span></span>
-<span><span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/eval.html">eval</a></span><span class="op">(</span><span class="va">m_call</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>There are many options you can modify when searching for outliers in your series. Some of the most practical options to start your exploration are the <em>type</em>, <em>critical value</em> and <em>span</em> that you would like to search.</p>
-<p>Here is an example of using span to limit the outlier search to the last few years of a series:</p>
-<div class="cell">
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_span</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">AirPassengers</span>,</span>
-<span>  outlier.types <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ao"</span>, <span class="st">"ls"</span>, <span class="st">"tc"</span><span class="op">)</span>,</span>
-<span>  outlier.critical <span class="op">=</span> <span class="fl">4.0</span>,</span>
-<span>  outlier.span <span class="op">=</span> <span class="st">"1958.jan, "</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m_span</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Call:</span></span>
-<span><span class="co">#&gt; seas(x = AirPassengers, outlier.types = c("ao", "ls", "tc"), </span></span>
-<span><span class="co">#&gt;     outlier.critical = 4, outlier.span = "1958.jan, ")</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Coefficients:</span></span>
-<span><span class="co">#&gt;                    Estimate Std. Error z value Pr(&gt;|z|)    </span></span>
-<span><span class="co">#&gt; Weekday           -0.002644   0.000604  -4.377 1.20e-05 ***</span></span>
-<span><span class="co">#&gt; Easter[1]          0.021321   0.008395   2.540  0.01110 *  </span></span>
-<span><span class="co">#&gt; MA-Nonseasonal-01  0.235404   0.083756   2.811  0.00495 ** </span></span>
-<span><span class="co">#&gt; MA-Seasonal-12     0.543743   0.074644   7.284 3.23e-13 ***</span></span>
-<span><span class="co">#&gt; ---</span></span>
-<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; SEATS adj.  ARIMA: (0 1 1)(0 1 1)  Obs.: 144  Transform: log</span></span>
-<span><span class="co">#&gt; AICc: 965.3, BIC: 979.2  QS (no seasonality in final):    0  </span></span>
-<span><span class="co">#&gt; Box-Ljung (no autocorr.): 28.26   Shapiro (normality): 0.9829 .</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_nospan</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">AirPassengers</span>,</span>
-<span>  outlier.types <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ao"</span>, <span class="st">"ls"</span>, <span class="st">"tc"</span><span class="op">)</span>,</span>
-<span>  outlier.critical <span class="op">=</span> <span class="fl">4.0</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m_nospan</span><span class="op">)</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Call:</span></span>
-<span><span class="co">#&gt; seas(x = AirPassengers, outlier.types = c("ao", "ls", "tc"), </span></span>
-<span><span class="co">#&gt;     outlier.critical = 4)</span></span>
+<span><span class="co">#&gt; seas(x = AirPassengers)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Coefficients:</span></span>
 <span><span class="co">#&gt;                     Estimate Std. Error z value Pr(&gt;|z|)    </span></span>
@@ -535,10 +443,224 @@ Automatic and manual model choice
 <span><span class="co">#&gt; AICc: 947.3, BIC: 963.9  QS (no seasonality in final):    0  </span></span>
 <span><span class="co">#&gt; Box-Ljung (no autocorr.): 26.65   Shapiro (normality): 0.9908</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The default critical value is set based on the length of the outlier span. Notice the MA-Nonseasonal-01 value when comparing <code>m_span</code> with <code>m_nospan</code>. We see the choice of span, and ultimately the choise to include an outlier in your model can have a dramatic effect on the estimated regARIMA parameters.</p>
+<p>Technically, model identification starts with determining the appropriate level of differencing, both seasonal and non-seasonal. Following this, the procedure compares various ARIMA models and opts for one with a low information criterion. The <code>fivebestmdl()</code> function can be used to look into some contenders for ‘good models’. These models are ranked based on their Bayesian Information Criterion (BIC):</p>
+<div class="cell">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">fivebestmdl</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
+<span><span class="co">#&gt;            arima    bic</span></span>
+<span><span class="co">#&gt; 1 (0 1 0)(0 1 1) -4.007</span></span>
+<span><span class="co">#&gt; 2 (1 1 1)(0 1 1) -3.986</span></span>
+<span><span class="co">#&gt; 3 (0 1 1)(0 1 1) -3.979</span></span>
+<span><span class="co">#&gt; 4 (1 1 0)(0 1 1) -3.977</span></span>
+<span><span class="co">#&gt; 5 (0 1 2)(0 1 1) -3.970</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<!-- DISCUSS: not sure how useful for now... -->
+<!--
+
+
+## Optional: Fitting ARIMA models
+
+Here we present a very oversimplied way to start to understand what values of $p, P, q$ and $Q$ you can investigate for your time series of interest.
+Recall that earlier it was mentioned that using automatic model identification is sufficient for most to get an adequate seasonal adjustment.
+Hence, this is simply for the interested reader to begin to gain additional intuition into the stochastic structures involved in their series and the types of structures the automatic modeling procedures look at.
+One of the main tools in a time series analyist tool box is the autocorrelation function (ACF).
+This is a function that returns the correlation between observations $h$ time units apart throughout the entire sample.
+So for $h=2$ this means looking at the correlation between the pairs $(X_1, X_3), (X_2, X_4), (X_3, X_5), \ldots$.
+Then a way to build a SARIMA model is to match the sample ACF and the theoretical ACF of a given model.
+The main point distinguishing an AR($p$) and MA($q$) is how their theoretical ACF behaves.
+An AR($p$) will have ACF the has exponential decay as $h$ increases.
+For example, an AR(1) ACF is $$\rho(h) = \phi^h$$ An MA($q$) models ACF will be non-zero for the first $q$ lags and then cutoff to zero thereafter.
+The ACF of an MA(1) is $$\rho(h) = \begin{cases}
+~~1 & h = 0 \\
+\frac{\theta}{1 + \theta^2} & h = 1 \\
+~~0 & \text{otherwise}
+\end{cases}
+$$ In practice, of course, the difference between decay and cut-off can be nebulous to detect but the interested reader is encouraged to explore the `arima.sim()` function the look at the sample ACF with the `acf()` function.
+As you increase the sample size it will converge to the theoretical ACF value and you can start to see the structures just discussed.
+
+::: {.cell}
+
+```{.r .cell-code}
+x_AR <- arima.sim(model = list(ar = .75), n = 300)
+x_MA <- arima.sim(model = list(ma = .75), n = 300)
+tsbox::ts_plot(cbind(x_AR, x_MA))
+op <- par(mfrow = c(1, 2), mar = c(5, 2, 4, 2))
+acf(x_AR, xlab = "h", main = ""); title("ACF of AR(1) model")
+acf(x_MA, xlab = "h", main = ""); title("ACF of MA(1) model")
+par <- op
+```
+
+
+::: {.cell-output-display}
+![](23-regARIMA_files/figure-html/unnamed-chunk-8-1.png){width=864}
+:::
+
+::: {.cell-output-display}
+![](23-regARIMA_files/figure-html/unnamed-chunk-8-2.png){width=864}
+:::
+:::
+
+
+ -->
+</section><section id="regression" class="level2 page-columns page-full" data-number="5.4"><h2 data-number="5.4" class="anchored" data-anchor-id="regression">
+<span class="header-section-number">5.4</span> Regression</h2>
+<p>After ARIMA and differencing, the final element of regARIMA is the regression component. The regression component describes the effect of exogenous variables on the residuals of an ARIMA model.</p>
+<div class="page-columns page-full"><p>If no transformation or intervention is needed, the regARIMA model takes the following form:<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn5">
+<p>The left-hand side of an regARIMA can be transformed and adjusted for subjective interventions. In such cases, the regARIMA formula extends to:</p>
+<p><span class="math display">\[
+f\left(\frac{Y_t}{D_t} \right) = \boldsymbol{\beta}^\prime {\mathbf X}_t + Z_t
+\]</span></p>
+<p>The function <span class="math inline">\(f\)</span> represents a transformation, with the logarithmic transformation (<span class="math inline">\(f(x) = \log(x)\)</span>) being a common choice. <span class="math inline">\(D_t\)</span> represents any interventions applied before transformation or modeling. These interventions are often specific to each time series and are applied based on the unique circumstances of the data. For example, if an event like a soybean farmer strike affects the data series, this intervention can help adjust the data before further analysis.</p>
+</li></div></div>
+<p><span class="math display">\[
+Y_t = \underbrace{\boldsymbol{\beta}^\prime {\mathbf X}_t}_{\text{regression}} + \underbrace{Z_t}_{\text{ARIMA}}
+\]</span></p>
+<p>In this model, <span class="math inline">\(Y_t\)</span> is the observed time series. The regression component is <span class="math inline">\({\mathbf X}_t\)</span> and <span class="math inline">\(Z_t\)</span> represents the ARIMA process. The key difference between a regARIMA model and classical linear models is the assumption about <span class="math inline">\(Z_t\)</span>. In regARIMA, <span class="math inline">\(Z_t\)</span> is an ARIMA process, where in classic models the error terms are typically assumed to be uncorrelated.</p>
+<p>For effective seasonal adjustment, it’s crucial to accurately specify the regARIMA model. Often, the automated modeling capabilities of X-13 are sufficient for determining a suitable model. This auto-generated model can also act as a starting point for further refinement of the regARIMA model. The <em>seasonal</em> package incorporates the automatic identification feature by default, and makes the process user-friendly and streamlined.</p>
+</section><section id="automated-regressor-identification" class="level2" data-number="5.5"><h2 data-number="5.5" class="anchored" data-anchor-id="automated-regressor-identification">
+<span class="header-section-number">5.5</span> Automated regressor identification</h2>
+<p>By default, the <code>seas()</code> command performs various automated regressor tests:</p>
+<ul>
+<li>Outlier</li>
+<li>Irregular Holidays (Easter)</li>
+<li>Weekday regressors</li>
+</ul>
+<p>For example, the basic call to <code>seas()</code> reveals the presence of Weekday, Easter and Outlier effects in the <code>AirPassengers</code> data:</p>
+<div class="cell">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; seas(x = AirPassengers)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients:</span></span>
+<span><span class="co">#&gt;                     Estimate Std. Error z value Pr(&gt;|z|)    </span></span>
+<span><span class="co">#&gt; Weekday           -0.0029497  0.0005232  -5.638 1.72e-08 ***</span></span>
+<span><span class="co">#&gt; Easter[1]          0.0177674  0.0071580   2.482   0.0131 *  </span></span>
+<span><span class="co">#&gt; AO1951.May         0.1001558  0.0204387   4.900 9.57e-07 ***</span></span>
+<span><span class="co">#&gt; MA-Nonseasonal-01  0.1156204  0.0858588   1.347   0.1781    </span></span>
+<span><span class="co">#&gt; MA-Seasonal-12     0.4973600  0.0774677   6.420 1.36e-10 ***</span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; SEATS adj.  ARIMA: (0 1 1)(0 1 1)  Obs.: 144  Transform: log</span></span>
+<span><span class="co">#&gt; AICc: 947.3, BIC: 963.9  QS (no seasonality in final):    0  </span></span>
+<span><span class="co">#&gt; Box-Ljung (no autocorr.): 26.65   Shapiro (normality): 0.9908</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We will cover these regressors in more detail in later chapters. The decision whether to include a regressor is typically left to an augmented AIC test, which we will cover in FIXME.</p>
+<p>In production, the general rule is to <em>not</em> use automatic modeling. This implies that if you plan to include seasonal adjustment as part of a regular, large-scale data processing routine (such as monthly operations), it’s not recommended to run automatic model identification each month. A better approach is to use automatic model selection once and then set the chosen model permanently in the specification. The <code>static()</code> function from the <em>seasonal</em> package can automate this process.</p>
+<!-- Perhaps move to outlier? -->
+<!--
+
+
+| Outlier Type                | Automatic Detection Available? |
+|-----------------------------|--------------------------------|
+| Additive outliers (AO)      | Yes (default)                  |
+| Level shifts (LS)           | Yes (default)                  |
+| Temporary level shifts (TL) | Yes                            |
+| Temporary changes (TC)      | No                             |
+| Ramps (RP, QI, QD)          | No                             |
+| Seasonal outliers (SO)      | No                             |
+
+ -->
+</section><section id="case-study-airpassengers" class="level2" data-number="5.6"><h2 data-number="5.6" class="anchored" data-anchor-id="case-study-airpassengers">
+<span class="header-section-number">5.6</span> Case Study: <code>AirPassengers</code>
+</h2>
+<p>Once again, consider the default seasonal adjustment:</p>
+<div class="cell">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, x11 <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m1</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; seas(x = AirPassengers, x11 = "")</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients:</span></span>
+<span><span class="co">#&gt;                     Estimate Std. Error z value Pr(&gt;|z|)    </span></span>
+<span><span class="co">#&gt; Weekday           -0.0029497  0.0005232  -5.638 1.72e-08 ***</span></span>
+<span><span class="co">#&gt; Easter[1]          0.0177674  0.0071580   2.482   0.0131 *  </span></span>
+<span><span class="co">#&gt; AO1951.May         0.1001558  0.0204387   4.900 9.57e-07 ***</span></span>
+<span><span class="co">#&gt; MA-Nonseasonal-01  0.1156204  0.0858588   1.347   0.1781    </span></span>
+<span><span class="co">#&gt; MA-Seasonal-12     0.4973600  0.0774677   6.420 1.36e-10 ***</span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; X11 adj.  ARIMA: (0 1 1)(0 1 1)  Obs.: 144  Transform: log</span></span>
+<span><span class="co">#&gt; AICc: 947.3, BIC: 963.9  QS (no seasonality in final):    0  </span></span>
+<span><span class="co">#&gt; Box-Ljung (no autocorr.): 26.65   Shapiro (normality): 0.9908  </span></span>
+<span><span class="co">#&gt; Messages generated by X-13:</span></span>
+<span><span class="co">#&gt; Warnings:</span></span>
+<span><span class="co">#&gt; - Visually significant seasonal and trading day peaks have</span></span>
+<span><span class="co">#&gt;   been found in one or more of the estimated spectra.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This time, we are using the X-11 method, rather than SEATS, which is the default in <em>seasonal</em>. (We will cover the distinction between X-11 and SEATS in the next chapters.) We can see from the summary that X-13 has opted for an (0 1 1)(0 1 1) ARIMA model. The <code>udg()</code> is an accessor function for many statistics, and can be used to extract the model directly:</p>
+<div class="cell">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">seasonal</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/udg.html">udg</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"automdl"</span><span class="op">)</span></span>
+<span><span class="co">#&gt;          automdl </span></span>
+<span><span class="co">#&gt; "(0 1 1)(0 1 1)"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>If we want to hard-code this model for subsequent runs, and turn off automatic model identification, this can be done via</p>
+<div class="cell">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">static</span><span class="op">(</span><span class="va">m1</span><span class="op">)</span></span>
+<span><span class="co">#&gt; seas(</span></span>
+<span><span class="co">#&gt;   x = AirPassengers,</span></span>
+<span><span class="co">#&gt;   x11 = "",</span></span>
+<span><span class="co">#&gt;   regression.variables = c("td1coef", "easter[1]", "ao1951.May"),</span></span>
+<span><span class="co">#&gt;   arima.model = "(0 1 1)(0 1 1)",</span></span>
+<span><span class="co">#&gt;   regression.aictest = NULL,</span></span>
+<span><span class="co">#&gt;   outlier = NULL,</span></span>
+<span><span class="co">#&gt;   transform.function = "log"</span></span>
+<span><span class="co">#&gt; )</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>If you run this code in R, you will get the same result as with the original specification.</p>
+<p><em>seasonal</em> allows you to use all options available in X-13. In the following, we want to explore the use of <code>outlier.span</code> to fine-tune automated outlier detection. With the <code>span</code> option, you can limit the outlier detection to a certain time span. Note from previous chapters that we combine spec names and spec arguments by a dot (<code>.</code>).</p>
+<p>We also set <code>outlier.critical</code> manually to override the default value that adjusts to the length of the outlier span:</p>
+<div class="cell">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_span</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>,</span>
+<span>  outlier.critical <span class="op">=</span> <span class="fl">4.0</span>,</span>
+<span>  outlier.span <span class="op">=</span> <span class="st">"1958.jan, "</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m_span</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; seas(x = AirPassengers, outlier.critical = 4, outlier.span = "1958.jan, ")</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients:</span></span>
+<span><span class="co">#&gt;                    Estimate Std. Error z value Pr(&gt;|z|)    </span></span>
+<span><span class="co">#&gt; Weekday           -0.002644   0.000604  -4.377 1.20e-05 ***</span></span>
+<span><span class="co">#&gt; Easter[1]          0.021321   0.008395   2.540  0.01110 *  </span></span>
+<span><span class="co">#&gt; MA-Nonseasonal-01  0.235404   0.083756   2.811  0.00495 ** </span></span>
+<span><span class="co">#&gt; MA-Seasonal-12     0.543743   0.074644   7.284 3.23e-13 ***</span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; SEATS adj.  ARIMA: (0 1 1)(0 1 1)  Obs.: 144  Transform: log</span></span>
+<span><span class="co">#&gt; AICc: 965.3, BIC: 979.2  QS (no seasonality in final):    0  </span></span>
+<span><span class="co">#&gt; Box-Ljung (no autocorr.): 28.26   Shapiro (normality): 0.9829 .</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_nospan</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>,</span>
+<span>  outlier.critical <span class="op">=</span> <span class="fl">4.0</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m_nospan</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; seas(x = AirPassengers, outlier.critical = 4)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients:</span></span>
+<span><span class="co">#&gt;                     Estimate Std. Error z value Pr(&gt;|z|)    </span></span>
+<span><span class="co">#&gt; Weekday           -0.0029497  0.0005232  -5.638 1.72e-08 ***</span></span>
+<span><span class="co">#&gt; Easter[1]          0.0177674  0.0071580   2.482   0.0131 *  </span></span>
+<span><span class="co">#&gt; AO1951.May         0.1001558  0.0204387   4.900 9.57e-07 ***</span></span>
+<span><span class="co">#&gt; MA-Nonseasonal-01  0.1156204  0.0858588   1.347   0.1781    </span></span>
+<span><span class="co">#&gt; MA-Seasonal-12     0.4973600  0.0774677   6.420 1.36e-10 ***</span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; SEATS adj.  ARIMA: (0 1 1)(0 1 1)  Obs.: 144  Transform: log</span></span>
+<span><span class="co">#&gt; AICc: 947.3, BIC: 963.9  QS (no seasonality in final):    0  </span></span>
+<span><span class="co">#&gt; Box-Ljung (no autocorr.): 26.65   Shapiro (normality): 0.9908</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>By limiting the span for outlier detection to the last 3 years, we don’t allow the procedure to detect the additive outlier in 1951. As we can see, small changes in outlier identification can have a substantial effect on the estimated regARIMA parameters.</p>
 <!-- ## Case study 2 -->
 <!-- Decide if you should include AO in May 2014. -->
 <!-- Construct a simple user defined regressor to handle specific issue. -->
+
 
 
 </section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">

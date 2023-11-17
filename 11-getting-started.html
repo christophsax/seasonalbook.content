@@ -336,34 +336,27 @@ div.csl-indent {
   </div>
   
 
-</header><div class="status">
-<div class="callout callout-style-simple callout-note">
-<div class="callout-body d-flex">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-body-container">
-<p>You are reading an early draft of <em>Seasonal Adjustment in R</em>. This chapter is complete enough as an education tool and can be used in a course. It needs additional polishing.</p>
-<p><strong>It is part of the course materials intended for Dec 21, 2022</strong>.</p>
-</div>
-</div>
-</div>
-</div>
+</header><pre><code>Loading required package: tibble</code></pre>
+<pre><code>
+Attaching package: 'tibble'</code></pre>
+<pre><code>The following object is masked from 'package:seasonal':
+
+    view</code></pre>
 <section id="installation" class="level2 page-columns page-full" data-number="2.1"><h2 data-number="2.1" class="anchored" data-anchor-id="installation">
 <span class="header-section-number">2.1</span> Installation</h2>
 <p>If you use R, installing X-13ARIMA-SEATS from CRAN is as easy as installing any other R package <span class="citation" data-cites="jss">(<a href="#ref-jss" role="doc-biblioref">Sax and Eddelbuettel 2018</a>)</span>:</p>
 <div class="no-row-height column-margin column-container"><div id="ref-jss" class="csl-entry" role="listitem">
 Sax, Christoph, and Dirk Eddelbuettel. 2018. <span>“Seasonal Adjustment by <span>X-13ARIMA-SEATS</span> in <span>R</span>.”</span> <em>Journal of Statistical Software</em> 87 (11): 1–17. <a href="https://doi.org/10.18637/jss.v087.i11">https://doi.org/10.18637/jss.v087.i11</a>.
-</div></div><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"seasonal"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"seasonal"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section><section id="sec-a-minimal-example" class="level2" data-number="2.2"><h2 data-number="2.2" class="anchored" data-anchor-id="sec-a-minimal-example">
 <span class="header-section-number">2.2</span> A minimal example</h2>
 <p>Once the package is installed, you can load it in the usual way:</p>
 <div class="cell">
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.seasonal.website">seasonal</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.seasonal.website">seasonal</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The <code><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas()</a></code> function provides the core functionality of the package. By default, <code>seas</code> calls the automatic procedures of X-13 to perform a seasonal adjustment that works well in most circumstances:</p>
 <div class="cell">
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; seas(x = AirPassengers)</span></span>
@@ -376,11 +369,11 @@ Sax, Christoph, and Dirk Eddelbuettel. 2018. <span>“Seasonal Adjustment by <sp
 </div>
 <p>The first argument of seas is a time series of class <code>ts</code>. <code>ts</code> objects are frequently used in base R and are useful to store monthly, quarterly, or annual data. We restrict our attention to monthly and quarterly series. This is done for two reasons; first is these are the main frequencies handled by X-13, second, this sampling frequency make conceptual understanding of statistical methods, such as linear filters, easier to grasp. The <code>AirPassengers</code> example series is included in base R and shows monthly totals of international airline passengers from 1949 to 1960. <code><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas()</a></code> returns a <code>seas</code> object that contains the necessary information on the adjustment performed on this time series; we can assign it to a variable:</p>
 <div class="cell">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>There are several functions and methods for <code>"seas"</code> objects. The final function returns the adjusted series. The plot method shows a plot with the unadjusted and the adjusted series.</p>
 <div class="cell">
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="11-getting-started_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="864"></p>
 </div>
@@ -389,7 +382,7 @@ Sax, Christoph, and Dirk Eddelbuettel. 2018. <span>“Seasonal Adjustment by <sp
 <p>This constitutes a crucial point about seasonal adjustment: It only removes regular, predictable movements, not irregular ones. In the adjusted series, we can see a decrease in airline passengers in 1953 and between 1957 and 1958. These decreases were difficult to discover in the original series.</p>
 <p>The summary method displays an overview of the model, very similar to the one produced by other R classes (eg <code>lm</code> or <code>numeric</code>):</p>
 <div class="cell">
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; seas(x = AirPassengers)</span></span>
