@@ -179,5 +179,14 @@ Revisions
     One does not want to get a different series with a new data point.
     X-13 offers tools to analyze revisions.
     @sec-revisions discusses them and helps you to decide which model to pick.
+    
+### Exercises
+
+1. Run the following code:
+```
+m <- seas(unemp)
+plot(m)
+```
+Why is the seasonally adjusted series not entirely smooth?
 
 ## References
