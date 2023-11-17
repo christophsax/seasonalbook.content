@@ -237,7 +237,7 @@ summary(seas(AirPassengers))
 ```
 
 We will cover these regressors in more detail in later chapters.
-The decision whether to include a regressor is typically left to an augmented AIC test, which we will cover in FIXME.
+The decision whether to include a regressor is typically left to an augmented AICc test, which we already covered in @sec-auto-transform.
 
 In production, the general rule is to *not* use automatic modeling.
 This implies that if you plan to include seasonal adjustment as part of a regular, large-scale data processing routine (such as monthly operations), it's not recommended to run automatic model identification each month.

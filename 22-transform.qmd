@@ -68,14 +68,14 @@ Since these are factors, the goal of seasonal adjustment is to remove seasonalit
 
 $$A_t = \frac{Y_t}{S_t}.$$
 
-For example, an observed value of 100 with a seasonal factor of 1.08 would result in a seasonally adjusted value of 100 / 1.08 = 92.59259.
+For example, an observed value of 100 with a seasonal factor of 1.08 would result in a seasonally adjusted value of 100 / 1.08 = 92.6.
 Hence for multiplicative models, values of $S_t > 1$ decrease the observed value, and $S_t < 1$ increase it.
 Keep this in mind when viewing seasonal factors such as in the function `monthplot(m)`.
 
 For a multiplicative adjustment, it is sufficient to take logarithms of the initial series and re-transform the results after the decomposition.
 The `transform` spec takes care of this.
 
-## Automated transformation choice
+## Automated transformation choice {#sec-auto-transform}
 
 X-13 has a built-in statistical test to decide between log and no transformation.
 The choice is made by comparing the AICc[^22-transform-1] value of an ARIMA (0 1 1)(0 1 1) model fit, or a user-specified ARIMA model, to the log-transformed series and the original series.
@@ -171,7 +171,7 @@ If you want to extract the seasonal factor directly into R, you can use the `ser
 series(m, "seats.seasonal")
 ```
 
-## Case Study: More difficult decision
+## Case Study: A more difficult decision
 
 Consider the situation where you are trying to decide on transform choices for monthly retail grocery store data.
 The series `grocery` is part of the *seasonalbook* package.
@@ -204,3 +204,10 @@ Suppose you were to change this option to `transform.aicdiff = 0`, then the prog
 m2 <- seas(grocery, x11 = "", transform.aicdiff = 2)
 transformfunction(m2)
 ```
+
+## Exercises
+
+1. Use *seasonal* to perform an automated seasonal adjustment of `mdeaths`.
+
+2. Compute `"aictest.trans.aicc.nolog"` and `"aictest.trans.aicc.log"` and compare these values.
+
