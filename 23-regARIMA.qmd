@@ -26,7 +26,7 @@ An ARIMA model with external regressors (regARIMA) lies at the heart of many of 
 As we have seen in chapter FIXME, regARIMA consists of several interacting specs.
 Some of the these specs will be further detailed in later chapters (Outlier, Trading Days).
 
-Like most statistical modeling in X-13, the process to find the best model is iterative.
+Like most statistical modeling in X-13, the process of finding the best model is iterative.
 Analysts use statistical tools and their expertise to fine-tune the regARIMA model.
 This iterative process is visualized in the flow chart below.
 
@@ -43,7 +43,7 @@ flowchart TD
   D --> A
 ```
 
-Once a satisfiying regARIMA has been found, one proceeds to the seasonal adjustment step.
+Once a satisfying regARIMA has been found, one proceeds to the seasonal adjustment step.
 The regARIMA model is crucial in forecasting the time series for applying symmetric filters and extracting components, whether using SEATS or X-11 for seasonal adjustment.
 In addition, in SEATS, the ARIMA model is also used to derive trend, seasonal, and irregular components.
 
@@ -85,21 +85,21 @@ and uses the current and one lagged error term.[^23-regarima-2]
 
 An ARMA(p, q) model combines these AR and MA components, using $p$ lagged values of the series and $q$ lagged error terms.
 In practice, X13's automatic modeling usually finds appropriate $p$ and $q$ values.
-However, it worth paying attention to correctly set the differencing and regression variables for seasonal adjustment.
+However, it is worth paying attention to correctly set the differencing and regression variables for seasonal adjustment.
 
 ## Differencing
 
 ARMA models are most effective with stationary time series, where both the mean and correlation structure do not vary over time.
 For non-stationary time series, transforming them into stationary ones is essential, and differencing is a widely used method for this purpose.
 It is known that differencing a series $k$ times can remove a polynomial trend of degree $k$.
-Therefore, first differencing is effective for a series with a linear trend, while second differencing works for a series with a quadratic trend.
+Therefore, the first differencing is effective for a series with a linear trend, while the second differencing works for a series with a quadratic trend.
 
 Seasonal patterns might also require seasonal differencing to achieve stationarity.
 The orders of differencing for the non-seasonal and seasonal parts are denoted as $d$ and $D$, respectively.
 Combining these with the stochastic model specification gives the notation SARIMA(p, d, q)(P, D, Q), where $p$, $d$, $q$ are non-seasonal parameters, and $P$, $D$, $Q$ are seasonal.[^23-regarima-3]:
 
 [^23-regarima-3]: The "S" in SARIMA stands for seasonal.
-    Since most of the ARIMA models within X-13 are seasonal, we will restrain from using the term and usueally refer to an ARIMA model of the structure (p, d, q)(P, D, Q).
+    Since most of the ARIMA models within X-13 are seasonal, we will restrain from using the term and usually refer to an ARIMA model of the structure (p, d, q)(P, D, Q).
 
 $$\text{SARIMA}\underbrace{(p, d, q)}_{\text{non-seasonal }}\underbrace{(P, D, Q)}_{\text{seasonal}}.$$
 
@@ -139,7 +139,7 @@ When the differencing order for both seasonal and non-seasonal components is inc
 
 ## Automated ARIMA modeling
 
-By default, `seas()` invoces the *automdl* spec to perform an automated ARIMA model search.
+By default, `seas()` invokes the *automdl* spec to perform an automated ARIMA model search.
 
 Unsurprisingly, the basic call to `seas(AirPassengers)` opts for the (0, 1, 1)(0, 1, 1) "airline model" that has its name from the series:
 
@@ -149,7 +149,7 @@ summary(m)
 ```
 
 Technically, model identification starts with determining the appropriate level of differencing, both seasonal and non-seasonal.
-Following this, the procedure compares various arima models and opts for one with a low information criterion.
+Following this, the procedure compares various ARIMA models and opts for one with a low information criterion.
 The `fivebestmdl()` function can be used to look into some contenders for 'good models'.
 These models are ranked based on their Bayesian Information Criterion (BIC):
 
@@ -180,7 +180,7 @@ The ACF of an MA(1) is $$\rho(h) = \begin{cases}
 \frac{\theta}{1 + \theta^2} & h = 1 \\
 ~~0 & \text{otherwise}
 \end{cases}
-$$ In practice of course the difference between decay and cut-off can be nebulous to detect but the interested reader is encouraged to explore the `arima.sim()` function the look at the sample ACF with the `acf()` function.
+$$ In practice, of course, the difference between decay and cut-off can be nebulous to detect but the interested reader is encouraged to explore the `arima.sim()` function the look at the sample ACF with the `acf()` function.
 As you increase the sample size it will converge to the theoretical ACF value and you can start to see the structures just discussed.
 
 ```{r}
@@ -201,11 +201,9 @@ par <- op
 After ARIMA and differencing, the final element of regARIMA is the regression component.
 The regression component describes the effect of exogenous variables on the residuals of an ARIMA model.
 
-We have discussed both the ARIMA modeling (both the SARMA and differencing), now we see how exogenous regression variables come into play.
-
 If no transformation or intervention is needed, the regARIMA model takes the following form:[^23-regarima-5]
 
-[^23-regarima-5]: The left hand side of an regARIMA can be transformed and adjusted for subjective interventions.
+[^23-regarima-5]: The left-hand side of an regARIMA can be transformed and adjusted for subjective interventions.
     In such cases, the regARIMA formula extends to:
 
     $$
@@ -227,8 +225,8 @@ The key difference between a regARIMA model and classical linear models is the a
 In regARIMA, $Z_t$ is an ARIMA process, where in classic models the error terms are typically assumed to be uncorrelated.
 
 For effective seasonal adjustment, it's crucial to accurately specify the regARIMA model.
-In many cases, the automated modeling capabilities of X-13 are sufficient for determining a suitable model.
-This auto-generated model can also act as an starting point for further refinement of the regARIMA model.
+Often, the automated modeling capabilities of X-13 are sufficient for determining a suitable model.
+This auto-generated model can also act as a starting point for further refinement of the regARIMA model.
 The *seasonal* package incorporates the automatic identification feature by default, and makes the process user-friendly and streamlined.
 
 ## Automated regressor identification
@@ -246,7 +244,7 @@ summary(seas(AirPassengers))
 ```
 
 We will cover these regressors in more detail in later chapters.
-The decision wheter to include a regressor is typically left to an augmented AIC test, which we will cover in FIXME.
+The decision whether to include a regressor is typically left to an augmented AIC test, which we will cover in FIXME.
 
 In production, the general rule is to *not* use automatic modeling.
 This implies that if you plan to include seasonal adjustment as part of a regular, large-scale data processing routine (such as monthly operations), it's not recommended to run automatic model identification each month.
@@ -270,7 +268,7 @@ The `static()` function from the *seasonal* package can automate this process.
 
  -->
 ```
-## Case Study: AirPassengers
+## Case Study: `AirPassengers`
 
 Once again, consider the default seasonal adjustment:
 
@@ -287,7 +285,7 @@ The `udg()` is an accessor function for many statistics, and can be used to extr
 seasonal::udg(m, "automdl")
 ```
 
-If we want to hardcode this model for subsequent runs, and turn off automatic model identification, this can be done via
+If we want to hard-code this model for subsequent runs, and turn off automatic model identification, this can be done via
 
 ```{r}
 static(m1)
@@ -295,7 +293,7 @@ static(m1)
 
 If you run this code in R, you will get the same result as with the original specification.
 
-seasonal allows you to use all options available in X-13.
+*seasonal* allows you to use all options available in X-13.
 In the following, we want to explore the use of `outlier.span` to fine-tune automated outlier detection.
 With the `span` option, you can limit the outlier detection to a certain time span.
 Note from previous chapters that we combine spec names and spec arguments by a dot (`.`).
