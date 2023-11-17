@@ -294,15 +294,19 @@ Note from previous chapters that we combine spec names and spec arguments by a d
 We also set `outlier.critical` manually to override the default value that adjusts to the length of the outlier span:
 
 ```{r}
-m_span <- seas(AirPassengers,
+m_span <- seas(
+  AirPassengers,
   outlier.critical = 4.0,
-  outlier.span = "1958.jan, ")
+  outlier.span = "1958.jan, "
+)
 summary(m_span)
 ```
 
 ```{r}
-m_nospan <- seas(AirPassengers,
-  outlier.critical = 4.0)
+m_nospan <- seas(
+  AirPassengers,
+  outlier.critical = 4.0
+)
 summary(m_nospan)
 ```
 
@@ -314,3 +318,18 @@ As we can see, small changes in outlier identification can have a substantial ef
 <!-- Decide if you should include AO in May 2014. -->
 
 <!-- Construct a simple user defined regressor to handle specific issue. -->
+
+## Exercises
+
+1. Use *seasonal* to perform an automated seasonal adjusmtent of `fdeaths`.
+
+2. Inspect the model: What is the degree of seasonal and non-seasonal
+differentiation, what are the seasonal and non-seasonal AR and MA orders?
+
+3. Use the `static()` function to substitute the automatic procedures in the model call by the choices they made.
+
+4. Bonus: re-estimate 1, using R base `arima()` function. Why do the coefficients differ?
+
+
+
+
