@@ -68,6 +68,26 @@ status <- function(type, date = as.Date(NA), section = "") {
   ))
 }
 
+
+todo <- function(x, assignee = "both") {
+  ans <- glue::glue(
+    "
+::: {{.callout-note}}
+
+### Todo
+
+{x}
+
+**Assignee: {assignee}**
+
+:::
+
+    "
+  )
+  cat(ans)
+}
+
+
 # Unclear what's a good way to share date between qmd. This writes a file
 # to ~ for now.
 # append_df(refresh = TRUE)          # delete

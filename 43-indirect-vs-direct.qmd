@@ -93,8 +93,15 @@ In the following, we use an 8 core Mac and gain a more than 4 times speed gain.
 
 ``` r
 library(furrr)
-plan(multisession, workers = future::nbrOfWorkers())
-system.time(future_map(many, seas))
+plan(multisession, workers = 8)
+ans <- future_map(many, \(x) qs(seas(x))[1])
+
+
+dplyr::tibble(
+    ~id,      ~name,                       ~source, ~freq, ~data,
+    "sdfasd", "Airline Passenger Numbers", "R",     12,     AirPassengers
+)
+
 #   user  system elapsed
 #  0.171   0.008   4.081
 ```
@@ -108,6 +115,8 @@ Here, multiple cores share the same memory, without having to start separate ses
 library(furrr)
 plan(multicore, workers = future::nbrOfWorkers())
 system.time(future_map(many, seas))
+
+
 #   user  system elapsed
 # 23.389   1.704   3.508
 ```

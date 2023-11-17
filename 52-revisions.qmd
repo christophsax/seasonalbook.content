@@ -43,7 +43,33 @@ This avoids issues with changing signs.
 
 The analogous quantities are defined for trend and seasonally adjusted series.
 
-NEED TO ADD TREND and MONTH_TO_MONTH CHANGE OUTPUT.
+
+
+
+
+```{r}
+#| results: "asis"
+#| echo: false
+todo("NEED TO ADD TREND and MONTH_TO_MONTH CHANGE OUTPUT.", "james")
+```
+
+
+
+```{r}
+#| results: "asis"
+#| echo: false
+todo("Fix todo and add to seasonalbook", "christoph")
+```
+
+
+
+```{r}
+#| results: "asis"
+#| echo: false
+todo("Move content belwo to regArima", "james")
+```
+
+
 
 ### History Spec
 
