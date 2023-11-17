@@ -113,6 +113,23 @@ Now, both the linear trend and seasonal patterns are removed, leaving a stationa
 [^airline]: The "airline model," or the ARIMA(0, 1, 1)(0, 1, 1) model, was popularized by @box1970time through their influential work in the field of time series analysis. This model is often associated with their seminal book "Time Series Analysis: Forecasting and Control." First published in 1970, this book has been a foundational text in the field of time series analysis. The airline model, named for its application in modeling airline passenger data, exemplifies the application of Seasonal ARIMA modeling in practical scenarios.
 
 
+## Automated ARIMA modeling
+
+By default, `seas()` invoces the *automdl* spec to perform an automated ARIMA model search.
+
+Unsurprisingly, the basic call to `seas(AirPassengers)` opts for the (0, 1, 1)(0, 1, 1) "airline model" that has its name from the series:
+
+```{r}
+m <- seas(AirPassengers)
+summary(m)
+```
+
+Technically, model identification starts with determining the appropriate level of differencing, both seasonal and non-seasonal. Following this, the procedure compares various arima models and opts for one with a low information criterion. The `fivebestmdl()` function can be used to look into some contenders for 'good models'. These models are ranked based on their Bayesian Information Criterion (BIC):
+
+```{r}
+fivebestmdl(m)
+```
+
 <!-- DISCUSS: not sure how useful for now... -->
 <!--
 
@@ -154,8 +171,6 @@ par <- op
 
 After ARIMA and differencing, the final element of regARIMA is the regression component. The regression component describes the effect of exogenous variables on the residuals of an ARIMA model.
 
-
-
 We have discussed both the ARIMA modeling (both the SARMA and differencing), now we see how exogenous regression variables come into play.
 
 If no transformation or intervention is needed, the regARIMA model takes the following form:[^transform]
@@ -183,13 +198,28 @@ The key difference between a regARIMA model and classical linear models is the a
 For effective seasonal adjustment, it's crucial to accurately specify the regARIMA model. In many cases, the automated modeling capabilities of X-13 are sufficient for determining a suitable model. This auto-generated model can also act as an starting point for further refinement of the regARIMA model. The *seasonal* package incorporates the automatic identification feature by default, and makes the process user-friendly and streamlined.
 
 
-::: callout-tip
-## Automatic and manual model choice
+## Automated regressor identification
+
+By default, the `seas()` command performs various automated regressor tests:
+
+- Outlier
+- Irregular Holidays (Easter)
+- Weekday regressors
+
+For example, the basic call to `seas()` reveals the presence of Weekday, Easter and Outlier effects in the `AirPassengers` data:
+
+```{r}
+summary(seas(AirPassengers))
+```
+We will cover these regressors in more detail in later chapters.
+The decision wheter to include a regressor is typically left to an augmented AIC test, which we will cover in FIXME.
 
 In production, the general rule is to *not* use automatic modeling.
 This implies that if you plan to include seasonal adjustment as part of a regular, large-scale data processing routine (such as monthly operations), it's not recommended to run automatic model identification each month. A better approach is to use automatic model selection once and then set the chosen model permanently in the specification. The `static()` function from the *seasonal* package can automate this process.
-:::
 
+
+<!-- Perhaps move to outlier? -->
+<!--
 
 
 | Outlier Type                | Automatic Detection Available? |
@@ -201,39 +231,39 @@ This implies that if you plan to include seasonal adjustment as part of a regula
 | Ramps (RP, QI, QD)          | No                             |
 | Seasonal outliers (SO)      | No                             |
 
+ -->
+
 ## Case Study: AirPassengers
 
-Consider the default seasonal adjustment:
+Once again, consider the default seasonal adjustment:
 
 ```{r}
-library(seasonal)
-m <- seasonal::seas(AirPassengers, x11 = "")
-print(m$spc$automdl)
-print(m$spc$arima)
+m1 <- seas(AirPassengers, x11 = "")
+summary(m1)
 ```
 
-Notice the value `NULL` indicates no ARIMA model is specified and the returned arguments for the automdl spec indicate it is active during the X13 run.
+This time, we are using the X-11 method, rather than SEATS, which is the default in *seasonal*. (We will cover the distinction between X-11 and SEATS in the next chapters.)
+We can see from the summary that X-13 has opted for an (0 1 1)(0 1 1) ARIMA model. The `udg()` is an accessor function for many statistics, and can be used to extract the model directly:
 
 ```{r}
 seasonal::udg(m, "automdl")
 ```
 
-Indicates that automatic modeling identified the (0 1 1)(0 1 1) model as the best choice.
 If we want to hardcode this model for subsequent runs, and turn off automatic model identification, this can be done via
 
 ```{r}
-m_call <- seasonal::static(m)
-m2 <- eval(m_call)
+static(m1)
 ```
 
-There are many options you can modify when searching for outliers in your series.
-Some of the most practical options to start your exploration are the *type*, *critical value* and *span* that you would like to search.
+If you run this code in R, you will get the same result as with the original specification.
 
-Here is an example of using span to limit the outlier search to the last few years of a series:
+seasonal allows you to use all options available in X-13. In the following, we want to explore the use of `outlier.span` to fine-tune automated outlier detection.
+With the `span` option, you can limit the outlier detection to a certain time span. Note from previous chapters that we combine spec names and spec arguments by a dot (`.`).
+
+We also set `outlier.critical` manually to override the default value that adjusts to the length of the outlier span:
 
 ```{r}
 m_span <- seas(AirPassengers,
-  outlier.types = c("ao", "ls", "tc"),
   outlier.critical = 4.0,
   outlier.span = "1958.jan, ")
 summary(m_span)
@@ -241,14 +271,12 @@ summary(m_span)
 
 ```{r}
 m_nospan <- seas(AirPassengers,
-  outlier.types = c("ao", "ls", "tc"),
   outlier.critical = 4.0)
 summary(m_nospan)
 ```
 
-The default critical value is set based on the length of the outlier span.
-Notice the MA-Nonseasonal-01 value when comparing `m_span` with `m_nospan`.
-We see the choice of span, and ultimately the choise to include an outlier in your model can have a dramatic effect on the estimated regARIMA parameters.
+By limiting the span for outlier detection to the last 3 years, we don't allow the procedure to detect the additive outlier in 1951.
+As we can see, small changes in outlier identification can have a substantial effect on the estimated regARIMA parameters.
 
 <!-- ## Case study 2 -->
 
