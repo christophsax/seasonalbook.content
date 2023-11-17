@@ -60,7 +60,7 @@ status <- function(type, date = as.Date(NA), section = "") {
     "\n",
     ":::: status\n",
     "::: callout-", class, " \n",
-    "You are reading an early draft of *Seasonal Adjustment in R*. ",
+    "You are reading a draft of *Seasonal Adjustment in R*. ",
     "This chapter ", status, ".\n",
     course_info,
     ":::\n",

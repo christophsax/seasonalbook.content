@@ -4,7 +4,7 @@
 #| results: "asis"
 #| echo: false
 source("_common.R")
-status("polishing", "2022-12-21", section = "regARIMA Model")  # drafting, polishing, complete
+status("polishing", "2023-11-20", section = "regARIMA Model")  # drafting, polishing, complete
 ```
 
 
@@ -19,14 +19,17 @@ Titles in sentence style
 
 
 
+
  -->
 
 An ARIMA model with external regressors (regARIMA) lies at the heart of many of the procedures in X-13. As we have seen in chapter FIXME, regARIMA consists of several interacting specs. Some of the these specs will be further detailed in later chapters (Outlier, Trading Days).
 
 Like most statistical modeling in X-13, the process to find the best model is iterative. Analysts use statistical tools and their expertise to fine-tune the regARIMA model. This iterative process is visualized in the flow chart below.
 
-
 ```{mermaid}
+%%| label: fig-arima-interact
+%%| fig-cap: "Interaction between regARIMA, diagnostics and seasonal adjustment"
+
 flowchart TD
   A[RegARIMA Modeling] --> B(Model Comparison / Diagnostics)
   B --> A
@@ -36,49 +39,40 @@ flowchart TD
   D --> A
 ```
 
-Once a satisfiying regARIMA has been found, analysts proceed to the seasonal adjustment step. The regARIMA model is crucial in forecasting the time series for applying symmetric filters and extracting components, whether using SEATS or X-11 for seasonal adjustment. In addition, in SEATS, the ARIMA model is also used to derive trend, seasonal, and irregular components.
+Once a satisfiying regARIMA has been found, one proceeds to the seasonal adjustment step. The regARIMA model is crucial in forecasting the time series for applying symmetric filters and extracting components, whether using SEATS or X-11 for seasonal adjustment. In addition, in SEATS, the ARIMA model is also used to derive trend, seasonal, and irregular components.
 
 The regARIMA model also includes exogenous information or regressors, like holiday effects, additive outliers, and level shifts. These elements help in forecasting and analyzing the series. For example, regARIMA modeling can answer if a series is affected by trading day effects or how outliers impact results. It's also used to integrate external regression variables such as moving holidays and trading day effects into the analysis.
 
 
-## SARIMA model overview
+## ARIMA model overview
 
-As the name implies, there are two components that one needs to understand when fitting a regARIMA model; namely regression and ARIMA.
-Furthermore, the ARIMA part is made up by a differencing order and the stochastic ARMA portion.
-In this chapter, we try to break these three components down to the most fundamental ingredients without an overly technical exposition.
-Essentially, providing readers with enough information about each topic to understand the rest of this book and go off and perform satisfactory seasonal adjustment.
-The interested reader is encouraged to find material devoted to each of these components separately to more fully understand them.
+The regARIMA model combines two elements: **reg**ression and **ARIMA**. The ARIMA segment itself is composed of a differencing order (the "I", for "integrated") and the ARMA part. This chapter aims to simplify these concepts without getting too technical, providing enough understanding for effective seasonal adjustment.
 
-ARIMA is an acronym describing the three parts of the modeling paradigm.
-AR = autoregressive, I = integrated (differenced), and MA = moving average.
-The prefix auto or "self", explains the AR portion perfectly.
-We model the current observation with lagged values from the past.
-This is illustrated with the classic autoregressive model of order 1:
+ARIMA stands for Autoregressive Integrated Moving Average. "Autoregressive" (AR) means the model uses past values of the series to predict the current value. For instance, an AR(1) model uses one lagged value:
 
 $$ Y_t = \phi Y_{t-1} + a_t $$
 
-where $Y_t$ is the observed time series, $\phi$ is a coefficient to be estimated and $\{a_t\}$ is an uncorrelated sequence of errors similar to that of standard linear regression.
-This model is notated AR(1).
-If instead of a single lag we used $p$ lags, the model would be and AR($p$) and have structure:
+Here, $Y_t$ is the time series, $\phi$ a coefficient, and $\{a_t\}$ an uncorrelated sequence of errors.[^ar_p]
 
-$$ Y_t = \phi_1 Y_{t-1} + \phi_2 Y_{t-2} + \cdots + \phi_p Y_{t-p} + a_t $$
+[^ar_p]: An AR(p) model extends this to $p$ lagged values:
 
-where now we have $p$ coefficients $\phi_1, \phi_2, \ldots, \phi_p$ to be estimated.
+    $$ Y_t = \phi_1 Y_{t-1} + \phi_2 Y_{t-2} + \cdots + \phi_p Y_{t-p} + a_t $$
 
-The moving average part of ARIMA model is similar in notation and reflects the number of lagged values of the error sequence should be included.
-For example, an MA(1) model with coefficient parameter $\theta$ is:
+    where now we have $p$ coefficients $\phi_1, \phi_2, \ldots, \phi_p$ to be estimated.
 
-$$ Y_t = a_t + \theta a_{t-1} $$.
+The "Moving Average" (MA) part uses past errors of the series for prediction. An MA(1) model looks like:
 
-Note that instead of doing self-regression we include past values of the unobserved errors in the model at time $t$.
-If instead of a single lag we wanted $q$ lags of the past error terms, we would have an MA($q$) model:
+$$ Y_t = a_t + \theta a_{t-1} $$
 
-$$ Y_t = a_t + \theta_1 a_{t-1} + \theta_2 a_{t-2} + \cdots + \theta_q a_{t-q} $$.
+and uses the current and one lagged error term.[^ma_q]
 
-When we combine these two ideas we can model $Y_t$ with $p$ lagged values of itself together with $q$ lagged values of the unobserved errors.
-Together it makes an ARMA($p$, $q$) model, one of the fundamental ingredients to the regARIMA model.
-For a practitioner the automatic modeling done in X13 is often sufficient to find an appropriate value for $p$ and $q$ and hence a well fitting ARMA model.
-If it more important from a seasonal adjustment perspective to correctly specify the differencing and regression variables in your overall regARIMA model.
+[^ma_q]: An MA(q) model includes $q$ lagged error terms:
+
+    $$ Y_t = a_t + \theta_1 a_{t-1} + \theta_2 a_{t-2} + \cdots + \theta_q a_{t-q} $$.
+
+An ARMA(p, q) model combines these AR and MA components, using $p$ lagged values of the series and $q$ lagged error terms. In practice, X13's automatic modeling usually finds appropriate $p$ and $q$ values. However, it worth paying attention to correctly set the differencing and regression variables for seasonal adjustment.
+
+
 
 ## Differencing
 
