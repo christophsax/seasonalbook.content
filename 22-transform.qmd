@@ -20,29 +20,31 @@ status("course_complete", "2022-12-21", section = "Transform")  # drafting, poli
 -   Case Study idea: Decide between log vs non-log transformation
  -->
 ```
-One of the first choices to make when modeling a time series is whether or not it needs to be transformed before modeling.
-Two types of transformation types typically occur within X-13, *prior modifications* and *transformations*.
 
-## Prior modifications and transformations
+In seasonal adjustment, one of the first choices is whether a series needs to be transformed before modeling.
+Two types of transformation types typically occur within X-13, *transformations* and *prior modifications*. Prior modifications are rarely used and will be covered in the second section. Tranformations, especially lograitmic transformations, are ubiquitous and central to many seasonal adjustment models.
 
-The first is a prior modification.
-A prior modification scales each observation for known fixed effects.
-These effects can be well-known and established, such as the length of a period or leap-year effects, or they can be more subjective such as a modification for a workers' strike.
-We will see how this comes into the regARIMA model in @sec-regarima.
-We can think of prior-modification factors as events or corrections made to your data that are fixed throughout the adjustment process.
-These prior modification factors can also be permanent (default) or temporary.
-Permanent modifications are excluded from the final seasonal adjustment.
-Temporary modifications are removed while calculating seasonal factors but added back to the seasonally adjusted series.
-
-The second type is a nonlinear transformation applied to the observations.
-This is typically a choice between logarithmic transform and no transformation but for modeling can be any power of the Box-Cox transformation.
+Below is our standard example. As we have seen before, the automated procedures of X-13 opt for a logarithmic transformation of the series.
 
 ```{r}
-m_none <- seas(AirPassengers, transform.function = "none")
-m_log  <- seas(AirPassengers, transform.function = "log")
+m_log  <- seas(AirPassengers, x11 = "")
+summary(m_log)
+plot(m_log)
 ```
 
+If we manually override the transformation function to be `"none"`, this results in a very different model and seasonal adjustment. Not only are the model specification and the coefficients very different, the resulting series has a much higher volatility in later years.
+
+```{r}
+m_none <- seas(AirPassengers, x11 = "", transform.function = "none")
+summary(m_none)
+plot(m_none)
+```
+Why is the tranformation function so important?
+In fact, applying a logaritimc transformation is equivalent of estimating a multiplicative seasonal adjusment model. This is one of the most fundamental decisions when doing seasonal adjustment.
+
+
 ## Additive and multiplicative adjustment {#sec-additive-and-multiplicative-adjustment}
+
 
 As you remember from @sec-introduction, Seasonal adjustment decomposes a time series into a **trend**, a **seasonal**, and an **irregular** component.
 Algebraically, the fundamental identity of seasonal adjustment looks like this:
@@ -73,7 +75,7 @@ Keep this in mind when viewing seasonal factors such as in the function `monthpl
 For a multiplicative adjustment, it is sufficient to take logarithms of the initial series and re-transform the results after the decomposition.
 The `transform` spec takes care of this.
 
-## Model choice
+## Automated transformation choice
 
 X-13 has a built-in statistical test to decide between log and no transformation.
 The choice is made by comparing the AICc[^22-transform-1] value of an ARIMA (0 1 1)(0 1 1) model fit, or a user-specified ARIMA model, to the log-transformed series and the original series.
@@ -111,6 +113,20 @@ out(m)
 The choice between `log` and `none` changes the type of seasonal decomposition that will occur and, hence, your interpretation of the seasonal factors.
 With no transformation, X-13 will perform an additive seasonal adjustment specified in @eq-additive.
 If log transformation is selected, X-13 will perform a multiplicative adjustment as specified in @eq-multiplicative.
+
+
+
+## Prior modifications
+
+Prior modifications describe a second, less commonly used transformation in X-13.
+A prior modification scales each observation for known fixed effects.
+These effects can be well-known and established, such as the length of a period or leap-year effects, or they can be more subjective such as a modification for a workers' strike.
+We will see how this comes into the regARIMA model in @sec-regarima.
+We can think of prior-modification factors as events or corrections made to your data that are fixed throughout the adjustment process.
+These prior modification factors can also be permanent (default) or temporary.
+Permanent modifications are excluded from the final seasonal adjustment.
+Temporary modifications are removed while calculating seasonal factors but added back to the seasonally adjusted series.
+
 
 ## Transform options
 
