@@ -27,6 +27,7 @@ ggplot2::theme_set(ggplot2::theme_gray(12))
 
 # status("drafting", Sys.Date())
 status <- function(type, date = as.Date(NA), section = "") {
+  return(invisible(NULL))
   status <- switch(type,
     polishing = "should be readable but needs polishing",
     restructuring = "is undergoing heavy restructuring and may be confusing or incomplete",
@@ -60,7 +61,7 @@ status <- function(type, date = as.Date(NA), section = "") {
     "\n",
     ":::: status\n",
     "::: callout-", class, " \n",
-    "You are reading an early draft of *Seasonal Adjustment in R*. ",
+    "You are reading a draft of *Seasonal Adjustment in R*. ",
     "This chapter ", status, ".\n",
     course_info,
     ":::\n",
