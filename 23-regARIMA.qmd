@@ -321,15 +321,11 @@ As we can see, small changes in outlier identification can have a substantial ef
 
 ## Exercises
 
-1. Use *seasonal* to perform an automated seasonal adjusmtent of `fdeaths`.
+1.  Use *seasonal* to perform an automated seasonal adjusmtent of `fdeaths`.
 
-2. Inspect the model: What is the degree of seasonal and non-seasonal
-differentiation, what are the seasonal and non-seasonal AR and MA orders?
+2.  Inspect the model: What is the degree of seasonal and non-seasonal differentiation, what are the seasonal and non-seasonal AR and MA orders?
 
-3. Use the `static()` function to substitute the automatic procedures in the model call by the choices they made.
+3.  Use the `static()` function to substitute the automatic procedures in the model call by the choices they made.
 
-4. Bonus: re-estimate 1, using R base `arima()` function. Why do the coefficients differ?
-
-
-
-
+4.  Bonus: re-estimate 1, using R base `arima()` function.
+    Why do the coefficients differ?
