@@ -18,35 +18,10 @@ library(tsbox)
  -->
 ```
 
-In seasonal adjustment, the fundamental task is to decompose a series into its constituent components: **trend (T_t)**, **seasonal (S_t)**, and **irregular (I_t)**. X-13ARIMA-SEATS offers two main techniques for this task: the X-11 method and SEATS.
-Ultimately, both X-11 and SEATS estimate the components $T_t$, $S_t$, $I_t$ by passing moving average filters over the series.
-
+The fundamental task of seasonal adjustment is to decompose a series into its constituent components: a trend, a seasonal component, and a irregular component. X-13 offers two main techniques for this task: the X-11 method and SEATS.
+Ultimately, both X-11 and SEATS estimate the components by passing moving average filters over the series.
 In this chapter, we will discuss X-11, one of the two main methods available.
-X-11 is a nonparametric procedure that works by passing predefined moving-average filters over the data. (SEATS derives the moving-average filters from the underlying ARIMA model and will be discussed in in @sec-seats.)
-
-
-
-As established in previous chapters and in @sec-additive-and-multiplicative-adjustment, the fundamental identity for an additive decomposition model is expressed as:
-
-$$
-X_t = T_t + S_t + I_t
-$$
-
-Here, $X_t$ represents the observed time series. The seasonally adjusted series for an additive decomposition is then calculated as:
-
-$$
-A_t = X_t - S_t
-$$
-
-For a multiplicative decomposition model, the identity and adjusted series are represented differently:
-
-$$
-X_t = T_t \cdot S_t \cdot I_t
-$$
-
-$$
-A_t = \frac{X_t}{S_t}
-$$
+X-11 is a nonparametric procedure that works by passing predefined moving-average filters over the data. SEATS, on the other hand, derives the moving-average filters from the underlying ARIMA model and will be discussed in in @sec-seats.
 
 
 ## Fundamental Identity of Seasonal Decomposition {#sec-seasonal-decomposition}
@@ -57,14 +32,11 @@ $$
 X_t = T_t + S_t + I_t
 $$
 
-Here, $X_t$ represents the observed time series. The seasonally adjusted series for an additive decomposition is then calculated as:
+Here, $X_t$ represents the observed time series. The seasonally adjusted series for an additive[^24-x11-1] decomposition is then calculated as:
 
 $$
 A_t = X_t - S_t
 $$
-
-where, $X_t$ is the observed time series, $T_t$ the trend, $S_t$ the seasonal component and $I_t$ the irregular component.
-Once the decomposition is done, the seasonally adjusted series for an additive[^24-x11-1] decomposition can be computed as:
 
 [^24-x11-1]: For a multiplicative decomposition model, the identity and adjusted series are represented differently:
 
@@ -85,7 +57,7 @@ Once the decomposition is done, the seasonally adjusted series for an additive[^
 Both X-11 and SEATS achieve the decomposition by applying moving average filters over the series. To ensure unbiased results at the series' margins, forecasts from the regARIMA model (@sec-regarima) are used to extend the series. The regARIMA model model also serves as the foundation of the initial steps in the X-11 algorithm to remove outliers and other regression effects before application of moving-averages.
 
 
-### Estimating the Trend Component
+#### Estimating the Trend Component {.unnumbered}
 
 X-11 starts by estimating the **trend component**.
 The trend component is estimated by applying a symmetric moving average over the series. Each point in time is averaged using a set number of observations to the left and right of the series.
@@ -94,7 +66,7 @@ Because the window is symmetric, we need the series to be extended by forecasts 
 Once the trend component is computed, we can subtract it from the original series to compute a *detrended series*.
 
 
-### Estimating the Seasonal Component
+#### Estimating the Seasonal Component {.unnumbered}
 
 To estimate the seasonal component, a *seasonal filter* is applied to the detrended series. A seasonal filter is a symmetric moving average that is calculated by taking the mean of the same period across several years.
 For instance, the average for January would be computed using all the January values from the time series data, February would use all February values, and so on.
@@ -111,11 +83,6 @@ For instance, the average for January would be computed using all the January va
 
 
 ## R-Fundamentals: A Simple Decomposition {#sec-simple-decomposition}
-
-In order to better understand the X-11 method, it will be helpful to first perform a basic seasonal adjustment procedure "by-hand".
-A basic trend filter could be a simple 2x12 moving average.
-This filter has weights 1/24, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/24.
-We use these weights to estimate the trend of the `AirPassengers` series.
 
 In order to deepen our understanding of the X-11 method, we start with a "by-hand" approach R.
 As a basic trend filter, we trend filter—a 2x12 moving average. The weights for this filter are distributed as 1/24, followed by 1/12 for the next 11 points, and then 1/24 again. We apply these weights to estimate the trend of the `AirPassengers` series:
