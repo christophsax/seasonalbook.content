@@ -330,8 +330,6 @@ Outliers get included in Part D (see below) when X-11 calculates the final seaso
 We will discuss extreme values and outliers in more detail in @sec-outliers.
 :::
 
-## Extreme values
-
 In the X-11 method, along with the regressors defined in the regARIMA model (such as additive outliers or level shifts), there's a distinct process for adjusting extreme values.
 After an intitial trend estimation, X-11 replaces extreme values according to the following procedure:
 
@@ -408,21 +406,19 @@ It has been observed that when multiplicative seasonal adjustment produces more 
 ```
 <!-- NEED TO SHOW USERS HOW TO VIEW THEIR EXTREME VALUES - D8.B TABLE DESIGNATIONS NEXT TO OBSERVATIONS. A good reference on the subject is Baxter (1994). -->
 
-````{=html}
+
 <!--
 ## Case study
-
-```{r x11-case-study}
 
 tsbox::ts_plot(
   s3x1 = predict(seas(AirPassengers, x11.seasonalma = "s3x1")),
   s3x15 = predict(seas(AirPassengers, x11.seasonalma = "s3x15"))
 )
 
-``` -->
-````
+ -->
 
-```{=html}
+
+
 <!--
 
 ## Points to include in Chapter
@@ -432,4 +428,4 @@ tsbox::ts_plot(
 -   Changing sigma limits changes the extreme values and can affect what filter seems most appropriate
     -   Experiment with changing filters and sigma limits for your series to see the results
  -->
-```
+
