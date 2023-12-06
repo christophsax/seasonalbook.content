@@ -66,27 +66,10 @@ To ensure unbiased results at the series' margins, forecasts from the regARIMA m
 
 #### Extreme Values {.unnumbered}
 
-Additionally, X-11 has a built in extreme value procedure included.
+The X-11 method is sensitive to outliers. In order to correct for these, X-11 applies a specialiced extreme value correction.
 This procedure identifies extreme values and replaces them.
 This results in a robust procedure that can automatically choose filters and identify extreme values without much user intervention.
 
-
-
-::: callout-note
-## Outliers and Extreme values
-
-We will discuss extreme values and outliers in more detail in @sec-outliers.
-
-The terms outlier and extreme value seem interchangeable.
-In X-13, these refer to very different types of effects.
-An outlier is identified by the regARIMA model in Part A (see below) of the X-11 method.
-An extreme value is a value that is large enough to effect the results of a moving-average filter but is not identified by the regARIMA automatic modeling identification.
-Outliers are prior-adjusted out of the series while extreme values are replaced within the X-11 procedure.
-
-Both types end up in the seasonally adjusted series.
-Extreme values are assigned to the irregular component and are hence included in the seasonally adjusted series.
-Outliers get included in Part D (see below) when X-11 calculates the final seasonal factors using the original series including outlier effects.
-:::
 
 
 #### Go in circles {.unnumbered}
@@ -320,9 +303,30 @@ abline(h = 0, lty = 'dotted')
 
 ## Extreme value
 
-The X11 method is sensitive to outliers.
-Beyond the specified regressors (AOs, level shifts, temporary changes, etc), an X11 adjustment will replace extreme values after the initial crude trend estimation occurs in the first iteration of the X11 method.
-The replacement procedure looks as follows:
+As mentioned above, X-11 is sensititve to outliers, and applies it's own extreme value adujstment (see Box for the differences between outliers and extrem values).
+
+::: callout-note
+## Outliers and Extreme values
+
+The terms outlier and extreme value seem interchangeable.
+In X-13, these refer to very different types of effects.
+An outlier is identified by the regARIMA model in Part A (see below) of the X-11 method.
+An extreme value is a value that is large enough to effect the results of a moving-average filter but is not identified by the regARIMA automatic modeling identification.
+Outliers are prior-adjusted out of the series while extreme values are replaced within the X-11 procedure.
+
+Both types end up in the seasonally adjusted series.
+Extreme values are assigned to the irregular component and are hence included in the seasonally adjusted series.
+Outliers get included in Part D (see below) when X-11 calculates the final seasonal factors using the original series including outlier effects.
+
+We will discuss extreme values and outliers in more detail in @sec-outliers.
+:::
+
+
+## Extreme values
+
+In the X-11 method, along with the regressors defined in the regARIMA model (such as additive outliers or level shifts), there's a distinct process for adjusting extreme values.
+After an intitial trend estimation, X-11 replaces extreme values according to the following procedure:
+
 
 ```{mermaid}
 %%| label: fig-spec-interaction
@@ -330,22 +334,23 @@ The replacement procedure looks as follows:
 %%| fig-cap: |
 %%|   Default behavior of Extreme value replacement procedure. 
 flowchart LR
-    A(  Estimate standard deviation <br> of irregular, s  )-->B(Compare SI-ration to <br> multiples of s)
-    B-->C(SI < 1.5 * s)
-    B-->D(1.5 * s < SI < 2.5 * s)
-    B-->E(SI > 2.5 * s)
+    A(  Estimate standard deviation <br> of irregular, sigma  )-->B(Compare SI-ration to <br> multiples of sigma)
+    B-->C(SI smaller than 1.5 * sigma)
+    B-->D(1.5 * s smaller than SI 2.5 * sigma)
+    B-->E(SI larger than 2.5 * sigma)
     C --> F(SI unchanged)
     D --> G(SI linearly weighted)
     E --> H(SI fully weighted)
 ```
 
-Users can change the multiples of $\sigma$ that are converted to extreme values.
-This is done with the `sigmalim` option within the `x11` spec.
-This option should be a vector of length 2 that specifies when weighting should begin and when full weight of zero should be applied.
+Users can modify the sigma thresholds (`sigmalim`) for extreme value conversion within the X-11 specification. This option, defined as a two-length vector that specifies when weighting should begin and when full weight of zero should be applied.
 Between the endpoints of the specified vector a linear weight will be applied.
-SI ratios are replaced with an average of the two nearest SI ratios from the same month/quarter.
+
+SI ratios are replaced with an average of the two nearest SI ratios from the same period.
 One caveat being that only fully weighted SI ratios are used for SI ratio replacement.
 Hence, if too small of a $\sigma$ limit is used the SI ratios used to replace an extreme value should be many years away.
+
+Extreme value choices can significantly influence the seasonal adjustment outcome. For example, the default values for in `AirPassengers` adjustment looks as follows:
 
 ```{r}
 m = seas(AirPassengers, x11 = "")
@@ -355,6 +360,8 @@ seasonal_factors <- series(m, "d10")
 tsbox::ts_dygraphs(cbind(unmodified_SIratio, modified_SIratio, seasonal_factors))
 ```
 
+If we change `x11.sigmalim` to `c(1, 2)`, we get the following result:
+
 ```{r}
 m = seas(AirPassengers, x11 = "", x11.sigmalim = c(1, 2))
 unmodified_SIratio <- series(m, "d8")
@@ -363,8 +370,6 @@ seasonal_factors <- series(m, "d10")
 tsbox::ts_dygraphs(cbind(unmodified_SIratio, modified_SIratio, seasonal_factors))
 ```
 
-It should be noted that extreme value choices can greatly affect the seasonal adjustment.
-
 ::: callout-warning
 ### SI ratio / SI difference
 
@@ -372,6 +377,10 @@ In a multiplicative adjustment, the detrended series is called the SI ratio.
 It is an estimate of the seasonal component.
 The SI ratio is used to identify extreme values during the initial and intermediate steps of the X-11 method.
 :::
+
+<!--
+
+FIMXE why does X-11 needs it's own log mode?
 
 ## Additive and multiplicative (again)
 
@@ -385,9 +394,11 @@ There exist two other models for decomposition, pseudo-additive and log additive
 These are less common than additive and multiplicative models and are not the focus of this text.
 If your series has some extremely small values in certain months (quarters) then pseudo-additive models could be worth further investigation.
 It has been observed that when multiplicative seasonal adjustment produces more extreme values in conjunction with small seasonal factors then pseudo-additive adjustment should be explored.
-
+ -->
 <!-- NEED TO SHOW USERS HOW TO VIEW THEIR EXTREME VALUES - D8.B TABLE DESIGNATIONS NEXT TO OBSERVATIONS. A good reference on the subject is Baxter (1994). -->
 
+
+<!--
 ## Case study
 
 ```{r x11-case-study}
@@ -397,7 +408,7 @@ tsbox::ts_plot(
   s3x15 = predict(seas(AirPassengers, x11.seasonalma = "s3x15"))
 )
 
-```
+``` -->
 <!--
 
 ## Points to include in Chapter
