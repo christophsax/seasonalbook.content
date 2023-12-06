@@ -390,7 +390,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><span id="eq-additive"><span class="math display">\[Y_t = T_t + S_t + I_t. \tag{4.1}\]</span></span></p>
 <p>We seek the decompose our observed series <span class="math inline">\(Y_t\)</span> into a trend <span class="math inline">\(T_t\)</span>, a seasonal <span class="math inline">\(S_t\)</span>, and an irregular <span class="math inline">\(I_t\)</span> component. The formulation above is <em>additive</em>, i.e., the trend, the seasonal, and the irregular component sum up to the observed series. The goal of seasonal adjustment is to subtract the seasonal component:</p>
 <p><span class="math display">\[A_t = Y_t - S_t.\]</span></p>
-<p>For example, an observed value of 100 with a seasonal factor of 3.2 would result in a seasonally adjusted value of 100 - 3.2 = 96.8.</p>
+<p>For example, an observed value of 100 with a seasonal compontent of -3.2 would result in a seasonally adjusted value of 100 - 3.2 = 96.8.</p>
 <p>Alternatively, the decomposition can be <em>multiplicative</em>:</p>
 <p><span id="eq-multiplicative"><span class="math display">\[Y_t = T_t \cdot S_t \cdot I_t \tag{4.2}\]</span></span></p>
 <p>I.e., the observed series is the product of the trend and the seasonal and irregular components. Since these are factors, the goal of seasonal adjustment is to remove seasonality by dividing by the seasonal factor.</p>
@@ -433,12 +433,12 @@ X-13ARIMA-SEATAS has a built-in HTML output that offers an extensive summary of 
 In R, this can be accessed using the `out()` function.
 E.g.,
 
-
 ::: {.cell}
 
 ```{.r .cell-code}
 out(m)
 ```
+
 :::
 
 :::
@@ -457,7 +457,7 @@ out(m)
 <colgroup>
 <col style="width: 23%">
 <col style="width: 23%">
-<col style="width: 29%">
+<col style="width: 28%">
 <col style="width: 23%">
 </colgroup>
 <thead><tr class="header">
