@@ -17,17 +17,19 @@ library(tsbox)
 
  -->
 ```
-
-The fundamental task of seasonal adjustment is to decompose a series into its constituent components: a trend, a seasonal component, and a irregular component. X-13 offers two main techniques for this task: the X-11 method and SEATS.
+The fundamental task of seasonal adjustment is to decompose a series into its constituent components: a trend, a seasonal component, and a irregular component.
+X-13 offers two main techniques for this task: the X-11 method and SEATS.
 Ultimately, both X-11 and SEATS estimate the components by passing moving average filters over the series.
 In this chapter, we will discuss X-11, one of the two main methods available.
-X-11 is a nonparametric procedure that works by passing predefined moving-average filters over the data. SEATS, on the other hand, derives the moving-average filters from the underlying ARIMA model and will be discussed in in @sec-seats.
-
+X-11 is a nonparametric procedure that works by passing predefined moving-average filters over the data.
+SEATS, on the other hand, derives the moving-average filters from the underlying ARIMA model and will be discussed in in @sec-seats.
 
 ## Basics
 
 As you remember from @sec-additive-and-multiplicative-adjustment, seasonal adjustment decomposes a time series into a trend, a seasonal, and an irregular component.
-Both X-11 and SEATS achieve the decomposition by applying moving average filters over the series. In the following, we describe the basic idea behind the seasonal decomposition in X-11. If you want to perform a seasonal adjustment in R, run the following:
+Both X-11 and SEATS achieve the decomposition by applying moving average filters over the series.
+In the following, we describe the basic idea behind the seasonal decomposition in X-11.
+If you want to perform a seasonal adjustment in R, run the following:
 
 ```{r}
 m <- seas(AirPassengers, x11 = "")
@@ -37,44 +39,42 @@ summary(m)
 #### Estimating the trend component {.unnumbered}
 
 X-11 starts by estimating the trend component.
-The trend component is estimated by applying a symmetric moving average over the series. Each point in time is averaged using a set number of observations to the left and right of the series.
+The trend component is estimated by applying a symmetric moving average over the series.
+Each point in time is averaged using a set number of observations to the left and right of the series.
 Because the window is symmetric, we need the series to be extended by forecasts and backcasts.
 
 Once the trend component is computed, we can subtract it from the original series to compute a *detrended series*.
 
-
 #### Estimating the seasonal component {.unnumbered}
 
-To estimate the seasonal component, a *seasonal filter* is applied to the detrended series. A seasonal filter is a symmetric moving average that is calculated by taking the mean of the same period across several years.
+To estimate the seasonal component, a *seasonal filter* is applied to the detrended series.
+A seasonal filter is a symmetric moving average that is calculated by taking the mean of the same period across several years.
 For instance, the average for January would be computed using all the January values from the time series data, February would use all February values, and so on.
 
-
-
+```{=html}
 <!--
     FIXME
 
     More formally, the seasonal filter can be expressed as follows:
 
  -->
-
-
-
+```
 #### Avoid biases {.unnumbered}
 
-To ensure unbiased results at the series' margins, forecasts from the regARIMA model (@sec-regarima) are used to extend the series. The regARIMA model model also serves as the foundation of the initial steps in the X-11 algorithm to remove outliers and other regression effects before application of moving-averages.
-
+To ensure unbiased results at the series' margins, forecasts from the regARIMA model (@sec-regarima) are used to extend the series.
+The regARIMA model model also serves as the foundation of the initial steps in the X-11 algorithm to remove outliers and other regression effects before application of moving-averages.
 
 #### Extreme Values {.unnumbered}
 
-The X-11 method is sensitive to outliers. In order to correct for these, X-11 applies a specialiced extreme value correction.
+The X-11 method is sensitive to outliers.
+In order to correct for these, X-11 applies a specialiced extreme value correction.
 This procedure identifies extreme values and replaces them.
 This results in a robust procedure that can automatically choose filters and identify extreme values without much user intervention.
 
-
-
 #### Go in circles {.unnumbered}
 
-X-11 iteratively refines this process. Each iteration enhances the estimated components by selecting more appropriate filters and managing outliers and regression effects.
+X-11 iteratively refines this process.
+Each iteration enhances the estimated components by selecting more appropriate filters and managing outliers and regression effects.
 
 In the default adjustment from above, a decomposition is run 3 times along with a pre-processing step to fit the regARIMA model.
 This procedure can be seen in great detail in @ladiray12.
@@ -99,11 +99,12 @@ Part D
 :   Final estimation of seasonally adjusted series, seasonal factors, trend, irregular.
     Combined factors incorporate the trading day and moving holiday regression effects estimated in Part A
 
-
 ## R-Fundamentals: A Simple Decomposition {#sec-simple-decomposition}
 
 In order to deepen our understanding of the X-11 method, we start with a "by-hand" approach R.
-As a basic trend filter, we trend filter—a 2x12 moving average. The weights for this filter are distributed as 1/24, followed by 1/12 for the next 11 points, and then 1/24 again. We apply these weights to estimate the trend of the `AirPassengers` series:
+As a basic trend filter, we trend filter---a 2x12 moving average.
+The weights for this filter are distributed as 1/24, followed by 1/12 for the next 11 points, and then 1/24 again.
+We apply these weights to estimate the trend of the `AirPassengers` series:
 
 ```{r x11-trend}
 observed <- AirPassengers
@@ -123,17 +124,18 @@ tsbox::ts_plot(detrended, seasonal)
 
 Subtracting this seasonal estimate provides us with a rudimentary seasonal adjustment:
 
-
 ```{r x11-seasonal-adj}
 adjusted = observed - seasonal
 tsbox::ts_plot(observed, adjusted)
 ```
 
-While this basic adjustment is insightful, it also reveals limitations, particularly at the series ends, underscoring the necessity for regARIMA modeling to extend forecasts. Another challenge is the interplay between trend and seasonality estimation—accurately estimating one in the presence of the other is complex.
+While this basic adjustment is insightful, it also reveals limitations, particularly at the series ends, underscoring the necessity for regARIMA modeling to extend forecasts.
+Another challenge is the interplay between trend and seasonality estimation---accurately estimating one in the presence of the other is complex.
 
-These observations pave the way for the X-11 method, which iteratively refines this process. Each iteration enhances the estimated components by selecting more appropriate filters and managing outliers and regression effects.
+These observations pave the way for the X-11 method, which iteratively refines this process.
+Each iteration enhances the estimated components by selecting more appropriate filters and managing outliers and regression effects.
 
-
+```{=html}
 <!--
 During these steps the trend filter is automatically chosen based the noise-to-signal ratios, labeled I/C in the output file.
 The seasonal moving average is determined by the Global Moving Seasonality Ratio (GMSR).
@@ -142,6 +144,7 @@ Being able to understand the
 When using the x11 spec you can change the length of the filter used for the trend and seasonal components with the `trendma` and `seasonalma` arguments respectively.
 Additionally, `sigmalim` will control the amount of extreme value adjustment that is done during the seasonal adjustment.
  -->
+```
 ## Frequency Domain (optional)
 
 We present the following as optional reading material.
@@ -211,7 +214,9 @@ fx_seasonal = spec.ar(x_seasonal, na.action = na.pass)
 
 ## X-11 Filters
 
-In the X-11 method, the choice of moving average filters plays a crucial role in seasonal adjustment. Users have the flexibility to select the length of both the trend and seasonal moving average filters, impacting the stability and responsiveness of the seasonal component. For example, the following model uses a short `3x1` filter to identify the seasonal component:
+In the X-11 method, the choice of moving average filters plays a crucial role in seasonal adjustment.
+Users have the flexibility to select the length of both the trend and seasonal moving average filters, impacting the stability and responsiveness of the seasonal component.
+For example, the following model uses a short `3x1` filter to identify the seasonal component:
 
 ```{r}
 m_short <- seas(AirPassengers, x11.seasonalma = "s3x1")
@@ -220,13 +225,13 @@ plot(m_short)
 
 On the other hand, the following uses a long `3x9` filter:
 
-
 ```{r}
 m_long <- seas(AirPassengers, x11.seasonalma = "s3x9")
 plot(m_long)
 ```
 
-Generally speaking, longer filters imply a more stable seasonal component and shorter filters a more changing seasonal pattern. We can see this by comparing the `monthplot()` outputs of the estimations.
+Generally speaking, longer filters imply a more stable seasonal component and shorter filters a more changing seasonal pattern.
+We can see this by comparing the `monthplot()` outputs of the estimations.
 
 ```{r}
 monthplot(m_short)
@@ -238,11 +243,16 @@ As you can see, the seasonal component is smoother with the longer filter:
 monthplot(m_long)
 ```
 
-Longer filters involve more data points in the calculation of the seasonal component at each time point. Therefore, they typically result in smaller revisions when new data is added to the series. However, these revisions can impact historical data values further back in the time series.
+Longer filters involve more data points in the calculation of the seasonal component at each time point.
+Therefore, they typically result in smaller revisions when new data is added to the series.
+However, these revisions can impact historical data values further back in the time series.
 
-In contrast, shorter filters, which use fewer data points, are more likely to produce larger revisions with each new data addition. These revisions, while more significant, extend less far back into the historical data.
+In contrast, shorter filters, which use fewer data points, are more likely to produce larger revisions with each new data addition.
+These revisions, while more significant, extend less far back into the historical data.
 
-If a user does not select a filter, the X-11 method defaults to automatic filter selection. To understand the implications of filter length, consider the finite set of options available during an X-11 adjustment. @tbl-x11-filters details the different filters that can be applied to both the seasonal and trend components of the series.
+If a user does not select a filter, the X-11 method defaults to automatic filter selection.
+To understand the implications of filter length, consider the finite set of options available during an X-11 adjustment.
+@tbl-x11-filters details the different filters that can be applied to both the seasonal and trend components of the series.
 
 | Value        | Description                                                                                                                                                                                                                     |
 |--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -255,7 +265,6 @@ If a user does not select a filter, the X-11 method defaults to automatic filter
 | `x11default` | A 3×3 moving average is used to calculate the initial seasonal factors in each iteration, and a 3×5 moving average to calculate the final seasonal factors.                                                                     |
 
 : Filters available in X11 {#tbl-x11-filters tbl-colwidths="\[30,70\]"}
-
 
 ```{r, echo=FALSE}
 # Function to find seasonal filter weight by passing impuse through
@@ -321,12 +330,10 @@ Outliers get included in Part D (see below) when X-11 calculates the final seaso
 We will discuss extreme values and outliers in more detail in @sec-outliers.
 :::
 
-
 ## Extreme values
 
 In the X-11 method, along with the regressors defined in the regARIMA model (such as additive outliers or level shifts), there's a distinct process for adjusting extreme values.
 After an intitial trend estimation, X-11 replaces extreme values according to the following procedure:
-
 
 ```{mermaid}
 %%| label: fig-spec-interaction
@@ -343,14 +350,16 @@ flowchart LR
     E --> H(SI fully weighted)
 ```
 
-Users can modify the sigma thresholds (`sigmalim`) for extreme value conversion within the X-11 specification. This option, defined as a two-length vector that specifies when weighting should begin and when full weight of zero should be applied.
+Users can modify the sigma thresholds (`sigmalim`) for extreme value conversion within the X-11 specification.
+This option, defined as a two-length vector that specifies when weighting should begin and when full weight of zero should be applied.
 Between the endpoints of the specified vector a linear weight will be applied.
 
 SI ratios are replaced with an average of the two nearest SI ratios from the same period.
 One caveat being that only fully weighted SI ratios are used for SI ratio replacement.
 Hence, if too small of a $\sigma$ limit is used the SI ratios used to replace an extreme value should be many years away.
 
-Extreme value choices can significantly influence the seasonal adjustment outcome. For example, the default values for in `AirPassengers` adjustment looks as follows:
+Extreme value choices can significantly influence the seasonal adjustment outcome.
+For example, the default values for in `AirPassengers` adjustment looks as follows:
 
 ```{r}
 m = seas(AirPassengers, x11 = "")
@@ -378,6 +387,7 @@ It is an estimate of the seasonal component.
 The SI ratio is used to identify extreme values during the initial and intermediate steps of the X-11 method.
 :::
 
+```{=html}
 <!--
 
 FIMXE why does X-11 needs it's own log mode?
@@ -395,9 +405,10 @@ These are less common than additive and multiplicative models and are not the fo
 If your series has some extremely small values in certain months (quarters) then pseudo-additive models could be worth further investigation.
 It has been observed that when multiplicative seasonal adjustment produces more extreme values in conjunction with small seasonal factors then pseudo-additive adjustment should be explored.
  -->
+```
 <!-- NEED TO SHOW USERS HOW TO VIEW THEIR EXTREME VALUES - D8.B TABLE DESIGNATIONS NEXT TO OBSERVATIONS. A good reference on the subject is Baxter (1994). -->
 
-
+````{=html}
 <!--
 ## Case study
 
@@ -409,6 +420,9 @@ tsbox::ts_plot(
 )
 
 ``` -->
+````
+
+```{=html}
 <!--
 
 ## Points to include in Chapter
@@ -418,3 +432,4 @@ tsbox::ts_plot(
 -   Changing sigma limits changes the extreme values and can affect what filter seems most appropriate
     -   Experiment with changing filters and sigma limits for your series to see the results
  -->
+```
