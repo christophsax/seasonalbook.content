@@ -117,6 +117,9 @@ A basic trend filter could be a simple 2x12 moving average.
 This filter has weights 1/24, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/12, 1/24.
 We use these weights to estimate the trend of the `AirPassengers` series.
 
+In order to deepen our understanding of the X-11 method, we start with a "by-hand" approach R.
+As a basic trend filter, we trend filter—a 2x12 moving average. The weights for this filter are distributed as 1/24, followed by 1/12 for the next 11 points, and then 1/24 again. We apply these weights to estimate the trend of the `AirPassengers` series:
+
 ```{r x11-trend}
 observed <- AirPassengers         
 filter_trend = c(1/24, rep(1/12, 11), 1/24)     
@@ -124,7 +127,7 @@ trend = stats::filter(observed, filter = filter_trend, sides = 2)
 tsbox::ts_plot(observed, trend)
 ```
 
-After estimating the trend we now can estimate the seasonal component of the detrended series using a 3x3 seasonal filter that has weights (1,2,3,2,1)/9 applied to the same season.
+After obtaining the trend, we estimate the seasonal component of the detrended series using a 3x3 seasonal filter with weights (1,2,3,2,1)/9, applied consistently across the same season:
 
 ```{r x11-seasonal-component}
 detrended <- observed - trend
@@ -133,25 +136,17 @@ seasonal = stats::filter(detrended, filter = filter_seas, sides = 2)
 tsbox::ts_plot(detrended, seasonal)
 ```
 
-By subtracting this seasonal estimate we have our crude seasonal adjustment.
+Subtracting this seasonal estimate provides us with a rudimentary seasonal adjustment:
+
 
 ```{r x11-seasonal-adj}
 adjusted = observed - seasonal
 tsbox::ts_plot(observed, adjusted)
 ```
 
-This basic seasonal adjustment is a useful tool to understand other features of X-13.
-The most obvious thing we see in this plot is the last of seasonal adjustment at the ends of the series.
-Hence, why we need to use regARIMA modeling to forecast extend.
-Additionally, we see some obvious flaws this this adjustment.
-It is difficult to estimate a trend in the presence of seasonality.
-Similarly, it is difficult to estimate the seasonal factors when the trend is poorly estimated/removed.
+While this basic adjustment is insightful, it also reveals limitations, particularly at the series ends, underscoring the necessity for regARIMA modeling to extend forecasts. Another challenge is the interplay between trend and seasonality estimation—accurately estimating one in the presence of the other is complex.
 
-This motivates the X-11 method which is an iterative application of this simple procedure we have just performed.
-Each subsequent iteration allows the estimated components to be refined by selecting better filters and handling extreme values and regression effects.
-The first adaptation is to consider a transformation of our series from `AirPassengers` to `log(AirPassengers)`.
-Our simple example performed an additive seasonal adjustment.
-This transformation will require a move to a multiplicative decomposition.
+These observations pave the way for the X-11 method, which iteratively refines this process. Each iteration enhances the estimated components by selecting more appropriate filters and managing outliers and regression effects.
 
 ## X-11 Adjustment
 
