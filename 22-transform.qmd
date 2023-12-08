@@ -4,7 +4,7 @@
 #| results: "asis"
 #| echo: false
 source("_common.R")
-status("course_complete", "2022-12-21", section = "Transform")  # drafting, polishing, complete
+status("course_complete", "2023-12-21", section = "Transform")  # drafting, polishing, complete
 ```
 
 ```{=html}
@@ -20,27 +20,33 @@ status("course_complete", "2022-12-21", section = "Transform")  # drafting, poli
 -   Case Study idea: Decide between log vs non-log transformation
  -->
 ```
-One of the first choices to make when modeling a time series is whether or not it needs to be transformed before modeling.
-Two types of transformation types typically occur within X-13, *prior modifications* and *transformations*.
+In seasonal adjustment, one of the first choices is whether a series needs to be transformed before modeling.
+Two types of transformation types typically occur within X-13, *transformations* and *prior modifications*.
+Prior modifications are relatively rarely used and will be covered in the second section.
+Tranformations, especially lograitmic transformations, are ubiquitous and central to many seasonal adjustment models.
 
-## Prior modifications and transformations
-
-The first is a prior modification.
-A prior modification scales each observation for known fixed effects.
-These effects can be well-known and established, such as the length of a period or leap-year effects, or they can be more subjective such as a modification for a workers' strike.
-We will see how this comes into the regARIMA model in @sec-regarima.
-We can think of prior-modification factors as events or corrections made to your data that are fixed throughout the adjustment process.
-These prior modification factors can also be permanent (default) or temporary.
-Permanent modifications are excluded from the final seasonal adjustment.
-Temporary modifications are removed while calculating seasonal factors but added back to the seasonally adjusted series.
-
-The second type is a nonlinear transformation applied to the observations.
-This is typically a choice between logarithmic transform and no transformation but for modeling can be any power of the Box-Cox transformation.
+Below is our standard example.
+As we have seen before, the automated procedures of X-13 opt for a logarithmic transformation of the series.
 
 ```{r}
-m_none <- seas(AirPassengers, transform.function = "none")
-m_log  <- seas(AirPassengers, transform.function = "log")
+m_log  <- seas(AirPassengers, x11 = "")
+summary(m_log)
+plot(m_log)
 ```
+
+If we manually override the transformation function to be `"none"`, this results in a very different model and seasonal adjustment.
+Not only are the model specification and the coefficients very different, the resulting series has a much higher volatility in later years.
+
+```{r}
+m_none <- seas(AirPassengers, x11 = "", transform.function = "none")
+summary(m_none)
+plot(m_none)
+```
+
+Why is the tranformation function so important?
+
+In fact, applying a logaritimc transformation is equivalent of estimating a multiplicative seasonal adjusment model.
+This is one of the most fundamental decisions during seasonal adjustment.
 
 ## Additive and multiplicative adjustment {#sec-additive-and-multiplicative-adjustment}
 
@@ -55,7 +61,7 @@ The goal of seasonal adjustment is to subtract the seasonal component:
 
 $$A_t = Y_t - S_t.$$
 
-For example, an observed value of 100 with a seasonal factor of 3.2 would result in a seasonally adjusted value of 100 - 3.2 = 96.8.
+For example, an observed value of 100 with a seasonal compontent of -3.2 would result in a seasonally adjusted value of 100 - 3.2 = 96.8.
 
 Alternatively, the decomposition can be *multiplicative*:
 
@@ -66,35 +72,55 @@ Since these are factors, the goal of seasonal adjustment is to remove seasonalit
 
 $$A_t = \frac{Y_t}{S_t}.$$
 
-For example, an observed value of 100 with a seasonal factor of 1.08 would result in a seasonally adjusted value of 100 / 1.08 = 92.59259.
-Hence for multiplicative models, values of $S_t > 1$ decrease the observed value, and $S_t < 1$ increase it.
-Keep this in mind when viewing seasonal factors such as in the function `monthplot(m)`.
+For example, an observed value of 100 with a seasonal factor of 1.08 would result in a seasonally adjusted value of 100 / 1.08 = 92.6.
+In a multiplicative model, values of $S_t > 1$ decrease the observed value, and $S_t < 1$ increase it.
 
-For a multiplicative adjustment, it is sufficient to take logarithms of the initial series and re-transform the results after the decomposition.
-The `transform` spec takes care of this.
+When analyzing seasonal components, the transformation is crucial.
+For example, `monthplot()` plots the evolution of the seasonal component for each period over time (shown by the evolving red line; the red bar shows its average).
+If the model is multiplicative, the seasonal component is a factor ranging from 0.8 to about 1.3.
+If the model is additive, the seasonal component is a summand ranging from about -100 airpassengers to about +130.
 
-## Model choice
+```{r}
+monthplot(m_log)
+monthplot(m_none)
+```
 
-X-13 has a built-in statistical test to decide between log and no transformation.
-The choice is made by comparing the AICc[^22-transform-1] value of an ARIMA (0 1 1)(0 1 1) model fit, or a user-specified ARIMA model, to the log-transformed series and the original series.
+For a multiplicative adjustment, it is sufficient to apply logarithms to the initial series and then re-transform the results following the decomposition.
+With no transformation, X-13 will perform an additive seasonal adjustment as specified in @eq-additive.
+With log transformation, X-13 will perform a multiplicative adjustment as specified in @eq-multiplicative.
+
+## Automated transformation choice {#sec-auto-transform}
+
+X-13 has a built-in statistical test determine the appropriateness of applying logarithmic transformation.
+The choice is made by comparing the AICc[^22-transform-1] value of an ARIMA (0 1 1)(0 1 1) model (or, optionaly, a user-specified model) to the log-transformed series and the original series.
 
 [^22-transform-1]: With small sample sizes, a standard AIC test may select models with too many parameters.
     AICc tackles this problem by correcting for sample size.
 
-For most practical purposes, this is an effective choice and can be left to the program to decide.
-If your series has negative values, it can not be log-transformed, and automatic selection is performed.
-Other restrictions on the allowed transformations exist, but these situations are rare.
-We can look at the results of the transformation tests by looking at specific statistics.
-The `udg()` function provides access to a large number of diagnostical statistics.The `qs()` function and the `AIC()`, `BIC()` and `logLik()` methods are wrappers that use `udg()` to access some specific diagnostical statistics.
+For most practical purposes, the automatic selection mechanism is quite reliable and can be trusted to make the appropriate choice.
+However, if your data series contains negative values, logarithmic transformation is not feasible, and the software will automatically adapt its selection process accordingly.
+
+<!-- either discuss, or dont mention -->
+
+<!-- Other restrictions on the allowed transformations exist, but these situations are rare. -->
+
+To examine the outcomes of these transformation tests, one can refer to specific statistics: The `udg()` function grants access to broad array of diagnostic statistics.
+The `qs()` function and the `AIC()`, `BIC()` and `logLik()` methods are wrappers that use `udg()` to access some specific diagnostical statistics.
+For example, if we want to access teh AICc values that were used to determine the appropriatness of the logaritmic model, we use:
 
 ```{r}
 m <- seas(AirPassengers)
 udg(m, c("aictest.trans.aicc.nolog", "aictest.trans.aicc.log"))
 ```
 
-We see the AICc for log transformation is lower and hence selected.
-We saw this in @sec-getting-started, were the summary of the seasonal object, `summary(m)`, has told us that `Transform: log`.
-The same infor transformation can also be found in many other places such as the HTML output with `out(m)` or the udg with argument name `aictrans` such as `udg(m, "aictrans")`.
+The AICc for the log transformed model is lower than the for the untransformed one.
+That is why the automated procedure has selected a log transformation, as we have seen previously in @sec-getting-started.
+
+<!-- CHR: seems more useful to me to introduce out() at a later stage, when we are acutally using for something. -->
+
+````{=html}
+<!--
+    The same infor transformation can also be found in many other places such as the HTML output with `out(m)` or the udg with argument name `aictrans` such as `udg(m, "aictrans")`.
 
 ::: callout-tip
 ## X-13 HTML Output
@@ -107,31 +133,53 @@ E.g.,
 out(m)
 ```
 :::
+ -->
+````
 
-The choice between `log` and `none` changes the type of seasonal decomposition that will occur and, hence, your interpretation of the seasonal factors.
-With no transformation, X-13 will perform an additive seasonal adjustment specified in @eq-additive.
-If log transformation is selected, X-13 will perform a multiplicative adjustment as specified in @eq-multiplicative.
+## Prior modifications
+
+Prior modifications describe a second, less commonly used transformation in X-13.
+A prior modification scales each observation for known fixed effects.
+These effects can be well-known and established, such as the length of a period or leap-year effects, or they can be more subjective such as a modification for a workers' strike.
+
+We can think of prior-modification factors as events or corrections made to your data that are fixed throughout the adjustment process.
+These prior modification factors can also be permanent (default) or temporary.
+Permanent modifications are excluded from the final seasonal adjustment.
+Temporary modifications are removed while calculating seasonal factors but added back to the seasonally adjusted series.
+
+In most cirumstances, incorporating external effects in a seasonal adjustment model would be left to the regression part in regARIMA, and will be covered in @sec-regarima.
 
 ## Transform options
+
+<!-- CHS not investing time on this, we previously did a scraping of the X-13 handbook and Andrea could derive some functionality to include a table with all options for each spec. -->
 
 The `transform` spec controls these options.
 Some primary options within this spec are
 
 | Spec option          | Use                                            | Example values        | default |
-|-----------------|-----------------|---------------------|-----------------|
+|-----------------|-----------------|--------------------|-----------------|
 | `transform.function` | Transform function                             | `none`, `log`, `auto` | `none`  |
 | `transform.aicdiff`  | adjust tolerance of AIC test for log transform | `0.0`, `3.0`, `-4.5`  | `-2.0`  |
 | `xtrans`             | Prior adjustment factor                        | `seas(m, xtrans = y)` | `NULL`  |
 
 ## Case Study: `AirPassengers`
 
-An increasing variance, also known as *heteroskadasticity* is one sign of requiring a logarithmic transform.
-We have already seen that this is present in `AirPassengers`.
-Let's verify that the automatic transformation identifies this.
+```{=html}
+<!--
 
-```{r}
-transformfunction(m)
+Should AirPassengers always be the text example, and 'Case Study' be left for more interesting examples. I think so!
+
+
+ -->
 ```
+Why does `AirPassengers` seem to follow a multiplicative model of seasonal adjusmtent?
+The answer is *heteroskadasticity*, or a varying variance.
+As the number of air passengers grow over time, so does their seasonality.
+With just a few people flying, we would expect the seasonal component to be small in absolute numbers.
+With many people using airplanes, the seasonal component is bigger in absolute numbers.
+In such a series, it makes more sense describe seasonality in a multiplicative model, and thus to log tranform the series before modeling.
+
+This is a characteric of many economic time series, wich often exibit a growth in the trend.
 
 This is also a good place to get our first look at the seasonal factors.
 The `monthplot()` method offers a convenient way to look at these:
@@ -155,7 +203,7 @@ If you want to extract the seasonal factor directly into R, you can use the `ser
 series(m, "seats.seasonal")
 ```
 
-## Case Study: More difficult decision
+## Case Study: A more difficult decision
 
 Consider the situation where you are trying to decide on transform choices for monthly retail grocery store data.
 The series `grocery` is part of the *seasonalbook* package.
@@ -188,3 +236,9 @@ Suppose you were to change this option to `transform.aicdiff = 0`, then the prog
 m2 <- seas(grocery, x11 = "", transform.aicdiff = 2)
 transformfunction(m2)
 ```
+
+## Exercises
+
+1.  Use *seasonal* to perform an automated seasonal adjustment of `mdeaths`.
+
+2.  Compute `"aictest.trans.aicc.nolog"` and `"aictest.trans.aicc.log"` and compare these values.

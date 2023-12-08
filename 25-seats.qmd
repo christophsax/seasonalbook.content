@@ -13,7 +13,7 @@ Signal Extraction in ARIMA Time Series, or SEATS, is a method for estimating uno
 It is developed from the work of @cleveland76, @hillmer82, @maravall86.
 If applied properly, SEATS seasonal factors are usually more stable than X-11, and the seasonally adjusted series show less revisions than X11 (see @sec-comparing for a more extensive discussion).
 
-Like X-11, SEATS applies a series of filters to an observed time series, as described in @sec-seasonal-decomposition.
+Like X-11, SEATS applies a series of filters to an observed time series, as described in @sec-x11.
 Like X-11, SEATS uses a forecast extended series, in order to obtain unbiased results at the margin.
 
 Unlike X-11, however, SEATS filters are derived from the ARIMA model of the time series.
