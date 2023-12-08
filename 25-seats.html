@@ -437,7 +437,7 @@ Planas, Christophe, and Raoul Depoutot. 2002. <span>“Controlling Revisions in 
 <p>Values of <span class="math inline">\(\Theta\)</span> close to one yield a seasonal adjustment filter that has seasonal factors that change slowly over time. This provides less smoothing but relatively small revisions. Any revisions that do occur will last for a longer period of time due to the longer filters.</p>
 <p>Overall, we may think of SEATS filters as a broader, more flexible set of filters than X-11 filers. While we have just seven filters in X-11, we have an infinite number of filters in SEATS. They cover a larger range of filters spans, ranging from filters that are much narrower than X-11 to filters that are much wider.</p>
 <p>SEATS greatest strength is also its greatest weakness. As we will see in the example below, SEATS sometimes chooses a filter that is very narrow. From a SEATS perspective, this makes sense: Given an ARIMA model with a very weak seasonality, the filter lengths should be chooses narrowly. From a practical perspective, the resulting seasonal component is undesirable. It is too volatile, essentially catching much of the irregular component and making the resulting seasonally adjusted series too smooth.</p>
-<p>Additionally, the filters that are</p>
+<!-- Additionally, the filters that are -->
 </section><section id="transitory-component" class="level2" data-number="7.3"><h2 data-number="7.3" class="anchored" data-anchor-id="transitory-component">
 <span class="header-section-number">7.3</span> Transitory component</h2>
 <p>Sometimes SEATS includes a transitory component in its decomposition:</p>
