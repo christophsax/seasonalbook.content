@@ -312,7 +312,7 @@ abline(h = 0, lty = 'dotted')
 
 ## Extreme value
 
-As mentioned above, X-11 is sensitive to outliers, and applies its own extreme value adjustment (see Box for the differences between outliers and extreme values).
+As mentioned above, X-11 is sensitive to outliers, and applies its own extreme value adjustment (see the box for the differences between outliers and extreme values).
 
 ::: callout-note
 ## Outliers and Extreme values
@@ -337,24 +337,26 @@ After an initial trend estimation, X-11 replaces extreme values according to the
 %%| label: fig-spec-interaction
 %%| fig-width: 9
 %%| fig-cap: |
-%%|   Default behavior of Extreme value replacement procedure.
+%%|   Default behavior of extreme value replacement procedure.
 flowchart LR
-    A(  Estimate standard deviation <br> of irregular, sigma  )-->B(Compare SI-ration to <br> multiples of sigma)
-    B-->C(SI smaller than 1.5 * sigma)
-    B-->D(1.5 * s smaller than SI 2.5 * sigma)
-    B-->E(SI larger than 2.5 * sigma)
-    C --> F(SI unchanged)
-    D --> G(SI linearly weighted)
-    E --> H(SI fully weighted)
+    A(Estimate standard deviation <br> of irregular, sigma)-->B(Compare values to <br> multiples of sigma)
+    B-->C(value smaller than 1.5 sigma)
+    B-->D(value between 1.5 and 2.5 sigma)
+    B-->E(value larger than 2.5 * sigma)
+    C --> F(value unchanged)
+    D --> G(value linearly weighted)
+    E --> H(value fully weighted)
 ```
+De-trended values (in X-13 parlance, they are sometimes called *SI-ratios*) are replaced with an average of the two nearest values from the same period. E.g., if January 1958 is considered to be an extreme value, the values of January 1956, 1957, 1959 and 1960 will be used.
 
-Users can modify the sigma thresholds (`sigmalim`) for extreme value conversion within the X-11 specification.
+If a values is larger than the larger limit, it is fully replaced. If a value is smaller than the lower limit, it is not replaced. If a value lies between the limits, it a weigted average between the two surrounding values and the value itself is used.
+
+Note, that only non-replaced values are used to derive the replacement values.
+Hence, if a very small limit is used, the values that are uesd to derive the replacement values may be far way.
+
+Users can modify the sigma thresholds (`sigmalim`) for extreme value conversion within the X-11 specification. Choosing smaller values lead to more extreme values and should typically result in a smoother seasonal component.
 This option, defined as a two-length vector that specifies when weighting should begin and when full weight of zero should be applied.
 Between the endpoints of the specified vector, a linear weight will be applied.
-
-SI ratios are replaced with an average of the two nearest SI ratios from the same period.
-One caveat being that only fully weighted SI ratios are used for SI ratio replacement.
-Hence, if too small of a $\sigma$ limit is used, the SI ratios used to replace an extreme value should be many years away.
 
 Extreme value choices can significantly influence the seasonal adjustment outcome.
 For example, the default values for in `AirPassengers` adjustment look as follows:
@@ -364,26 +366,25 @@ m = seas(AirPassengers, x11 = "")
 unmodified_SIratio <- series(m, "d8")
 modified_SIratio   <- series(m, "d9")
 seasonal_factors <- series(m, "d10")
-tsbox::ts_dygraphs(cbind(unmodified_SIratio, modified_SIratio, seasonal_factors))
+tsbox::ts_plot(cbind(unmodified_SIratio, modified_SIratio, seasonal_factors))
+```
+
+An alternative way to inspect output of X-13 is to use the `out()` function, which accesses the X-13 HTML output that contains a pletora of infomation:
+
+```{r, eval = FALSE}
+out(m)
 ```
 
 If we change `x11.sigmalim` to `c(1, 2)`, we get the following result:
 
 ```{r}
-m = seas(AirPassengers, x11 = "", x11.sigmalim = c(1, 2))
-unmodified_SIratio <- series(m, "d8")
-modified_SIratio   <- series(m, "d9")
-seasonal_factors <- series(m, "d10")
-tsbox::ts_dygraphs(cbind(unmodified_SIratio, modified_SIratio, seasonal_factors))
+m_small_limits = seas(AirPassengers, x11 = "", x11.sigmalim = c(1, 2))
+unmodified_SIratio <- series(m_small_limits, "d8")
+modified_SIratio   <- series(m_small_limits, "d9")
+seasonal_factors <- series(m_small_limits, "d10")
+tsbox::ts_plot(cbind(unmodified_SIratio, modified_SIratio, seasonal_factors))
 ```
 
-::: callout-warning
-### SI ratio / SI difference
-
-In a multiplicative adjustment, the detrended series is called the SI ratio.
-It is an estimate of the seasonal component.
-The SI ratio is used to identify extreme values during the initial and intermediate steps of the X-11 method.
-:::
 
 ```{=html}
 <!--
@@ -405,6 +406,21 @@ It has been observed that when multiplicative seasonal adjustment produces more 
  -->
 ```
 <!-- NEED TO SHOW USERS HOW TO VIEW THEIR EXTREME VALUES - D8.B TABLE DESIGNATIONS NEXT TO OBSERVATIONS. A good reference on the subject is Baxter (1994). -->
+
+
+
+## Exercises
+
+1.  Use *seasonal* to perform an automated seasonal adjusmtent of `fdeaths`, using X-11.
+
+2. Use `monthplot()` to inspect the seasonal component.
+
+3. Adjust the filter length to a longer filter (`s3x15`). Can you see the differences in `monthplot()`?
+
+4. Use `out()` to inspect the extreme value adjustment. Which default values for `sigmalim` have been chosen?
+
+5. Use lower values for `sigmalim` and see if it affects the results of `monthplot()`.
+
 
 
 <!--
