@@ -47,13 +47,13 @@ As will be shown later on, SEATS sometimes choose a filter that is too narrow, a
 Plots of X-11 filters vs SEATS filters
 :::
 
-Given a certain ARIMA model (such as the "Airline" (0 1 1)(0 1 1) model which is appropriate for the description of the `AirPassengers` time series), SEATS decomposes the model into separate models for the trend, the seasonal and the irregular component.
+Given a certain ARIMA model (such as the "Airline" (0 1 1)(0 1 1) which is appropriate for the description of the `AirPassengers` time series), SEATS decomposes the model into separate models for the trend, the seasonal and the irregular component.
 This is done by the *Canonical Decomposition* and will be discussed in @sec-canonical-decomposition.
 
-The decomposition of the ARIMA model is almost independent of the data.
+For a given set of ARIMA model parameter, the decomposition of the ARIMA model is almost independent of the data.
 For each ARIMA specification, there is a unique canonical decomposition.
-For a normal "Airline" (0 1 1)(0 1 1) model (with both moving average coefficients not being to close to 1), the trend component can be described with a (0 2 2)(0 0 0) model, while the seasonal component can be described approximately by a (0 0 11)(0 0 0) model.
-The parameters of these models can be derived from the parameter estimations of the initial airline model that describes the original series.
+For an "Airline" (0 1 1)(0 1 1) model (with both moving average coefficients not being to close to 1), the trend component can be described with a (0 2 2)(0 0 0) model, while the seasonal sum of seasonal component can be described by a (0 0 11)(0 0 0) model.
+The parameters of these models can be derived from the parameter estimates of the initial airline model that describes the original series.
 The irregular component is usually white noise, described by the trivial (0 0 0)(0 0 0) model.
 
 The decomposed ARIMA models imply a certain filter, which is derived by the Wiener-Kolmogorov procedure (@sec-wiener-kolmogorov-algorithm).
@@ -70,8 +70,8 @@ tsbox::ts_plot(final(seats), final(x11))
 ```
 
 Others have looked at comparing SEATS and X-11 filters.
-In @planas02 they show with X11 seasonal filter that is closest to an implied (0 1 1)(0 1 1) "Airline" SEATS model based on the $\Theta_{12}$.
-As a reminder, $\Theta_{12}$ refers to the moving average parameter of the seasonal difference in the ARIMA model.
+In @planas02 they show with X11 seasonal filter that is closest to an implied (0 1 1)(0 1 1) "Airline" SEATS model based on the $\Theta$.
+As a reminder, $\Theta$ refers to the seasonal moving average parameter of the ARIMA model.
 
 | Filter | Closest Seasonal MA | Seasonal MA Interval |
 |--------|---------------------|----------------------|
@@ -80,7 +80,7 @@ As a reminder, $\Theta_{12}$ refers to the moving average parameter of the seaso
 | 3x9    | 0.723 - 0.732       | 0.75 - 0.87          |
 | 3x15   | 0.824 - 0.828       | 0.88 - 1.00          |
 
-Let's consider small vs large values of seasonal $\Theta_{12}$.
+Let's consider small vs large values of seasonal $\Theta$.
 Values of $\Theta$ close to zero yield a seasonal adjustment filter that has seasonal factors that change rapidly over time.
 This provides considerable smoothing and large revisions.
 These revisions will only last for a small number of years due to the shorter filters.
@@ -90,10 +90,10 @@ This provides less smoothing but relatively small revisions.
 Any revisions that do occur will last for a longer period of time due to the longer filters.
 
 Overall, we may think of SEATS filters as a broader, more flexible set of filters than X-11 filers.
-While we have just seven filters in X-11, we have an infite numer of filters in SEATS.
+While we have just seven filters in X-11, we have an infinite number of filters in SEATS.
 They cover a larger range of filters spans, ranging from filters that are much narrower than X-11 to filters that are much wider.
 
-SEATS greatest stength is also its greatest weakness.
+SEATS greatest strength is also its greatest weakness.
 As we will see in the example below, SEATS sometimes chooses a filter that is very narrow.
 From a SEATS perspective, this makes sense: Given an ARIMA model with a very weak seasonality, the filter lengths should be chooses narrowly.
 From a practical perspective, the resulting seasonal component is undesirable.
@@ -188,8 +188,12 @@ More than other coefficients, the seasonal MA ($\theta_{12}$) influences whether
 
 ## Example SEATS adjustment
 
-Let's have a look at nominal taxes from Swiss production account, previously discussed [here](https://github.com/dpkj/dpkj-research/blob/master/seas_adj/pk_tax_n.md).
+Let's have a look at nominal taxes from Swiss production account.
+
+<!--
+, previously discussed [here](https://github.com/dpkj/dpkj-research/blob/master/seas_adj/pk_tax_n.md).
 *(added some minutes ago, to be discussed in class).*
+-->
 
 The series looks as follows:
 
@@ -421,7 +425,7 @@ legend('topright', legend = c('SEATS', 'X11 3x5', 'X11 3x9'), col = c(1, 3, 2), 
 
 ```
 
-### Reasons for using SEATS or X11 
+### Reasons for using SEATS or X11
 
 ::: callout-note
 ## TODO
@@ -429,21 +433,21 @@ legend('topright', legend = c('SEATS', 'X11 3x5', 'X11 3x9'), col = c(1, 3, 2), 
 Add Table with pros and cons
 :::
 
-First off, there does not exist a simple flow chat that tells each individual users whether they should use SEATS or X-11. 
-For most well-behaved series both methods will produce suitable seasonal adjustments that will work for the majority of use cases. 
+First off, there does not exist a simple flow chat that tells each individual users whether they should use SEATS or X-11.
+For most well-behaved series both methods will produce suitable seasonal adjustments that will work for the majority of use cases.
 The ultimate decision between the two comes down to a few questions.
 
-1. What will you be doing with these seasonal adjustments?
-1. How often is your data revised?
-1. Does your agency have a policy to freeze data/seasonal adjustment revisions after a fixed period of time?
-1. How much time can be devoted to development of initial spec files?
-1. How much time can be devoted to maintenance of spec files?
-1. What is your maintenance schedule? (yearly, monthly, etc)
-1. What are the consequences of a poor adjustment?
-1. What are the consequences of large revisions?
-1. Will your agency be publishing original series, just SA, trends, seasonal factors?
-1. Is there an emphasis on deep methodological understanding of the procedures?
-1. Is there an emphasis on training users of released data to have a methodological understanding of the SA process?
+1.  What will you be doing with these seasonal adjustments?
+2.  How often is your data revised?
+3.  Does your agency have a policy to freeze data/seasonal adjustment revisions after a fixed period of time?
+4.  How much time can be devoted to development of initial spec files?
+5.  How much time can be devoted to maintenance of spec files?
+6.  What is your maintenance schedule? (yearly, monthly, etc)
+7.  What are the consequences of a poor adjustment?
+8.  What are the consequences of large revisions?
+9.  Will your agency be publishing original series, just SA, trends, seasonal factors?
+10. Is there an emphasis on deep methodological understanding of the procedures?
+11. Is there an emphasis on training users of released data to have a methodological understanding of the SA process?
 
 -   When applied properly (good ARIMA model, filters are not too narrow), it produces a seasonal component that is more stable.
     This leads to less revisions in the resulting series.
