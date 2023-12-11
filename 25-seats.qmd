@@ -99,7 +99,7 @@ From a SEATS perspective, this makes sense: Given an ARIMA model with a very wea
 From a practical perspective, the resulting seasonal component is undesirable.
 It is too volatile, essentially catching much of the irregular component and making the resulting seasonally adjusted series too smooth.
 
-Additionally, the filters that are
+<!-- Additionally, the filters that are -->
 
 ## Transitory component
 
