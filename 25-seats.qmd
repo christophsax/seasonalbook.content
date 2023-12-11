@@ -7,6 +7,25 @@ source("_common.R")
 status("polishing", "2023-01-21", section = "SEATS")  # drafting, polishing, complete
 ```
 
+
+<!--
+
+  Nest time:
+
+  - Christoph to rework, and hold SEATS part. Once I am fine with that, the chapter has the right level
+  - 7.1 and 7.2 are already quite good, 7.3 is tiny
+  - 7.4 optionally left to Jim (if time allows)
+  - Some more hammering on the intiution
+
+
+
+  # What is the definition of Seasonality?
+  What is the role of predictability?
+
+
+
+
+ -->
 ## Model based decomposition
 
 Signal Extraction in ARIMA Time Series, or SEATS, is a method for estimating unobserved components in a time series.
