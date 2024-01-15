@@ -286,7 +286,7 @@ imp_cn
 ```
 :::
 
-seasonal includes the genhol() function, a R version of the equally named software utility by the U.S.
+seasonal includes the `genhol()` function, a R version of the equally named software utility by the U.S.
 Census Bureau.
 Using the dates of the Chinese New Year as an input, it produces a time series with the deviations from the monthly means.
 Here we are assuming that the holiday starts on New Year's Eve and lasts for one week.
