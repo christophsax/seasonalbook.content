@@ -290,6 +290,8 @@ find_seasonal_PxQ_filter_wts = function(P, Q) {
 }
 ```
 
+<!-- TODO: avoid abbreviations `wts`. -->
+
 ```{r, echo=FALSE}
 # 3 x 3 seasonal filter wts
 w = find_seasonal_PxQ_filter_wts(3, 3)
