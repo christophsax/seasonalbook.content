@@ -199,6 +199,8 @@ Instead of deriving the result, the following code simulates observations from a
 The spectrum is then estimated using a parametric estimator using the `spec.ar` function.
 Details of this estimation can be found in @brockwell1991theory.
 
+<!-- FIXME: use citation tag -->
+
 ```{r}
 library(forecast)
 set.seed(123)
