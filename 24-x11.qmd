@@ -369,7 +369,7 @@ seasonal_factors <- series(m, "d10")
 tsbox::ts_plot(cbind(unmodified_SIratio, modified_SIratio, seasonal_factors))
 ```
 
-An alternative way to inspect output of X-13 is to use the `out()` function, which accesses the X-13 HTML output that contains a pletora of infomation:
+An alternative way to inspect output of X-13 is to use the `out()` function, which accesses the X-13 HTML output that contains a plethora of information:
 
 ```{r, eval = FALSE}
 out(m)
@@ -411,7 +411,7 @@ It has been observed that when multiplicative seasonal adjustment produces more 
 
 ## Exercises
 
-1.  Use *seasonal* to perform an automated seasonal adjusmtent of `fdeaths`, using X-11.
+1.  Use *seasonal* to perform an automated seasonal adjustment of `fdeaths`, using X-11.
 
 2. Use `monthplot()` to inspect the seasonal component.
 
