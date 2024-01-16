@@ -139,6 +139,8 @@ Another challenge is the interplay between trend and seasonality estimation---ac
 These observations pave the way for the X-11 method, which iteratively refines this process.
 Each iteration enhances the estimated components by selecting more appropriate filters and managing outliers and regression effects.
 
+<!-- FIXME: complete "Being able to understand the ... " -->
+
 ```{=html}
 <!--
 During these steps the trend filter is automatically chosen based the noise-to-signal ratios, labeled I/C in the output file.
