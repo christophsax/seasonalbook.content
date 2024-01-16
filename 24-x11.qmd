@@ -349,10 +349,10 @@ flowchart LR
 ```
 De-trended values (in X-13 parlance, they are sometimes called *SI-ratios*) are replaced with an average of the two nearest values from the same period. E.g., if January 1958 is considered to be an extreme value, the values of January 1956, 1957, 1959 and 1960 will be used.
 
-If a values is larger than the larger limit, it is fully replaced. If a value is smaller than the lower limit, it is not replaced. If a value lies between the limits, it a weigted average between the two surrounding values and the value itself is used.
+If a values is larger than the larger limit, it is fully replaced. If a value is smaller than the lower limit, it is not replaced. If a value lies between the limits, it a weighted average between the two surrounding values and the value itself is used.
 
 Note, that only non-replaced values are used to derive the replacement values.
-Hence, if a very small limit is used, the values that are uesd to derive the replacement values may be far way.
+Hence, if a very small limit is used, the values that are used to derive the replacement values may be far way.
 
 Users can modify the sigma thresholds (`sigmalim`) for extreme value conversion within the X-11 specification. Choosing smaller values lead to more extreme values and should typically result in a smoother seasonal component.
 This option, defined as a two-length vector that specifies when weighting should begin and when full weight of zero should be applied.
