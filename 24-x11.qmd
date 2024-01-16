@@ -238,6 +238,8 @@ m_long <- seas(AirPassengers, x11.seasonalma = "s3x9")
 plot(m_long)
 ```
 
+<!-- TODO: add reference to `monthplot()` explanation in chp "transform" -->
+
 Generally speaking, longer filters imply a more stable seasonal component and shorter filters a more changing seasonal pattern.
 We can see this by comparing the `monthplot()` outputs of the estimations.
 
