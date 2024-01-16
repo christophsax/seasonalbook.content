@@ -251,6 +251,8 @@ As you can see, the seasonal component is smoother with the longer filter:
 monthplot(m_long)
 ```
 
+<!-- TODO: point to revisions chapter? -->
+
 Longer filters involve more data points in the calculation of the seasonal component at each time point.
 Therefore, they typically result in smaller revisions when new data is added to the series.
 However, these revisions can impact historical data values further back in the time series.
