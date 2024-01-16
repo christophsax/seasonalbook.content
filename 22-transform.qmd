@@ -43,9 +43,9 @@ summary(m_none)
 plot(m_none)
 ```
 
-Why is the tranformation function so important?
+Why is the transformation function so important?
 
-In fact, applying a logaritimc transformation is equivalent of estimating a multiplicative seasonal adjusment model.
+In fact, applying a logarithmic transformation is equivalent to estimating a multiplicative seasonal adjustment model.
 This is one of the most fundamental decisions during seasonal adjustment.
 
 ## Additive and multiplicative adjustment {#sec-additive-and-multiplicative-adjustment}
