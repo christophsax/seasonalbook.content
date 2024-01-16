@@ -169,7 +169,7 @@ $$X_t = w_t + \theta w_{t-1}$$
 
 The second, is a frequency domain representation of a series.
 Here, $X_t$ is represented as the sum of trigonometric functions.
-More specifically, the spectral density of $X_t$ is the fourier transform of the acf of the series.
+More specifically, the spectral density of $X_t$ is the fourier transform of the ACF of the series.
 $$f_X(\nu) = \sum_{h = - \infty}^{\infty} \gamma(h) e^{-2\pi i \nu h}$$ For example, the spectral density of an MA(1) is: $$f_X(\nu) = \sigma^2 \left( 1 + \theta^2 + 2\theta\cos(2\pi\nu) \right)$$
 
 The important concept here is to understand that these representations are equivalent; meaning, they contain the same information about a time series, such as encoding the ACF function.
