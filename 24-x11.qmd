@@ -108,6 +108,8 @@ As a basic trend filter, we trend filter---a 2x12 moving average.
 The weights for this filter are distributed as 1/24, followed by 1/12 for the next 11 points, and then 1/24 again.
 We apply these weights to estimate the trend of the `AirPassengers` series:
 
+<!-- FIXME: use `=` or `<-` consistently -->
+
 ```{r x11-trend}
 observed <- AirPassengers
 filter_trend = c(1/24, rep(1/12, 11), 1/24)
