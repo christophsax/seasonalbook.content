@@ -239,6 +239,7 @@ plot(m_long)
 ```
 
 <!-- TODO: add reference to `monthplot()` explanation in chp "transform" -->
+<!-- TODO: the explanation of SI-ratio is found afterwards which. Move it upper as a note? -->
 
 Generally speaking, longer filters imply a more stable seasonal component and shorter filters a more changing seasonal pattern.
 We can see this by comparing the `monthplot()` outputs of the estimations.
