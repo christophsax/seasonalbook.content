@@ -36,6 +36,8 @@ m <- seas(AirPassengers, x11 = "")
 summary(m)
 ```
 
+<!-- FIXME: can we introduce the following bullets? -->
+
 #### Estimating the trend component {.unnumbered}
 
 X-11 starts by estimating the trend component.
