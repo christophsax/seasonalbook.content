@@ -191,7 +191,7 @@ However, for the sake of this text we just know that it tells us exactly the fre
 Let's look at an example spectrum for the airline model.
 Instead of deriving the result, the following code simulates observations from an airline model with $\theta = .5$ and $\Theta = .9$.
 The spectrum is then estimated using a parametric estimator using the `spec.ar` function.
-Details of this estimation can be found in @brockwell1991theroy.
+Details of this estimation can be found in @brockwell1991theory.
 
 ```{r}
 library(forecast)
