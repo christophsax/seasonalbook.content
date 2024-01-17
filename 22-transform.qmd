@@ -92,7 +92,7 @@ With log transformation, X-13 will perform a multiplicative adjustment as specif
 ## Automated transformation choice {#sec-auto-transform}
 
 X-13 has a built-in statistical test determine the appropriateness of applying logarithmic transformation.
-The choice is made by comparing the AICc[^22-transform-1] value of an ARIMA (0 1 1)(0 1 1) model (or, optionaly, a user-specified model) to the log-transformed series and the original series.
+The choice is made by comparing the AICc[^22-transform-1] value of an ARIMA (0 1 1)(0 1 1) model (or, optionally, a user-specified model) to the log-transformed series and the original series.
 
 [^22-transform-1]: With small sample sizes, a standard AIC test may select models with too many parameters.
     AICc tackles this problem by correcting for sample size.
@@ -105,8 +105,8 @@ However, if your data series contains negative values, logarithmic transformatio
 <!-- Other restrictions on the allowed transformations exist, but these situations are rare. -->
 
 To examine the outcomes of these transformation tests, one can refer to specific statistics: The `udg()` function grants access to broad array of diagnostic statistics.
-The `qs()` function and the `AIC()`, `BIC()` and `logLik()` methods are wrappers that use `udg()` to access some specific diagnostical statistics.
-For example, if we want to access the AICc values that were used to determine the appropriatness of the logaritmic model, we use:
+The `qs()` function and the `AIC()`, `BIC()` and `logLik()` methods are wrappers that use `udg()` to access some specific diagnostic statistics.
+For example, if we want to access the AICc values that were used to determine the appropriateness of the logarithmic model, we use:
 
 ```{r}
 m <- seas(AirPassengers)
