@@ -70,7 +70,7 @@ Modeling a seasonal break is usually preferable to a separation of the time seri
 ### Restricting model span
 
 In many structural breaks, restricting `series.modelspan` may be the easiest way to deal with such series.
-Resticting the model span, uses only part of the series for model estimation, but applies seasonal adjustment to the whole series:
+Restricting the model span, uses only part of the series for model estimation, but applies seasonal adjustment to the whole series:
 
 ```{r }
 
