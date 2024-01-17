@@ -321,7 +321,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 -   This is our first chance to mention the idea of test first then hard-code in production
 
 -   Case Study idea: Decide between log vs non-log transformation
- --><p>In seasonal adjustment, one of the first choices is whether a series needs to be transformed before modeling. Two types of transformation types typically occur within X-13, <em>transformations</em> and <em>prior modifications</em>. Prior modifications are relatively rarely used and will be covered in the second section. Tranformations, especially lograitmic transformations, are ubiquitous and central to many seasonal adjustment models.</p>
+ --><p>In seasonal adjustment, one of the first choices is whether a series needs to be transformed before modeling. Two types of transformation types typically occur within X-13, <em>transformations</em> and <em>prior modifications</em>. Prior modifications are relatively rarely used and will be covered in the second section. Transformations, especially logarithmic transformations, are ubiquitous and central to many seasonal adjustment models.</p>
 <p>Below is our standard example. As we have seen before, the automated procedures of X-13 opt for a logarithmic transformation of the series.</p>
 <div class="cell">
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_log</span>  <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, x11 <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
@@ -382,8 +382,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><img src="22-transform_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="864"></p>
 </div>
 </div>
-<p>Why is the tranformation function so important?</p>
-<p>In fact, applying a logaritimc transformation is equivalent of estimating a multiplicative seasonal adjusment model. This is one of the most fundamental decisions during seasonal adjustment.</p>
+<p>Why is the transformation function so important?</p>
+<p>In fact, applying a logarithmic transformation is equivalent to estimating a multiplicative seasonal adjustment model. This is one of the most fundamental decisions during seasonal adjustment.</p>
 <section id="sec-additive-and-multiplicative-adjustment" class="level2" data-number="4.1"><h2 data-number="4.1" class="anchored" data-anchor-id="sec-additive-and-multiplicative-adjustment">
 <span class="header-section-number">4.1</span> Additive and multiplicative adjustment</h2>
 <p>As you remember from <a href="10-introduction.html"><span>Chapter&nbsp;1</span></a>, Seasonal adjustment decomposes a time series into a <strong>trend</strong>, a <strong>seasonal</strong>, and an <strong>irregular</strong> component. Algebraically, the fundamental identity of seasonal adjustment looks like this:</p>

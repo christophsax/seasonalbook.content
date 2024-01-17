@@ -441,7 +441,7 @@ Being able to understand the
 When using the x11 spec you can change the length of the filter used for the trend and seasonal components with the `trendma` and `seasonalma` arguments respectively.
 Additionally, `sigmalim` will control the amount of extreme value adjustment that is done during the seasonal adjustment.
  -->
-</section><section id="frequency-domain-optional" class="level2" data-number="6.3"><h2 data-number="6.3" class="anchored" data-anchor-id="frequency-domain-optional">
+</section><section id="frequency-domain-optional" class="level2 page-columns page-full" data-number="6.3"><h2 data-number="6.3" class="anchored" data-anchor-id="frequency-domain-optional">
 <span class="header-section-number">6.3</span> Frequency Domain (optional)</h2>
 <p>We present the following as optional reading material. For those interesting in simply performing seasonal adjustment, an understanding of the frequency domain of a time series, is not mandatory. However, the spectral domain representation will help the interested reader further understand the impact a linear filter has on a time series. Since both X-11 and SEATS use linear filters, this will deepen the users’ understanding of whichever seasonal adjustment procedure is chosen.</p>
 <p>Seasonal adjustment is highly motivated by the study, estimation, and ultimately removal of regular fluctuations in a time series. The words <em>regular fluctuations</em> immediately lead us to trigonometric functions sine and cosine. It turns out, there exist two equivalent representations of a time series. The first, and usually easier for beginners to understand, is the time domain representation. This is expressing how <span class="math inline">\(X_t\)</span> evolves as time <span class="math inline">\(t\)</span> evolves. For example, an MA(1) time domain representation:</p>
@@ -464,8 +464,10 @@ Where does the term “White Noise” come from?
 <p>Now that we know we can express a time series either in the time domain or as a sum of sin and cosine curves, we get to the important part for seasonal adjustment - how does a linear filter effect the input series? Assume we want to pass a moving-average linear filter over our data <span class="math inline">\(X_t\)</span> with weights <span class="math inline">\(\ldots, w_{-2}, w_{-1}, w_{0}, w_{1}, w_{2}, \ldots\)</span>. Assume the output of the linear filter will be <span class="math inline">\(Y_t\)</span> such that <span class="math display">\[Y_t = \sum_{j = -\infty}^{\infty} w_j X_{t+j} =
 \ldots + w_{-2}X_{t-2} + w_{-1}X_{t-1} +  w_{0}X_{t} + w_{1}X_{t+1} + w_{2}X_{t+2} + \ldots\]</span> This type of linear filter can be expressed as a linear operator in terms of the backshift operator <span class="math inline">\(B\)</span> , where <span class="math inline">\(BX_t = X_{t-1}\)</span> and <span class="math inline">\(B^{-1}X_t = X_{t+1}\)</span>. <span class="math display">\[W(B) = \ldots + w_{-2}B^2 + w_{-1}B +  w_{0} + w_{1}B^{-1} + w_{2}B^{-2} + \ldots\]</span> and hence <span class="math inline">\(Y_t = W(B)X_t\)</span>. We can now express the spectral density of <span class="math inline">\(Y_t\)</span> in terms of the input spectral density <span class="math inline">\(X_t\)</span>. <span class="math display">\[f_Y(\nu) = \underbrace{\lvert W(e^{2\pi i \nu}) \rvert^2}_{\text{Square Gain Function}} f_X(\nu)\]</span></p>
 <p>There is some mathematical machinery needed when understanding exactly what the square-gain function, <span class="math inline">\(\lvert W(e^{2\pi i \nu}) \rvert^2\)</span>, is. However, for the sake of this text we just know that it tells us exactly the frequencies of <span class="math inline">\(X_t\)</span> that amplified in the output <span class="math inline">\(Y_t\)</span> as well as the frequencies of <span class="math inline">\(X_t\)</span> that will be annihilated (when the square-gain function equals 0).</p>
-<p>Let’s look at an example spectrum for the airline model. Instead of deriving the result, the following code simulates observations from an airline model with <span class="math inline">\(\theta = .5\)</span> and <span class="math inline">\(\Theta = .9\)</span>. The spectrum is then estimated using a parametric estimator using the <code>spec.ar</code> function. Details of this estimation can be found in (Brockwell and Davis).</p>
-<div class="cell">
+<p>Let’s look at an example spectrum for the airline model. Instead of deriving the result, the following code simulates observations from an airline model with <span class="math inline">\(\theta = .5\)</span> and <span class="math inline">\(\Theta = .9\)</span>. The spectrum is then estimated using a parametric estimator using the <code>spec.ar</code> function. Details of this estimation can be found in <span class="citation" data-cites="brockwell1991theory">Brockwell and Davis (<a href="#ref-brockwell1991theory" role="doc-biblioref">1991</a>)</span>.</p>
+<div class="no-row-height column-margin column-container"><div id="ref-brockwell1991theory" class="csl-entry" role="listitem">
+Brockwell, Peter J., and Richard A. Davis. 1991. <em>Time Series: Theory and Methods</em>. New York: Springer-Verlag.
+</div></div><div class="cell">
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://pkg.robjhyndman.com/forecast/">forecast</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; Registered S3 method overwritten by 'quantmod':</span></span>
 <span><span class="co">#&gt;   method            from</span></span>
@@ -631,8 +633,8 @@ Outliers and Extreme values
 </div>
 </div>
 <p>De-trended values (in X-13 parlance, they are sometimes called <em>SI-ratios</em>) are replaced with an average of the two nearest values from the same period. E.g., if January 1958 is considered to be an extreme value, the values of January 1956, 1957, 1959 and 1960 will be used.</p>
-<p>If a values is larger than the larger limit, it is fully replaced. If a value is smaller than the lower limit, it is not replaced. If a value lies between the limits, it a weigted average between the two surrounding values and the value itself is used.</p>
-<p>Note, that only non-replaced values are used to derive the replacement values. Hence, if a very small limit is used, the values that are uesd to derive the replacement values may be far way.</p>
+<p>If a values is larger than the larger limit, it is fully replaced. If a value is smaller than the lower limit, it is not replaced. If a value lies between the limits, it a weighted average between the two surrounding values and the value itself is used.</p>
+<p>Note, that only non-replaced values are used to derive the replacement values. Hence, if a very small limit is used, the values that are used to derive the replacement values may be far way.</p>
 <p>Users can modify the sigma thresholds (<code>sigmalim</code>) for extreme value conversion within the X-11 specification. Choosing smaller values lead to more extreme values and should typically result in a smoother seasonal component. This option, defined as a two-length vector that specifies when weighting should begin and when full weight of zero should be applied. Between the endpoints of the specified vector, a linear weight will be applied.</p>
 <p>Extreme value choices can significantly influence the seasonal adjustment outcome. For example, the default values for in <code>AirPassengers</code> adjustment look as follows:</p>
 <div class="cell">
@@ -645,7 +647,7 @@ Outliers and Extreme values
 <p><img src="24-x11_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="864"></p>
 </div>
 </div>
-<p>An alternative way to inspect output of X-13 is to use the <code>out()</code> function, which accesses the X-13 HTML output that contains a pletora of infomation:</p>
+<p>An alternative way to inspect output of X-13 is to use the <code>out()</code> function, which accesses the X-13 HTML output that contains a plethora of information:</p>
 <div class="cell">
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">out</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -682,7 +684,7 @@ It has been observed that when multiplicative seasonal adjustment produces more 
 </section><section id="exercises" class="level2" data-number="6.6"><h2 data-number="6.6" class="anchored" data-anchor-id="exercises">
 <span class="header-section-number">6.6</span> Exercises</h2>
 <ol type="1">
-<li><p>Use <em>seasonal</em> to perform an automated seasonal adjusmtent of <code>fdeaths</code>, using X-11.</p></li>
+<li><p>Use <em>seasonal</em> to perform an automated seasonal adjustment of <code>fdeaths</code>, using X-11.</p></li>
 <li><p>Use <code><a href="https://rdrr.io/r/stats/monthplot.html">monthplot()</a></code> to inspect the seasonal component.</p></li>
 <li><p>Adjust the filter length to a longer filter (<code>s3x15</code>). Can you see the differences in <code><a href="https://rdrr.io/r/stats/monthplot.html">monthplot()</a></code>?</p></li>
 <li><p>Use <code>out()</code> to inspect the extreme value adjustment. Which default values for <code>sigmalim</code> have been chosen?</p></li>
