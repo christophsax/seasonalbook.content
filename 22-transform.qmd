@@ -106,7 +106,7 @@ However, if your data series contains negative values, logarithmic transformatio
 
 To examine the outcomes of these transformation tests, one can refer to specific statistics: The `udg()` function grants access to broad array of diagnostic statistics.
 The `qs()` function and the `AIC()`, `BIC()` and `logLik()` methods are wrappers that use `udg()` to access some specific diagnostical statistics.
-For example, if we want to access teh AICc values that were used to determine the appropriatness of the logaritmic model, we use:
+For example, if we want to access the AICc values that were used to determine the appropriatness of the logaritmic model, we use:
 
 ```{r}
 m <- seas(AirPassengers)
