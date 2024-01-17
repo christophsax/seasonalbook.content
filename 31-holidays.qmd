@@ -457,4 +457,15 @@ summary(m4)
 
 ```
 
+## Exercises
+
+1. Go through `seasonal::genhol()` documentation and make sure you understand its argument.
+
+1. Can you replicate `seasonal::genhol(easter, frequency = 4)`'s output manually?
+
+1. Can you explain why do we need to set `center = "mean"` for Ramadan?
+
+1. What is the consequence of not specifying `regression.usertype = "holiday"` in a call to `seas()` when adjusting for moving holidays?
+
+
 
