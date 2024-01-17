@@ -36,27 +36,27 @@ library(tsbox, quietly = TRUE)
 Many time series are affected by public holidays.
 For example, retail sales typically increase before Christmas, and are much lower during Christmas days.
 Similar effects occur for Chinese New Year, Ramadan, Diwali or Easter.
-In seasonal adjusmtent, the treatment of Christmas is usually not much of a problem, because Christmas always occur on the same date in Decemeber.
+In seasonal adjustment, the treatment of Christmas is usually not much of a problem because Christmas always occurs on the same date in December.
 Thus, the Christmas effect is simply part of the December effect (or of the fourth quarter effect, if you have a quarterly series).
 
 Things are more complicated with irregular holidays.
-Because their occurence follow different rules, the holiday happens at different months in different years.
+Because their occurrence follows different rules, the holiday happens at different months in different years.
 Easter, for example, is based on the lunar cycles of the Jewish calendar, and is sometimes in March and sometimes in April.
-In quarterly data, Easter fall either in the first or in the second quarter.
+In quarterly data, Easter falls either in the first or in the second quarter.
 
-For the interpretation of many time series, this constitutes problem.
+For the interpretation of many time series, this constitutes a problem.
 Retails sales, for example, are usually reduced during the Easter holiday.
 If March values are compared between years, their interpretation depends on the exact day of Easter.
 If Easter falls into March, we would expect lower retail sales in this month.
-Conversely, if it falls into April we would expect April numbers to be lower.
+Conversely, if it falls into April, we would expect April numbers to be lower.
 
 | Variable    | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 |-------------------------------|----------------------------------------|
-| `easter[w]` | Easter holiday regression variable for monthly or quarterly flow data that assumes the level of daily activity changes on the w-th day before Easter and remains at the new level through the day before Easter. This value w must be supplied and can range from 1 to 25. A user can also specify an `easter[0]` regression variable, which assumes the daily level of activity level changes only on Easter Sunday. To estimate complex effects, several of these variables, differing in their choices of `w`, can be specified. |
-| `labor[w]`  | Labor Day holiday regression variable (monthly flow data only) that assumes the level of daily activity changes on the w-th day before Labor Day and remains at the new level until the day before Labor Day. The value `w` must be supplied and can range from 1 to 25.                                                                                                                                                                                                                                                            |
-| `thank[w]`  | Thanksgiving holiday regression variable (monthly flow data only) that assumes the level of daily activity changes on the w-th day before or after Thanksgiving and remains at the new level until December 24. The value w must be supplied and can range from −8 to 17. Values of `w < 0` indicate a number of days after Thanksgiving; values of `w > 0` indicate a number of days before Thanksgiving.                                                                                                                          |
+| `easter[w]` | Easter holiday regression variable for monthly or quarterly flow data that assumes the level of daily activity changes on the `w`-th day before Easter and remains at the new level through the day before Easter. This value w must be supplied and can range from 1 to 25. A user can also specify an `easter[0]` regression variable, which assumes the daily level of activity level changes only on Easter Sunday. To estimate complex effects, several of these variables, differing in their choices of `w`, can be specified. |
+| `labor[w]`  | Labor Day holiday regression variable (monthly flow data only) that assumes the level of daily activity changes on the `w`-th day before Labor Day and remains at the new level until the day before Labor Day. The value `w` must be supplied and can range from 1 to 25.                                                                                                                                                                                                                                                            |
+| `thank[w]`  | Thanksgiving holiday regression variable (monthly flow data only) that assumes the level of daily activity changes on the `w`-th day before or after Thanksgiving and remains at the new level until December 24. The value w must be supplied and can range from −8 to 17. Values of `w < 0` indicate a number of days after Thanksgiving; values of `w > 0` indicate a number of days before Thanksgiving.                                                                                                                          |
 
-: Values for `regression.variables` that are relvant for holiday adjustment {#tbl-regression-arguments tbl-colwidths="\[20,80\]"}
+: Values for `regression.variables` that are relevant for holiday adjustment {#tbl-regression-arguments tbl-colwidths="\[20,80\]"}
 
 ## Automated Adjustment
 
@@ -72,15 +72,15 @@ X-13 tests various lengths of an Easter effect and picks the one model with the 
 `Easter[1`\] indicates that a length of one day has been chosen.
 I.e., the Easter holiday period is thought to start on Easter day and last for only one day.
 Alternatively, `Easter[8`\] starts at Easter day and lasts for the eight subsequent days.
-If we want to enforce an eight day Easter holiday, we can specify the call as follows:
+If we want to enforce an eight-day Easter holiday, we can specify the call as follows:
 
 ```{r}
 m_easter_8 <- seas(AirPassengers, regression.variables = "easter[8]")
 summary(m_easter_8)
 ```
 
-Surprisingly, the 8 day Easter model has a lower AICc than the one day model.
-This opens the question why the one day model has been chosen in the beginning.
+Surprisingly, the 8-day Easter model has a lower AICc than the one-day model.
+This opens the question of why the one-day model has been chosen in the beginning.
 
 Including holiday effects can have a dramatic effect on a final seasonal adjustment.
 Consider the monthly retail sales from Hobby, toy, and game stores.
@@ -118,38 +118,38 @@ get_census_time_series(census_url)
 :::
 
 ```{r, echo=FALSE}
-hobby_toy_game <- 
-structure(c(620L, 585L, 643L, 706L, 660L, 721L, 678L, 653L, 638L, 
-789L, 1332L, 3226L, 598L, 576L, 683L, 735L, 685L, 722L, 745L, 
-682L, 671L, 799L, 1480L, 3275L, 618L, 637L, 819L, 782L, 742L, 
-758L, 778L, 801L, 806L, 987L, 1677L, 3445L, 683L, 665L, 823L, 
-867L, 821L, 873L, 851L, 846L, 846L, 993L, 1830L, 3616L, 705L, 
-737L, 890L, 862L, 669L, 849L, 877L, 874L, 870L, 1094L, 2002L, 
-4073L, 730L, 791L, 1032L, 896L, 947L, 940L, 963L, 958L, 971L, 
-1141L, 2009L, 3643L, 858L, 883L, 987L, 1022L, 986L, 1016L, 1042L, 
-1025L, 1005L, 1197L, 2011L, 3801L, 933L, 966L, 1135L, 1076L, 
-1061L, 1101L, 1083L, 1101L, 1111L, 1277L, 2096L, 3711L, 893L, 
-1002L, 1106L, 1136L, 1072L, 1098L, 1124L, 1132L, 1175L, 1285L, 
-2161L, 3763L, 880L, 971L, 1176L, 1063L, 1038L, 1107L, 1094L, 
-1065L, 1050L, 1303L, 2445L, 3628L, 896L, 966L, 1186L, 1014L, 
-1078L, 1065L, 1103L, 1087L, 1048L, 1347L, 2468L, 3651L, 910L, 
-940L, 1111L, 1139L, 1088L, 1064L, 1094L, 1087L, 1095L, 1286L, 
-2223L, 3545L, 962L, 1045L, 1125L, 1082L, 974L, 1024L, 1086L, 
-1016L, 1051L, 1311L, 2187L, 3451L, 950L, 980L, 1173L, 1098L, 
-1061L, 1049L, 1077L, 1028L, 1019L, 1229L, 2120L, 3471L, 1063L, 
-1022L, 1117L, 1094L, 1040L, 1048L, 1070L, 1043L, 1086L, 1205L, 
-1933L, 3299L, 948L, 974L, 1188L, 1064L, 1050L, 1096L, 1102L, 
-1084L, 1102L, 1275L, 2208L, 3253L, 1043L, 1077L, 1183L, 1080L, 
-1131L, 1044L, 1097L, 1065L, 1061L, 1218L, 1959L, 3117L, 1031L, 
-1009L, 1095L, 1086L, 1064L, 1020L, 1058L, 1007L, 1063L, 1194L, 
-1842L, 2999L, 953L, 1000L, 1155L, 1059L, 1030L, 1024L, 1070L, 
-1039L, 1074L, 1254L, 1990L, 3064L, 967L, 1023L, 1193L, 1184L, 
-1065L, 1061L, 1082L, 1067L, 1143L, 1243L, 1951L, 3033L, 1063L, 
-1182L, 1259L, 1146L, 1175L, 1120L, 1113L, 1117L, 1148L, 1263L, 
-1929L, 2963L, 1019L, 1068L, 1239L, 1107L, 1116L, 1057L, 1106L, 
-1145L, 1161L, 1338L, 2134L, 3263L, 1012L, 1084L, 1213L, 1195L, 
-1170L, 1084L, 1183L, 1185L, 1253L, 1360L, 2140L, 3511L, 1157L, 
-1190L, 1360L, 1260L, 1274L, 1196L), .Tsp = c(1992, 2015.41666666667, 
+hobby_toy_game <-
+structure(c(620L, 585L, 643L, 706L, 660L, 721L, 678L, 653L, 638L,
+789L, 1332L, 3226L, 598L, 576L, 683L, 735L, 685L, 722L, 745L,
+682L, 671L, 799L, 1480L, 3275L, 618L, 637L, 819L, 782L, 742L,
+758L, 778L, 801L, 806L, 987L, 1677L, 3445L, 683L, 665L, 823L,
+867L, 821L, 873L, 851L, 846L, 846L, 993L, 1830L, 3616L, 705L,
+737L, 890L, 862L, 669L, 849L, 877L, 874L, 870L, 1094L, 2002L,
+4073L, 730L, 791L, 1032L, 896L, 947L, 940L, 963L, 958L, 971L,
+1141L, 2009L, 3643L, 858L, 883L, 987L, 1022L, 986L, 1016L, 1042L,
+1025L, 1005L, 1197L, 2011L, 3801L, 933L, 966L, 1135L, 1076L,
+1061L, 1101L, 1083L, 1101L, 1111L, 1277L, 2096L, 3711L, 893L,
+1002L, 1106L, 1136L, 1072L, 1098L, 1124L, 1132L, 1175L, 1285L,
+2161L, 3763L, 880L, 971L, 1176L, 1063L, 1038L, 1107L, 1094L,
+1065L, 1050L, 1303L, 2445L, 3628L, 896L, 966L, 1186L, 1014L,
+1078L, 1065L, 1103L, 1087L, 1048L, 1347L, 2468L, 3651L, 910L,
+940L, 1111L, 1139L, 1088L, 1064L, 1094L, 1087L, 1095L, 1286L,
+2223L, 3545L, 962L, 1045L, 1125L, 1082L, 974L, 1024L, 1086L,
+1016L, 1051L, 1311L, 2187L, 3451L, 950L, 980L, 1173L, 1098L,
+1061L, 1049L, 1077L, 1028L, 1019L, 1229L, 2120L, 3471L, 1063L,
+1022L, 1117L, 1094L, 1040L, 1048L, 1070L, 1043L, 1086L, 1205L,
+1933L, 3299L, 948L, 974L, 1188L, 1064L, 1050L, 1096L, 1102L,
+1084L, 1102L, 1275L, 2208L, 3253L, 1043L, 1077L, 1183L, 1080L,
+1131L, 1044L, 1097L, 1065L, 1061L, 1218L, 1959L, 3117L, 1031L,
+1009L, 1095L, 1086L, 1064L, 1020L, 1058L, 1007L, 1063L, 1194L,
+1842L, 2999L, 953L, 1000L, 1155L, 1059L, 1030L, 1024L, 1070L,
+1039L, 1074L, 1254L, 1990L, 3064L, 967L, 1023L, 1193L, 1184L,
+1065L, 1061L, 1082L, 1067L, 1143L, 1243L, 1951L, 3033L, 1063L,
+1182L, 1259L, 1146L, 1175L, 1120L, 1113L, 1117L, 1148L, 1263L,
+1929L, 2963L, 1019L, 1068L, 1239L, 1107L, 1116L, 1057L, 1106L,
+1145L, 1161L, 1338L, 2134L, 3263L, 1012L, 1084L, 1213L, 1195L,
+1170L, 1084L, 1183L, 1185L, 1253L, 1360L, 2140L, 3511L, 1157L,
+1190L, 1360L, 1260L, 1274L, 1196L), .Tsp = c(1992, 2015.41666666667,
 12), class = "ts")
 ```
 
@@ -171,27 +171,23 @@ ts_dygraphs(
 
 Notice the large differences during certain Easter periods.
 For example, the final seasonally adjusted series including an Easter regressor in April 2011 was 1360.52.
-The final seasonally adjusted values without an Easter regressor was 1449.3, a difference of 89 million dollars which is over 7.5% difference from of the original series value.
+The final seasonally adjusted values without an Easter regressor was 1449.3, a difference of 89 million dollars which more than 7.5% higher than the original series value.
 
 ## Case Study: Chinese New Year
 
 The Lunar New Year is the most important holiday in China and many other Asian countries.
-Traditionally, the holiday starts on Lunar New Year's Eve, and lasts to the Lantern Festival on the 15th day of the first month of the lunisolar calendar.
+Traditionally, the holiday starts on Lunar New Year's Eve, and lasts until the Lantern Festival on the 15th day of the first month of the lunisolar calendar.
 The Chinese New Year is celebrated either in January or in February of the Gregorian calendar.
 
 Because of its importance, Chinese New Year seriously distorts monthly time series, which are usually reported according to the Gregorian calendar.
 Unlike Easter, Chinese New Year does not affect quarterly time series, as it always falls in the first quarter.
 
-X-13-ARIMA-SEATS has a built-in adjustment procedure for Easter holiday, but not for Chinese New Year.
+X-13-ARIMA-SEATS has a built-in adjustment procedure for the Easter holiday, but not for Chinese New Year.
 However, all packages allow for the inclusion of user-defined variables, and the Chinese New Year can be modeled as such.
-
-With the R package seasonal, generating and including such a series is easy.
-We will use it in the following to seasonally adjust and remove Chinese New Year effects from the nominal dollar value of imports to China.
-seasonal is an interface to X-13ARIMA-SEATS; for more information and installation details, see here.
 
 ### Imports of Goods to China
 
-Chinese imports are included as an example series in seasonal, both with and without the official seasonal adjustment.
+Chinese imports are included as an example series in seasonalbook, both with and without the official seasonal adjustment.
 
 ```{r }
 library(tsbox)
@@ -215,9 +211,9 @@ ts_dygraphs(imp_cn_2000)
 ::: callout-note
 ### How to read data from FRED into R
 
-{fredr} provides access to the [Federal Reserve of Economic Data](https://fred.stlouisfed.org) (FRED), provided by the Federal Reserve Bank of St. Louis.
-To use fredr and the FRED API in general, you must first obtain a FRED API key.
-Have a look at the [Documentation](https://cran.r-project.org/web/packages/fredr/vignettes/fredr.html) for details.
+*fredr* provides access to the [Federal Reserve of Economic Data](https://fred.stlouisfed.org) (FRED), provided by the Federal Reserve Bank of St. Louis.
+To use *fredr* and the FRED API in general, you must first obtain a FRED API key.
+Take a look at the [Documentation](https://cran.r-project.org/web/packages/fredr/vignettes/fredr.html) for details.
 
 The core function in this package is `fredr()`, which fetches observations for a FRED series.
 
@@ -243,7 +239,7 @@ imp_cn_tidy <-
   ))
 ```
 
-Use the tsbox package to convert the data frame into ts objects.
+Use the *tsbox* package to convert the data frame into ts objects.
 
 ```{r }
 #| eval = FALSE
@@ -263,7 +259,7 @@ imp_cn
 ```
 :::
 
-seasonal includes the `genhol()` function, a R version of the equally named software utility by the U.S.
+*seasonal* includes the `genhol()` function, a R version of the equally named software utility by the U.S.
 Census Bureau.
 Using the dates of the Chinese New Year as an input, it produces a time series with the deviations from the monthly means.
 Here we are assuming that the holiday starts on New Year's Eve and lasts for one week.
@@ -339,7 +335,7 @@ ts_dygraphs(
 
 We can use R's `arima()` function and `genhol()` to fully replicate X-13's automated Easter adjustment.
 
-Let's build a easter regressor, using `genhol()`:
+Let's build an Easter regressor, using `genhol()`:
 
 ```{r }
 # easter regressor
