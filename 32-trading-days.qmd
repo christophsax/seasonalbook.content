@@ -19,10 +19,10 @@ status("polishing", "2023-03-24", section = "Holidays")  # drafting, polishing, 
 
  -->
 ```
-## Why should we adjust for trading day effects
 
-Months and quarters may differ in their overall length, or, more importantly may differ in the number of weekdays.
-Similar to the holiday adjustments, X-13 offers various tools to deal with differences in the number of days or weekdays.
+<!-- Why should we adjust for trading day effects -->
+
+Similarly to irregular holidays, the weekly pattern differs from year to year. So the number of weekdays in a given month or quarter may be different from year to year. In the example below, January 2022 has 21 weekdays, while January 2023 has 22 weekdays. Some time series, such as manufactoring, may be affected by this pattern.
 
 
 ::: {#fig-mini-cal layout-ncol=2}
@@ -31,11 +31,13 @@ Similar to the holiday adjustments, X-13 offers various tools to deal with diffe
 
 ![January, 2023](img/mini-cal-23.png){#fig-mini-cal-23}
 
-The number of weekdays differ between months
+The number of weekdays per month differ between years
 :::
 
 
-Trading day effects, as weekday effects are called in X-13, constitute a predictable movement in a time series, and therefore should not be part of the seasonally adjusted series.
+Similar to the holiday adjustments, X-13 offers various tools to deal with differences in the number of days or weekdays. This chapter discusses the automated trading day adjustemts in X-13, and explores various ways of user customization. Note that the term *trading day* adjustmen is X-13 slang for weekday adjustment and will be used interchangeably.
+
+Trading day effects constitute a predictable movement in a time series, and therefore should not be part of the seasonally adjusted series.
 Trading day effects are usually removed by the regression spec, although some adjustments can be also done by the transform spec.
 Contrary to the regression spec, the transform spec performs a 1:1 adjustment, while the regression spec estimates the size of the effect from the data.
 
@@ -123,8 +125,8 @@ ts_dygraphs(ts_c(
 ## Case Study: Replicate X-13 trading days adjustment
 
 
-'Trading day adjustment' removes the effect of the weekdays, and but does not include holidays, such as Christmas or Easter.
-These are handled separately (Easter) or dealt with by standard seasonal adjustment (Christmas).
+'Trading day adjustment' removes the effect of the weekdays, but does not include holidays, such as Christmas or Easter.
+These are handled separately (Easter) (@sec-holidays) or dealt with by standard seasonal adjustment (Christmas).
 
 Sometimes, users may want to specify user defined trading day regressors, in order to incorporate country specific trading day patterns.
 In @sec-replicate-x-13-trading-days-adjustment, we replicate the built-in regressors.
@@ -140,7 +142,11 @@ library(seasonal)
 
 ### Constructing weekday regressors
 
+To construct weekday regressors in R, we use the following code:
+
 ```{r}
+library(dplyr)
+
 dates <- seq(as.Date("1931-01-01"), as.Date("2030-12-31"), by = "day")
 
 first_of_month <- function(x) {
@@ -151,8 +157,26 @@ first_of_month <- function(x) {
     sep = "-"
   ))
 }
+
+td_m_tbl <-
+  tibble(dates, wd = as.POSIXlt(dates)$wday, name = weekdays(dates)) |>
+  group_by(time = first_of_month(dates)) |>
+  summarize(
+    mon = sum(wd == 1) - sum(wd == 0),
+    tue = sum(wd == 2) - sum(wd == 0),
+    wed = sum(wd == 3) - sum(wd == 0),
+    thu = sum(wd == 4) - sum(wd == 0),
+    fri = sum(wd == 5) - sum(wd == 0),
+    sat = sum(wd == 6) - sum(wd == 0),
+    td1 = sum(wd %in% 1:5) - 5 / 2 * sum(wd %in% c(6, 0))
+  )
+
+head(td_m_tbl, 10)
 ```
 
+For each month, `td_m_tbl` computes the number of specific weekdays, and compares them to the number of Sundays (`wd == -`) (columns `mon` to `sat`). For example, in May 1931, the number Mondays was 4 while the number of Sundays was 5. The column `td1` compares the total number of weekdays with the total number of weekends. The normaization formula is the one used by X-13 and described in the X-13 manual.
+
+<!--
 td1nolpyear
 
 :   Include the weekday-weekend contrast variable (monthly and quarterly flow eries only): (no. of weekdays) −(5/2) (no. of Saturdays and Sundays).
@@ -162,40 +186,26 @@ tdnolpyear
 :   Include the six day-of-week contrast variables (monthly and quarterly flow series only): (no. of Mondays) − (no. of Sundays), .
     . . , (no. of Saturdays) − (no. of Sundays).
 
-```{r}
-td_m_tbl <-
-  tibble(dates, wd = as.POSIXlt(dates)$wday, name = weekdays(dates)) %>%
-  group_by(time = first_of_month(dates)) %>%
-  summarize(
-    td1 = sum(wd %in% 1:5) - 5 / 2 * sum(wd %in% c(6, 0)),
-    mon = sum(wd == 1) - sum(wd == 0),
-    tue = sum(wd == 2) - sum(wd == 0),
-    wed = sum(wd == 3) - sum(wd == 0),
-    thu = sum(wd == 4) - sum(wd == 0),
-    fri = sum(wd == 5) - sum(wd == 0),
-    sat = sum(wd == 6) - sum(wd == 0)
-  )
+ -->
 
-head(as.data.frame(td_m_tbl), 10)
-```
-
-'Trading day adjustment' removes the effect of the weekdays, and but does not include holidays, such as Christmas or Easter.
-These are handled separately (Easter) or dealt with by standard seasonal adjustment (Christmas).
+To extract the regressors as `ts` time series, we use the following code:
 
 ```{r}
 td1nolpyear <-
-  td_m_tbl %>%
-  select(time, value = td1) %>%
+  td_m_tbl |>
+  select(time, value = td1) |>
   ts_ts()
 
 tdnolpyear <-
-  td_m_tbl %>%
-  select(-td1) %>%
-  ts_long() %>%
+  td_m_tbl |>
+  select(-td1) |>
+  ts_long() |>
   ts_ts()
 ```
 
-### Single coef
+### Single coefficient regressor
+
+It is straigtforward to replicate these values to the automated procedure in X-13:
 
 ```{r}
 m_td1coef <- seas(
@@ -218,7 +228,9 @@ m_td1coef_built_in <- seas(
 summary(m_td1coef_built_in)
 ```
 
-### All coefs
+### One coefficient per day
+
+Note that the baseline is Sunday.
 
 ```{r}
 m_td <- seas(
@@ -240,3 +252,23 @@ m_td_built_in <- seas(
 )
 summary(m_td_built_in)
 ```
+
+### Is it worth building country specific regressors?
+
+The built-in trading day adjustment in X-13 is exclusively based on the calendar to construct regressor variables, meaning it does not take into account country-specific holidays like Thanksgiving in the US. These holidays are addressed separately, as discussed in the @sec-holidays section.
+
+As previously noted, regular holidays, such as Christmas, typically don't need special handling. When dealing with irregular holidays, such as Chinese New Year, employing holiday regressors is the preferred approach. Consequently, creating country-specific regressors is generally unnecessary.
+
+
+
+<!--
+Jim, this is very opinionated, does it make sense?
+
+ -->
+
+
+
+
+
+
+
