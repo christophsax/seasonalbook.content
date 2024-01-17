@@ -328,3 +328,136 @@ ts_dygraphs(
   )
 )
 ```
+
+
+
+::: callout-note
+### Replicate automated Easter adjustment in R
+
+We can use R's `arima()` function and `genhol()` to fully replicate X-13's automated Easter adjustment.
+
+Let's build a easter regressor, using `genhol()`:
+
+```{r }
+# easter regressor
+ea <- genhol(easter, start = -1, end = -1, center = "calendar")
+ea <- window(ea, start = start(AirPassengers), end = end(AirPassengers))
+```
+
+And use this in an ARIMA model in R:
+
+```{r }
+arima(
+  log(AirPassengers),
+  order = c(0,1,1),
+  seasonal = c(0,1,1),
+  xreg = ea
+)
+```
+
+
+Now, let's compare to the results of X-13:
+
+```{r }
+m <- seas(
+  AirPassengers,
+  regression.variables = c("easter[1]"),
+  regression.aictest = NULL
+)
+summary(m)
+```
+Note that R defines the ARIMA model with negative signs before the MA term, X-13 with a positive sign.
+
+:::
+
+
+
+## Case Study: Azerbaijani Retail Sales
+
+
+```{r }
+library(cbar.sa)
+library(seasonal)
+library(dplyr)
+
+# manual regressor construction
+ramadan_ts_manual <-
+  islamic_calendar |>
+  group_by(y = lubridate::year(date)) |>
+  mutate(ramadan_y = sum(ramadan)) |>
+  ungroup() |>
+  group_by(y = lubridate::year(date), q = lubridate::quarter(date)) |>
+  summarize(time = date[1], value = sum(ramadan) / ramadan_y[1], .groups = "drop") |>
+  select(time, value) |>
+  tsbox::ts_ts()
+
+# Careful, this is not centered!
+
+
+# ### automatic regressor construction (experimental)
+
+ramadan <-
+  islamic_calendar |>
+  mutate(diff = ramadan - lag(ramadan)) |>
+  mutate(start = (diff == 1)) |>
+  dplyr::filter(start) |>
+  pull(date)
+
+# Q: Can we come up with a defined start date for Ramadan or Muharrem?
+islamic_calendar |>
+  filter(date %in% c("2000-11-26", "2000-11-27", "2000-11-28"))
+
+# Q: Is the length of Ramadan uniquely defined?
+ramadan_ts_auto <- seasonal::genhol(ramadan, frequency = 4, start = 0, end = 29, center = "none")
+
+# Applying the calendar mean adjustment
+ramadan_ts <- seasonal::genhol(ramadan, frequency = 4, start = 0, end = 29, center = "calendar")
+
+
+# Different pattern pre 2008
+plot(trade_tur)
+
+m0 <- seas(trade_tur, x11 = "")
+m1 <- seas(
+  trade_tur,
+  xreg = ramadan_ts,
+  regression.usertype = "holiday"
+)
+summary(m0)
+summary(m1)  # xreg insignificant
+
+
+# If we start adjusting from 2008 on, we get a better result
+m2 <- seas(trade_tur, x11 = "", series.modelspan = "2008.01,")
+m3 <- seas(
+  trade_tur,
+  xreg = ramadan_ts,
+  regression.usertype = "holiday",
+  series.modelspan = "2008.01,"
+)
+summary(m2)
+summary(m3)
+
+tsbox::ts_plot(
+  delta_perc = (final(m3) - final(m2)) / final(m2)
+)
+
+
+
+
+# Applying the calendar mean adjustment
+ramadan_pre_ts <- seasonal::genhol(ramadan, frequency = 4, start = -2, end = 0, center = "calendar")
+library(tsbox)
+m4 <- seas(
+  trade_tur,
+  xreg = cbind(ramadan_pre_ts, ramadan_ts),
+  regression.usertype = "holiday",
+  series.modelspan = "2008.01,"
+)
+
+# Q: The signs feel intuitively wrong?
+summary(m4)
+
+```
+
+
