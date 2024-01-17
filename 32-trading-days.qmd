@@ -122,8 +122,7 @@ ts_dygraphs(ts_c(
 ))
 ```
 
-## Case Study: Replicate X-13 trading days adjustment
-
+## Case Study: Replicate X-13 trading days adjustment {#sec-replicate-x-13-trading-days-adjustment}
 
 'Trading day adjustment' removes the effect of the weekdays, but does not include holidays, such as Christmas or Easter.
 These are handled separately (Easter) (@sec-holidays) or dealt with by standard seasonal adjustment (Christmas).
