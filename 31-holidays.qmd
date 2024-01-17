@@ -273,6 +273,9 @@ reg_cny <- genhol(cny, start = -1, end = 6, center = "calendar")
 tsbox::ts_dygraphs(reg_cny)
 ```
 
+The `center` argument normalizes the series by either subtracting the overall average effect (`"mean"`) or the average for each period (`"calendar"`). You should use `"calendar"` for Easter or Chinese New Year, but `"mean"` for Ramadan. Without this adjustment (`"none"`), the holiday effect is subtracted, altering the annual value of the series.
+
+
 ### Including user-defined regressors
 
 The time series `reg_cny` can be included in the main seasonal adjustment.
@@ -411,7 +414,7 @@ islamic_calendar |>
 ramadan_ts_auto <- seasonal::genhol(ramadan, frequency = 4, start = 0, end = 29, center = "none")
 
 # Applying the calendar mean adjustment
-ramadan_ts <- seasonal::genhol(ramadan, frequency = 4, start = 0, end = 29, center = "calendar")
+ramadan_ts <- seasonal::genhol(ramadan, frequency = 4, start = 0, end = 29, center = "mean")
 
 
 # Different pattern pre 2008
@@ -443,10 +446,8 @@ tsbox::ts_plot(
 )
 
 
-
-
 # Applying the calendar mean adjustment
-ramadan_pre_ts <- seasonal::genhol(ramadan, frequency = 4, start = -2, end = 0, center = "calendar")
+ramadan_pre_ts <- seasonal::genhol(ramadan, frequency = 4, start = -2, end = 0, center = "mean")
 library(tsbox)
 m4 <- seas(
   trade_tur,
@@ -455,7 +456,7 @@ m4 <- seas(
   series.modelspan = "2008.01,"
 )
 
-# Q: The signs feel intuitively wrong?
+# Q: Does the sign makes sense?
 summary(m4)
 
 ```
