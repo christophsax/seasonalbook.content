@@ -288,7 +288,7 @@ summary(m1)
 plot(m1)
 ```
 
-With `xreg`, arbitrary user-defined regressors can be included, regression.usertype = "holiday" ensures that the final series does not include the regression effect.
+With `xreg`, arbitrary user-defined regressors can be included, `regression.usertype = "holiday"` ensures that the final series does not include the regression effect.
 We also have chosen X11 as the decomposition method.
 
 Unsurprisingly, the summary reveals a highly significant Chinese New Year effect.
