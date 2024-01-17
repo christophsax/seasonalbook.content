@@ -41,6 +41,8 @@ Trading day effects constitute a predictable movement in a time series, and ther
 Trading day effects are usually removed by the regression spec, although some adjustments can also be done by the transform spec.
 Contrary to the regression spec, the transform spec performs a 1:1 adjustment, while the regression spec estimates the size of the effect from the data.
 
+<!-- TODO: resolve @sec-user-defined-regressors, which sec should point to? -->
+
 As with most adjustments, X-13 offers a built-in automated adjustment that works well in most circumstances.
 We start the chapter by looking at the automated procedures.
 Sometimes, you want to rely on a user-defined specification of trading days, a topic covered in @sec-user-defined-regressors.
