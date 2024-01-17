@@ -49,7 +49,7 @@ Let's do this now.
 ### Identifying a seasonal break
 
 In part, the seasonal break is visible in the series.
-It is more straigthforward to spot in the monthplot of the series:
+It is more straightforward to spot in the monthplot of the series:
 
 ```{r }
 monthplot(seas(imp_cn))
