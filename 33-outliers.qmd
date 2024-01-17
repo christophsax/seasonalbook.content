@@ -45,7 +45,7 @@ The default settings discovered a single, additive outlier.
 By default, X-13 uses a formula that interpolates critical values for numbers of observations between 3 and 99 (Table 7.22 in the Manual).
 For standard time series, this results in a critical value around 4.
 
-Using the `outlier.critical` argument, we can fine tune the detection prosses.
+Using the `outlier.critical` argument, we can fine tune the detection process.
 With `outlier.critical = 3`, we set a lower bar for the detection of outliers.
 `outlier.critical` is the z-value of a particular value that is needed to be classified as an outlier.
 A value of three means that the z-value must be 3 or larger.
