@@ -189,3 +189,6 @@ If there is not a methodological, social or economic reason to explain the prese
 
 -->
 ```
+## Exercise
+
+1.  Can you explain the difference between an extreme value and an outlier? Does it makes to remove extreme values? What about outliers? Does the same apply for transformation?
