@@ -273,6 +273,20 @@ Andrea, do you know of an Azerbaijani example that we could use as a case study?
  -->
 
 
+## Case Study: Azerbaijani Retail Sales
+
+We build upon the case study in @sec-holidays. Retail sales are usually affected by shifts in trading days.
+
+```{r}
+library(cbar.sa)
+library(seasonal)
+m0 <- seas(trade_tur, x11 = "")
+m1 <- seas(
+  trade_tur
+)
+summary(m0)
+summary(m1) 
+```
 
 ## Exercises
 
