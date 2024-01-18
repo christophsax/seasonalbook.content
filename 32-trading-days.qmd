@@ -272,37 +272,6 @@ Jim, this is very opinionated, does it make sense?
 Andrea, do you know of an Azerbaijani example that we could use as a case study?
  -->
 
-
-## Case Study: Azerbaijani Retail Sales
-
-We build upon the case study in @sec-holidays where the retail sales was used. This type of series is also a candidate since retail sales usually shows differences between weekdays and weekend. We verify this assumption adding a `td1coef` regressor.
-
-```{r}
-library(cbar.sa)
-library(seasonal)
-m0 <- seas(
-  x = trade_tur,
-  regression.variables = c("ls2008.2", "ls2009.1", "ao2015.2"),
-  arima.model = "(1 1 0)(0 1 0)",
-  regression.aictest = NULL,
-  outlier = NULL,
-  transform.function = "log"
-)
-summary(m0)
-```
-```{r}
-m1 <- seas(
-  x = trade_tur,
-  regression.variables = c("ls2008.2", "ls2009.1", "ao2015.2", "td1coef"),
-  arima.model = "(1 1 0)(0 1 0)",
-  regression.aictest = NULL,
-  outlier = NULL,
-  transform.function = "log"
-)
-summary(m1) 
-```
-Eventually, the `td1coef` regressor is not significant.
-
 ## Case Study: Azerbaijani Consumer price index for construction
 
 `td1coef` is significant.
