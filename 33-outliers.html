@@ -291,9 +291,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#level-shift" id="toc-level-shift" class="nav-link" data-scroll-target="#level-shift"><span class="header-section-number">10.2</span> Level Shift</a></li>
   <li><a href="#additive-outliers" id="toc-additive-outliers" class="nav-link" data-scroll-target="#additive-outliers"><span class="header-section-number">10.3</span> Additive Outliers</a></li>
   <li><a href="#temporary-change-regressor" id="toc-temporary-change-regressor" class="nav-link" data-scroll-target="#temporary-change-regressor"><span class="header-section-number">10.4</span> Temporary Change Regressor</a></li>
-  <li><a href="#manually-identifying-outliers" id="toc-manually-identifying-outliers" class="nav-link" data-scroll-target="#manually-identifying-outliers"><span class="header-section-number">10.5</span> Manually Identifying Outliers</a></li>
-  <li><a href="#when-outliers-are-found" id="toc-when-outliers-are-found" class="nav-link" data-scroll-target="#when-outliers-are-found"><span class="header-section-number">10.6</span> When Outliers Are Found</a></li>
-  <li><a href="#exercise" id="toc-exercise" class="nav-link" data-scroll-target="#exercise"><span class="header-section-number">10.7</span> Exercise</a></li>
+  <li><a href="#ramps-rp-qi-qd" id="toc-ramps-rp-qi-qd" class="nav-link" data-scroll-target="#ramps-rp-qi-qd"><span class="header-section-number">10.5</span> Ramps (RP, QI, QD)</a></li>
+  <li><a href="#manually-identifying-outliers" id="toc-manually-identifying-outliers" class="nav-link" data-scroll-target="#manually-identifying-outliers"><span class="header-section-number">10.6</span> Manually Identifying Outliers</a></li>
+  <li><a href="#when-outliers-are-found" id="toc-when-outliers-are-found" class="nav-link" data-scroll-target="#when-outliers-are-found"><span class="header-section-number">10.7</span> When Outliers Are Found</a></li>
+  <li><a href="#exercise" id="toc-exercise" class="nav-link" data-scroll-target="#exercise"><span class="header-section-number">10.8</span> Exercise</a></li>
   </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/33-outliers.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
@@ -351,7 +352,47 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>The default settings discovered a single, additive outlier. By default, X-13 uses a formula that interpolates critical values for numbers of observations between 3 and 99 (Table 7.22 in the Manual). For standard time series, this results in a critical value around 4.</p>
+<table class="table">
+<thead><tr class="header">
+<th>Outlier Span Length</th>
+<th>Default Critical Value</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>1.96</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>2.24</td>
+</tr>
+<tr class="odd">
+<td>48</td>
+<td>3.63</td>
+</tr>
+<tr class="even">
+<td>96</td>
+<td>3.80</td>
+</tr>
+<tr class="odd">
+<td>120</td>
+<td>3.85</td>
+</tr>
+<tr class="even">
+<td>240</td>
+<td>3.99</td>
+</tr>
+<tr class="odd">
+<td>360</td>
+<td>4.07</td>
+</tr>
+</tbody>
+</table>
 <p>Using the <code>outlier.critical</code> argument, we can fine tune the detection process. With <code>outlier.critical = 3</code>, we set a lower bar for the detection of outliers. <code>outlier.critical</code> is the z-value of a particular value that is needed to be classified as an outlier. A value of three means that the z-value must be 3 or larger.</p>
+<ul>
+<li>Higher values make it less likely to identify a value as an outlier</li>
+<li>Each outlier type can have a different critical value (typically we use the same for all types)</li>
+</ul>
 <div class="cell">
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_high</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, outlier.critical <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m_high</span><span class="op">)</span></span>
@@ -423,7 +464,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>The default is <code>c("ao", "ls")</code>.</td>
 </tr>
 </tbody>
-</table></section><section id="level-shift" class="level2" data-number="10.2"><h2 data-number="10.2" class="anchored" data-anchor-id="level-shift">
+</table>
+<p>Outlier Effects</p>
+<ul>
+<li>Additive (or Point) outliers (AO)</li>
+<li>Level shifts (LS)</li>
+<li>Temporary level shifts (TL)</li>
+<li>Temporary changes (TC)</li>
+<li>Ramps (RP, QI, QD)</li>
+<li>Seasonal outliers (SO)</li>
+</ul></section><section id="level-shift" class="level2" data-number="10.2"><h2 data-number="10.2" class="anchored" data-anchor-id="level-shift">
 <span class="header-section-number">10.2</span> Level Shift</h2>
 <p>The first outlier category we look at are level shifts. Level shifts refers to a sudden and sustained change in the underlying level of a time series. There can be various causes of level shifts in time series data, such as changes in concepts or definitions of the survey population, alterations in the method of data collection, shifts in economic behavior, changes in legislation, etc. Level shifts are a problem for seasonal adjustment because they will distort the estimation of the seasonal factors.</p>
 <p>Below is an example of a manually specified level shift:</p>
@@ -500,9 +550,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section><section id="temporary-change-regressor" class="level2" data-number="10.4"><h2 data-number="10.4" class="anchored" data-anchor-id="temporary-change-regressor">
 <span class="header-section-number">10.4</span> Temporary Change Regressor</h2>
 <p>We use the <code>regression.variables = TCyyyy.mm</code> format for a temporary change.</p>
+<p><span class="math display">\[ \begin{cases}
+0 \qquad &amp;\mbox{for} ~t &lt; t_0 \\
+\alpha^{t - t_0} \qquad &amp;\mbox{for} ~t \geq t_0
+\end{cases}
+\]</span></p>
 <p>Where <span class="math inline">\(\alpha\)</span> is the rate of decay back to the previous level, 0 &lt; <span class="math inline">\(\alpha\)</span> &lt; 1 (default: 0.7 for monthly and 0.343 for quarterly series)</p>
-</section><section id="manually-identifying-outliers" class="level2" data-number="10.5"><h2 data-number="10.5" class="anchored" data-anchor-id="manually-identifying-outliers">
-<span class="header-section-number">10.5</span> Manually Identifying Outliers</h2>
+</section><section id="ramps-rp-qi-qd" class="level2" data-number="10.5"><h2 data-number="10.5" class="anchored" data-anchor-id="ramps-rp-qi-qd">
+<span class="header-section-number">10.5</span> Ramps (RP, QI, QD)</h2>
+<div id="fig-ramps" class="quarto-layout-panel">
+<figure class="figure"><div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 100.0%;justify-content: center;">
+<div id="fig-ramps" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure"><p><img src="img/ramps.png" class="img-fluid figure-img" data-ref-parent="fig-ramps"></p>
+<figcaption class="figure-caption">(a) Type of ramps</figcaption></figure>
+</div>
+</div>
+</div>
+<p></p><figcaption class="figure-caption">Figure&nbsp;10.1: Types of ramp regressors.</figcaption><p></p>
+</figure>
+</div>
+</section><section id="manually-identifying-outliers" class="level2" data-number="10.6"><h2 data-number="10.6" class="anchored" data-anchor-id="manually-identifying-outliers">
+<span class="header-section-number">10.6</span> Manually Identifying Outliers</h2>
 <p>X-13 contains an automated outlier detection procedure that works well in most circumstances and can be used as a starting point. Plotting the series may add additional information on whether outliers should be adjusted or not. The <code><a href="https://rdrr.io/r/graphics/identify.html">identify()</a></code> method opens a window that allows you to manually identify outliers. Select or deselect outliers by point and click. To quit and return the call, press ESC. Click several times to loop through different outlier types.</p>
 <div class="cell">
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span></span>
@@ -577,14 +646,14 @@ Question if there is any evidence for suspecting a level shift or outlier at thi
 If there is not a methodological, social or economic reason to explain the presence of the suspected level shift or outlier then do not adjust for it.
 
 -->
-</section><section id="when-outliers-are-found" class="level2" data-number="10.6"><h2 data-number="10.6" class="anchored" data-anchor-id="when-outliers-are-found">
-<span class="header-section-number">10.6</span> When Outliers Are Found</h2>
+</section><section id="when-outliers-are-found" class="level2" data-number="10.7"><h2 data-number="10.7" class="anchored" data-anchor-id="when-outliers-are-found">
+<span class="header-section-number">10.7</span> When Outliers Are Found</h2>
 <ul>
 <li>ALWAYS, ALWAYS, ALWAYS check if outliers are reasonable</li>
 <li>Hard-code known outliers in production</li>
 <li>Usually a concern only for the most recent part of the series</li>
-</ul></section><section id="exercise" class="level2" data-number="10.7"><h2 data-number="10.7" class="anchored" data-anchor-id="exercise">
-<span class="header-section-number">10.7</span> Exercise</h2>
+</ul></section><section id="exercise" class="level2" data-number="10.8"><h2 data-number="10.8" class="anchored" data-anchor-id="exercise">
+<span class="header-section-number">10.8</span> Exercise</h2>
 <ol type="1">
 <li>Can you explain the difference between an extreme value and an outlier? Does it makes to remove extreme values? What about outliers?</li>
 </ol>
