@@ -45,10 +45,24 @@ The default settings discovered a single, additive outlier.
 By default, X-13 uses a formula that interpolates critical values for numbers of observations between 3 and 99 (Table 7.22 in the Manual).
 For standard time series, this results in a critical value around 4.
 
+| Outlier Span Length | Default Critical Value |
+|----------------------|------------------------|
+| 1                    | 1.96                   |
+| 2                    | 2.24                   |
+| 48                   | 3.63                   |
+| 96                   | 3.80                   |
+| 120                  | 3.85                   |
+| 240                  | 3.99                   |
+| 360                  | 4.07                   |
+
+
 Using the `outlier.critical` argument, we can fine tune the detection process.
 With `outlier.critical = 3`, we set a lower bar for the detection of outliers.
 `outlier.critical` is the z-value of a particular value that is needed to be classified as an outlier.
 A value of three means that the z-value must be 3 or larger.
+
+- Higher values make it less likely to identify a value as an outlier
+- Each outlier type can have a different critical value (typically we use the same for all types)
 
 ```{r}
 m_high <- seas(AirPassengers, outlier.critical = 3)
@@ -82,6 +96,16 @@ By understanding these effects and how to address them, analysts can improve the
 +--------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 : Arguments to the \`outlier\` spec
+
+Outlier Effects
+
+- Additive (or Point) outliers (AO)
+- Level shifts (LS)
+- Temporary level shifts (TL)
+- Temporary changes (TC)
+- Ramps (RP, QI, QD)
+- Seasonal outliers (SO)
+
 
 ## Level Shift
 
@@ -149,9 +173,22 @@ Since we want to deactivate the automated outlier detection from above, we speci
 
 We use the `regression.variables = TCyyyy.mm` format for a temporary change. 
 
+$$ \begin{cases}
+0 \qquad &\mbox{for} ~t < t_0 \\
+\alpha^{t - t_0} \qquad &\mbox{for} ~t \geq t_0 
+\end{cases}
+$$
+
 Where $\alpha$ is the rate of decay back to the previous level, 0 < $\alpha$ < 1 (default: 0.7 for monthly and 0.343 for quarterly series)
 
 
+## Ramps (RP, QI, QD)
+
+::: {#fig-ramps layout-ncol="1"}
+![Type of ramps](img/ramps.png){#fig-ramps}
+
+Types of ramp regressors.
+:::
 
 ## Manually Identifying Outliers
 
