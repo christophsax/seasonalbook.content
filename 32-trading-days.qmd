@@ -97,7 +97,12 @@ static(m)
 
 m0 <- seas(
   x = hobby_toy_game,
-  regression.variables = c("td", "easter[8]", "ao1996.May", "ao1996.Dec"),
+  regression.variables = c(
+  "td",
+  "easter[8]",
+  "ao1996.May",
+  "ao1996.Dec"
+  ),
   arima.model = "(0 1 2)(0 1 1)",
   regression.aictest = NULL,
   outlier = NULL,
@@ -109,7 +114,12 @@ summary(m0)
 
 m1 <- seas(
   x = hobby_toy_game,
-  regression.variables = c("td1coef", "easter[8]", "ao1996.May", "ao1996.Dec"),
+  regression.variables = c(
+  "td1coef",
+  "easter[8]",
+  "ao1996.May",
+  "ao1996.Dec"
+  ),
   arima.model = "(0 1 2)(0 1 1)",
   regression.aictest = NULL,
   outlier = NULL,
