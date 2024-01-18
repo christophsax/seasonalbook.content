@@ -19,7 +19,8 @@ status("drafting")  # drafting, polishing, complete
 ```
 Some series have seasonal breaks.
 Apart from visual inspection of the unadjusted series, a look at `monthplot()` is usually helpful.
-If there are seasonal breaks, this leads to a jump in the SI ratio.
+If there are seasonal breaks, this leads to a jump in the SI-ratio.
+
 
 ## Case Study: Imports of Goods to China
 

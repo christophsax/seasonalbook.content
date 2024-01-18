@@ -248,7 +248,7 @@ monthplot(m)
 To me (Christoph), this seems against the very basic idea of seasonal adjustment: We want to collect predictable fluctuations in the seasonal component, not random noise.
 The other side of the coin is a very smooth seasonal adjustment.
 
-These kind of SI ratios appear in around 10 to 20% of SEATS adjustment and may be the reason why SEATS often seems smoother than X11.
+These kind of SI-ratios appear in around 10 to 20% of SEATS adjustment and may be the reason why SEATS often seems smoother than X11.
 
 How to detect these cases?
 How to deal with these adjustments?
