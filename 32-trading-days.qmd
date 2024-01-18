@@ -273,5 +273,9 @@ Andrea, do you know of an Azerbaijani example that we could use as a case study?
 
 
 
+## Exercises
 
+1.  What is the difference between `td1coef` and `td` regressor? When would fit better than the other?
+1.  Why it is worth constructing trading days regressors over holiday ones?
+1.  Run `seas()` to on AirPassengers using `td1coef` and `td` regressors and compare the results.
 
