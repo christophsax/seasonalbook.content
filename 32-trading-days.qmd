@@ -276,7 +276,7 @@ Andrea, do you know of an Azerbaijani example that we could use as a case study?
 ```
 ## Case Study: Azerbaijani Consumer price index for construction
 
-`td1coef` is significant.
+`td1coef` is significant. But does the series have a seasonal pattern?
 
 ```{r}
 library(cbar.sa)
