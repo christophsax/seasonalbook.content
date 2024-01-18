@@ -19,42 +19,46 @@ status("polishing", "2023-03-24", section = "Holidays")  # drafting, polishing, 
 
  -->
 ```
-## Why should we adjust for trading day effects
 
-Months and quarters may differ in their overall length, or, more importantly may differ in the number of weekdays.
-Similar to the holiday adjustments, X-13 offers various tools to deal with differences in the number of days or weekdays.
+<!-- Why should we adjust for trading day effects -->
+
+Similarly to irregular holidays, the weekly pattern differs from year to year. So the number of weekdays in a given month or quarter may be different from year to year. In the example below, January 2022 has 21 weekdays, while January 2023 has 22 weekdays. Some time series, such as manufacturing, may be affected by this pattern.
 
 
 ::: {#fig-mini-cal layout-ncol=2}
 
-![January, 2022](img/mini-cal-22.png){#fig-mini-cal-22}
+![January 2022](img/mini-cal-22.png){#fig-mini-cal-22}
 
-![January, 2023](img/mini-cal-23.png){#fig-mini-cal-23}
+![January 2023](img/mini-cal-23.png){#fig-mini-cal-23}
 
-The number of weekdays differ between months
+The number of weekdays per month differ between years
 :::
 
 
-Trading day effects, as weekday effects are called in X-13, constitute a predictable movement in a time series, and therefore should not be part of the seasonally adjusted series.
-Trading day effects are usually removed by the regression spec, although some adjustments can be also done by the transform spec.
+Similar to the holiday adjustments, X-13 offers various tools to deal with differences in the number of days or weekdays. This chapter discusses the automated trading day adjustments in X-13, and explores various ways of user customization. Note that the term *trading day* adjustment is X-13 slang for weekday adjustment and will be used interchangeably.
+
+Trading day effects constitute a predictable movement in a time series, and therefore should not be part of the seasonally adjusted series.
+Trading day effects are usually removed by the regression spec, although some adjustments can also be done by the transform spec.
 Contrary to the regression spec, the transform spec performs a 1:1 adjustment, while the regression spec estimates the size of the effect from the data.
 
-As with most adjustments, X-13 offers a built in automated adjustment that works well in most circumstances.
+<!-- TODO: resolve @sec-user-defined-regressors, which sec should point to? -->
+
+As with most adjustments, X-13 offers a built-in automated adjustment that works well in most circumstances.
 We start the chapter by looking at the automated procedures.
-Sometimes, you want to rely on a user defined specification of trading days, a topic covered @sec-user-defined-regressors.
+Sometimes, you want to rely on a user-defined specification of trading days, a topic covered in @sec-user-defined-regressors.
 Finally, in @sec-replicate-x-13-trading-days-adjustment, we link the two sections by replicating the built-in regressors in R.
 
 ## Built-in trading day adjustment
 
 In a default run of `seas()`, X-13 uses a familiar AICc test to decide between a number of potential trading day adjustments.
-Form the various models, it uses the one with the lowest AICc as the best model.
+From the various models, it uses the one with the lowest AICc as the best model.
 By default, the following models are evaluated:
 
 -   `td1coef`: A single coefficient trading day adjustment
 
--   `td`: A six day coefficients trading day adjustment
+-   `td`: A six-day coefficient trading day adjustment
 
-The first model distinguishes between weekday and weekends, while the second model treats every day as it's own.
+The first model distinguishes between weekdays and weekends, while the second model treats every day as its own.
 The first model is appropriate for many economic time series, where variables behave differently during the week than during the weekend.
 In some series, there may be large differences between weekdays, or even between Saturday and Sunday.
 Retail sales, for example, usually peak towards the end of the week and are weak on Sunday.
@@ -70,7 +74,7 @@ The procedure has opted for a one coefficient model.
 During weekdays, the number of air passengers was lower during the period of the example series, by about 0.3% (note we are looking at a logarithmic, multiplicative model).
 
 We can manipulate the automated model.
-To enforce a six coefficient model, `regression.variables` can be specified as `"td"` (as opposed to `"td1coef")`:
+To enforce a six coefficient model, `regression.variables` can be specified as `"td"` (as opposed to `"td1coef"`):
 
 ```{r}
 m_td <- seas(AirPassengers, regression.variables = "td")
@@ -120,13 +124,12 @@ ts_dygraphs(ts_c(
 ))
 ```
 
-## Case Study: Replicate X-13 trading days adjustment
+## Case Study: Replicate X-13 trading days adjustment {#sec-replicate-x-13-trading-days-adjustment}
 
+'Trading day adjustment' removes the effect of the weekdays, but does not include holidays, such as Christmas or Easter.
+These are handled separately (Easter) (@sec-holidays) or dealt with standard seasonal adjustment (Christmas).
 
-'Trading day adjustment' removes the effect of the weekdays, and but does not include holidays, such as Christmas or Easter.
-These are handled separately (Easter) or dealt with by standard seasonal adjustment (Christmas).
-
-Sometimes, users may want to specify user defined trading day regressors, in order to incorporate country specific trading day patterns.
+Sometimes, users may want to specify user-defined trading day regressors, to incorporate country specific trading day patterns.
 In @sec-replicate-x-13-trading-days-adjustment, we replicate the built-in regressors.
 These regressors simply use the number of weekdays, and do not pay any reference to a country specific calendar.
 If you want to deviate from them, a good way is to start with the replicated values, and adjust from there.
@@ -140,7 +143,11 @@ library(seasonal)
 
 ### Constructing weekday regressors
 
+To construct weekday regressors in R, we use the following code:
+
 ```{r}
+library(dplyr)
+
 dates <- seq(as.Date("1931-01-01"), as.Date("2030-12-31"), by = "day")
 
 first_of_month <- function(x) {
@@ -151,51 +158,55 @@ first_of_month <- function(x) {
     sep = "-"
   ))
 }
+
+td_m_tbl <-
+  tibble(dates, wd = as.POSIXlt(dates)$wday, name = weekdays(dates)) |>
+  group_by(time = first_of_month(dates)) |>
+  summarize(
+    mon = sum(wd == 1) - sum(wd == 0),
+    tue = sum(wd == 2) - sum(wd == 0),
+    wed = sum(wd == 3) - sum(wd == 0),
+    thu = sum(wd == 4) - sum(wd == 0),
+    fri = sum(wd == 5) - sum(wd == 0),
+    sat = sum(wd == 6) - sum(wd == 0),
+    td1 = sum(wd %in% 1:5) - 5 / 2 * sum(wd %in% c(6, 0))
+  )
+
+head(td_m_tbl, 10)
 ```
 
+For each month, `td_m_tbl` computes the number of specific weekdays, and compares them to the number of Sundays (`wd == -`) (columns `mon` to `sat`). For example, in May 1931, the number of Mondays was 4 while the number of Sundays was 5. The column `td1` compares the total number of weekdays with the total number of weekends. The normalization formula is the one used by X-13 and described in the X-13 manual.
+
+<!--
 td1nolpyear
 
-:   Include the weekday-weekend contrast variable (monthly and quarterly flow eries only): (no. of weekdays) −(5/2) (no. of Saturdays and Sundays).
+:   Include the weekday-weekend contrast variable (monthly and quarterly flow series only): (no. of weekdays) −(5/2) (no. of Saturdays and Sundays).
 
 tdnolpyear
 
 :   Include the six day-of-week contrast variables (monthly and quarterly flow series only): (no. of Mondays) − (no. of Sundays), .
     . . , (no. of Saturdays) − (no. of Sundays).
 
-```{r}
-td_m_tbl <-
-  tibble(dates, wd = as.POSIXlt(dates)$wday, name = weekdays(dates)) %>%
-  group_by(time = first_of_month(dates)) %>%
-  summarize(
-    td1 = sum(wd %in% 1:5) - 5 / 2 * sum(wd %in% c(6, 0)),
-    mon = sum(wd == 1) - sum(wd == 0),
-    tue = sum(wd == 2) - sum(wd == 0),
-    wed = sum(wd == 3) - sum(wd == 0),
-    thu = sum(wd == 4) - sum(wd == 0),
-    fri = sum(wd == 5) - sum(wd == 0),
-    sat = sum(wd == 6) - sum(wd == 0)
-  )
+ -->
 
-head(as.data.frame(td_m_tbl), 10)
-```
-
-'Trading day adjustment' removes the effect of the weekdays, and but does not include holidays, such as Christmas or Easter.
-These are handled separately (Easter) or dealt with by standard seasonal adjustment (Christmas).
+To extract the regressors as `ts` time series, we use the following code:
 
 ```{r}
 td1nolpyear <-
-  td_m_tbl %>%
-  select(time, value = td1) %>%
+  td_m_tbl |>
+  select(time, value = td1) |>
   ts_ts()
 
 tdnolpyear <-
-  td_m_tbl %>%
-  select(-td1) %>%
-  ts_long() %>%
+  td_m_tbl |>
+  select(-td1) |>
+  ts_long() |>
   ts_ts()
 ```
 
-### Single coef
+### Single coefficient regressor
+
+It is straightforward to replicate these values to the automated procedure in X-13:
 
 ```{r}
 m_td1coef <- seas(
@@ -218,7 +229,9 @@ m_td1coef_built_in <- seas(
 summary(m_td1coef_built_in)
 ```
 
-### All coefs
+### One coefficient per day
+
+Note that the baseline is Sunday.
 
 ```{r}
 m_td <- seas(
@@ -240,3 +253,26 @@ m_td_built_in <- seas(
 )
 summary(m_td_built_in)
 ```
+
+### Is it worth building country specific regressors?
+
+The built-in trading day adjustment in X-13 is exclusively based on the calendar to construct regressor variables, meaning it does not consider country-specific holidays like Thanksgiving in the US. These holidays are addressed separately, as discussed in the @sec-holidays section.
+
+As previously noted, regular holidays, such as Christmas, typically don't need special handling. When dealing with irregular holidays, such as Chinese New Year, employing holiday regressors is the preferred approach. Consequently, creating country-specific regressors is generally unnecessary.
+
+
+
+<!--
+Jim, this is very opinionated, does it make sense?
+
+ -->
+
+
+<!--
+Andrea, do you know of an Azerbaijani example that we could use as a case study?
+ -->
+
+
+
+
+

@@ -18,8 +18,9 @@ status("drafting")  # drafting, polishing, complete
  -->
 ```
 Some series have seasonal breaks.
-Apart from visual inspection of the unadjusted series, a look at monthplot() is usually helpful.
+Apart from visual inspection of the unadjusted series, a look at `monthplot()` is usually helpful.
 If there are seasonal breaks, this leads to a jump in the SI-ratio.
+
 
 ## Case Study: Imports of Goods to China
 
@@ -49,14 +50,14 @@ Let's do this now.
 ### Identifying a seasonal break
 
 In part, the seasonal break is visible in the series.
-It is more straigthforward to spot in the monthplot of the series:
+It is more straightforward to spot in the monthplot of the series:
 
 ```{r }
 monthplot(seas(imp_cn))
 ```
 
 This makes it obvious that there were very strong December effects before 2000.
-We don't know anything about the series, but we can speculate thatprior to 2000, custom receipts were counted when they were handed in (at the end of the year), rather than at the date of import.
+We don't know anything about the series, but we can speculate that prior to 2000, custom receipts were counted when they were handed in (at the end of the year), rather than at the date of import.
 
 ```{r }
 plot(seas(imp_cn, regression.variables = "seasonal/2000.jan//"))
@@ -70,7 +71,7 @@ Modeling a seasonal break is usually preferable to a separation of the time seri
 ### Restricting model span
 
 In many structural breaks, restricting `series.modelspan` may be the easiest way to deal with such series.
-Resticting the model span, uses only part of the series for model estimation, but applies seasonal adjustment to the whole series:
+Restricting the model span, uses only part of the series for model estimation, but applies seasonal adjustment to the whole series:
 
 ```{r }
 

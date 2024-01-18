@@ -180,7 +180,7 @@ Revisions
     X-13 offers tools to analyze revisions.
     @sec-revisions discusses them and helps you to decide which model to pick.
     
-### Exercises
+## Exercises
 
 1. Run the following code:
 ```
