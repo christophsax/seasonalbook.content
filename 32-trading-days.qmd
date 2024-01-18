@@ -256,23 +256,51 @@ summary(m_td_built_in)
 
 ### Is it worth building country specific regressors?
 
-The built-in trading day adjustment in X-13 is exclusively based on the calendar to construct regressor variables, meaning it does not consider country-specific holidays like Thanksgiving in the US. These holidays are addressed separately, as discussed in the @sec-holidays section.
+The built-in trading day adjustment in X-13 is exclusively based on the calendar to construct regressor variables, meaning it does not consider country-specific holidays like Thanksgiving in the US.
+These holidays are addressed separately, as discussed in the @sec-holidays section.
 
-As previously noted, regular holidays, such as Christmas, typically don't need special handling. When dealing with irregular holidays, such as Chinese New Year, employing holiday regressors is the preferred approach. Consequently, creating country-specific regressors is generally unnecessary.
+As previously noted, regular holidays, such as Christmas, typically don't need special handling.
+When dealing with irregular holidays, such as Chinese New Year, employing holiday regressors is the preferred approach.
+Consequently, creating country-specific regressors is generally unnecessary.
 
-
-
+```{=html}
 <!--
 Jim, this is very opinionated, does it make sense?
 
  -->
-
-
+```
+```{=html}
 <!--
 Andrea, do you know of an Azerbaijani example that we could use as a case study?
  -->
+```
+## Case Study: Azerbaijani Consumer price index for construction
 
+`td1coef` is significant. But does the series have a seasonal pattern?
 
+```{r}
+library(cbar.sa)
+m0 <- seas(
+  x = cpi_const,
+  regression.variables = c("const", "ls2009.1"),
+  arima.model = "(1 1 0)",
+  regression.aictest = NULL,
+  outlier = NULL,
+  transform.function = "none"
+)
+summary(m0)
+```
+```{r}
+m1 <- seas(
+  x = cpi_const,
+  regression.variables = c("const", "td1coef", "ls2009.1"), 
+  arima.model = "(1 1 0)",
+  regression.aictest = NULL,
+  outlier = NULL,
+  transform.function = "none"
+)
+summary(m1)
+```
 
 ## Exercises
 
@@ -280,5 +308,5 @@ Andrea, do you know of an Azerbaijani example that we could use as a case study?
 1.  Run `seas()` to on AirPassengers using `td1coef` and `td` regressors and compare the results.
 1. Consult X-13ARIMA-SEATS Reference Manual. What other options are available as built-in regressors to model trading days?
 1. Would it make sense to model both the holiday and trading days effect at the same time?
-1. Use the `trade_tur` series. Try modeling the holiday and trading days effect simultaneously and compare the results with the individual solutions. Do you get better results?
+1. Use the `trade_tur` series. Try adding a `td1coef` regressor to model the difference between weekday and weekend. Is that significant? What happens if you model simultaneously the holiday and trading days effect? Do you get better results?
 
