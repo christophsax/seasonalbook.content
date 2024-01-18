@@ -308,5 +308,7 @@ summary(m1)
 1.  Run `seas()` to on AirPassengers using `td1coef` and `td` regressors and compare the results.
 1. Consult X-13ARIMA-SEATS Reference Manual. What other options are available as built-in regressors to model trading days?
 1. Would it make sense to model both the holiday and trading days effect at the same time?
-1. Use the `trade_tur` series. Try adding a `td1coef` regressor to model the difference between weekday and weekend. Is that significant? What happens if you model simultaneously the holiday and trading days effect? Do you get better results?
+1. Explain the difference among the following arguments: `xreg`, `regression.variables`, and `regression.usertype`. Are these equivalent?
+1. Use the `trade_tur` series. Try modeling the holiday and trading days effect simultaneously and compare the results with the individual solutions. Do you get better results?
+
 
