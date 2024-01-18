@@ -299,6 +299,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul>
 </li>
   <li><a href="#case-study-azerbaijani-retail-sales" id="toc-case-study-azerbaijani-retail-sales" class="nav-link" data-scroll-target="#case-study-azerbaijani-retail-sales"><span class="header-section-number">8.3</span> Case Study: Azerbaijani Retail Sales</a></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="header-section-number">8.4</span> Exercises</a></li>
   </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/31-holidays.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
@@ -582,7 +583,7 @@ How to read data from FRED into R
 <p><img src="31-holidays_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="864"></p>
 </div>
 </div>
-<p>With <code>xreg</code>, arbitrary user-defined regressors can be included, regression.usertype = “holiday” ensures that the final series does not include the regression effect. We also have chosen X11 as the decomposition method.</p>
+<p>With <code>xreg</code>, arbitrary user-defined regressors can be included, <code>regression.usertype = "holiday"</code> ensures that the final series does not include the regression effect. We also have chosen X11 as the decomposition method.</p>
 <p>Unsurprisingly, the summary reveals a highly significant Chinese New Year effect. As the automatic model has been estimated on the logarithmic series, the coefficient of -0.17 indicates that New Year in 2023 will lower imports in January, by approximately 0.74 * 17 ~ 13% (compared to average January), and increase it by the same amount in February. The automatic procedure has also detected weekday effects and a level shift during the financial crisis.</p>
 </section><section id="multiple-regressors" class="level3" data-number="8.2.3"><h3 data-number="8.2.3" class="anchored" data-anchor-id="multiple-regressors">
 <span class="header-section-number">8.2.3</span> Multiple regressors</h3>
@@ -898,6 +899,14 @@ Replicate automated Easter adjustment in R
 <p><img src="31-holidays_files/figure-html/unnamed-chunk-23-2.png" class="img-fluid" width="864"></p>
 </div>
 </div>
+</section><section id="exercises" class="level2" data-number="8.4"><h2 data-number="8.4" class="anchored" data-anchor-id="exercises">
+<span class="header-section-number">8.4</span> Exercises</h2>
+<ol type="1">
+<li><p>Go through <code><a href="https://rdrr.io/pkg/seasonal/man/genhol.html">seasonal::genhol()</a></code> documentation and make sure you understand its argument.</p></li>
+<li><p>Can you replicate <code>seasonal::genhol(easter, frequency = 4, start = -2, center = "calendar")</code> output manually?</p></li>
+<li><p>Can you explain why do we need to set <code>center = "mean"</code> for Ramadan?</p></li>
+<li><p>What is the consequence of not specifying <code>regression.usertype = "holiday"</code> in a call to <code><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas()</a></code> when adjusting for moving holidays?</p></li>
+</ol>
 
 
 </section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">

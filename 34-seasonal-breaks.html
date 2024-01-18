@@ -319,7 +319,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 -   Correction for seasonal breaks
 
- --><p>Some series have seasonal breaks. Apart from visual inspection of the unadjusted series, a look at monthplot() is usually helpful. If there are seasonal breaks, this leads to a jump in the SI ratio.</p>
+ --><p>Some series have seasonal breaks. Apart from visual inspection of the unadjusted series, a look at <code><a href="https://rdrr.io/r/stats/monthplot.html">monthplot()</a></code> is usually helpful. If there are seasonal breaks, this leads to a jump in the SI-ratio.</p>
 <section id="case-study-imports-of-goods-to-china" class="level2" data-number="11.1"><h2 data-number="11.1" class="anchored" data-anchor-id="case-study-imports-of-goods-to-china">
 <span class="header-section-number">11.1</span> Case Study: Imports of Goods to China</h2>
 <p>We previously used the imports of goods to China, as series that seem to have a pretty obvious seasonal break.</p>
@@ -414,14 +414,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Back then, we said that adjusting the whole series in one step is possible, but for good results one should manually model the seasonal break. Let’s do this now.</p>
 <section id="identifying-a-seasonal-break" class="level3" data-number="11.1.1"><h3 data-number="11.1.1" class="anchored" data-anchor-id="identifying-a-seasonal-break">
 <span class="header-section-number">11.1.1</span> Identifying a seasonal break</h3>
-<p>In part, the seasonal break is visible in the series. It is more straigthforward to spot in the monthplot of the series:</p>
+<p>In part, the seasonal break is visible in the series. It is more straightforward to spot in the monthplot of the series:</p>
 <div class="cell">
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/monthplot.html">monthplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">imp_cn</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="34-seasonal-breaks_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="864"></p>
 </div>
 </div>
-<p>This makes it obvious that there were very strong December effects before 2000. We don’t know anything about the series, but we can speculate thatprior to 2000, custom receipts were counted when they were handed in (at the end of the year), rather than at the date of import.</p>
+<p>This makes it obvious that there were very strong December effects before 2000. We don’t know anything about the series, but we can speculate that prior to 2000, custom receipts were counted when they were handed in (at the end of the year), rather than at the date of import.</p>
 <div class="cell">
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">imp_cn</span>, regression.variables <span class="op">=</span> <span class="st">"seasonal/2000.jan//"</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -431,7 +431,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>A formal test of a seasonal break can be performed by including <code>regression.variables = "seasonal/1999.jan//"</code> into the specification. By default, seasonal outliers are removed from the final series. Therefore, this can be used to model a seasonal break. Modeling a seasonal break is usually preferable to a separation of the time series in two parts.</p>
 </section><section id="restricting-model-span" class="level3" data-number="11.1.2"><h3 data-number="11.1.2" class="anchored" data-anchor-id="restricting-model-span">
 <span class="header-section-number">11.1.2</span> Restricting model span</h3>
-<p>In many structural breaks, restricting <code>series.modelspan</code> may be the easiest way to deal with such series. Resticting the model span, uses only part of the series for model estimation, but applies seasonal adjustment to the whole series:</p>
+<p>In many structural breaks, restricting <code>series.modelspan</code> may be the easiest way to deal with such series. Restricting the model span, uses only part of the series for model estimation, but applies seasonal adjustment to the whole series:</p>
 <div class="cell">
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">imp_cn</span>, series.modelspan <span class="op">=</span> <span class="st">"2000.jan,"</span><span class="op">)</span><span class="op">)</span></span>
