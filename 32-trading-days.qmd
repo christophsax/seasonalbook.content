@@ -256,27 +256,30 @@ summary(m_td_built_in)
 
 ### Is it worth building country specific regressors?
 
-The built-in trading day adjustment in X-13 is exclusively based on the calendar to construct regressor variables, meaning it does not consider country-specific holidays like Thanksgiving in the US. These holidays are addressed separately, as discussed in the @sec-holidays section.
+The built-in trading day adjustment in X-13 is exclusively based on the calendar to construct regressor variables, meaning it does not consider country-specific holidays like Thanksgiving in the US.
+These holidays are addressed separately, as discussed in the @sec-holidays section.
 
-As previously noted, regular holidays, such as Christmas, typically don't need special handling. When dealing with irregular holidays, such as Chinese New Year, employing holiday regressors is the preferred approach. Consequently, creating country-specific regressors is generally unnecessary.
+As previously noted, regular holidays, such as Christmas, typically don't need special handling.
+When dealing with irregular holidays, such as Chinese New Year, employing holiday regressors is the preferred approach.
+Consequently, creating country-specific regressors is generally unnecessary.
 
-
-
+```{=html}
 <!--
 Jim, this is very opinionated, does it make sense?
 
  -->
-
-
+```
+```{=html}
 <!--
 Andrea, do you know of an Azerbaijani example that we could use as a case study?
  -->
-
+```
 ## Case Study: Azerbaijani Consumer price index for construction
 
 `td1coef` is significant.
 
 ```{r}
+library(cbar.sa)
 m0 <- seas(
   x = cpi_const,
   regression.variables = c("const", "ls2009.1"),
