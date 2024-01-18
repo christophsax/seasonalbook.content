@@ -63,30 +63,23 @@ X-13 offers several ways to model outliers.
 In this chapter, we will focus on two most important types of effects that can occur in time series data: level shifts and additive outliers.
 By understanding these effects and how to address them, analysts can improve the quality of their analyses and draw more accurate conclusions from the data.
 
-+--------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------+
-| Argument           | Description                                                                                                                                                                    | Default                                                                                  |
-+====================+================================================================================================================================================================================+==========================================================================================+
-| `outlier.critical` | Sets the value to which the absolute values of the outlier t-statistics are compared to                                                                                        | Obtained by a                                                                            |
-|                    | detect outliers.                                                                                                                                                               | modification of the asymptotic formula of Ljung (1993) that interpolates critical values |
-|                    |                                                                                                                                                                                | for numbers of observations between 3 and 99.                                            |
-|                    | If only one value is given for this argument, then this critical value is                                                                                                      |                                                                                          |
-|                    | used for all types of outliers. If a list of up to three values is given, different values are used for additive outliers, level shift outliers and temporary change outliers. |                                                                                          |
-+--------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------+
-| `outlier.method`   | Determines how the program successively adds detected outliers to the model. The                                                                                               | `"addone".`                                                                              |
-|                    | choices are `"addone"` or `"addall"`.                                                                                                                                          |                                                                                          |
-|                    |                                                                                                                                                                                |                                                                                          |
-|                    | `"addone"` calculates t-statistics for each type of                                                                                                                            |                                                                                          |
-|                    | outlier specified at all time points.                                                                                                                                          |                                                                                          |
-|                    |                                                                                                                                                                                |                                                                                          |
-|                    | `"addall"` follows the same general steps as the addone method, except it adds to the model *all* outliers with absolute t-statistics exceeding the critical value.            |                                                                                          |
-+--------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------+
-| `outlier.span`     | Specifies start and end dates of a span of the time series to be searched for outliers. The start and end dates of the span must both lie within the series.                   | None.                                                                                    |
-+--------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------+
-| `outlier.types`    | Specifies the types of outliers to detect. The choices are: `"ao"` (additive outliers), `"ls"` (level shifts), `"tc"` (temporary                                               | The default is `c("ao", "ls")`.                                                          |
-|                    | change), `"all"`: (detect all three of the above types simultaneously),                                                                                                        |                                                                                          |
-|                    | and `"none"` (turn off outlier detection, but not t-statistics for temporary level                                                                                             |                                                                                          |
-|                    | shifts).                                                                                                                                                                       |                                                                                          |
-+--------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------+
++--------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Argument           | Description                                                                                                                                                                                                                                                                                          | Default                                                                                                                                              |
++====================+======================================================================================================================================================================================================================================================================================================+======================================================================================================================================================+
+| `outlier.critical` | Sets the value to which the absolute values of the outlier t-statistics are compared to detect outliers.                                                                                                                                                                                             | Obtained by a modification of the asymptotic formula of Ljung (1993) that interpolates critical values for numbers of observations between 3 and 99. |
+|                    |                                                                                                                                                                                                                                                                                                      |                                                                                                                                                      |
+|                    | If only one value is given for this argument, then this critical value is used for all types of outliers. If a list of up to three values is given, different values are used for additive outliers, level shift outliers and temporary change outliers.                                             |                                                                                                                                                      |
++--------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------+
+| `outlier.method`   | Determines how the program successively adds detected outliers to the model. The choices are `"addone"` or `"addall"`.                                                                                                                                                                               | `"addone".`                                                                                                                                          |
+|                    |                                                                                                                                                                                                                                                                                                      |                                                                                                                                                      |
+|                    | `"addone"` calculates t-statistics for each type of outlier specified at all time points.                                                                                                                                                                                                            |                                                                                                                                                      |
+|                    |                                                                                                                                                                                                                                                                                                      |                                                                                                                                                      |
+|                    | `"addall"` follows the same general steps as the addone method, except it adds to the model *all* outliers with absolute t-statistics exceeding the critical value.                                                                                                                                  |                                                                                                                                                      |
++--------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------+
+| `outlier.span`     | Specifies start and end dates of a span of the time series to be searched for outliers. The start and end dates of the span must both lie within the series.                                                                                                                                         | None.                                                                                                                                                |
++--------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------+
+| `outlier.types`    | Specifies the types of outliers to detect. The choices are: `"ao"` (additive outliers), `"ls"` (level shifts), `"tc"` (temporary change), `"all"`: (detect all three of the above types simultaneously), and `"none"` (turn off outlier detection, but not t-statistics for temporary level shifts). | The default is `c("ao", "ls")`.                                                                                                                      |
++--------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 : Arguments to the \`outlier\` spec
 
@@ -117,6 +110,16 @@ If there is an abrupt change in the level of the series, the estimates will be d
 The estimates before the level shift will be underestimated, and those after will be overestimated.
 As the calculation of the irregular and seasonal components follow on from this initial trend-cycle estimation, they may be distorted as well.
 
+If your series has canceling Level Shifts:
+
+- Also called temporary level shifts
+- NOT temporary changes
+- 2 (or more) level shifts whose effects cancel
+- Can replace them with additive outliers (over short spans) or use a temporary level shift regressor
+
+We use, for example, `regression.variables = c(TL1953.Jun, TL1953.Sep)` argument to manually specify a temporary level-shift.
+
+
 ## Additive Outliers
 
 An additive outlier is a data point that falls outside the general pattern of the trend and seasonal component in a time series.
@@ -141,6 +144,14 @@ summary(m_additive_outlier)
 
 Again, we use the `regression.variables` argument to manually specify an additive outlier.
 Since we want to deactivate the automated outlier detection from above, we specify `outlier = NULL`.
+
+## Temporary Change Regressor 
+
+We use the `regression.variables = TCyyyy.mm` format for a temporary change. 
+
+Where $\alpha$ is the rate of decay back to the previous level, 0 < $\alpha$ < 1 (default: 0.7 for monthly and 0.343 for quarterly series)
+
+
 
 ## Manually Identifying Outliers
 
@@ -189,6 +200,14 @@ If there is not a methodological, social or economic reason to explain the prese
 
 -->
 ```
+
+
+## When Outliers Are Found
+
+- ALWAYS, ALWAYS, ALWAYS check if outliers are reasonable
+- Hard-code known outliers in production
+- Usually a concern only for the most recent part of the series
+
 ## Exercise
 
 1.  Can you explain the difference between an extreme value and an outlier? Does it makes to remove extreme values? What about outliers?
