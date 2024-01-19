@@ -230,8 +230,8 @@ A bit of tidying:
 ```{r }
 #| eval = FALSE
 imp_cn_tidy <-
-  imp_cn_raw %>%
-  select(time = date, id = series_id, value) %>%
+  imp_cn_raw |>
+  select(time = date, id = series_id, value) |>
   mutate(id = recode(
     id,
     XTIMVA01CNM667S = "sa",
