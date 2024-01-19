@@ -106,6 +106,36 @@ Outlier Effects
 - Ramps (RP, QI, QD)
 - Seasonal outliers (SO)
 
+```{r}
+#| echo: false
+library(ggplot2)
+outlier_df <- data.frame(
+  x = rep(0:30, 6),
+  y = rep(
+    c(
+      0, 1, 0, 1, 0, 1, 0, 1, 0.779, 0.607, 0.472, 0.368, 0.287, 0.223, 0.174,
+      0.135, 0.105, 0.082, 0.064, 0.05, 0.039, 0.03, 0.024, 0.018, 0.014, 0.011,
+      0.009, 0.007, 0, 0.091, 0.182, 0.273, 0.364, 0.455, 0.545, 0.636, 0.727,
+      0.818, 0.909, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0
+    ),
+    rep(
+      c(15L, 1L, 26L, 20L, 11L, 10L, 20L, 1L, 10L, 1L, 11L, 6L, 1L, 
+      6L, 1L, 6L, 1L, 6L, 1L, 3L),
+      rep(c(1L, 21L, 1L, 10L, 1L), c(7L, 1L, 1L, 1L, 10L))
+    )
+  ),
+  type = rep(c("AO", "LS", "TL", "TC", "RP", "SO"), each = 31L)
+)
+ggplot(outlier_df, aes(x = x, y = y)) +
+  geom_line() +
+  geom_point(size = 0.60) +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  facet_wrap(vars(type)) +
+  labs(title = "Outlier Effects", x = NULL, y = NULL)
+```
+
+
 
 ## Level Shift
 
