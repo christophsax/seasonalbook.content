@@ -427,8 +427,8 @@ It has been observed that when multiplicative seasonal adjustment produces more 
 ## Case study
 
 tsbox::ts_plot(
-  s3x1 <- predict(seas(AirPassengers, x11.seasonalma = "s3x1")),
-  s3x15 <- predict(seas(AirPassengers, x11.seasonalma = "s3x15"))
+  s3x1 = predict(seas(AirPassengers, x11.seasonalma = "s3x1")),
+  s3x15 = predict(seas(AirPassengers, x11.seasonalma = "s3x15"))
 )
 
  -->
