@@ -97,7 +97,9 @@ By understanding these effects and how to address them, analysts can improve the
 
 : Arguments to the \`outlier\` spec
 
-Outlier Effects
+## Outlier Effects
+
+The figure below illustrates outlier effects.
 
 ```{r}
 #| echo: false
@@ -151,7 +153,7 @@ ggplot(outlier_df, aes(x = x, y = y)) +
 ```
 
 
-## Level Shift
+### Level Shift
 
 The first outlier category we look at are level shifts.
 Level shifts refers to a sudden and sustained change in the underlying level of a time series.
@@ -188,7 +190,7 @@ If your series has canceling Level Shifts:
 We use, for example, `regression.variables = c(TL1953.Jun, TL1953.Sep)` argument to manually specify a temporary level-shift.
 
 
-## Additive Outliers
+### Additive Outliers
 
 An additive outlier is a data point that falls outside the general pattern of the trend and seasonal component in a time series.
 Outliers can be caused by random effects, such as an extreme irregular point, or by identifiable factors, such as a strike or bad weather.
@@ -213,7 +215,7 @@ summary(m_additive_outlier)
 Again, we use the `regression.variables` argument to manually specify an additive outlier.
 Since we want to deactivate the automated outlier detection from above, we specify `outlier = NULL`.
 
-## Temporary Change Regressor 
+### Temporary Change Regressor 
 
 We use the `regression.variables = TCyyyy.mm` format for a temporary change. 
 
@@ -226,7 +228,7 @@ $$
 Where $\alpha$ is the rate of decay back to the previous level, 0 < $\alpha$ < 1 (default: 0.7 for monthly and 0.343 for quarterly series)
 
 
-## Ramps (RP, QI, QD)
+### Ramps (RP, QI, QD)
 
 ::: {#fig-ramps layout-ncol="1"}
 ![Type of ramps](img/ramps.png){#fig-ramps}
