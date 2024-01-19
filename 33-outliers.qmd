@@ -132,14 +132,14 @@ outlier_df <- data.frame(
     rep(c("AO", "LS", "TL", "TC", "RP", "SO", "QI", "QD"), each = 31L),
     levels = c("AO", "LS", "TL", "TC", "SO", "RP", "QI", "QD"),
     labels = c(
-      "Additive outlier",
-      "Level shifts",
-      "Temporary level shift",
-      "Temporary change",
-      "Seasonal outlier",
-      "Ramp",
-      "Increasing quadratic ramp",
-      "Decreasing quadratic ramp"
+      "Additive outlier (AO)",
+      "Level shifts (LS)",
+      "Temporary level shift (TL)",
+      "Temporary change (TC)",
+      "Seasonal outlier (SO)",
+      "Ramp (RP)",
+      "Increasing quadratic ramp (QI)",
+      "Decreasing quadratic ramp (QD)"
     )
   )
 )
