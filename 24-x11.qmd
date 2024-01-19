@@ -108,8 +108,8 @@ We apply these weights to estimate the trend of the `AirPassengers` series:
 
 ```{r x11-trend}
 observed <- AirPassengers
-filter_trend = c(1/24, rep(1/12, 11), 1/24)
-trend = stats::filter(observed, filter = filter_trend, sides = 2)
+filter_trend <- c(1/24, rep(1/12, 11), 1/24)
+trend <- stats::filter(observed, filter = filter_trend, sides = 2)
 tsbox::ts_plot(observed, trend)
 ```
 
@@ -117,15 +117,15 @@ After obtaining the trend, we estimate the seasonal component of the de-trended 
 
 ```{r x11-seasonal-component}
 detrended <- observed - trend
-filter_seas = c(1, rep(0, 11), 2, rep(0, 11), 3, rep(0, 11), 2, rep(0, 11), 1) / 9
-seasonal = stats::filter(detrended, filter = filter_seas, sides = 2)
+filter_seas <- c(1, rep(0, 11), 2, rep(0, 11), 3, rep(0, 11), 2, rep(0, 11), 1) / 9
+seasonal <- stats::filter(detrended, filter = filter_seas, sides = 2)
 tsbox::ts_plot(detrended, seasonal)
 ```
 
 Subtracting this seasonal estimate provides us with a rudimentary seasonal adjustment:
 
 ```{r x11-seasonal-adj}
-adjusted = observed - seasonal
+adjusted <- observed - seasonal
 tsbox::ts_plot(observed, adjusted)
 ```
 
@@ -201,15 +201,15 @@ model <- Arima(y = ts(rnorm(1000),freq=12),
                seasonal=c(0,1,1),
                fixed=c(theta=-0.5, Theta=-0.9))
 x <- simulate(model, nsim=10000)
-fx = spec.ar(x, order = 36, plot = TRUE)
+fx <- spec.ar(x, order = 36, plot = TRUE)
 
 # Pass a trend filter over data
-x_trend = stats::filter(x, filter = filter_trend, sides = 2)
-fx_trend = spec.ar(x_trend, na.action = na.pass)
+x_trend <- stats::filter(x, filter = filter_trend, sides = 2)
+fx_trend <- spec.ar(x_trend, na.action = na.pass)
 
 # Remove trend to leave seasonal + irregular
-x_seasonal = x - x_trend
-fx_seasonal = spec.ar(x_seasonal, na.action = na.pass)
+x_seasonal <- x - x_trend
+fx_seasonal <- spec.ar(x_seasonal, na.action = na.pass)
 ```
 
 ## X-11 Filters
@@ -268,44 +268,44 @@ To understand the implications of filter length, consider the finite set of opti
 
 ```{r, echo=FALSE}
 # Function to find seasonal filter weight by passing impuse through
-find_seasonal_PxQ_filter_wts = function(P, Q) {
-  v = rep(0, 100)
-  v[50] = 1
-  v2 = stats::filter(v, rep(1 / Q, Q), sides = 2)
-  v3 = stats::filter(v2, rep(1 / P, P), sides = 2)
-  wts = v3[v3 > 0 & !is.na(v3)]
+find_seasonal_PxQ_filter_wts <- function(P, Q) {
+  v <- rep(0, 100)
+  v[50] <- 1
+  v2 <- stats::filter(v, rep(1 / Q, Q), sides = 2)
+  v3 <- stats::filter(v2, rep(1 / P, P), sides = 2)
+  wts <- v3[v3 > 0 & !is.na(v3)]
   wts
 }
 ```
 
 ```{r, echo=FALSE}
 # 3 x 3 seasonal filter wts
-w = find_seasonal_PxQ_filter_wts(3, 3)
-w_len = (length(w) - 1) / 2
+w <- find_seasonal_PxQ_filter_wts(3, 3)
+w_len <- (length(w) - 1) / 2
 plot((-w_len):(w_len), w, type = "b", ylim = c(0, max(w)), xlab = "time lag", ylab = "filter weight", main = "3x3 Seasonal Filter wts")
 abline(h = 0, lty = 'dotted')
 ```
 
 ```{r, echo=FALSE}
 # 3 x 5 seasonal filter wts
-w = find_seasonal_PxQ_filter_wts(3, 5)
-w_len = (length(w) - 1) / 2
+w <- find_seasonal_PxQ_filter_wts(3, 5)
+w_len <- (length(w) - 1) / 2
 plot((-w_len):(w_len), w, type = "b", ylim = c(0, max(w)), xlab = "time lag", ylab = "filter weight", main = "3x5 Seasonal Filter wts")
 abline(h = 0, lty = 'dotted')
 ```
 
 ```{r, echo=FALSE}
 # 3 x 9 seasonal filter wts
-w = find_seasonal_PxQ_filter_wts(3, 9)
-w_len = (length(w) - 1) / 2
+w <- find_seasonal_PxQ_filter_wts(3, 9)
+w_len <- (length(w) - 1) / 2
 plot((-w_len):(w_len), w, type = "b", ylim = c(0, max(w)), xlab = "time lag", ylab = "filter weight", main = "3x9 Seasonal Filter wts")
 abline(h = 0, lty = 'dotted')
 ```
 
 ```{r, echo=FALSE}
 # 3 x 15 seasonal filter wts
-w = find_seasonal_PxQ_filter_wts(3, 15)
-w_len = (length(w) - 1) / 2
+w <- find_seasonal_PxQ_filter_wts(3, 15)
+w_len <- (length(w) - 1) / 2
 plot((-w_len):(w_len), w, type = "b", ylim = c(0, max(w)), xlab = "time lag", ylab = "filter weight", main = "3x15 Seasonal Filter wts")
 abline(h = 0, lty = 'dotted')
 ```
@@ -362,7 +362,7 @@ Extreme value choices can significantly influence the seasonal adjustment outcom
 For example, the default values for in `AirPassengers` adjustment look as follows:
 
 ```{r}
-m = seas(AirPassengers, x11 = "")
+m <- seas(AirPassengers, x11 = "")
 unmodified_SIratio <- series(m, "d8")
 modified_SIratio   <- series(m, "d9")
 seasonal_factors <- series(m, "d10")
@@ -378,7 +378,7 @@ out(m)
 If we change `x11.sigmalim` to `c(1, 2)`, we get the following result:
 
 ```{r}
-m_small_limits = seas(AirPassengers, x11 = "", x11.sigmalim = c(1, 2))
+m_small_limits <- seas(AirPassengers, x11 = "", x11.sigmalim = c(1, 2))
 unmodified_SIratio <- series(m_small_limits, "d8")
 modified_SIratio   <- series(m_small_limits, "d9")
 seasonal_factors <- series(m_small_limits, "d10")
@@ -427,8 +427,8 @@ It has been observed that when multiplicative seasonal adjustment produces more 
 ## Case study
 
 tsbox::ts_plot(
-  s3x1 = predict(seas(AirPassengers, x11.seasonalma = "s3x1")),
-  s3x15 = predict(seas(AirPassengers, x11.seasonalma = "s3x15"))
+  s3x1 <- predict(seas(AirPassengers, x11.seasonalma = "s3x1")),
+  s3x15 <- predict(seas(AirPassengers, x11.seasonalma = "s3x15"))
 )
 
  -->
