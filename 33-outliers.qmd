@@ -99,13 +99,6 @@ By understanding these effects and how to address them, analysts can improve the
 
 Outlier Effects
 
-- Additive (or Point) outliers (AO)
-- Level shifts (LS)
-- Temporary level shifts (TL)
-- Temporary changes (TC)
-- Seasonal outliers (SO)
-- Ramps (RP, QI, QD)
-
 ```{r}
 #| echo: false
 outlier_df <- data.frame(
