@@ -110,8 +110,6 @@ m0 <- seas(
 )
 summary(m0)
 
-
-
 m1 <- seas(
   x = hobby_toy_game,
   regression.variables = c(
