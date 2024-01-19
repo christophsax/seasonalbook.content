@@ -99,7 +99,7 @@ By understanding these effects and how to address them, analysts can improve the
 
 ## Outlier Effects
 
-This section discusses how to adjust a series for different types of outlier effects in a series. Figure @fig-outlier-effects shows the most common ones.
+This section discusses how to adjust a series for different types of outlier effects. Figure @fig-outlier-effects shows the most common ones.
 
 ```{r}
 #| echo: false
