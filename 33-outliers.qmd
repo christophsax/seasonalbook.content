@@ -108,7 +108,6 @@ Outlier Effects
 
 ```{r}
 #| echo: false
-library(ggplot2)
 outlier_df <- data.frame(
   x = rep(0:30, 8),
   y = rep(
@@ -122,36 +121,41 @@ outlier_df <- data.frame(
       0.791, 0.829, 0.866, 0.901, 0.935, 0.968, 1
     ),
     rep(
-      c(15L, 1L, 26L, 20L, 11L, 10L, 20L, 1L, 10L, 1L, 11L, 6L, 1L, 
-      6L, 1L, 6L, 1L, 6L, 1L, 3L, 1L, 12L, 15L, 1L),
+      c(
+        15L, 1L, 26L, 20L, 11L, 10L, 20L, 1L, 10L, 1L, 11L, 6L, 1L,
+        6L, 1L, 6L, 1L, 6L, 1L, 3L, 1L, 12L, 15L, 1L
+      ),
       rep(c(1L, 21L, 1L, 10L, 1L, 19L, 1L, 16L), c(7L, 1L, 1L, 1L, 10L, 1L, 2L, 1L))
     )
   ),
   type = factor(
-    rep(c("AO", "LS", "TL", "TC", "RP", "SO", "QI", "QD"), each = 31L), 
+    rep(c("AO", "LS", "TL", "TC", "RP", "SO", "QI", "QD"), each = 31L),
     levels = c("AO", "LS", "TL", "TC", "SO", "RP", "QI", "QD"),
     labels = c(
-  "Additive outlier",
-  "Level shifts",
-  "Temporary level shift",
-  "Temporary change",
-  "Seasonal outlier",
-  "Ramp",
-  "Increasing quadratic ramp",
-  "Decreasing quadratic ramp"
-)
+      "Additive outlier",
+      "Level shifts",
+      "Temporary level shift",
+      "Temporary change",
+      "Seasonal outlier",
+      "Ramp",
+      "Increasing quadratic ramp",
+      "Decreasing quadratic ramp"
+    )
   )
 )
+```
 
+```{r}
+#| echo: false
+library(ggplot2)
 ggplot(outlier_df, aes(x = x, y = y)) +
   geom_line() +
   scale_y_continuous(breaks = c(0, 1)) +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5)) +
-  facet_wrap(vars(type)) +
-  labs(title = "Outlier Effects", x = NULL, y = NULL)
+  facet_wrap(vars(type)) 
+  labs(x = NULL, y = NULL)
 ```
-
 
 
 ## Level Shift
