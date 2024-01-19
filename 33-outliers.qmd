@@ -155,7 +155,7 @@ ggplot(outlier_df, aes(x = x, y = y)) +
 ```
 
 
-### Level Shift
+### Level Shift (LS)
 
 The first outlier category we look at are level shifts.
 Level shifts refers to a sudden and sustained change in the underlying level of a time series.
@@ -192,7 +192,7 @@ If your series has canceling Level Shifts:
 We use, for example, `regression.variables = c(TL1953.Jun, TL1953.Sep)` argument to manually specify a temporary level-shift.
 
 
-### Additive Outliers
+### Additive Outliers (AO)
 
 An additive outlier is a data point that falls outside the general pattern of the trend and seasonal component in a time series.
 Outliers can be caused by random effects, such as an extreme irregular point, or by identifiable factors, such as a strike or bad weather.
@@ -217,7 +217,7 @@ summary(m_additive_outlier)
 Again, we use the `regression.variables` argument to manually specify an additive outlier.
 Since we want to deactivate the automated outlier detection from above, we specify `outlier = NULL`.
 
-### Temporary Change Regressor 
+### Temporary Change Regressor (TL, TC)
 
 We use the `regression.variables = TCyyyy.mm` format for a temporary change. 
 
