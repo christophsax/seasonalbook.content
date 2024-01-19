@@ -103,8 +103,8 @@ Outlier Effects
 - Level shifts (LS)
 - Temporary level shifts (TL)
 - Temporary changes (TC)
-- Ramps (RP, QI, QD)
 - Seasonal outliers (SO)
+- Ramps (RP, QI, QD)
 
 ```{r}
 #| echo: false
@@ -127,8 +127,12 @@ outlier_df <- data.frame(
       rep(c(1L, 21L, 1L, 10L, 1L, 19L, 1L, 16L), c(7L, 1L, 1L, 1L, 10L, 1L, 2L, 1L))
     )
   ),
-  type = rep(c("AO", "LS", "TL", "TC", "RP", "SO", "QI", "QD"), each = 31L)
+  type = factor(
+    rep(c("AO", "LS", "TL", "TC", "RP", "SO", "QI", "QD"), each = 31L), 
+    levels = c("AO", "LS", "TL", "TC", "SO", "RP", "QI", "QD")
+  )
 )
+
 ggplot(outlier_df, aes(x = x, y = y)) +
   geom_line() +
   geom_point(size = 0.60) +
