@@ -78,6 +78,7 @@ In this chapter, we will focus on two most important types of effects that can o
 By understanding these effects and how to address them, analysts can improve the quality of their analyses and draw more accurate conclusions from the data.
 
 ```{r}
+#| echo: false
 outlier_tab <- tibble::tibble(
   Argument = c("outlier.critical", "outlier.method", "outlier.span", "outlier.types"),
   Description = c(
