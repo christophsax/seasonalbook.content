@@ -113,7 +113,7 @@ append_df <- function(row = NULL,
 
 seasonal_table <- function(df, code_vars, md_vars, title) {
   stopifnot(is.data.frame(df))
-  chars <- sapply(list(code_vars, md_vars, header), FUN = is.character)
+  chars <- sapply(list(code_vars, md_vars, title), FUN = is.character)
   stopifnot(all(chars))
   gt(df) |>
     text_transform(
