@@ -95,14 +95,12 @@ outlier_tab <- tibble::tibble(
 
 ```{r}
 #| echo: false
-gt(outlier_tab) |>
-  text_transform(
-    locations = cells_body(columns = c("Argument")),
-    fn = function(x) as_code(x)
-  ) |> 
-  fmt_markdown(columns = c("Description", "Default")) |>
-  tab_header("Arguments to the `outlier` spec") |> 
-  tab_options(column_labels.font.weight = "bold") 
+seasonal_table(
+  outlier_tab, 
+  code_vars = "Argument", 
+  md_vars = c("Description", "Default"), 
+  title = "Arguments to the `outlier` spec"
+)
 ```
 
 +--------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------+
