@@ -4,6 +4,7 @@ suppressMessages(library(tibble))
 suppressMessages(library(dplyr))
 suppressMessages(library(seasonal))
 suppressMessages(library(seasonalbook))
+suppressMessages(library(gt))
 
 knitr::opts_chunk$set(
   comment = "#>",
