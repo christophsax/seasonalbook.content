@@ -77,6 +77,23 @@ X-13 offers several ways to model outliers.
 In this chapter, we will focus on two most important types of effects that can occur in time series data: level shifts and additive outliers.
 By understanding these effects and how to address them, analysts can improve the quality of their analyses and draw more accurate conclusions from the data.
 
+```{r}
+outlier_tab <- tibble::tibble(
+  Argument = c("outlier.critical", "outlier.method", "outlier.span", "outlier.types"),
+  Description = c(
+    "Sets the value to which the absolute values of the outlier t-statistics are compared to detect outliers.\n            If only one value is given for this argument, then this critical value is used for all types of outliers. If a list of up to three values is given, different values are used for additive outliers, level shift outliers and temporary change outliers.",
+    "Determines how the program successively adds detected outliers to the model. The choices are \"addone\" or \"addall\".\n              \"addone\" calculates t-statistics for each type of outlier specified at all time points.\n              \"addall\" follows the same general steps as the addone method, except it adds to the model all outliers with absolute t-statistics exceeding the critical value.",
+    "Specifies start and end dates of a span of the time series to be searched for outliers. The start and end dates of the span must both lie within the series.",
+    "Specifies the types of outliers to detect. The choices are: \"ao\" (additive outliers), \"ls\" (level shifts), \"tc\" (temporary change), \"all\": (detect all three of the above types simultaneously), and \"none\" (turn off outlier detection, but not t-statistics for temporary level shifts)."
+  ),
+  Default = c(
+    "Obtained by a modification of the asymptotic formula of Ljung (1993) that interpolates critical values for numbers of observations between 3 and 99.",
+    "\"addone\".", "None.", "The default is c(\"ao\", \"ls\")."
+  ),
+)
+```
+
+
 +--------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------+
 | Argument           | Description                                                                                                                                                                                                                                                                                          | Default                                                                                                                                              |
 +====================+======================================================================================================================================================================================================================================================================================================+======================================================================================================================================================+
