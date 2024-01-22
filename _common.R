@@ -109,3 +109,7 @@ append_df <- function(row = NULL,
   }
   ans
 }
+
+as_code <- function(x) {
+  htmltools::HTML(paste0("<code>", x, "</code>"))
+}
