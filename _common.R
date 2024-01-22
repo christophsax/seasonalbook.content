@@ -111,6 +111,20 @@ append_df <- function(row = NULL,
   ans
 }
 
+seasonal_table <- function(df, code_vars, md_vars, title) {
+  stopifnot(is.data.frame(df))
+  chars <- sapply(list(code_vars, md_vars, header), FUN = is.character)
+  stopifnot(all(chars))
+  gt(df) |>
+    text_transform(
+      locations = cells_body(columns = code_vars),
+      fn = function(x) as_code(x)
+    ) |> 
+    fmt_markdown(columns = md_vars) |>
+    tab_header(title = title) |> 
+    tab_options(column_labels.font.weight = "bold") 
+}
+
 as_code <- function(x) {
   paste0("<code>", x, "</code>")
 }
