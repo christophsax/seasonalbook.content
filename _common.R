@@ -111,7 +111,7 @@ append_df <- function(row = NULL,
   ans
 }
 
-seasonal_table <- function(df, code_vars, md_vars, title, scale = 3) {
+seasonal_table <- function(df, code_vars, md_vars, title, scale = 3, text_size_px = 15) {
   stopifnot(is.data.frame(df))
   chars <- sapply(list(code_vars, md_vars, title), FUN = is.character)
   stopifnot(all(chars))
@@ -122,8 +122,21 @@ seasonal_table <- function(df, code_vars, md_vars, title, scale = 3) {
     ) |> 
     fmt_markdown(columns = md_vars) |>
     tab_header(title = title) |> 
+    tab_style(
+      style = cell_text(
+        whitespace = "break-spaces",
+        size = px(text_size_px),
+        # stretch = "ultra-expanded",
+        align = "left",
+        v_align = "middle"
+      ),
+      locations = cells_body(columns = md_vars)
+    ) |>
     tab_options(column_labels.font.weight = "bold") |> 
-    opt_horizontal_padding(scale = scale)
+    opt_horizontal_padding(scale = scale) |> 
+    opt_css(css = ".gt_table {
+            line-height: 3.5;
+            }")
 }
 
 as_code <- function(x) {
