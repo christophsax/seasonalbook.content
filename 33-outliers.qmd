@@ -46,23 +46,22 @@ By default, X-13 uses a formula that interpolates critical values for numbers of
 For standard time series, this results in a critical value around 4.
 
 | Outlier Span Length | Default Critical Value |
-|----------------------|------------------------|
-| 1                    | 1.96                   |
-| 2                    | 2.24                   |
-| 48                   | 3.63                   |
-| 96                   | 3.80                   |
-| 120                  | 3.85                   |
-| 240                  | 3.99                   |
-| 360                  | 4.07                   |
-
+|---------------------|------------------------|
+| 1                   | 1.96                   |
+| 2                   | 2.24                   |
+| 48                  | 3.63                   |
+| 96                  | 3.80                   |
+| 120                 | 3.85                   |
+| 240                 | 3.99                   |
+| 360                 | 4.07                   |
 
 Using the `outlier.critical` argument, we can fine tune the detection process.
 With `outlier.critical = 3`, we set a lower bar for the detection of outliers.
 `outlier.critical` is the z-value of a particular value that is needed to be classified as an outlier.
 A value of three means that the z-value must be 3 or larger.
 
-- Higher values make it less likely to identify a value as an outlier
-- Each outlier type can have a different critical value (typically we use the same for all types)
+-   Higher values make it less likely to identify a value as an outlier
+-   Each outlier type can have a different critical value (typically we use the same for all types)
 
 ```{r}
 m_high <- seas(AirPassengers, outlier.critical = 3)
@@ -99,7 +98,8 @@ By understanding these effects and how to address them, analysts can improve the
 
 ## Outlier Effects
 
-This section discusses how to adjust a series for different types of outlier effects. Figure @fig-outlier-effects shows the most common ones.
+This section discusses how to adjust a series for different types of outlier effects.
+Figure @fig-outlier-effects shows the most common ones.
 
 ```{r}
 #| echo: false
@@ -140,11 +140,13 @@ library(ggplot2)
 ggplot(outlier_df, aes(x = x, y = y)) +
   geom_line() +
   scale_y_continuous(breaks = c(-1, 0, 1)) +
-  theme(plot.title = element_text(hjust = 0.5), panel.grid = element_blank()) +
+  theme(plot.title = element_text(hjust = 0.5), 
+        panel.grid = element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank()) +
   facet_wrap(vars(type), ncol = 2) +
-  labs(x = NULL, y = NULL)
+  labs(x = NULL, y = NULL) 
 ```
-
 
 ### Level Shift (LS)
 
@@ -175,13 +177,12 @@ As the calculation of the irregular and seasonal components follow on from this 
 
 If your series has canceling Level Shifts:
 
-- Also called temporary level shifts
-- NOT temporary changes
-- 2 (or more) level shifts whose effects cancel
-- Can replace them with additive outliers (over short spans) or use a temporary level shift regressor
+-   Also called temporary level shifts
+-   NOT temporary changes
+-   2 (or more) level shifts whose effects cancel
+-   Can replace them with additive outliers (over short spans) or use a temporary level shift regressor
 
 We use, for example, `regression.variables = c(TL1953.Jun, TL1953.Sep)` argument to manually specify a temporary level-shift.
-
 
 ### Additive Outliers (AO)
 
@@ -210,7 +211,7 @@ Since we want to deactivate the automated outlier detection from above, we speci
 
 ### Temporary Change Regressor (TL, TC)
 
-We use the `regression.variables = TCyyyy.mm` format for a temporary change. 
+We use the `regression.variables = TCyyyy.mm` format for a temporary change.
 
 $$ \begin{cases}
 0 \qquad &\mbox{for} ~t < t_0 \\
@@ -218,13 +219,12 @@ $$ \begin{cases}
 \end{cases}
 $$
 
-Where $\alpha$ is the rate of decay back to the previous level, 0 < $\alpha$ < 1 (default: 0.7 for monthly and 0.343 for quarterly series)
-
+Where $\alpha$ is the rate of decay back to the previous level, 0 \< $\alpha$ \< 1 (default: 0.7 for monthly and 0.343 for quarterly series)
 
 ### Ramps (RP, QI, QD)
 
 ::: {#fig-ramps layout-ncol="1"}
-![Type of ramps](img/ramps.png){#fig-ramps}
+![Type of ramps](img/ramps.png)
 
 Types of ramp regressors.
 :::
@@ -276,13 +276,11 @@ If there is not a methodological, social or economic reason to explain the prese
 
 -->
 ```
-
-
 ## When Outliers Are Found
 
-- ALWAYS, ALWAYS, ALWAYS check if outliers are reasonable
-- Hard-code known outliers in production
-- Usually a concern only for the most recent part of the series
+-   ALWAYS, ALWAYS, ALWAYS check if outliers are reasonable
+-   Hard-code known outliers in production
+-   Usually a concern only for the most recent part of the series
 
 ## Exercise
 
