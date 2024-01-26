@@ -104,7 +104,7 @@ This section discusses how to adjust a series for different types of outlier eff
 ```{r}
 #| echo: false
 ao <- c(rep(0, 15), 1, rep(0, 15))
-ls <- c(rep(1, 15), rep(0, 16))
+ls <- c(rep(-1, 15), rep(0, 16))
 tl <- c(rep(0, 11), rep(1, 10), rep(0, 10))
 tc <- c(rep(0, 10), .75^(0:20))
 so <- c(rep(0, 5), 1, rep(0, 6), 1, rep(0, 6), 1, rep(0, 6), 1, rep(0, 4))
