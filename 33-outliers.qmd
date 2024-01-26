@@ -144,7 +144,7 @@ ggplot(outlier_df, aes(x = x, y = y)) +
         panel.grid = element_blank(),
         axis.text.x=element_blank(),
         axis.ticks.x=element_blank()) +
-  facet_wrap(vars(type), ncol = 2) +
+  facet_wrap(vars(type), ncol = 2, scales = "free") +
   labs(x = NULL, y = NULL) 
 ```
 
