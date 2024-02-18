@@ -50,7 +50,7 @@ We know that X-11 with automatic modeling and automatic filter identification pe
 If we look at the spectrum of the seasonally adjusted series, the peaks have been removed.
 
 ```{r}
-require(seasonal)
+library(seasonal)
 m <- seas(AirPassengers, x11 = "")
 spec.ar(final(m))
 ```
@@ -58,7 +58,7 @@ spec.ar(final(m))
 Let's intentionally perform a poor seasonal adjustment and see the effect on the spectrum of the seasonally adjusted series.
 
 ```{r}
-require(seasonal)
+library(seasonal)
 m <- seas(AirPassengers, transform.function = "none", x11 = "", x11.seasonalma = 'stable')
 spec.ar(final(m))
 ```
