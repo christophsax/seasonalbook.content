@@ -35,10 +35,10 @@ Three prominent ones are
 
 We start with visual inspection of the spectrum of a series.
 For those unfamiliar with spectral analysis of a time series, the following discussion is intended to be accessible to all trying to perform seasonal adjustment.
-Hence, we take some liberies with language an interpretation in an effort to make the discussion accessible.
+Hence, we take some liberties with language an interpretation in an effort to make the discussion accessible.
 For example, we use the term spectrum to refer to the theoretical construct as well as the estimated periodogram.
 We note here that we will use a parametric AR representation to estimate the spectrum of a process.
-This is the easiest and most straight forward way to get smooth yet sensible empirical specral estimates for the everyday user.
+This is the easiest and most straight forward way to get smooth yet sensible empirical spectral estimates for the everyday user.
 Peaks in the spectrum indicate significant influence to your series of a sin/cos curve of the corresponding frequency.
 For example, looking at the spectrum of the AirPassengers series we see large peaks at frequencies 1/12, 2/12, 3/12, ...
 
