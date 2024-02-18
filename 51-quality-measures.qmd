@@ -85,7 +85,7 @@ The null hypothesis is that the autocorrelation is zero, indicating no seasonal 
 Hence, a small p-value indicates residual seasonality.
 
 Let $\hat{\gamma}(h)$ be the estimated autocorrelation function of a differenced time series.
-The QS statistic for a montly time series is $$
+The QS statistic for a monthly time series is $$
 QS = n(n+2)\left(\frac{\hat{\gamma}(12)^2}{n - 12} + \frac{\hat{\gamma}(24)^2}{n - 24}\right)
 $$ For a quarterly series replace the 12s and 24s with 4s and 8s.
 The value QS is approximately chi-squared with 2 degrees of freedom.
