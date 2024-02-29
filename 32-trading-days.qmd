@@ -177,8 +177,13 @@ td_m_tbl <-
     sat = sum(wd == 6) - sum(wd == 0),
     td1 = sum(wd %in% 1:5) - 5 / 2 * sum(wd %in% c(6, 0))
   )
+```
 
-td_m_tbl
+```{r}
+#| echo: false
+td_m_tbl |> 
+  head() |> 
+  knitr::kable()
 ```
 
 For each month, `td_m_tbl` computes the number of specific weekdays, and compares them to the number of Sundays (`wd == -`) (columns `mon` to `sat`). For example, in May 1931, the number of Mondays was 4 while the number of Sundays was 5. The column `td1` compares the total number of weekdays with the total number of weekends. The normalization formula is the one used by X-13 and described in the X-13 manual.
