@@ -1,3 +1,8 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
 ## Presence of seasonality {#sec-presence-of-seasonality}
 
 ```{r}
@@ -23,8 +28,9 @@ In general, adjusting a non-seasonal series is less of a problem than not adjust
 So, unless you have good reasons to believe that a series is not-seasonal, adjust it.
 *When in doubt, adjust!*
 
-Controversy?
-IMF Handbook says the opposite?
+Of course the final answer is never that simple. 
+For example, the International Monetary Fund (IMF) in their [Quarterly National Accounts Manual](https://www.imf.org/external/pubs/ft/qna/pdf/2017/chapter7.pdf) about seasonal adjustment says, "A series should be seasonally adjusted only when there is evidence of identifiable seasonality. Series with no seasonality or too unstable seasonality should not be seasonally adjusted." 
+The IMF is attempting to maintain accounting relationship which are of utmost important to their seasonal adjustment policies. 
 
 ### Available Tests
 
@@ -55,7 +61,7 @@ qs(seas(AirPassengers))
 The QS Statistic shows the degree of seasonality in various components of the seasonal adjustment.
 For our purposes, the first line is the most interesting.
 It shows that the QS value of the original series is 168, which comes with a p-value of essentially 0.
-This reads as there is a 0 probability that the null-hypothesis of seasonality in the original series can be rejected.
+Since the null hypothesis is no seasonality, this p-value can be read as high evidence the series is seasonal. 
 
 In other words, `AirPassengers` is a clearly seasonal series, which should not come as a surprise at this point.
 
