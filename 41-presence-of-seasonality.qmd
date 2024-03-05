@@ -148,7 +148,7 @@ qs(m)
 ```
 
 Let's have a look at the first line.
-A QS value of 0 has a p-value of 1, meaning the Nul-Hypothesis of seasonality in the orgininal value can be savely rejected.
+A QS value of 0 has a p-value of 1, meaning the Null-Hypothesis of no seasonality in the original value can not be rejected.
 According to this measure, it is clear that this series has no seasonality.
 
 If we want to consider the M7 values, we need to use X11:
