@@ -26,7 +26,7 @@ The yearly total of a seasonally adjusted series is usually not exactly equal to
 There is no theoretical reason why the annual totals of the original series and the seasonally adjusted series should be the same.
 For example, the number of trading days may differ in different years, and we would expect a trading day adjusted series to be different at the annual level.
 
-Sometimes, however, may be useful to apply annual constraining.
+Sometimes, however, it may be useful to apply annual constraining.
 The reason for this is usually to lower confusion for the end users.
 To constrain the annual totals, X13 includes a version of the Denton method.
 Let's start with a SEATS adjustment of `AirPassengers`:
@@ -64,19 +64,16 @@ ts_frequency(AirPassengers, aggregate = "sum")
 As previously discussed, there isn't a theoretical justification for enforcing annual constraints.
 Implementing annual constraints ensures consistency in annual values across both seasonally adjusted and unadjusted series, which can reduce confusion and possibly enhance user satisfaction.
 
-Here are some guidelines (loosly based on @ONS07, 8.2.2) on deciding whether to apply annual constraints:
+Here are some guidelines (loosely based on @ONS07, Chapter 8.2.2) on deciding whether to apply annual constraints:
 
 Usage
-: Most importantly, consider how the data is used, and what is expected by users. For examples, if the data are integrated into the National Accounts, they likely require constraining to align with other datasets.
-
+: Most importantly, consider how the data is used, and what is expected by users. For example, if the data are integrated into the National Accounts, they likely require constraining to align with other datasets.
 
 Conceptual Appropriateness
-: Assess if annual constraints are conceptually relevant for your dataset. If, for example, you data is a price index, annual constaining is not appropriate.
-
+: Assess if annual constraints are conceptually relevant for your dataset. For example, if your data is a price index, annual constraining is not appropriate.
 
 Consistency
 : For series already undergoing seasonal adjustment, a strong justification is needed to alter the constraining approach. Avoid frequently toggling the use of annual constraints to maintain methodological consistency.
 
 Impact Analysis
 : Examine the differences (or ratios, if using a multiplicative model) between the constrained and unconstrained series in their final forms. If these differences are minor and other considerations support constraining, applying annual constraints may be the more suitable option.
-
