@@ -180,6 +180,15 @@ If you don't, e.g., because the beak on the data is only a few years away from t
 ## Case Study: Azerbaijani Budget Expenditures
 
 
+<!--
+
+TODO Jim: fix example
+
+What is a good conclusion here?
+
+-->
+
+
 
 ```{r }
 library(cbar.sa)
