@@ -69,7 +69,7 @@ Three prominent ones are:
 <!-- (I THINK THIS IS A GOOD PLACE TO ADD A REFERENCE TABLE THAT LISTS THESE THREE METHODS ALONG WITH PROS, CONS, IMMEDIATE INTERPRETATIONS. I THINK MANY READERS WILL JUST WANT TO KNOW HOW TO IDENTIFY RESIDUAL SEASONALITY AND MATCH UP A TEST WITH THEIR SKILL-SET AND THEN SEE HOW TO APPLY IT) -->
 
 
-### QS statistc
+### QS statistic
 
 We have already seen the that the QS statistic in model summary is not significant, meaning there is no residual seasonality in the series.
 
@@ -172,8 +172,18 @@ In the case of indirect adjustments, it is advisable to prioritize the analysis 
 
 ## Model Appropriateness
 
+<!--
+
 Box Ljung, Shapiro, AIC
 
+m <- seas(AirPassengers, arima.model = c(0, 0, 0))
+
+udg(m, "nlbq")
+
+names(udg(m))
+
+Box.test(resid(m), lag = 24, type = "Ljung")
+ -->
 <!-- TODO  -->
 
 
