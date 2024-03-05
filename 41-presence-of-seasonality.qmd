@@ -44,6 +44,8 @@ To help you to make a good decision, X-13 offers a few formal checks:
 
 -   The M7 statistic applies critical values to the Identifiable Seasonality Test (IDS) and returns a simple yes or no answer.
 
+- F-test for seasonal regressors
+
 Which tests are preferable, and how should a user decide if the tests are not aligned?
 
 ### QS Test
@@ -175,3 +177,39 @@ From the previous discussion, it should not be surprising that the answer is *no
 ```{r}
 udg(m_x11, "f2.idseasonal")
 ```
+
+## F-test for seasonality
+
+Another simple yet effective test for seasonality is to include seasonal regressor in your model and then check if they are significant.
+
+```{r}
+m = seas(
+  AirPassengers,
+  x11 = "",
+  arima.model = "(0 1 1)",
+  regression.variables = "seasonal"
+)
+
+
+Ftest = udg(m, "ftest$Seasonal") |> round(5)
+rownames(Ftest) = c("df1", "df2", "test_stat", "p_value")
+Ftest
+```
+
+We see again that AirPassengers is seasonal. 
+
+```{r}
+m = seas(
+  x,
+  x11 = "",
+  arima.model = "(0 1 1)",
+  regression.variables = "seasonal"
+)
+
+
+Ftest = udg(m, "ftest$Seasonal") |> round(5)
+rownames(Ftest) = c("df1", "df2", "test_stat", "p_value")
+Ftest
+```
+
+The F-test again shows the case study series is not seasonal.
