@@ -13,34 +13,29 @@ status("polishing")  # drafting, polishing, complete
 -   How to use the force spec
  -->
 ```
-### The Problem
 
 Seasonal adjustment may affect the annual values of a series.
 The yearly total of an adjusted series usually differs from the total of an unadjusted series.
-By applying the Denton Method, the adjustment procedure can be used to enforce the totals to be equal.
-In seasonal, this can be performed with the option `force.type = "denton"`.
+By applying variants of the Denton Method (@dagum1994, @denton1971), the adjustment procedure can be used to enforce the totals to be equal.
+In seasonal, this can be performed with the option `force.type = "regress"`.
 
-### Annual constraining
+
+## Annual constraining
 
 The yearly total of a seasonally adjusted series is usually not exactly equal to the yearly total of the original series.
-
 There is no theoretical reason why the annual totals of the original series and the seasonally adjusted series should be the same.
 For example, the number of trading days may differ in different years, and we would expect a trading day adjusted series to be different at the annual level.
 
 Sometimes, however, may be useful to apply annual constraining.
 The reason for this is usually to lower confusion for the end users.
-
 To constrain the annual totals, X13 includes a version of the Denton method.
-
-### Re-adjusting annual values
-
 Let's start with a SEATS adjustment of `AirPassengers`:
 
 ```{r}
 m <- seas(AirPassengers)
 ```
 
-The tsbox package can be used to compute annual totals.
+The [tsbox package](https://docs.ropensci.org/tsbox/) can be used to compute annual totals.
 As for `AirPassengers`, the annual total is the sum of the monthly values, but it sometimes makes sense to use `"mean"` as an aggregation function:
 
 ```{r}
@@ -57,48 +52,31 @@ However, in this case, the differences are rather small, and at most as large as
 ts_frequency(AirPassengers, aggregate = "sum") - 1)
 ```
 
-By applying `force.type = "denton"`, we constrain the annual values to be the same:
+By applying `force.type = "regress"`, we constrain the annual values to be the same:
 
 ```{r}
-ts_frequency(final(seas(AirPassengers, force.type = "denton")), aggregate = "sum")
+ts_frequency(final(seas(AirPassengers, force.type = "regress")), aggregate = "sum")
 ts_frequency(AirPassengers, aggregate = "sum")
 ```
 
-### Should the annual values be restrained?
+## Should annual values be constrained?
 
-As mentioned above, there is no theoretical reason why annual constraining should be applied.
+As previously discussed, there isn't a theoretical justification for enforcing annual constraints.
+Implementing annual constraints ensures consistency in annual values across both seasonally adjusted and unadjusted series, which can reduce confusion and possibly enhance user satisfaction.
 
-Applying annual constraining ensures that the annual values are the same, independent of whether a user looks at the adjusted or at the non-adjusted series, leading to less confusion and a potentially higher user satisfaction.
+Here are some guidelines (loosly based on @ONS07, 8.2.2) on deciding whether to apply annual constraints:
 
-Some criteria from @ONS07 (Chapter 8.2.2):
+Usage
+: Most importantly, consider how the data is used, and what is expected by users. For examples, if the data are integrated into the National Accounts, they likely require constraining to align with other datasets.
 
-Use
 
-:   consider how the data are used and any stated preferences of users.
-    This criterion will sometimes override the other criteria.
-    For example, if the series are part of the National Accounts dataset, they will probably need to be constrained.
+Conceptual Appropriateness
+: Assess if annual constraints are conceptually relevant for your dataset. If, for example, you data is a price index, annual constaining is not appropriate.
 
-Concept
 
-:   decide whether annual constraining makes conceptual sense for your time series.
-    Consider, for example, how the timing of the observations in your time series relate to calendar years (thinking carefully about the way the data are collected and compiled) and what they represent.
-    It may be apparent from this that annual constraining is inappropriate for your series.
-    Consider the following examples: the observations in the Labor Force Survey are a sequence of overlapping 3-month averages; Retail Sales data are collected on a 4, 4, 5 week pattern rather than a calendar month basis; prices, earnings, claimant count and many other series are points in time series, for which averaging to the same annual averages might have little presentational importance.
+Consistency
+: For series already undergoing seasonal adjustment, a strong justification is needed to alter the constraining approach. Avoid frequently toggling the use of annual constraints to maintain methodological consistency.
 
-Continuity
+Impact Analysis
+: Examine the differences (or ratios, if using a multiplicative model) between the constrained and unconstrained series in their final forms. If these differences are minor and other considerations support constraining, applying annual constraints may be the more suitable option.
 
-:   if a time series is already being seasonally adjusted, then strong reasons are needed for changing the approach to constraining.
-    Avoid switching between applying and not applying annual constraining every few years.
-
-Effect
-
-:   look at the final series to see if the differences (or ratios if multiplicative) between the constrained and unconstrained data are large.
-    If they are negligible, and the other criteria are satisfied, then annual constraining may be preferable.
-
-```{=html}
-<!--
--   Should the annual values be restrained?
-
--   How to use the force spec
- -->
-```
