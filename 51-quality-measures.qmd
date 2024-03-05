@@ -7,36 +7,121 @@ source("_common.R")
 status("polishing")  # drafting, polishing, complete
 ```
 
-This chapter will be broken up into relevant pieces that construct a good seasonal adjustment.
-Yet, it is the sum of these parts that ultimately comprise a quality adjustment and it is difficult to completely break them up in a vacuum.
-Different users have a different definitions of 'quality' that depends on their end goals and their end users of a seasonal adjustment.
-For example, a federal statistical agency, who is concerned about the users of their seasonal adjustments, may have very different definition of quality compared with a single analyst who is interested in only long-term trend.
-A good starting point is a quality seasonal adjustment should eliminate residual seasonality and calendar effects, exhibit stability and smoothness, and have no significant seasonal or trading day effects.
+What makes a good seasonal adjustment?
+Different users will have varying definitions of 'quality' based on their specific needs and the audiences they serve. For example, a federal statistical agency, who is concerned about the users of their seasonal adjustments, may have very different definition of quality compared with a single analyst who is interested in only long-term trend.
 
-Another consideration is the span of your series that is required to produce a quality adjustment...
+Regardless of the end goal, some criteria are valid most of the time. For example, a good seasonal adjustment should eliminate residual seasonality and calendar effects, exhibit stability and smoothness, and have no significant trading day effects.
+
+This chapter will be broken up into relevant pieces that construct a good seasonal adjustment.
+Yet, it is the sum of these parts that ultimately comprise a quality adjustment and it is often difficult to completely break them up in a vacuum.
+
+
+## Summary Statistics
+
+The `summary` of the model gives a glance of a seasonal adjustment process and is a good starting point for the evaluation wheter a medel is good or bad:
+
+``` {r}
+m <- seas(AirPassengers)
+summary(m)
+```
+
+
+The summary gives an overview of the adjustment model and provides diagnostics - we briefly went through its elements in @sec-getting-started.
+
+In the lower part, the summary of the adjustment model shows various quality measures:
+
+- The AICc and BIC information criterion (we use them for model comparison)
+
+As well as the following statistics:
+
+- the QS Statistic (do we have seasonality in the final series?),
+- the Box-Ljung (do we auto-correlation in the residuals? Is our ARIMA model appropriate?),
+- and the Shapiro statistic (are the residuals normally-distributed? Is our ARIMA model appropriate?).
+
+None of the three statistics shows any significance (indicated by one or several stars), which is a good sign.
+By now we know that `AirPassengers` is a series that is easy to adjust and that the automated procedures of X-13 work well on this series, so this should not come as a surprise.
+
+We will already discussed the role of the information criterions and the statistics in more detail below.
+Usually, it makes sense to look at the statics if the summary indicates significance on any of them.
+
+In addition, looking the estimated seasonal component gives you a good understanding on what actually happened during seassonal adjstument. We wills start with visually inspecting the seasonal component of a seasonal adjusment model.
+
+
 
 ## Residual Seasonality
 
+The QS statistic in the `summary` has not shown any significance, meaning the seasonally adjusted series show no seasonality. This is closely related to the concept of residual seasonality.
 Residual seasonality plays a crucial role in determining the quality of a seasonal adjustment.
+
 Residual seasonality refers to the presence of remaining seasonal patterns or fluctuations in the seasonally adjusted series or its residuals.
 It indicates that the seasonal adjustment may not have fully removed all the seasonal effects from the data.
 If residual seasonality is present in the adjusted series, it can lead to biased or misleading analysis and forecasts.
+
 It implies that there are still systematic patterns or cycles left in the data, which can hinder accurate interpretation and decision-making.
 There are many ways to test for residual seasonality.
-Three prominent ones are
+Three prominent ones are:
+
+-   The QS-statistic,
+-   Visual inspection of the spectrum,
+-   or an F-test for residual seasonality
+
 
 <!-- (I THINK THIS IS A GOOD PLACE TO ADD A REFERENCE TABLE THAT LISTS THESE THREE METHODS ALONG WITH PROS, CONS, IMMEDIATE INTERPRETATIONS. I THINK MANY READERS WILL JUST WANT TO KNOW HOW TO IDENTIFY RESIDUAL SEASONALITY AND MATCH UP A TEST WITH THEIR SKILL-SET AND THEN SEE HOW TO APPLY IT) -->
 
--   Visual inspection of the spectrum
--   QS-statistic
--   F-test for residual seasonality
 
-### Spectrum
+### QS statistc
+
+We have already seen the that the QS statistic in model summary is not significant, meaning there is no residual seasonality in the series.
+
+The QS statistics check for positive autocorrelation at the seasonal lags.
+The null hypothesis is that the autocorrelation is zero, indicating no seasonal autocorrelation.
+Hence, a small p-value indicates residual seasonality.
+
+Let $\hat{\gamma}(h)$ be the estimated autocorrelation function of a differenced time series.
+The QS statistic for a monthly time series is $$
+QS = n(n+2)\left(\frac{\hat{\gamma}(12)^2}{n - 12} + \frac{\hat{\gamma}(24)^2}{n - 24}\right)
+$$ For a quarterly series replace the 12s and 24s with 4s and 8s.
+The value QS is approximately chi-squared with 2 degrees of freedom.
+
+The seasonal package provides functionality to look at the QS values of various series.
+We will breakdown what all these tests and p-values are
+
+```{r}
+qs(m)
+```
+
+In the output table we see 14 rows.
+The top 7 rows correspond to the QS statistic
+
+1.  Original series
+
+2.  Original series, adjusted for extreme values
+
+3.  Model residuals
+
+4.  Seasonally adjusted series
+
+5.  Seasonally adjusted series, adjusted for extreme values
+
+6.  Irregular series
+
+7.  Irregular series, adjusted for extreme values
+
+The next seven rows are simply the exact same statistics calculated on a (possibly) shorter span of the data.
+The default span used for the second 7 QS statistics is set to be the same as the spectrum uses, 96 observations or 8 years in a monthly series.
+
+The value shown in the summary output of the model correspond to the 4th row. If this value does not show any significance, there is usually no significance in the QS statistic of the irregular series.
+
+
+### Frequency Domain (optional): Spectrum
+
+Another way to look at residual seasonality is to look at the spectrum.
 
 We start with visual inspection of the spectrum of a series.
 For those unfamiliar with spectral analysis of a time series, the following discussion is intended to be accessible to all trying to perform seasonal adjustment.
 Hence, we take some liberties with language an interpretation in an effort to make the discussion accessible.
 For example, we use the term spectrum to refer to the theoretical construct as well as the estimated periodogram.
+
 We note here that we will use a parametric AR representation to estimate the spectrum of a process.
 This is the easiest and most straight forward way to get smooth yet sensible empirical spectral estimates for the everyday user.
 Peaks in the spectrum indicate significant influence to your series of a sin/cos curve of the corresponding frequency.
@@ -67,55 +152,30 @@ Here we see peaks remaining the the final seasonal adjustment.
 This is a clear indication of lack of quality and something needs to be done to improve the adjustment.
 
 When attempting to eliminate persistent peaks in the spectrum, several strategies can be employed.
+
 First, consider adjusting the model span, particularly when there are indications of changing patterns.
 Furthermore, it is essential to carefully examine for any missed outliers and thoroughly review instances that are considered "almost" outliers.
 Additionally, scrutinize the seasonal filters and sigma limits in X-11 or the model in SEATS to ensure they are appropriately set.
+
 Exploring different estimations of the spectrum can also provide insights into potential solutions.
 Here we used the `spec.ar` function which utilizes an AIC test to find an appropriate AR(p) model for the series and plots the associated spectrum.
 This results in a smooth function as apposed to say, `spec.pgram` which will be much rougher.
+
 It is important to acknowledge that sometimes these peaks may be spurious, making it challenging to ascertain their significance.
 Always try to eliminate peaks at 1/12, 2/12, 3/12, 4/12, or TD 0.348 but be aware that not every situation lends itself to a clear-cut answer.
+
 When employing X-11 seasonal adjustment, it is crucial to consider that peaks observed in the spectrum of the seasonally adjusted series or irregular component, these are more significance than peaks in the spectrum of the model residuals.
 In the case of indirect adjustments, it is advisable to prioritize the analysis of the seasonally adjusted series.
 
-### QS statistc
 
-The QS statistics check for positive autocorrelation at the seasonal lags.
-The null hypothesis is that the autocorrelation is zero, indicating no seasonal autocorrelation.
-Hence, a small p-value indicates residual seasonality.
 
-Let $\hat{\gamma}(h)$ be the estimated autocorrelation function of a differenced time series.
-The QS statistic for a monthly time series is $$
-QS = n(n+2)\left(\frac{\hat{\gamma}(12)^2}{n - 12} + \frac{\hat{\gamma}(24)^2}{n - 24}\right)
-$$ For a quarterly series replace the 12s and 24s with 4s and 8s.
-The value QS is approximately chi-squared with 2 degrees of freedom.
-The seasonal package provides functionality to immediately look at the QS table from the UDG file.
-We will breakdown what all these tests and p-values are
 
-```{r}
-m <- seas(AirPassengers)
-qs(m)
-```
+## Model Appropriateness
 
-In the output table we see 14 rows.
-The top 7 rows correspond to the QS statistic
+Box Ljung, Shapiro, AIC
 
-1.  Original series
+<!-- TODO  -->
 
-2.  Original series, adjusted for extreme values
-
-3.  Model residuals
-
-4.  Seasonally adjusted series
-
-5.  Seasonally adjusted series, adjusted for extreme values
-
-6.  Irregular series
-
-7.  Irregular series, adjusted for extreme values
-
-The next seven rows are simply the exact same statistics calculated on a (possibly) shorter span of the data.
-The default span used for the second 7 QS statistics is set to be the same as the spectrum uses, 96 observations or 8 years in a monthly series.
 
 ## Stability and smoothness
 
@@ -124,11 +184,29 @@ First, the stability of a seasonal adjustment which refers to its consistency an
 It assesses whether the model fits remain consistent as new data becomes available.
 Stability is important as large revisions are a hindrance in a production cycle of seasonal adjustment.
 Again, this is a good example of a situation where a user interested in only a single seasonal adjustment (will never adjust this series again) may not care to read this section.
+
 The diagnostics provided in other chapters will more adequately aid them to produce a quality seasonal adjustment.
 However, for those that produce a seasonal adjustment, say monthly, stability is crucial for producing consistent and trustworthy data that can be used for analysis, decision-making, and forecasting.
 This is discussed in the following subsection.
 
 Secondly, in the following chapter, we will discuss the history spec and revisions.
+
+
+### Monthplot
+
+Visually inspecting the seasonal component makes sense almost any adjusmten process.
+We already looked at the `monthplot` function in @sec-transform.
+
+```{r}
+monthplot(m)
+```
+
+The plot organizes the data by month. Observing the January (`J`) data, the blue bars represent the evolution of the detrended series from 1949 through 1960. The red bar shows the average seasonal component across these years, while the smooth red line indicates the seasonal component as calculated by the model.
+
+The plot reveals a seasonal pattern where passenger numbers increase during summer months and decrease in winter. Over time, the intensity of the seasonal factors evolves, with the summer peak intensifying and the February and March peak diminishing.
+
+Since the red lines are relatively smooth, the seasonal component is stable and predictable, as indicative for a good seasonal adjustment.
+
 
 ### Sliding spans
 
