@@ -1,3 +1,8 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
 ## Seasonal breaks {#sec-seasonal-breaks}
 
 ```{r}
@@ -17,24 +22,25 @@ status("drafting")  # drafting, polishing, complete
 
  -->
 ```
+The goal of seasonal adjustment is to remove repeating seasonal patterns from time series data.
+These patterns are predictable and can be modeled in an ARIMA model.
+A *seasonal break* refers to a sudden change in the seasonal pattern of the data.
+Such a change could be due to various factors, such as:
 
-The goal of seasonal adjustment is to remove repeating seasonal patterns from time series data. These patterns are predictable and can be modeled in an ARIMA model.
-A *seasonal break* refers to a sudden change in the seasonal pattern of the data. Such a change could be due to various factors, such as:
+-   A major economic event that alters consumer behavior or business operations, leading to long-lasting change in the seasonal component.
 
-- A major economic event that alters consumer behavior or business operations, leading to long-lasting change in the seasonal component.
+-   A change in policy or regulations that affects the seasonal cycle, such as new holiday schedules or school calendars.
 
-- A change in policy or regulations that affects the seasonal cycle, such as new holiday schedules or school calendars.
+-   Shifts in consumer preferences that change the way people interact with products or services throughout the year.
 
-- Shifts in consumer preferences that change the way people interact with products or services throughout the year.
-
-- Changes in how the data is measured or surveyed, e.g, changes in the population being surveyed, or revisions to the methodologies used to gather the data.
-
+-   Changes in how the data is measured or surveyed, e.g, changes in the population being surveyed, or revisions to the methodologies used to gather the data.
 
 Detecting seasonal breaks is important because they can significantly affect the accuracy of the underlying ARIMA model.
 
 In the case of the SEATS method, the ARIMA model will affect both the ARIMA forecast and the seasonal adjustment.
 
-In case of the X-11 method, the moving averages are capable of dealing with changes in the seasonal pattern. The shorter the filter, the faster they adapt to an altered sesaonal pattern.
+In case of the X-11 method, the moving averages are capable of dealing with changes in the seasonal pattern.
+The shorter the filter, the faster they adapt to an altered sesaonal pattern.
 However, the X-11 method is also susceptible to seasonal breaks, since ARIMA forecast is needed at the margin of the series.
 
 ## Identifying a seasonal break
@@ -51,6 +57,7 @@ library(seasonal)
 
 ts_plot(imp_cn)
 ```
+
 As can be spotted quickly, the series has a very different seasonal pattern before 2000.
 In our previous example, we simply cut the data and focused on the later period.
 
@@ -67,13 +74,12 @@ monthplot(seas(imp_cn))
 This makes it obvious that there were very strong December effects before 2000.
 We don't know anything about the series, but we can speculate that prior to 2000, custom receipts were counted at the end of the year, rather than at the date of import.
 
-
-
 ## Restricting model span
 
 In many cases, restricting `series.modelspan` may be the easiest way to deal with such series.
 
-When restricting the model span, we use only part of the series for model estimation, but still applies seasonal adjustment to the whole series. Thus, the ARIMA model is the same as if we cutted the span of the series before adjustment (as we did in the previous case study):
+When restricting the model span, we use only part of the series for model estimation, but still applies seasonal adjustment to the whole series.
+Thus, the ARIMA model is the same as if we cutted the span of the series before adjustment (as we did in the previous case study):
 
 ```{r }
 
@@ -91,7 +97,8 @@ m_span <- seas(
 summary(m_span)
 ```
 
-By using the `series.modelspan`, we restrict the data used in the ARIMA model, but we sill adjust the whole series. This leads to almost the same seasonally adjusted series in the overlapping period (after 2000).
+By using the `series.modelspan`, we restrict the data used in the ARIMA model, but we sill adjust the whole series.
+This leads to almost the same seasonally adjusted series in the overlapping period (after 2000).
 
 ```{r }
 ts_plot(
@@ -100,16 +107,33 @@ ts_plot(
 )
 ```
 
-Note that the ARIMA model that has been chosen is not optimal for the period before 2000. This will affect the backcast of the series, and may lead to slighly sub-optimal results for the first year. Since the interest in the accuracy of the latest data is usually much higher, this seems like a good compromise in many cases.
-
+Note that the ARIMA model that has been chosen is not optimal for the period before 2000.
+This will affect the backcast of the series, and may lead to slighly sub-optimal results for the first year.
+Since the interest in the accuracy of the latest data is usually much higher, this seems like a good compromise in many cases.
 
 ## Modelling seasonal breaks
 
-A way to 'model' seaonal breaks to include seasonal dummies before and after the supporsed break. A seasonal dummy model can be estimated by an appropriate specification of the `regression.variables` argument.
+A way to 'model' seasonal breaks to include seasonal dummies before (and possibly after) the supposed break.
+A seasonal dummy model can be estimated by an appropriate specification of the `regression.variables` argument.
+This is done with a so-called *change-of-regime* regression variable.
+There are two types of change-of-regime regressors available: full and partial.
+
+Change of regime regressors are denoted by adding the change date, enclosed in one or two slashes. 
+This designated date divides the series under analysis into two periods: an early span encompassing data prior to the change date, and a late span covering data from this date onwards. 
+
+- Partial change of regime variables are active only within one of these spans, while remaining zero in the other. 
+- Full change of regime variables simultaneously estimate the base regression and the partial change of regime regression for the early span. 
+
+
+| Type                                          | Syntax              | Example       |
+|-----------------------------------------------|---------------------|---------------|
+| Full change of regime regressor              | `reg/date/`        | `seasonal/2000.jan/` |
+| Partial change of regime regressor, zero before change date | `reg//date/`       | `seasonal//2000.jan/` |
+| Partial change of regime regressor, zero on and after change date | `reg/date//`       | `sesaonal/2000.jan//` |
 
 To model the span after 2000, we can either cut the time series input (as we did in the case study), or use the `series.span` argument:
 
-``` {r}
+```{r}
 m1 <- seas(
   imp_cn,
   outlier = NULL,
@@ -124,7 +148,7 @@ summary(m1)
 
 In order to model the span before 2000, the specification looks as follows:
 
-``` {r}
+```{r}
 m2 <- seas(
   imp_cn,
   outlier = NULL,
@@ -142,53 +166,31 @@ Note that we set `outlier`, `arima.model` and `transform.function` such that we 
 
 We can use the `regression.variables` argument to estimate the whole span in one call:
 
-``` {r}
+```{r}
 m3 <- seas(
   imp_cn,
   outlier = NULL,
   x11 = "",
   arima.model = "(0 1 1)",
   transform.function = "log",
-  regression.variables = "seasonal/2000.jan/",
+  regression.variables = "seasonal/2000.jan//", 
 )
 summary(m3)
 ```
 
 By default, seasonal outliers are removed from the final series.
-Therefore, this can be used to model a seasonal break.
-Modeling a seasonal break is usually preferable to a separation of the time series in two parts.
-
-
-<!--
-
-TODO Jim: Explain / vs //
-
-we would like to know how we could 'model' a seasonal break
-
-
--->
 
 ## When to model a seasonal break?
 
+When should we model a seasonal break?
+When we have enough data after the break (as in the imports of goods to China example), restricting `series.modelspan` is the easiest way and leads to good results.
 
-When should we model a seasonal break? When we have enough data after the break (as in the imports of goods to China example), restricting `series.modelspan` is the easiesiest way and leads to good results.
-
-If you don't, e.g., because the beak on the data is only a few years away from the present, modelling the seasonal break using dummies may be an option.
-
-
+In some situations you may not be able to restrict the model span.
+For example if the seasonal break too close to the end of the series or if there is a policy restricting it. 
+In this case, modelling the seasonal break using seasonal regressors may be an option.
+We apply this technique in the following Case study.
 
 ## Case Study: Azerbaijani Budget Expenditures
-
-
-<!--
-
-TODO Jim: fix example
-
-What is a good conclusion here?
-
--->
-
-
 
 ```{r }
 library(cbar.sa)
@@ -200,8 +202,19 @@ library(tsbox)
 # visually not obious seasonal break
 ts_plot(budg_exp)
 
-# but monthplot reveals a big jump in hte december effect in 2016
-monthplot(budg_exp)
+# month plot of detrended series
+monthplot(budg_exp - ts_trend(budg_exp))
+
+m1 <- seas(
+  x = budg_exp,
+  x11 = "",
+  regression.variables = c("const", "ao2017.4", "seasonal/2016.1/"),
+  arima.model = "(2 0 0)(1 0 1)",
+  regression.aictest = NULL,
+  outlier = NULL,
+  transform.function = "log"
+)
+summary(m1)
 
 
 m2 <- seas(
@@ -215,11 +228,14 @@ m2 <- seas(
   transform.function = "log"
 )
 
+m3 <- seas(
+  x = budg_exp,
+  x11 = "",
+  regression.variables = c("const", "ao2017.4", "seasonal/2016.1//"),
+  arima.model = "(2 0 0)(1 1 1)",
+  regression.aictest = NULL,
+  outlier = NULL,
+  transform.function = "log"
+)
+
 ```
-
-
-
-
-
-
-
