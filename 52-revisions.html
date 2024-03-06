@@ -287,6 +287,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
 <li><a href="#history-spec" id="toc-history-spec" class="nav-link active" data-scroll-target="#history-spec"><span class="header-section-number">16.0.1</span> History Spec</a></li>
+  <li><a href="#using-history-spec-to-compare-forecasts" id="toc-using-history-spec-to-compare-forecasts" class="nav-link" data-scroll-target="#using-history-spec-to-compare-forecasts"><span class="header-section-number">16.0.2</span> Using History Spec to compare forecasts</a></li>
+  <li><a href="#what-to-do-with-revisions" id="toc-what-to-do-with-revisions" class="nav-link" data-scroll-target="#what-to-do-with-revisions"><span class="header-section-number">16.0.3</span> What to do with Revisions</a></li>
   </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/52-revisions.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
@@ -304,17 +306,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
   
 
-</header><ul>
-<li><p>How to measure revisions?</p></li>
-<li><p>Should a model be re-estimated each period?</p></li>
-<li><p>How to use the slidingspan and history spec</p></li>
-</ul>
-<p>Revision play a major role in seasonal adjustment. Their role is multifaceted.</p>
+</header><p>Revision play a major role in seasonal adjustment. Their role is multifaceted.</p>
 <ol type="1">
 <li>Revisions can tell us about the stability of our adjustment process. Hence, they are in some sense a diagnostic tool to help us decided between two possible models or filters.</li>
 <li>Revisions have the additional role that most users of seasonal adjusted data don’t like them. It can be frustrating to get a seasonally adjusted value one month, only to have it change the following month.</li>
+<li>
+<em>We favor the method that results in smaller revisions</em>, provided that the final adjustments from different options or methods are deemed acceptable, with no residual seasonal or calendar effects.</li>
 </ol>
-<p>We will try to address the first completely. The second is a more delicate issue that usually requires a policy decision and will vary person-to-person and agency-to-agency. Some will decide to revise all historical seasonal adjustments when a new month of data becomes available, and some may decide to fix historical seasonal adjustments and only release the most current. Each policy decision will have its own pros and cons that we will briefly discuss at the end of this chapter.</p>
+<p>We will try to address the first completely. The second and third are more delicate issues that usually require a policy decision and will vary person-to-person and agency-to-agency. Some will decide to revise all historical seasonal adjustments when a new month of data becomes available, and some may decide to fix historical seasonal adjustments and only release the most current. Each policy decision will have its own pros and cons that we will briefly discuss at the end of this chapter.</p>
 <p>Let’s define a revision. Define <span class="math inline">\(A_{t|n}\)</span> to be the seasonally adjusted value of <span class="math inline">\(y_t\)</span> using <span class="math inline">\(y_1, y_2, \ldots, y_n\)</span>. Assume the full series is of length <span class="math inline">\(T\)</span>.</p>
 <ol type="1">
 <li>A <strong>concurrent</strong> seasonal adjustment is then <span class="math inline">\(A_{t|t}\)</span>
@@ -330,48 +329,6 @@ R_t = \frac{A_{t|T} - A_{t|t}}{A_{t|t}}
 \]</span></p>
 <p>Note, if performing an additive adjustment that has negative values, X13 will only report the revision itself (<span class="math inline">\(R_t\)</span> with 1 as a denominator) instead of the percent revision. This avoids issues with changing signs.</p>
 <p>The analogous quantities are defined for trend and seasonally adjusted series.</p>
-<div class="callout callout-style-simple callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Todo
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>NEED TO ADD TREND and MONTH_TO_MONTH CHANGE OUTPUT.</p>
-<p><strong>Assignee: james</strong></p>
-</div>
-</div>
-<div class="callout callout-style-simple callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Todo
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Fix todo and add to seasonalbook</p>
-<p><strong>Assignee: christoph</strong></p>
-</div>
-</div>
-<div class="callout callout-style-simple callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Todo
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Move content belwo to regArima</p>
-<p><strong>Assignee: james</strong></p>
-</div>
-</div>
 <section id="history-spec" class="level3" data-number="16.0.1"><h3 data-number="16.0.1" class="anchored" data-anchor-id="history-spec">
 <span class="header-section-number">16.0.1</span> History Spec</h3>
 <p>The program conducts multiple runs, iterating over a sequence of expanding intervals, effectively simulating the passage of time. Our preference lies with the approach that generates smaller revisions, assuming the final adjustments resulting from different options or methods are equally satisfactory without any remaining seasonal or calendar effects. Instead of referring to them as history diagnostics, we use the term “revisions history” to describe these measurements, as they quantify the magnitudes of adjustments made by incorporating series values. It’s important to note that these diagnostics do not include any changes or revisions to the underlying series values themselves.</p>
@@ -428,8 +385,8 @@ Todo
 <div class="cell">
 <pre><code>#&gt; ── [1mAttaching core tidyverse packages[22m ───────────────────── tidyverse 2.0.0 ──
 #&gt; [32m✔[39m [34mforcats  [39m 1.0.0     [32m✔[39m [34mreadr    [39m 2.1.4
-#&gt; [32m✔[39m [34mggplot2  [39m 3.4.4     [32m✔[39m [34mstringr  [39m 1.5.0
-#&gt; [32m✔[39m [34mlubridate[39m 1.9.3     [32m✔[39m [34mtidyr    [39m 1.3.0
+#&gt; [32m✔[39m [34mggplot2  [39m 3.4.4     [32m✔[39m [34mstringr  [39m 1.5.1
+#&gt; [32m✔[39m [34mlubridate[39m 1.9.3     [32m✔[39m [34mtidyr    [39m 1.3.1
 #&gt; [32m✔[39m [34mpurrr    [39m 1.0.2     
 #&gt; ── [1mConflicts[22m ─────────────────────────────────────── tidyverse_conflicts() ──
 #&gt; [31m✖[39m [34mdplyr[39m::[32mfilter()[39m  masks [34mstats[39m::filter()
@@ -462,6 +419,44 @@ Todo
 <span><span class="co"># out(old_sa)</span></span>
 <span><span class="co"># out(auto_sa)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>Note, as the history run progresses towards its end, the gap between the concurrent series and the final series diminishes, leading to a decrease in the average revision across years. Keep this in mind when looking at history output:</p>
+<ul>
+<li>No specific pass/fail thresholds are recommended</li>
+<li>Look for large differences</li>
+<li>Don’t use for selecting seasonal filters as the diagnostic tends to prefer longer filters</li>
+</ul></section><section id="using-history-spec-to-compare-forecasts" class="level3" data-number="16.0.2"><h3 data-number="16.0.2" class="anchored" data-anchor-id="using-history-spec-to-compare-forecasts">
+<span class="header-section-number">16.0.2</span> Using History Spec to compare forecasts</h3>
+<p>The outline of what happenes when <code>history.estimates = c("fcst")</code> is added to a seasonal adjustment run:</p>
+<ul>
+<li>Truncate the series at time point <span class="math inline">\(t_0\)</span>.</li>
+<li>Apply the regARIMA model and generate forecasts for <span class="math inline">\(h\)</span> steps ahead.</li>
+<li>Generate forecasts for one step ahead and one year ahead.</li>
+<li>Include the data point at time point <span class="math inline">\((t_0 + 1)\)</span>.</li>
+<li>Repeat the model fitting process and forecasting.</li>
+</ul>
+<p>To make a decision between two model we can apply the following logic to our differences in sum of square forecast error plot.</p>
+<p><span class="math display">\[
+SSE^{(1, 2)}_{h, N}
+=
+\sum_{t = t_0}^{N-h}
+\left[
+(Y_{t+h} - \widehat{Y}^{(1)}_{t_h|t})^2 -
+(Y_{t+h} - \widehat{Y}^{(2)}_{t_h|t})^2
+\right]
+\]</span></p>
+<ul>
+<li>For a persistently decreasing value (negative slope) with increasing N, prefer Model 1.</li>
+<li>If there are persistently better forecasts from Model 1 (consistently summing negative values, indicating smaller errors), prefer Model 1.</li>
+<li>In the case of a stair-stepping down pattern, prefer Model 1.</li>
+<li>For a persistently increasing value (positive slope) with increasing N, prefer Model 2.</li>
+<li>If there is a stair-stepping up pattern, prefer Model 2.</li>
+</ul>
+<p>Each line on the plot is a seperate comparison of two models.</p>
+<ul>
+<li>If one line is inconclusive, the other line can indicate model preference</li>
+<li>Weight seasonal forecasts more</li>
+<li>Weight most-recent result more</li>
+</ul>
 <div class="cell">
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">old_sa</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span></span>
 <span>  x <span class="op">=</span> <span class="va">old</span>,</span>
@@ -487,7 +482,7 @@ Todo
 <span><span class="fu">ts_plot</span><span class="op">(</span><span class="fu">ts_c</span><span class="op">(</span><span class="va">sdiff1</span>, <span class="va">sdiff12</span><span class="op">)</span>, title <span class="op">=</span> <span class="st">"Squared Forecast Error Differences, Fixed - Auto"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span>h<span class="op">=</span><span class="fl">0</span>, col <span class="op">=</span> <span class="st">"grey"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="52-revisions_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="864"></p>
+<p><img src="52-revisions_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="864"></p>
 </div>
 </div>
 <div class="cell">
@@ -502,10 +497,15 @@ Todo
 <span><span class="fu">ts_plot</span><span class="op">(</span><span class="fu">ts_c</span><span class="op">(</span><span class="va">sdiff1</span>, <span class="va">sdiff12</span><span class="op">)</span>, title <span class="op">=</span> <span class="st">"Squared Forecast Error Differences, good - bad"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span>h<span class="op">=</span><span class="fl">0</span>, col <span class="op">=</span> <span class="st">"grey"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="52-revisions_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="864"></p>
+<p><img src="52-revisions_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="864"></p>
 </div>
 </div>
 <p>There are no specific pass/fail levels recommended for these results, indicating that there are no predetermined thresholds to determine success or failure. Instead, a comparison approach is suggested, particularly when significant differences emerge among the results. For example, it is expected that the disparity between the concurrent series and the final series diminishes gradually. Therefore, it is reasonable to anticipate a decrease in the average revision across years as the process nears completion. In such cases, it becomes crucial to thoroughly analyze and understand the reasons behind these disparities. Additionally, it is advised to exercise caution when utilizing these results as the sole basis for selecting a seasonal filter. Other factors and considerations should be taken into account to make an informed decision. It is worth noting that the diagnostic tends to favor longer filters, implying that the analysis tends to lean towards recommending seasonal filters with larger spans. However, it is important to weigh this tendency against other relevant factors and requirements specific to the context at hand to make the most appropriate choice.</p>
+</section><section id="what-to-do-with-revisions" class="level3" data-number="16.0.3"><h3 data-number="16.0.3" class="anchored" data-anchor-id="what-to-do-with-revisions">
+<span class="header-section-number">16.0.3</span> What to do with Revisions</h3>
+<p>Revisions occur due to various factors including changes in the original series, late respondents, historical corrections, method or classification/definition changes in the original series, adding new observations, and the introduction of new values. These revisions can result in adjustments to model parameters, forecasts, potentially leading to changes in extreme values, as well as adjustments in seasonal and trend filter values.</p>
+<p>If you data itself changes then a suggestion is to revise one or two previous values beyond where the original series has changed. You can also revise the same month/quarter a year ago.</p>
+<p>If your data has remained constant and the only source of revision is seasonal adjustment, it is advised to set a policy for within year release and any annual review of your procedure and stick with it. For example, only revise the past 2 observations when a new value becomes available. During annual review revise the last full year.</p>
 
 
 </section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">

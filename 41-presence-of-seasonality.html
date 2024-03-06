@@ -310,6 +310,7 @@ div.csl-indent {
   <li><a href="#qs-test" id="toc-qs-test" class="nav-link" data-scroll-target="#qs-test"><span class="header-section-number">12.0.3</span> QS Test</a></li>
   <li><a href="#identifiable-seasonality-test" id="toc-identifiable-seasonality-test" class="nav-link" data-scroll-target="#identifiable-seasonality-test"><span class="header-section-number">12.0.4</span> Identifiable Seasonality Test</a></li>
   <li><a href="#case-study" id="toc-case-study" class="nav-link" data-scroll-target="#case-study"><span class="header-section-number">12.0.5</span> Case Study</a></li>
+  <li><a href="#f-test-for-seasonality" id="toc-f-test-for-seasonality" class="nav-link" data-scroll-target="#f-test-for-seasonality"><span class="header-section-number">12.1</span> F-test for seasonality</a></li>
   </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/41-presence-of-seasonality.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
@@ -334,7 +335,7 @@ div.csl-indent {
 <section id="basic-principle" class="level3" data-number="12.0.1"><h3 data-number="12.0.1" class="anchored" data-anchor-id="basic-principle">
 <span class="header-section-number">12.0.1</span> Basic Principle</h3>
 <p>In general, adjusting a non-seasonal series is less of a problem than not adjusting a seasonal series. So, unless you have good reasons to believe that a series is not-seasonal, adjust it. <em>When in doubt, adjust!</em></p>
-<p>Controversy? IMF Handbook says the opposite?</p>
+<p>Of course the final answer is never so simple. For example, the International Monetary Fund (IMF) in their <a href="https://www.imf.org/external/pubs/ft/qna/pdf/2017/chapter7.pdf">Quarterly National Accounts Manual</a> about seasonal adjustment says, “A series should be seasonally adjusted only when there is evidence of identifiable seasonality. Series with no seasonality or too unstable seasonality should not be seasonally adjusted.” The IMF is attempting to maintain accounting relationship which are of utmost important to their seasonal adjustment policies.</p>
 </section><section id="available-tests" class="level3" data-number="12.0.2"><h3 data-number="12.0.2" class="anchored" data-anchor-id="available-tests">
 <span class="header-section-number">12.0.2</span> Available Tests</h3>
 <p>To help you to make a good decision, X-13 offers a few formal checks:</p>
@@ -342,8 +343,9 @@ div.csl-indent {
 <li><p>The QS test is the primary test to evaluate seasonality both the original or in the adjusted series. It will be discussed in more detail in <a href="51-quality-measures.html"><span>Chapter&nbsp;15</span></a>.</p></li>
 <li><p>The Identifiable Seasonality Test (IDS) gives a simple yes or no answer to whether a series is seasonal or not. It is available for X11 adjustments only.</p></li>
 <li><p>The M7 statistic applies critical values to the Identifiable Seasonality Test (IDS) and returns a simple yes or no answer.</p></li>
+<li><p>F-test for seasonal regressors</p></li>
 </ul>
-<p>Which tests are preferable, and how should a user decide if the tests are not aligned?</p>
+<p>Which tests are preferable, and how should a user decide if the tests are not aligned? Often, this will only happen with marginal cases and hence we suggest following our guiding principle and adjusting your series. More often than not the tests will provide enough evidence to make help make an informed decision about whether a series is seasonal or not.</p>
 </section><section id="qs-test" class="level3" data-number="12.0.3"><h3 data-number="12.0.3" class="anchored" data-anchor-id="qs-test">
 <span class="header-section-number">12.0.3</span> QS Test</h3>
 <p>The QS test has a few advantages compared to the IDS statistics and is generally preferable. It is available both with X11 and SEATS.</p>
@@ -366,8 +368,9 @@ div.csl-indent {
 <span><span class="co">#&gt; qssirr         0.00000 1.0000</span></span>
 <span><span class="co">#&gt; qssirrevadj    0.00000 1.0000</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The QS Statistic shows the degree of seasonality in various components of the seasonal adjustment. For our purposes, the first line is the most interesting. It shows that the QS value of the original series is 168, which comes with a p-value of essentially 0. This reads as there is a 0 probability that the null-hypothesis of seasonality in the original series can be rejected.</p>
+<p>The QS Statistic shows the degree of seasonality in various components of the seasonal adjustment. For our purposes, the first line is the most interesting. It shows that the QS value of the original series is 168, which comes with a p-value of essentially 0. Since the null hypothesis is no seasonality, this p-value can be read as high evidence the series is seasonal.</p>
 <p>In other words, <code>AirPassengers</code> is a clearly seasonal series, which should not come as a surprise at this point.</p>
+<p>If you encounter a series with a moderate p-value for the first line, you can also consider the 8th line (the second occurrence of <code>qsori</code>) which again calculates the QS statistic for the original series but restricting the view to the most recent 8 years of data. Since often the more recent data is more crucial to seasonal adjust correctly this additional test can help make the decision.</p>
 </section><section id="identifiable-seasonality-test" class="level3 page-columns page-full" data-number="12.0.4"><h3 data-number="12.0.4" class="anchored" data-anchor-id="identifiable-seasonality-test">
 <span class="header-section-number">12.0.4</span> Identifiable Seasonality Test</h3>
 <p>A second test for seasonality is the Identifiable Seasonality Test. It is only available in X11.</p>
@@ -461,7 +464,7 @@ UK Office for National Statistics. 2007. <em>Guide to Seasonal Adjustment with x
 <span><span class="co">#&gt; qssirr       1.92576 0.38179</span></span>
 <span><span class="co">#&gt; qssirrevadj  1.92576 0.38179</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Let’s have a look at the first line. A QS value of 0 has a p-value of 1, meaning the Nul-Hypothesis of seasonality in the orgininal value can be savely rejected. According to this measure, it is clear that this series has no seasonality.</p>
+<p>Let’s have a look at the first line. A QS value of 0 has a p-value of 1, meaning the Null-Hypothesis of no seasonality in the original value can not be rejected. According to this measure, it is clear that this series has no seasonality.</p>
 <p>If we want to consider the M7 values, we need to use X11:</p>
 <div class="cell">
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_x11</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">x</span>, x11 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -497,6 +500,89 @@ UK Office for National Statistics. 2007. <em>Guide to Seasonal Adjustment with x
 <span><span class="co">#&gt; f2.idseasonal </span></span>
 <span><span class="co">#&gt;          "no"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</section><section id="f-test-for-seasonality" class="level2" data-number="12.1"><h2 data-number="12.1" class="anchored" data-anchor-id="f-test-for-seasonality">
+<span class="header-section-number">12.1</span> F-test for seasonality</h2>
+<p>Another simple yet effective test for seasonality is to include seasonal regressor in your model and then check if they are significant.</p>
+<div class="cell">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span></span>
+<span>  <span class="va">AirPassengers</span>,</span>
+<span>  x11 <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  arima.model <span class="op">=</span> <span class="st">"(0 1 1)"</span>,</span>
+<span>  regression.variables <span class="op">=</span> <span class="st">"seasonal"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">Ftest</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/udg.html">udg</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"ftest$Seasonal"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">Ftest</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Seasonal F-test"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">Ftest</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"df1"</span>, <span class="st">"df2"</span>, <span class="st">"test_stat"</span>, <span class="st">"p_value"</span><span class="op">)</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="va">Ftest</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">Seasonal F-test</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">df1</td>
+<td style="text-align: right;">11.00000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">df2</td>
+<td style="text-align: right;">130.00000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">test_stat</td>
+<td style="text-align: right;">96.50175</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">p_value</td>
+<td style="text-align: right;">0.00000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>We see again that AirPassengers is seasonal.</p>
+<div class="cell">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  x11 <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  arima.model <span class="op">=</span> <span class="st">"(0 1 1)"</span>,</span>
+<span>  regression.variables <span class="op">=</span> <span class="st">"seasonal"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">Ftest</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/udg.html">udg</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"ftest$Seasonal"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">Ftest</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Seasonal F-test"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">Ftest</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"df1"</span>, <span class="st">"df2"</span>, <span class="st">"test_stat"</span>, <span class="st">"p_value"</span><span class="op">)</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="va">Ftest</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">Seasonal F-test</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">df1</td>
+<td style="text-align: right;">3.00000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">df2</td>
+<td style="text-align: right;">99.00000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">test_stat</td>
+<td style="text-align: right;">0.88871</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">p_value</td>
+<td style="text-align: right;">0.44982</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>The F-test again shows the case study series is not seasonal.</p>
 
 
 
