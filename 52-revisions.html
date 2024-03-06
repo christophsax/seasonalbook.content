@@ -286,9 +286,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
-<li><a href="#history-spec" id="toc-history-spec" class="nav-link active" data-scroll-target="#history-spec"><span class="header-section-number">16.0.1</span> History Spec</a></li>
-  <li><a href="#using-history-spec-to-compare-forecasts" id="toc-using-history-spec-to-compare-forecasts" class="nav-link" data-scroll-target="#using-history-spec-to-compare-forecasts"><span class="header-section-number">16.0.2</span> Using History Spec to compare forecasts</a></li>
-  <li><a href="#what-to-do-with-revisions" id="toc-what-to-do-with-revisions" class="nav-link" data-scroll-target="#what-to-do-with-revisions"><span class="header-section-number">16.0.3</span> What to do with Revisions</a></li>
+<li><a href="#history-spec" id="toc-history-spec" class="nav-link active" data-scroll-target="#history-spec"><span class="header-section-number">16.1</span> History Spec</a></li>
+  <li><a href="#using-history-spec-to-compare-forecasts" id="toc-using-history-spec-to-compare-forecasts" class="nav-link" data-scroll-target="#using-history-spec-to-compare-forecasts"><span class="header-section-number">16.2</span> Using History Spec to compare forecasts</a></li>
+  <li><a href="#what-to-do-with-revisions" id="toc-what-to-do-with-revisions" class="nav-link" data-scroll-target="#what-to-do-with-revisions"><span class="header-section-number">16.3</span> What to do with Revisions</a></li>
   </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/52-revisions.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
@@ -329,8 +329,8 @@ R_t = \frac{A_{t|T} - A_{t|t}}{A_{t|t}}
 \]</span></p>
 <p>Note, if performing an additive adjustment that has negative values, X13 will only report the revision itself (<span class="math inline">\(R_t\)</span> with 1 as a denominator) instead of the percent revision. This avoids issues with changing signs.</p>
 <p>The analogous quantities are defined for trend and seasonally adjusted series.</p>
-<section id="history-spec" class="level3" data-number="16.0.1"><h3 data-number="16.0.1" class="anchored" data-anchor-id="history-spec">
-<span class="header-section-number">16.0.1</span> History Spec</h3>
+<section id="history-spec" class="level2" data-number="16.1"><h2 data-number="16.1" class="anchored" data-anchor-id="history-spec">
+<span class="header-section-number">16.1</span> History Spec</h2>
 <p>The program conducts multiple runs, iterating over a sequence of expanding intervals, effectively simulating the passage of time. Our preference lies with the approach that generates smaller revisions, assuming the final adjustments resulting from different options or methods are equally satisfactory without any remaining seasonal or calendar effects. Instead of referring to them as history diagnostics, we use the term “revisions history” to describe these measurements, as they quantify the magnitudes of adjustments made by incorporating series values. It’s important to note that these diagnostics do not include any changes or revisions to the underlying series values themselves.</p>
 <p>We can look at any of the following estimates produced by the program</p>
 <table class="table">
@@ -412,8 +412,8 @@ R_t = \frac{A_{t|T} - A_{t|t}}{A_{t|t}}
 <li>No specific pass/fail thresholds are recommended</li>
 <li>Look for large differences</li>
 <li>Don’t use for selecting seasonal filters as the diagnostic tends to prefer longer filters</li>
-</ul></section><section id="using-history-spec-to-compare-forecasts" class="level3" data-number="16.0.2"><h3 data-number="16.0.2" class="anchored" data-anchor-id="using-history-spec-to-compare-forecasts">
-<span class="header-section-number">16.0.2</span> Using History Spec to compare forecasts</h3>
+</ul></section><section id="using-history-spec-to-compare-forecasts" class="level2" data-number="16.2"><h2 data-number="16.2" class="anchored" data-anchor-id="using-history-spec-to-compare-forecasts">
+<span class="header-section-number">16.2</span> Using History Spec to compare forecasts</h2>
 <p>The outline of what happenes when <code>history.estimates = c("fcst")</code> is added to a seasonal adjustment run:</p>
 <ul>
 <li>Truncate the series at time point <span class="math inline">\(t_0\)</span>.</li>
@@ -489,8 +489,8 @@ SSE^{(1, 2)}_{h, N}
 </div>
 </div>
 <p>There are no specific pass/fail levels recommended for these results, indicating that there are no predetermined thresholds to determine success or failure. Instead, a comparison approach is suggested, particularly when significant differences emerge among the results. For example, it is expected that the disparity between the concurrent series and the final series diminishes gradually. Therefore, it is reasonable to anticipate a decrease in the average revision across years as the process nears completion. In such cases, it becomes crucial to thoroughly analyze and understand the reasons behind these disparities. Additionally, it is advised to exercise caution when utilizing these results as the sole basis for selecting a seasonal filter. Other factors and considerations should be taken into account to make an informed decision. It is worth noting that the diagnostic tends to favor longer filters, implying that the analysis tends to lean towards recommending seasonal filters with larger spans. However, it is important to weigh this tendency against other relevant factors and requirements specific to the context at hand to make the most appropriate choice.</p>
-</section><section id="what-to-do-with-revisions" class="level3" data-number="16.0.3"><h3 data-number="16.0.3" class="anchored" data-anchor-id="what-to-do-with-revisions">
-<span class="header-section-number">16.0.3</span> What to do with Revisions</h3>
+</section><section id="what-to-do-with-revisions" class="level2" data-number="16.3"><h2 data-number="16.3" class="anchored" data-anchor-id="what-to-do-with-revisions">
+<span class="header-section-number">16.3</span> What to do with Revisions</h2>
 <p>Revisions occur due to various factors including changes in the original series, late respondents, historical corrections, method or classification/definition changes in the original series, adding new observations, and the introduction of new values. These revisions can result in adjustments to model parameters, forecasts, potentially leading to changes in extreme values, as well as adjustments in seasonal and trend filter values.</p>
 <p>If you data itself changes then a suggestion is to revise one or two previous values beyond where the original series has changed. You can also revise the same month/quarter a year ago.</p>
 <p>If your data has remained constant and the only source of revision is seasonal adjustment, it is advised to set a policy for within year release and any annual review of your procedure and stick with it. For example, only revise the past 2 observations when a new value becomes available. During annual review revise the last full year.</p>
