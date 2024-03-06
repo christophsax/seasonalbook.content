@@ -101,7 +101,7 @@ The coefficients from the summary are as follows:
 | Sep   |        0.0813043      |       -0.0641267       |
 | Oct   |       -0.0441661      |        0.0496035       |
 | Nov   |        0.0328833      |        0.0332059       |
-| Dec (derived) | 0.0294782      |       -0.3710507  |
+| Dec (derived) | -0.0294782      |      0.3710507  |
 
 We see multiple sign changes and multiple large discrepancies between the two model spans. 
 This is an indication that this series has a change-of-regime. 
