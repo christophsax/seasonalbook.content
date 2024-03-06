@@ -1,3 +1,8 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
 ## Revisions {#sec-revisions}
 
 ```{r}
@@ -7,20 +12,15 @@ source("_common.R")
 status("polishing")  # drafting, polishing, complete
 ```
 
--   How to measure revisions?
-
--   Should a model be re-estimated each period?
-
--   How to use the slidingspan and history spec
-
 Revision play a major role in seasonal adjustment.
 Their role is multifaceted.
 
 1.  Revisions can tell us about the stability of our adjustment process. Hence, they are in some sense a diagnostic tool to help us decided between two possible models or filters.
 2.  Revisions have the additional role that most users of seasonal adjusted data don't like them. It can be frustrating to get a seasonally adjusted value one month, only to have it change the following month.
+3. *We favor the method that results in smaller revisions*, provided that the final adjustments from different options or methods are deemed acceptable, with no residual seasonal or calendar effects.
 
 We will try to address the first completely.
-The second is a more delicate issue that usually requires a policy decision and will vary person-to-person and agency-to-agency.
+The second and third are more delicate issues that usually require a policy decision and will vary person-to-person and agency-to-agency.
 Some will decide to revise all historical seasonal adjustments when a new month of data becomes available, and some may decide to fix historical seasonal adjustments and only release the most current.
 Each policy decision will have its own pros and cons that we will briefly discuss at the end of this chapter.
 
@@ -43,34 +43,6 @@ This avoids issues with changing signs.
 
 The analogous quantities are defined for trend and seasonally adjusted series.
 
-
-
-
-
-```{r}
-#| results: "asis"
-#| echo: false
-todo("NEED TO ADD TREND and MONTH_TO_MONTH CHANGE OUTPUT.", "james")
-```
-
-
-
-```{r}
-#| results: "asis"
-#| echo: false
-todo("Fix todo and add to seasonalbook", "christoph")
-```
-
-
-
-```{r}
-#| results: "asis"
-#| echo: false
-todo("Move content belwo to regArima", "james")
-```
-
-
-
 ### History Spec
 
 The program conducts multiple runs, iterating over a sequence of expanding intervals, effectively simulating the passage of time.
@@ -91,7 +63,6 @@ We can look at any of the following estimates produced by the program
 | `fcst`              | forecasts and evolving mean square forecast errors         |
 | `arma`              | estimated AR and MA coefficients                           |
 | `td`                | trading day regression coefficients                        |
-
 
 ```{r, echo=FALSE}
 library(tidyverse)
@@ -128,6 +99,49 @@ auto_sa <- seas(
 # out(old_sa)
 # out(auto_sa)
 ```
+
+Note, as the history run progresses towards its end, the gap between the concurrent series and the final series diminishes, leading to a decrease in the average revision across years. 
+Keep this in mind when looking at history output:
+
+- No specific pass/fail thresholds are recommended
+- Look for large differences 
+- Don't use for selecting seasonal filters as the diagnostic tends to prefer longer filters
+
+
+### Using History Spec to compare forecasts
+
+The outline of what happenes when `history.estimates = c("fcst")` is added to a seasonal adjustment run:
+
+- Truncate the series at time point $t_0$.
+- Apply the regARIMA model and generate forecasts for $h$ steps ahead.
+- Generate forecasts for one step ahead and one year ahead.
+- Include the data point at time point $(t_0 + 1)$.
+- Repeat the model fitting process and forecasting.
+
+To make a decision between two model we can apply the following logic to our differences in sum of square forecast error plot. 
+
+$$
+SSE^{(1, 2)}_{h, N}
+= 
+\sum_{t = t_0}^{N-h} 
+\left[
+(Y_{t+h} - \widehat{Y}^{(1)}_{t_h|t})^2 - 
+(Y_{t+h} - \widehat{Y}^{(2)}_{t_h|t})^2
+\right]
+$$
+
+- For a persistently decreasing value (negative slope) with increasing N, prefer Model 1.
+- If there are persistently better forecasts from Model 1 (consistently summing negative values, indicating smaller errors), prefer Model 1.
+- In the case of a stair-stepping down pattern, prefer Model 1.
+- For a persistently increasing value (positive slope) with increasing N, prefer Model 2.
+- If there is a stair-stepping up pattern, prefer Model 2.
+
+Each line on the plot is a seperate comparison of two models.
+
+- If one line is inconclusive, the other line can indicate model preference
+- Weight seasonal forecasts more
+- Weight most-recent result more
+
 
 ```{r}
 old_sa <- seas(
@@ -168,17 +182,24 @@ ts_plot(ts_c(sdiff1, sdiff12), title = "Squared Forecast Error Differences, good
 abline(h=0, col = "grey")
 ```
 
-There are no specific pass/fail levels recommended for these results, indicating that there are no predetermined thresholds to determine success or failure. 
-Instead, a comparison approach is suggested, particularly when significant differences emerge among the results. 
-For example, it is expected that the disparity between the concurrent series and the final series diminishes gradually. 
+There are no specific pass/fail levels recommended for these results, indicating that there are no predetermined thresholds to determine success or failure.
+Instead, a comparison approach is suggested, particularly when significant differences emerge among the results.
+For example, it is expected that the disparity between the concurrent series and the final series diminishes gradually.
 Therefore, it is reasonable to anticipate a decrease in the average revision across years as the process nears completion.
-In such cases, it becomes crucial to thoroughly analyze and understand the reasons behind these disparities. 
-Additionally, it is advised to exercise caution when utilizing these results as the sole basis for selecting a seasonal filter. 
-Other factors and considerations should be taken into account to make an informed decision. 
-It is worth noting that the diagnostic tends to favor longer filters, implying that the analysis tends to lean towards recommending seasonal filters with larger spans. 
+In such cases, it becomes crucial to thoroughly analyze and understand the reasons behind these disparities.
+Additionally, it is advised to exercise caution when utilizing these results as the sole basis for selecting a seasonal filter.
+Other factors and considerations should be taken into account to make an informed decision.
+It is worth noting that the diagnostic tends to favor longer filters, implying that the analysis tends to lean towards recommending seasonal filters with larger spans.
 However, it is important to weigh this tendency against other relevant factors and requirements specific to the context at hand to make the most appropriate choice.
 
+### What to do with Revisions
 
+Revisions occur due to various factors including changes in the original series, late respondents, historical corrections, method or classification/definition changes in the original series, adding new observations, and the introduction of new values. These revisions can result in adjustments to model parameters, forecasts, potentially leading to changes in extreme values, as well as adjustments in seasonal and trend filter values.
 
+If you data itself changes then a suggestion is to revise one or two previous values beyond where the original series has changed. 
+You can also revise the same month/quarter a year ago.
 
+If your data has remained constant and the only source of revision is seasonal adjustment, it is advised to set a policy for within year release and any annual review of your procedure and stick with it. 
+For example, only revise the past 2 observations when a new value becomes available.
+During annual review revise the last full year.
 
