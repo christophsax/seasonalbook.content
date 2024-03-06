@@ -74,6 +74,39 @@ monthplot(seas(imp_cn))
 This makes it obvious that there were very strong December effects before 2000.
 We don't know anything about the series, but we can speculate that prior to 2000, custom receipts were counted at the end of the year, rather than at the date of import.
 
+```{r}
+m = seas(
+  imp_cn,
+  x11 = "",
+  regression.variables = c("seasonal/2000.1/"),
+  regression.aictest = NULL,
+  outlier = NULL,
+  transform.function = "log"
+)
+summary(m)
+```
+
+The coefficients from the summary are as follows:
+
+| Month | Pre 2000 coefficients | Post 2000 coefficients |
+|-------|-----------------------|------------------------|
+| Jan   |       -0.0654535      |       -0.3183942       |
+| Feb   |       -0.1970206      |       -0.1122450       |
+| Mar   |        0.0356460      |       -0.0295122       |
+| Apr   |        0.0328228      |       -0.0286242       |
+| May   |       -0.0238587      |        0.0669706       |
+| Jun   |        0.0067156      |        0.0165824       |
+| Jul   |        0.0354693      |       -0.0001398       |
+| Aug   |        0.0350369      |       -0.0354610       |
+| Sep   |        0.0813043      |       -0.0641267       |
+| Oct   |       -0.0441661      |        0.0496035       |
+| Nov   |        0.0328833      |        0.0332059       |
+| Dec (derived) | 0.0294782      |       -0.3710507  |
+
+We see multiple sign changes and multiple large discrepancies between the two model spans. 
+This is an indication that this series has a change-of-regime. 
+Also as previously indicated the December effect was much different post 2000. 
+
 ## Restricting model span
 
 In many cases, restricting `series.modelspan` may be the easiest way to deal with such series.
