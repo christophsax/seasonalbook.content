@@ -305,12 +305,12 @@ div.csl-indent {
         <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
-<li><a href="#basic-principle" id="toc-basic-principle" class="nav-link active" data-scroll-target="#basic-principle"><span class="header-section-number">12.0.1</span> Basic Principle</a></li>
-  <li><a href="#available-tests" id="toc-available-tests" class="nav-link" data-scroll-target="#available-tests"><span class="header-section-number">12.0.2</span> Available Tests</a></li>
-  <li><a href="#qs-test" id="toc-qs-test" class="nav-link" data-scroll-target="#qs-test"><span class="header-section-number">12.0.3</span> QS Test</a></li>
-  <li><a href="#identifiable-seasonality-test" id="toc-identifiable-seasonality-test" class="nav-link" data-scroll-target="#identifiable-seasonality-test"><span class="header-section-number">12.0.4</span> Identifiable Seasonality Test</a></li>
-  <li><a href="#case-study" id="toc-case-study" class="nav-link" data-scroll-target="#case-study"><span class="header-section-number">12.0.5</span> Case Study</a></li>
-  <li><a href="#f-test-for-seasonality" id="toc-f-test-for-seasonality" class="nav-link" data-scroll-target="#f-test-for-seasonality"><span class="header-section-number">12.1</span> F-test for seasonality</a></li>
+<li><a href="#basic-principle" id="toc-basic-principle" class="nav-link active" data-scroll-target="#basic-principle"><span class="header-section-number">12.1</span> Basic Principle</a></li>
+  <li><a href="#available-tests" id="toc-available-tests" class="nav-link" data-scroll-target="#available-tests"><span class="header-section-number">12.2</span> Available Tests</a></li>
+  <li><a href="#qs-test" id="toc-qs-test" class="nav-link" data-scroll-target="#qs-test"><span class="header-section-number">12.3</span> QS Test</a></li>
+  <li><a href="#identifiable-seasonality-test" id="toc-identifiable-seasonality-test" class="nav-link" data-scroll-target="#identifiable-seasonality-test"><span class="header-section-number">12.4</span> Identifiable Seasonality Test</a></li>
+  <li><a href="#case-study" id="toc-case-study" class="nav-link" data-scroll-target="#case-study"><span class="header-section-number">12.5</span> Case Study</a></li>
+  <li><a href="#f-test-for-seasonality" id="toc-f-test-for-seasonality" class="nav-link" data-scroll-target="#f-test-for-seasonality"><span class="header-section-number">12.6</span> F-test for seasonality</a></li>
   </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/41-presence-of-seasonality.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
@@ -332,12 +332,12 @@ div.csl-indent {
 <p>X-13 removes seasonality from the series, even if a series is not seasonal from the beginning. If a series is not seasonal, the resulting series may be bad.</p>
 <p>Fortunately, X-13 contains a few tests that help users decide if a series is seasonal.</p>
 <p>Before applying X-13, deciding if the series is seasonal may be necessary. This section discusses how to decide whether a series should be adjusted.</p>
-<section id="basic-principle" class="level3" data-number="12.0.1"><h3 data-number="12.0.1" class="anchored" data-anchor-id="basic-principle">
-<span class="header-section-number">12.0.1</span> Basic Principle</h3>
+<section id="basic-principle" class="level2" data-number="12.1"><h2 data-number="12.1" class="anchored" data-anchor-id="basic-principle">
+<span class="header-section-number">12.1</span> Basic Principle</h2>
 <p>In general, adjusting a non-seasonal series is less of a problem than not adjusting a seasonal series. So, unless you have good reasons to believe that a series is not-seasonal, adjust it. <em>When in doubt, adjust!</em></p>
 <p>Of course the final answer is never so simple. For example, the International Monetary Fund (IMF) in their <a href="https://www.imf.org/external/pubs/ft/qna/pdf/2017/chapter7.pdf">Quarterly National Accounts Manual</a> about seasonal adjustment says, “A series should be seasonally adjusted only when there is evidence of identifiable seasonality. Series with no seasonality or too unstable seasonality should not be seasonally adjusted.” The IMF is attempting to maintain accounting relationship which are of utmost important to their seasonal adjustment policies.</p>
-</section><section id="available-tests" class="level3" data-number="12.0.2"><h3 data-number="12.0.2" class="anchored" data-anchor-id="available-tests">
-<span class="header-section-number">12.0.2</span> Available Tests</h3>
+</section><section id="available-tests" class="level2" data-number="12.2"><h2 data-number="12.2" class="anchored" data-anchor-id="available-tests">
+<span class="header-section-number">12.2</span> Available Tests</h2>
 <p>To help you to make a good decision, X-13 offers a few formal checks:</p>
 <ul>
 <li><p>The QS test is the primary test to evaluate seasonality both the original or in the adjusted series. It will be discussed in more detail in <a href="51-quality-measures.html"><span>Chapter&nbsp;15</span></a>.</p></li>
@@ -346,8 +346,8 @@ div.csl-indent {
 <li><p>F-test for seasonal regressors</p></li>
 </ul>
 <p>Which tests are preferable, and how should a user decide if the tests are not aligned? Often, this will only happen with marginal cases and hence we suggest following our guiding principle and adjusting your series. More often than not the tests will provide enough evidence to make help make an informed decision about whether a series is seasonal or not.</p>
-</section><section id="qs-test" class="level3" data-number="12.0.3"><h3 data-number="12.0.3" class="anchored" data-anchor-id="qs-test">
-<span class="header-section-number">12.0.3</span> QS Test</h3>
+</section><section id="qs-test" class="level2" data-number="12.3"><h2 data-number="12.3" class="anchored" data-anchor-id="qs-test">
+<span class="header-section-number">12.3</span> QS Test</h2>
 <p>The QS test has a few advantages compared to the IDS statistics and is generally preferable. It is available both with X11 and SEATS.</p>
 <p>You can retrieve the results of the QS test by the <code><a href="https://rdrr.io/pkg/seasonal/man/udg.html">qs()</a></code> function. (We will say more about the QS statistic in <a href="51-quality-measures.html"><span>Chapter&nbsp;15</span></a>).</p>
 <div class="cell">
@@ -371,8 +371,8 @@ div.csl-indent {
 <p>The QS Statistic shows the degree of seasonality in various components of the seasonal adjustment. For our purposes, the first line is the most interesting. It shows that the QS value of the original series is 168, which comes with a p-value of essentially 0. Since the null hypothesis is no seasonality, this p-value can be read as high evidence the series is seasonal.</p>
 <p>In other words, <code>AirPassengers</code> is a clearly seasonal series, which should not come as a surprise at this point.</p>
 <p>If you encounter a series with a moderate p-value for the first line, you can also consider the 8th line (the second occurrence of <code>qsori</code>) which again calculates the QS statistic for the original series but restricting the view to the most recent 8 years of data. Since often the more recent data is more crucial to seasonal adjust correctly this additional test can help make the decision.</p>
-</section><section id="identifiable-seasonality-test" class="level3 page-columns page-full" data-number="12.0.4"><h3 data-number="12.0.4" class="anchored" data-anchor-id="identifiable-seasonality-test">
-<span class="header-section-number">12.0.4</span> Identifiable Seasonality Test</h3>
+</section><section id="identifiable-seasonality-test" class="level2 page-columns page-full" data-number="12.4"><h2 data-number="12.4" class="anchored" data-anchor-id="identifiable-seasonality-test">
+<span class="header-section-number">12.4</span> Identifiable Seasonality Test</h2>
 <p>A second test for seasonality is the Identifiable Seasonality Test. It is only available in X11.</p>
 <p>According to <span class="citation" data-cites="ONS07">UK Office for National Statistics (<a href="#ref-ONS07" role="doc-biblioref">2007</a>)</span>, a value lower than 1.150 (monthly series) or lower than 0.900 (quarterly series) indicates that seasonality is clearly present.</p>
 <div class="no-row-height column-margin column-container"><div id="ref-ONS07" class="csl-entry" role="listitem">
@@ -390,8 +390,8 @@ UK Office for National Statistics. 2007. <em>Guide to Seasonal Adjustment with x
 <span><span class="co">#&gt;         "yes"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The M7 value is way below the critical values. Accordingly, the Identifiable Seasonality Test indicates seasonality in the series.</p>
-</section><section id="case-study" class="level3" data-number="12.0.5"><h3 data-number="12.0.5" class="anchored" data-anchor-id="case-study">
-<span class="header-section-number">12.0.5</span> Case Study</h3>
+</section><section id="case-study" class="level2" data-number="12.5"><h2 data-number="12.5" class="anchored" data-anchor-id="case-study">
+<span class="header-section-number">12.5</span> Case Study</h2>
 <p>Consider the following less clear-cut series:</p>
 <div class="cell">
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/tsbox/">tsbox</a></span><span class="op">)</span></span>
@@ -500,8 +500,8 @@ UK Office for National Statistics. 2007. <em>Guide to Seasonal Adjustment with x
 <span><span class="co">#&gt; f2.idseasonal </span></span>
 <span><span class="co">#&gt;          "no"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section><section id="f-test-for-seasonality" class="level2" data-number="12.1"><h2 data-number="12.1" class="anchored" data-anchor-id="f-test-for-seasonality">
-<span class="header-section-number">12.1</span> F-test for seasonality</h2>
+</section><section id="f-test-for-seasonality" class="level2" data-number="12.6"><h2 data-number="12.6" class="anchored" data-anchor-id="f-test-for-seasonality">
+<span class="header-section-number">12.6</span> F-test for seasonality</h2>
 <p>Another simple yet effective test for seasonality is to include seasonal regressor in your model and then check if they are significant.</p>
 <div class="cell">
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span></span>
