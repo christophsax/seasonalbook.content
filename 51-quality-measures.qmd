@@ -8,49 +8,49 @@ status("polishing")  # drafting, polishing, complete
 ```
 
 What makes a good seasonal adjustment?
-Different users will have varying definitions of 'quality' based on their specific needs and the audiences they serve. For example, a federal statistical agency, who is concerned about the users of their seasonal adjustments, may have very different definition of quality compared with a single analyst who is interested in only long-term trend.
+Different users will have varying definitions of 'quality' based on their specific needs and the audiences they serve.
+For example, a federal statistical agency, who is concerned about the users of their seasonal adjustments, may have very different definition of quality compared with a single analyst who is interested in only long-term trend.
 
-Regardless of the end goal, some criteria are valid most of the time. For example, a good seasonal adjustment should eliminate residual seasonality and calendar effects, exhibit stability and smoothness, and have no significant trading day effects.
+Regardless of the end goal, some criteria are valid most of the time.
+**A good seasonal adjustment should, most importantly, have no residual seasonality.** It should also, be free of calendar effects, exhibit stability and smoothness, and have no significant trading day effects.
 
 This chapter will be broken up into relevant pieces that construct a good seasonal adjustment.
 Yet, it is the sum of these parts that ultimately comprise a quality adjustment and it is often difficult to completely break them up in a vacuum.
 
-
 ## Summary Statistics
 
-The `summary` of the model gives a glance of a seasonal adjustment process and is a good starting point for the evaluation wheter a medel is good or bad:
+The `summary` of the model gives a glance of a seasonal adjustment process and is a good starting point for the evaluation whether a model is good or bad:
 
-``` {r}
+```{r}
 m <- seas(AirPassengers)
 summary(m)
 ```
-
 
 The summary gives an overview of the adjustment model and provides diagnostics - we briefly went through its elements in @sec-getting-started.
 
 In the lower part, the summary of the adjustment model shows various quality measures:
 
-- The AICc and BIC information criterion (we use them for model comparison)
+-   The AICc and BIC information criterion (we use them for model comparison)
 
 As well as the following statistics:
 
-- the QS Statistic (do we have seasonality in the final series?),
-- the Box-Ljung (do we auto-correlation in the residuals? Is our ARIMA model appropriate?),
-- and the Shapiro statistic (are the residuals normally-distributed? Is our ARIMA model appropriate?).
+-   the QS Statistic (do we have seasonality in the final series?),
+-   the Box-Ljung (do we auto-correlation in the residuals? Is our ARIMA model appropriate?),
+-   and the Shapiro statistic (are the residuals normally-distributed? Is our ARIMA model appropriate?).
 
 None of the three statistics shows any significance (indicated by one or several stars), which is a good sign.
 By now we know that `AirPassengers` is a series that is easy to adjust and that the automated procedures of X-13 work well on this series, so this should not come as a surprise.
 
-We will already discussed the role of the information criterions and the statistics in more detail below.
+We will already discussed the role of information criterion and the statistics in more detail below.
 Usually, it makes sense to look at the statics if the summary indicates significance on any of them.
 
-In addition, looking the estimated seasonal component gives you a good understanding on what actually happened during seassonal adjstument. We wills start with visually inspecting the seasonal component of a seasonal adjusment model.
-
-
+In addition, looking the estimated seasonal component gives you a good understanding on what actually happened during seasonal adjustment.
+We will start with visually inspecting the seasonal component of a seasonal adjustment model.
 
 ## Residual Seasonality
 
-The QS statistic in the `summary` has not shown any significance, meaning the seasonally adjusted series show no seasonality. This is closely related to the concept of residual seasonality.
+The QS statistic in the `summary` has not shown any significance, meaning the seasonally adjusted series show no seasonality.
+This is closely related to the concept of residual seasonality.
 Residual seasonality plays a crucial role in determining the quality of a seasonal adjustment.
 
 Residual seasonality refers to the presence of remaining seasonal patterns or fluctuations in the seasonally adjusted series or its residuals.
@@ -59,15 +59,18 @@ If residual seasonality is present in the adjusted series, it can lead to biased
 
 It implies that there are still systematic patterns or cycles left in the data, which can hinder accurate interpretation and decision-making.
 There are many ways to test for residual seasonality.
+Essentially, this mimics what we learned in @sec-presence-of-seasonality but now applied to the final seasonally adjusted series.
+
 Three prominent ones are:
 
 -   The QS-statistic,
 -   Visual inspection of the spectrum,
 -   or an F-test for residual seasonality
 
+Additionally, (Findley, Lytras and Mcelroy 2017) find the  most diagnostics must be applied to a subspan of the seasonally adjusted series for best residual seasonality detection. 
+Keep this in mind when doing any analysis of your final seasonal adjustment. 
 
 <!-- (I THINK THIS IS A GOOD PLACE TO ADD A REFERENCE TABLE THAT LISTS THESE THREE METHODS ALONG WITH PROS, CONS, IMMEDIATE INTERPRETATIONS. I THINK MANY READERS WILL JUST WANT TO KNOW HOW TO IDENTIFY RESIDUAL SEASONALITY AND MATCH UP A TEST WITH THEIR SKILL-SET AND THEN SEE HOW TO APPLY IT) -->
-
 
 ### QS statistic
 
@@ -110,8 +113,8 @@ The top 7 rows correspond to the QS statistic
 The next seven rows are simply the exact same statistics calculated on a (possibly) shorter span of the data.
 The default span used for the second 7 QS statistics is set to be the same as the spectrum uses, 96 observations or 8 years in a monthly series.
 
-The value shown in the summary output of the model correspond to the 4th row. If this value does not show any significance, there is usually no significance in the QS statistic of the irregular series.
-
+The value shown in the summary output of the model correspond to the 4th row.
+If this value does not show any significance, there is usually no significance in the QS statistic of the irregular series.
 
 ### Frequency Domain (optional): Spectrum
 
@@ -167,11 +170,19 @@ Always try to eliminate peaks at 1/12, 2/12, 3/12, 4/12, or TD 0.348 but be awar
 When employing X-11 seasonal adjustment, it is crucial to consider that peaks observed in the spectrum of the seasonally adjusted series or irregular component, these are more significance than peaks in the spectrum of the model residuals.
 In the case of indirect adjustments, it is advisable to prioritize the analysis of the seasonally adjusted series.
 
-
-
-
 ## Model Appropriateness
 
+Often a poor seasonal adjustment might be due to a poor fitting regARIMA model.
+The converse is not always true and does not always need to be rectified if the resulting seasonal adjustment is free of residual seasonality and passes other diagnostic test. 
+Some diagnostics that can be used to test your regARIMA model are:
+
+- t-tests on model coefficients (reported in the summary)
+- Normality of residuals (reported in the summary as `Shapiro`)
+- Sample autocorrelations and partial autocorrelations
+- The Ljung-Box Q statistic
+- A spectrum plot of regARIMA residuals 
+
+```{=html}
 <!--
 
 Box Ljung, Shapiro, AIC
@@ -184,8 +195,7 @@ names(udg(m))
 
 Box.test(resid(m), lag = 24, type = "Ljung")
  -->
-<!-- TODO  -->
-
+```
 
 ## Stability and smoothness
 
@@ -201,7 +211,6 @@ This is discussed in the following subsection.
 
 Secondly, in the following chapter, we will discuss the history spec and revisions.
 
-
 ### Monthplot
 
 Visually inspecting the seasonal component makes sense almost any adjusmten process.
@@ -211,12 +220,14 @@ We already looked at the `monthplot` function in @sec-transform.
 monthplot(m)
 ```
 
-The plot organizes the data by month. Observing the January (`J`) data, the blue bars represent the evolution of the detrended series from 1949 through 1960. The red bar shows the average seasonal component across these years, while the smooth red line indicates the seasonal component as calculated by the model.
+The plot organizes the data by month.
+Observing the January (`J`) data, the blue bars represent the evolution of the detrended series from 1949 through 1960.
+The red bar shows the average seasonal component across these years, while the smooth red line indicates the seasonal component as calculated by the model.
 
-The plot reveals a seasonal pattern where passenger numbers increase during summer months and decrease in winter. Over time, the intensity of the seasonal factors evolves, with the summer peak intensifying and the February and March peak diminishing.
+The plot reveals a seasonal pattern where passenger numbers increase during summer months and decrease in winter.
+Over time, the intensity of the seasonal factors evolves, with the summer peak intensifying and the February and March peak diminishing.
 
 Since the red lines are relatively smooth, the seasonal component is stable and predictable, as indicative for a good seasonal adjustment.
-
 
 ### Sliding spans
 
@@ -248,7 +259,7 @@ The 0.03 on the right hand side comes from the default cutoff.
 Some of the other defaults are as follows
 
 | Series                                          | Default cutoff | spec option     |
-|----------------------------------------|----------------|----------------|
+|-------------------------------------|------------------|------------------|
 | Seasonal factors and seasonally adjusted series | 3%             | `cutseas = 3.0` |
 | month-to-month and year-to-year change          | 3%             | `cutchng = 3.0` |
 | trading day factors                             | 2%             | `cuttd = 2.0`   |
@@ -262,17 +273,22 @@ These months are typically acknowledged by all data users as potentially trouble
 The sliding spans output is instrumental in identifying such concentrations, making it effortless to spot these patterns.
 
 ```{r}
-m <- seas(AirPassengers, 
-          slidingspans.numspans = 4
-)
+m <- seas(AirPassengers,
+          slidingspans.numspans = 4)
 # Seasonal Factors - Percentage of months flagged as unstable
 SF <- udg(m, "s2.a.per")
-row.names(SF) <- c("Number of months flagged", "Total number of months", "Percent")
+row.names(SF) <-
+  c("Number of months flagged", 
+    "Total number of months", 
+    "Percent")
 colnames(SF) <- "seasonal factors"
 knitr::kable(SF)
 # Month-to-Month Changes in SA Series - Percentage of months flagged as unstable
 M2M <- udg(m, "s2.d.per")
-row.names(M2M) <- c("Number of months flagged", "Total number of months", "Percent")
+row.names(M2M) <-
+  c("Number of months flagged", 
+    "Total number of months", 
+    "Percent")
 colnames(M2M) <- "Month-to-Month Changes in SA Series"
 knitr::kable(M2M)
 ```
@@ -281,15 +297,28 @@ Let's return to our example where we intentionally make a poor seasonal adjustme
 Now we need to take a log transform which will certainly improve the results from the prior run.
 
 ```{r}
-m <- seas(AirPassengers, transform.function = "log", x11 = "", x11.seasonalma = 'stable', slidingspans.numspans = 4)
+m <-
+  seas(
+    AirPassengers,
+    transform.function = "log",
+    x11 = "",
+    x11.seasonalma = 'stable',
+    slidingspans.numspans = 4
+  )
 # Seasonal Factors - Percentage of months flagged as unstable
 SF <- udg(m, "s2.a.per")
-row.names(SF) <- c("Number of months flagged", "Total number of months", "Percent")
+row.names(SF) <-
+  c("Number of months flagged", 
+    "Total number of months", 
+    "Percent")
 colnames(SF) <- "seasonal factors"
 knitr::kable(SF)
 # Month-to-Month Changes in SA Series - Percentage of months flagged as unstable
 M2M <- udg(m, "s2.d.per")
-row.names(M2M) <- c("Number of months flagged", "Total number of months", "Percent")
+row.names(M2M) <-
+  c("Number of months flagged", 
+    "Total number of months", 
+    "Percent")
 colnames(M2M) <- "Month-to-Month Changes in SA Series"
 knitr::kable(M2M)
 ```
@@ -298,20 +327,30 @@ We see the A(%) value of 16.667 falls squarely in the problematic range.
 If we were to lower the cutoff threshold we could expect to get even more values being flagged yielding a higher percentage.
 
 ```{r}
-m <- seas(AirPassengers, transform.function = "log", x11 = "", x11.seasonalma = 'stable', slidingspans.numspans = 4, slidingspans.cutseas = 2.0)
+m <-
+  seas(
+    AirPassengers,
+    transform.function = "log",
+    x11 = "",
+    x11.seasonalma = 'stable',
+    slidingspans.numspans = 4,
+    slidingspans.cutseas = 2.0
+  )
 # Seasonal Factors - Percentage of months flagged as unstable
 SF <- udg(m, "s2.a.per")
-row.names(SF) <- c("Number of months flagged", "Total number of months", "Percent")
+row.names(SF) <-
+  c("Number of months flagged", "Total number of months", "Percent")
 colnames(SF) <- "seasonal factors"
 knitr::kable(SF)
 # Month-to-Month Changes in SA Series - Percentage of months flagged as unstable
 M2M <- udg(m, "s2.d.per")
-row.names(M2M) <- c("Number of months flagged", "Total number of months", "Percent")
+row.names(M2M) <-
+  c("Number of months flagged", "Total number of months", "Percent")
 colnames(M2M) <- "Month-to-Month Changes in SA Series"
 knitr::kable(M2M)
 ```
 
-We can also examine the series provied to us
+We can also examine the series provided to us
 
 ```{r, echo=FALSE}
 old <- ts(c(4834.69696276515, 4849.95279551784, 4891.60651111975, 4594.53218152862, 4508.04739195123, 4428.22147823101, 4155.91263906551, 4277.27732294852, 4314.72714684268, 4357.95842152047, 4525.86400420145, 4235.01307399616, 4234.31347048639, 4331.24968071644, 4269.96397372461, 4124.65109334579, 4036.0495661422, 4444.17945910393, 4481.18280071285, 4560.22493419428, 4288.37787646166, 4542.58828313334, 4187.50575635486, 4477.30867504387, 4404.73759196123, 4735.5572542894, 4608.92570298092, 4029.9443205093, 3665.21379380021, 3929.81159617718, 3874.39444792532, 3672.76153249019, 3621.76139566453, 3586.0688291707, 3539.10636878989, 3296.01063087786, 2867.82749974982, 3132.456244459, 3374.55438380709, 3375.09878530561, 3541.68391197462, 3143.80628657862, 3409.20463221518, 3334.82321270204, 3305.82329779194, 3651.9754084428, 3751.93452300575, 3415.12901433583, 3336.02758998745, 3795.41450201046, 4013.55178626454, 3645.97122999431, 3556.83471985917, 4184.60568792191, 4522.36464754394, 3380.32806845944, 3113.67904992775, 3518.38743103085, 3680.08532367028, 3186.7567219905, 3320.61091971433, 3485.86161873198, 3427.71910340804, 3359.47011807825, 3291.49417084242, 3339.6533659906, 3356.70750775719, 3311.03270788708, 3421.62937737094, 3619.78785274183, 3728.11164869981, 3568.83734758082, 3686.52261186333, 3654.17911110257, 3559.35198444409, 3422.43572235506, 2954.37897070737, 3015.25056639864, 3019.38068843909, 2968.92747841368, 2775.54519919915, 2861.0289396906, 2550.45300589867, 2327.07089479867, 2132.52846235601, 2385.88709598878, 2178.03750309247, 1898.1855342073, 2132.53176396644, 2476.21252299127, 2623.87767699292, 2416.63792466076, 2638.74213991235, 3085.1718593452, 2943.13771994699, 2600.34720843909, 2728.38253443839, 2879.55584743557, 3209.27333879276, 2882.93806149548, 2718.68273555635, 2601.11864981355, 2614.49771755992, 2495.57704172867, 2442.70662519753, 2409.76528414241, 2548.17912864698, 2168.13792822606, 2252.15220171482, 2470.70895832381, 2470.01465466505), start = c(1995, 1), frequency = 4)
@@ -345,3 +384,10 @@ row.names(M2M) <- c("Number of months flagged", "Total number of months", "Perce
 colnames(M2M) <- c("old_sa", "auto_sa")
 knitr::kable(M2M, caption = "Month-to-Month Changes in SA Series")
 ```
+
+Some overall guidance for using modifications to a failing sliding span diagnostic can be summarized as follows:
+
+- Try raising X-11 sigma limits 
+- Look at regARIMA model
+- Don't use sliding spans to choose seasonal filters as they tend to favor longer filters. 
+
