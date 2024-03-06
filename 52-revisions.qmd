@@ -3,6 +3,7 @@ output: html_document
 editor_options: 
   chunk_output_type: console
 ---
+
 ## Revisions {#sec-revisions}
 
 ```{r}
@@ -17,7 +18,7 @@ Their role is multifaceted.
 
 1.  Revisions can tell us about the stability of our adjustment process. Hence, they are in some sense a diagnostic tool to help us decided between two possible models or filters.
 2.  Revisions have the additional role that most users of seasonal adjusted data don't like them. It can be frustrating to get a seasonally adjusted value one month, only to have it change the following month.
-3. *We favor the method that results in smaller revisions*, provided that the final adjustments from different options or methods are deemed acceptable, with no residual seasonal or calendar effects.
+3.  *We favor the method that results in smaller revisions*, provided that the final adjustments from different options or methods are deemed acceptable, with no residual seasonal or calendar effects.
 
 We will try to address the first completely.
 The second and third are more delicate issues that usually require a policy decision and will vary person-to-person and agency-to-agency.
@@ -65,9 +66,9 @@ We can look at any of the following estimates produced by the program
 | `td`                | trading day regression coefficients                        |
 
 ```{r, echo=FALSE}
-library(tidyverse)
-library(tsbox)
-library(seasonal)
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(tsbox))
+suppressPackageStartupMessages(library(seasonal))
 
 old <- ts(c(4834.69696276515, 4849.95279551784, 4891.60651111975, 4594.53218152862, 4508.04739195123, 4428.22147823101, 4155.91263906551, 4277.27732294852, 4314.72714684268, 4357.95842152047, 4525.86400420145, 4235.01307399616, 4234.31347048639, 4331.24968071644, 4269.96397372461, 4124.65109334579, 4036.0495661422, 4444.17945910393, 4481.18280071285, 4560.22493419428, 4288.37787646166, 4542.58828313334, 4187.50575635486, 4477.30867504387, 4404.73759196123, 4735.5572542894, 4608.92570298092, 4029.9443205093, 3665.21379380021, 3929.81159617718, 3874.39444792532, 3672.76153249019, 3621.76139566453, 3586.0688291707, 3539.10636878989, 3296.01063087786, 2867.82749974982, 3132.456244459, 3374.55438380709, 3375.09878530561, 3541.68391197462, 3143.80628657862, 3409.20463221518, 3334.82321270204, 3305.82329779194, 3651.9754084428, 3751.93452300575, 3415.12901433583, 3336.02758998745, 3795.41450201046, 4013.55178626454, 3645.97122999431, 3556.83471985917, 4184.60568792191, 4522.36464754394, 3380.32806845944, 3113.67904992775, 3518.38743103085, 3680.08532367028, 3186.7567219905, 3320.61091971433, 3485.86161873198, 3427.71910340804, 3359.47011807825, 3291.49417084242, 3339.6533659906, 3356.70750775719, 3311.03270788708, 3421.62937737094, 3619.78785274183, 3728.11164869981, 3568.83734758082, 3686.52261186333, 3654.17911110257, 3559.35198444409, 3422.43572235506, 2954.37897070737, 3015.25056639864, 3019.38068843909, 2968.92747841368, 2775.54519919915, 2861.0289396906, 2550.45300589867, 2327.07089479867, 2132.52846235601, 2385.88709598878, 2178.03750309247, 1898.1855342073, 2132.53176396644, 2476.21252299127, 2623.87767699292, 2416.63792466076, 2638.74213991235, 3085.1718593452, 2943.13771994699, 2600.34720843909, 2728.38253443839, 2879.55584743557, 3209.27333879276, 2882.93806149548, 2718.68273555635, 2601.11864981355, 2614.49771755992, 2495.57704172867, 2442.70662519753, 2409.76528414241, 2548.17912864698, 2168.13792822606, 2252.15220171482, 2470.70895832381, 2470.01465466505), start = c(1995, 1), frequency = 4)
 new <- ts(c(4834.69696276515, 4849.95279551784, 4891.60651111975, 4594.53218152862, 4508.04739195123, 4428.22147823101, 4155.91263906551, 4277.27732294852, 4314.72714684268, 4357.95842152047, 4525.86400420145, 4235.01307399616, 4234.31347048639, 4331.24968071644, 4269.96397372461, 4124.65109334579, 4036.0495661422, 4444.17945910393, 4481.18280071285, 4560.22493419428, 4288.37787646166, 4542.58828313334, 4187.50575635486, 4477.30867504387, 4404.73759196123, 4735.5572542894, 4608.92570298092, 4029.9443205093, 3665.21379380021, 3929.81159617718, 3874.39444792532, 3672.76153249019, 3621.76139566453, 3586.0688291707, 3539.10636878989, 3296.01063087786, 2867.82749974982, 3132.456244459, 3374.55438380709, 3375.09878530561, 3541.68391197462, 3143.80628657862, 3409.20463221518, 3334.82321270204, 3305.82329779194, 3651.9754084428, 3751.93452300575, 3415.12901433583, 3336.02758998745, 3795.41450201046, 4013.55178626454, 3645.97122999431, 3556.83471985917, 4184.60568792191, 4522.36464754394, 3380.32806845944, 3113.67904992775, 3518.38743103085, 3680.08532367028, 3186.7567219905, 3320.61091971433, 3485.86161873198, 3427.71910340804, 3359.47011807825, 3291.49417084242, 3339.6533659906, 3356.70750775719, 3311.03270788708, 3421.62937737094, 3619.78785274183, 3728.11164869981, 3568.83734758082, 3686.52261186333, 3654.17911110257, 3559.35198444409, 3422.43572235506, 2954.37897070737, 3015.25056639864, 3019.38068843909, 2968.92747841368, 2775.54519919915, 2861.0289396906, 2550.45300589867, 2327.07089479867, 2132.52846235601, 2385.88709598878, 2178.03750309247, 1898.1855342073, 2132.53176396644, 2476.21252299127, 2623.87767699292, 2416.63792466076, 2638.74213991235, 3085.1718593452, 2943.13771994699, 2600.34720843909, 2728.38253443839, 2879.55584743557, 3209.27333879276, 2882.93806149548, 2718.68273555635, 2601.11864981355, 2614.49771755992, 2495.57704172867, 2442.70662519753, 2409.76528414241, 2548.17912864698, 2168.13792822606, 2252.15220171482, 2470.70895832382, 2436.58349286672, 2114.42931528768), start = c(1995, 1), frequency = 4)
@@ -100,25 +101,24 @@ auto_sa <- seas(
 # out(auto_sa)
 ```
 
-Note, as the history run progresses towards its end, the gap between the concurrent series and the final series diminishes, leading to a decrease in the average revision across years. 
+Note, as the history run progresses towards its end, the gap between the concurrent series and the final series diminishes, leading to a decrease in the average revision across years.
 Keep this in mind when looking at history output:
 
-- No specific pass/fail thresholds are recommended
-- Look for large differences 
-- Don't use for selecting seasonal filters as the diagnostic tends to prefer longer filters
-
+-   No specific pass/fail thresholds are recommended
+-   Look for large differences
+-   Don't use for selecting seasonal filters as the diagnostic tends to prefer longer filters
 
 ### Using History Spec to compare forecasts
 
 The outline of what happenes when `history.estimates = c("fcst")` is added to a seasonal adjustment run:
 
-- Truncate the series at time point $t_0$.
-- Apply the regARIMA model and generate forecasts for $h$ steps ahead.
-- Generate forecasts for one step ahead and one year ahead.
-- Include the data point at time point $(t_0 + 1)$.
-- Repeat the model fitting process and forecasting.
+-   Truncate the series at time point $t_0$.
+-   Apply the regARIMA model and generate forecasts for $h$ steps ahead.
+-   Generate forecasts for one step ahead and one year ahead.
+-   Include the data point at time point $(t_0 + 1)$.
+-   Repeat the model fitting process and forecasting.
 
-To make a decision between two model we can apply the following logic to our differences in sum of square forecast error plot. 
+To make a decision between two model we can apply the following logic to our differences in sum of square forecast error plot.
 
 $$
 SSE^{(1, 2)}_{h, N}
@@ -130,18 +130,17 @@ SSE^{(1, 2)}_{h, N}
 \right]
 $$
 
-- For a persistently decreasing value (negative slope) with increasing N, prefer Model 1.
-- If there are persistently better forecasts from Model 1 (consistently summing negative values, indicating smaller errors), prefer Model 1.
-- In the case of a stair-stepping down pattern, prefer Model 1.
-- For a persistently increasing value (positive slope) with increasing N, prefer Model 2.
-- If there is a stair-stepping up pattern, prefer Model 2.
+-   For a persistently decreasing value (negative slope) with increasing N, prefer Model 1.
+-   If there are persistently better forecasts from Model 1 (consistently summing negative values, indicating smaller errors), prefer Model 1.
+-   In the case of a stair-stepping down pattern, prefer Model 1.
+-   For a persistently increasing value (positive slope) with increasing N, prefer Model 2.
+-   If there is a stair-stepping up pattern, prefer Model 2.
 
 Each line on the plot is a seperate comparison of two models.
 
-- If one line is inconclusive, the other line can indicate model preference
-- Weight seasonal forecasts more
-- Weight most-recent result more
-
+-   If one line is inconclusive, the other line can indicate model preference
+-   Weight seasonal forecasts more
+-   Weight most-recent result more
 
 ```{r}
 old_sa <- seas(
@@ -194,12 +193,12 @@ However, it is important to weigh this tendency against other relevant factors a
 
 ### What to do with Revisions
 
-Revisions occur due to various factors including changes in the original series, late respondents, historical corrections, method or classification/definition changes in the original series, adding new observations, and the introduction of new values. These revisions can result in adjustments to model parameters, forecasts, potentially leading to changes in extreme values, as well as adjustments in seasonal and trend filter values.
+Revisions occur due to various factors including changes in the original series, late respondents, historical corrections, method or classification/definition changes in the original series, adding new observations, and the introduction of new values.
+These revisions can result in adjustments to model parameters, forecasts, potentially leading to changes in extreme values, as well as adjustments in seasonal and trend filter values.
 
-If you data itself changes then a suggestion is to revise one or two previous values beyond where the original series has changed. 
+If you data itself changes then a suggestion is to revise one or two previous values beyond where the original series has changed.
 You can also revise the same month/quarter a year ago.
 
-If your data has remained constant and the only source of revision is seasonal adjustment, it is advised to set a policy for within year release and any annual review of your procedure and stick with it. 
+If your data has remained constant and the only source of revision is seasonal adjustment, it is advised to set a policy for within year release and any annual review of your procedure and stick with it.
 For example, only revise the past 2 observations when a new value becomes available.
 During annual review revise the last full year.
-
