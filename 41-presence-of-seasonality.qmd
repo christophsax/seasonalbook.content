@@ -3,7 +3,7 @@ output: html_document
 editor_options: 
   chunk_output_type: console
 ---
-## Presence of seasonality {#sec-presence-of-seasonality}
+# Presence of seasonality {#sec-presence-of-seasonality}
 
 ```{r}
 #| results: "asis"
@@ -22,7 +22,7 @@ Fortunately, X-13 contains a few tests that help users decide if a series is sea
 Before applying X-13, deciding if the series is seasonal may be necessary.
 This section discusses how to decide whether a series should be adjusted.
 
-### Basic Principle
+## Basic Principle
 
 In general, adjusting a non-seasonal series is less of a problem than not adjusting a seasonal series.
 So, unless you have good reasons to believe that a series is not-seasonal, adjust it.
@@ -32,7 +32,7 @@ Of course the final answer is never so simple.
 For example, the International Monetary Fund (IMF) in their [Quarterly National Accounts Manual](https://www.imf.org/external/pubs/ft/qna/pdf/2017/chapter7.pdf) about seasonal adjustment says, "A series should be seasonally adjusted only when there is evidence of identifiable seasonality. Series with no seasonality or too unstable seasonality should not be seasonally adjusted." 
 The IMF is attempting to maintain accounting relationship which are of utmost important to their seasonal adjustment policies. 
 
-### Available Tests
+## Available Tests
 
 To help you to make a good decision, X-13 offers a few formal checks:
 
@@ -50,7 +50,7 @@ Which tests are preferable, and how should a user decide if the tests are not al
 Often, this will only happen with marginal cases and hence we suggest following our guiding principle and adjusting your series. 
 More often than not the tests will provide enough evidence to make help make an informed decision about whether a series is seasonal or not. 
 
-### QS Test
+## QS Test
 
 The QS test has a few advantages compared to the IDS statistics and is generally preferable.
 It is available both with X11 and SEATS.
@@ -72,7 +72,7 @@ In other words, `AirPassengers` is a clearly seasonal series, which should not c
 If you encounter a series with a moderate p-value for the first line, you can also consider the 8th line (the second occurrence of `qsori`) which again calculates the QS statistic for the original series but restricting the view to the most recent 8 years of data.
 Since often the more recent data is more crucial to seasonal adjust correctly this additional test can help make the decision. 
 
-### Identifiable Seasonality Test
+## Identifiable Seasonality Test
 
 A second test for seasonality is the Identifiable Seasonality Test.
 It is only available in X11.
@@ -95,7 +95,7 @@ udg(seas(AirPassengers, x11 = list()), "f2.idseasonal")
 The M7 value is way below the critical values.
 Accordingly, the Identifiable Seasonality Test indicates seasonality in the series.
 
-### Case Study
+## Case Study
 
 Consider the following less clear-cut series:
 
