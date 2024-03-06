@@ -4,7 +4,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-## Revisions {#sec-revisions}
+# Revisions {#sec-revisions}
 
 ```{r}
 #| results: "asis"
@@ -44,7 +44,7 @@ This avoids issues with changing signs.
 
 The analogous quantities are defined for trend and seasonally adjusted series.
 
-### History Spec
+## History Spec
 
 The program conducts multiple runs, iterating over a sequence of expanding intervals, effectively simulating the passage of time.
 Our preference lies with the approach that generates smaller revisions, assuming the final adjustments resulting from different options or methods are equally satisfactory without any remaining seasonal or calendar effects.
@@ -108,7 +108,7 @@ Keep this in mind when looking at history output:
 -   Look for large differences
 -   Don't use for selecting seasonal filters as the diagnostic tends to prefer longer filters
 
-### Using History Spec to compare forecasts
+## Using History Spec to compare forecasts
 
 The outline of what happenes when `history.estimates = c("fcst")` is added to a seasonal adjustment run:
 
@@ -191,7 +191,7 @@ Other factors and considerations should be taken into account to make an informe
 It is worth noting that the diagnostic tends to favor longer filters, implying that the analysis tends to lean towards recommending seasonal filters with larger spans.
 However, it is important to weigh this tendency against other relevant factors and requirements specific to the context at hand to make the most appropriate choice.
 
-### What to do with Revisions
+## What to do with Revisions
 
 Revisions occur due to various factors including changes in the original series, late respondents, historical corrections, method or classification/definition changes in the original series, adding new observations, and the introduction of new values.
 These revisions can result in adjustments to model parameters, forecasts, potentially leading to changes in extreme values, as well as adjustments in seasonal and trend filter values.
