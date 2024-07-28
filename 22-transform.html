@@ -452,45 +452,42 @@ out(m)
 <span class="header-section-number">4.4</span> Transform options</h2>
 
 <!-- CHS not investing time on this, we previously did a scraping of the X-13 handbook and Andrea could derive some functionality to include a table with all options for each spec. -->
-<p>The <code>transform</code> spec controls these options. Some primary options within this spec are</p>
 <table class="table">
+<caption>Frequently used spec arguments in the <code>transform</code> spec</caption>
 <colgroup>
-<col style="width: 23%">
-<col style="width: 23%">
-<col style="width: 28%">
-<col style="width: 23%">
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
 </colgroup>
 <thead><tr class="header">
-<th>Spec option</th>
-<th>Use</th>
+<th>Arguments</th>
+<th>Description</th>
 <th>Example values</th>
-<th>default</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
 <td><code>transform.function</code></td>
 <td>Transform function</td>
 <td>
-<code>none</code>, <code>log</code>, <code>auto</code>
+<strong><code>none</code></strong>, <code>log</code>, <code>auto</code>
 </td>
-<td><code>none</code></td>
 </tr>
 <tr class="even">
 <td><code>transform.aicdiff</code></td>
 <td>adjust tolerance of AIC test for log transform</td>
 <td>
-<code>0.0</code>, <code>3.0</code>, <code>-4.5</code>
+<strong><code>-2</code></strong>, <code>0</code>, <code>3</code>
 </td>
-<td><code>-2.0</code></td>
 </tr>
 <tr class="odd">
 <td><code>xtrans</code></td>
 <td>Prior adjustment factor</td>
-<td><code>seas(m, xtrans = y)</code></td>
-<td><code>NULL</code></td>
+<td></td>
 </tr>
 </tbody>
-</table></section><section id="case-study-airpassengers" class="level2" data-number="4.5"><h2 data-number="4.5" class="anchored" data-anchor-id="case-study-airpassengers">
+</table>
+<p>The <code>transform</code> spec controls these options. Some primary options within this spec are</p>
+</section><section id="case-study-airpassengers" class="level2" data-number="4.5"><h2 data-number="4.5" class="anchored" data-anchor-id="case-study-airpassengers">
 <span class="header-section-number">4.5</span> Case Study: <code>AirPassengers</code>
 </h2>
 <!--
@@ -505,7 +502,7 @@ Should AirPassengers always be the text example, and 'Case Study' be left for mo
 <div class="cell">
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/monthplot.html">monthplot</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="22-transform_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="864"></p>
+<p><img src="22-transform_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="864"></p>
 </div>
 </div>
 <p>Like the R base <code><a href="https://rdrr.io/r/stats/monthplot.html">monthplot()</a></code> function that can be applied on any time series (also on quarterly time series!), this groups time series data by months. If you look at the January (<code>J</code>), entry, the blue bars show the evolution of the detrended data from 1949 to 1960. The red bar shows the average seasonal factor over these years. The smooth red lines show the seasonal factors as estimated by the model.</p>
@@ -519,7 +516,7 @@ Should AirPassengers always be the text example, and 'Case Study' be left for mo
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">seasonalbook</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">grocery</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="22-transform_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="864"></p>
+<p><img src="22-transform_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="864"></p>
 </div>
 </div>
 <p>Visual inspection of the series shows no immediate reason to think we need to perform a logarithmic transform. There is possible seasonal heteroskadasity which could be mitigated by taking logs. Perform an X-11 adjustment with all the defaults of <em>seasonal</em></p>

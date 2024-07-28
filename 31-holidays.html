@@ -508,7 +508,7 @@ How to read data from FRED into R
 </div>
 <div class="callout-body-container callout-body">
 <p><em>fredr</em> provides access to the <a href="https://fred.stlouisfed.org">Federal Reserve of Economic Data</a> (FRED), provided by the Federal Reserve Bank of St.&nbsp;Louis. To use <em>fredr</em> and the FRED API in general, you must first obtain a FRED API key. Take a look at the <a href="https://cran.r-project.org/web/packages/fredr/vignettes/fredr.html">Documentation</a> for details.</p>
-<p>The core function in this package is <code><a href="https://rdrr.io/pkg/fredr/man/fredr.html">fredr()</a></code>, which fetches observations for a FRED series.</p>
+<p>The core function in this package is <code>fredr()</code>, which fetches observations for a FRED series.</p>
 <p>We can use <code><a href="https://purrr.tidyverse.org/reference/map_dfr.html">purrr::map_dfr()</a></code> to download multiple series at once:</p>
 <div class="cell">
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/sboysel/fredr">fredr</a></span><span class="op">)</span></span>
