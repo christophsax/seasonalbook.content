@@ -153,14 +153,12 @@ In most cirumstances, incorporating external effects in a seasonal adjustment mo
 
 <!-- CHS not investing time on this, we previously did a scraping of the X-13 handbook and Andrea could derive some functionality to include a table with all options for each spec. -->
 
+```{r, results='asis', echo = FALSE}
+specs_tbl(topic = "transform-main", caption = "Frequently used spec arguments in the `transform` spec")
+```
+
 The `transform` spec controls these options.
 Some primary options within this spec are
-
-| Spec option          | Use                                            | Example values        | default |
-|-----------------|-----------------|--------------------|-----------------|
-| `transform.function` | Transform function                             | `none`, `log`, `auto` | `none`  |
-| `transform.aicdiff`  | adjust tolerance of AIC test for log transform | `0.0`, `3.0`, `-4.5`  | `-2.0`  |
-| `xtrans`             | Prior adjustment factor                        | `seas(m, xtrans = y)` | `NULL`  |
 
 ## Case Study: `AirPassengers`
 

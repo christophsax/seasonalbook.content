@@ -109,3 +109,90 @@ append_df <- function(row = NULL,
   }
   ans
 }
+
+
+
+# Spec tables ------------------------------------------------------------------
+
+specs_tbl_raw <- function() {
+  ll <- jsonlite::read_json(file.path("specs", "specs.json"), simplifyVector = TRUE)
+  as_tibble(ll)
+}
+
+backtick <- function(x) {
+  if (is.null(x)) return(x)
+  z <- paste0("`", x, "`")
+  # no empty ``
+  z[nchar(x) == 0] <- x
+  z
+}
+
+collapse <- function(x) {
+  paste(x, collapse = ", ")
+}
+
+bold <- function(x) {
+  if (length(x) == 0) return(0)
+  paste0("**", x, "**")
+}
+
+#' @export
+specs_tbl <- function(topic = NULL, caption = NULL) {
+
+  ans <- specs_tbl_raw()
+
+  if (!is.null(topic)) {
+    ans <-
+      ans |>
+      dplyr::filter(topic %in% !! topic)
+  }
+
+  format_value <- function(value, default) {
+    if (is.null(value)) return("")
+    value <- as.character(value)
+    if (is.null(default)) {
+      default == ""
+    }
+
+    value_bt <- backtick(value)
+    value_bt[value == default] <- bold(value_bt[value == default])
+    collapse(value_bt)
+  }
+
+  purrr::map2_chr(ans$value, ans$default, format_value)
+
+  ans <-
+    ans |>
+    mutate(
+      arg = backtick(arg),
+      descr = descr,
+      value = purrr::map2_chr(value, default, format_value)
+    ) |>
+    dplyr::transmute(
+      Arguments = arg,
+      Description = descr,
+      `Example values` = value
+    )
+
+  ans <- df_to_md(ans)
+
+  # Add the caption if provided
+  if (!is.null(caption)) {
+    ans <- paste0("Table: ", caption, "\n\n", ans)
+  }
+
+  cat(ans)
+
+}
+
+
+df_to_md <- function(data) {
+  headers <- colnames(data)
+  header_row <- paste0("| ", paste(headers, collapse = " | "), " |")
+  separator_row <- paste0("|", paste(rep("---", length(headers)), collapse = "|"), "|")
+  data_rows <- apply(data, 1, function(row) {
+    paste0("| ", paste(row, collapse = " | "), " |")
+  })
+  paste(c(header_row, separator_row, data_rows), collapse = "\n")
+}
+

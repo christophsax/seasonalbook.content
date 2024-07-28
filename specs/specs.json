@@ -1,0 +1,26 @@
+[
+    {
+        "arg": "transform.function",
+        "descr": "Transform function",
+        "value": ["none", "log", "auto"],
+        "example": "seas(AirPassengers, transform.function = \"none\")",
+        "default": "none",
+        "topic": "transform-main"
+    },
+    {
+        "arg": "transform.aicdiff",
+        "descr": "adjust tolerance of AIC test for log transform",
+        "value": [-2.0, 0.0, 3.0],
+        "example": "seas(AirPassengers, transform.aicdiff = 0.0)",
+        "default": -2.0,
+        "topic": "transform-main"
+    },
+    {
+        "arg": "xtrans",
+        "descr": "Prior adjustment factor",
+        "example": "seas(AirPassengers, xtrans = y)",
+        "default": "NULL",
+        "topic": "transform-main"
+    }
+]
+
