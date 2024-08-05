@@ -237,6 +237,26 @@ transformfunction(m2)
 
 ## Exercises
 
-1.  Use *seasonal* to perform an automated seasonal adjustment of `mdeaths`.
+1. **Understanding log transformations:**
 
-2.  Compute `"aictest.trans.aicc.nolog"` and `"aictest.trans.aicc.log"` and compare these values.
+   - Perform a seasonal adjustment on the `AirPassengers` data using the default settings. Plot the results. Which transformation has been applied?
+   - Then, perform the same seasonal adjustment but override the transformation function to be `"none"`. Plot the results.
+   - Compare the plots and describe how the transformation affects the seasonally adjusted series.
+
+2. **Interpreting AICc values:**
+
+   - Perform a seasonal adjustment on the `AirPassengers` data using the default settings.
+   - Use the `udg()` function to access the AICc values for both the log-transformed and the untransformed models. Compare these values and explain why the log transformation was chosen by the automated procedure.
+
+
+3. **Exploring additive and multiplicative models:**
+
+   - Perform a seasonal adjustment on the `AirPassengers` data using both additive and multiplicative models by specifying the appropriate transformation functions.
+   - Use the `monthplot()` function to visualize the seasonal components for both models. Compare the seasonal components and discuss how they differ between the additive and multiplicative models.
+
+
+4. **Deciding on a transformation:**
+
+   - Perform a seasonal adjustment on the `grocery` data using the default settings.
+   - Compute the AICc values for both the log-transformed and the untransformed models using the `udg()` function. Compare these values and explain which transformation would be more appropriate based on the AICc values.
+   - Experiment with changing the `transform.aicdiff` option to see how it affects the transformation choice.

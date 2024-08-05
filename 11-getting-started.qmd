@@ -182,9 +182,25 @@ Revisions
     
 ## Exercises
 
-1. Run the following code:
-```
-m <- seas(unemp)
-plot(m)
-```
-Why is the seasonally adjusted series not entirely smooth?
+1. **Running a basic seasonal adjustment:**
+
+   - Run the following code to perform a seasonal adjustment on the `unemp` dataset and plot the results.
+   - Why is the seasonally adjusted series not entirely smooth? What components are still present in the adjusted series?
+
+2. **Working with `AirPassengers`:**
+
+   - Perform a seasonal adjustment on the `AirPassengers` data using the `seas` function and plot the results.
+   - Describe the seasonal pattern observed in the original series and how it changes in the adjusted series.
+
+3. **Interpreting the summary output:**
+
+   - Run the `summary` function on the seasonal adjustment model `m` from the `AirPassengers` dataset.
+   - Identify and explain the key diagnostics provided in the summary output.
+   - Discuss how these diagnostics help in evaluating the quality of the seasonal adjustment.
+
+4. **Exploring seasonal adjustment with different data:**
+
+   - Load the `seasonal` package and use the `seas` function on a different time series dataset, such as `nottem` (average air temperatures in Nottingham).
+   - Perform a seasonal adjustment on the `nottem` dataset and plot the results.
+   - Discuss any visible patterns and how the seasonal adjustment has altered the original series.
+

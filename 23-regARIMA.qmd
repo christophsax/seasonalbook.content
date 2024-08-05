@@ -319,13 +319,29 @@ As we can see, small changes in outlier identification can have a substantial ef
 
 <!-- Construct a simple user defined regressor to handle specific issue. -->
 
+
 ## Exercises
 
-1.  Use *seasonal* to perform an automated seasonal adjusmtent of `fdeaths`.
+1. **Performing an automated seasonal adjustment:**
 
-2.  Inspect the model: What is the degree of seasonal and non-seasonal differentiation, what are the seasonal and non-seasonal AR and MA orders?
+   - Perform a seasonal adjustment on the `fdeaths` data using the default settings.
+   - Plot the results and summarize the key components of the model.
 
-3.  Use the `static()` function to substitute the automatic procedures in the model call by the choices they made.
+2. **Inspecting model parameters:**
 
-4.  Bonus: re-estimate 1, using R base `arima()` function.
-    Why do the coefficients differ?
+   - Inspect the model chosen for the `fdeaths` dataset.
+   - Identify the degrees of seasonal and non-seasonal differencing.
+   - Determine the seasonal and non-seasonal AR and MA orders.
+
+
+3. **Using the `static()` function:**
+
+   - Use the `static()` function to extract the static version of the automated model chosen for the `fdeaths` dataset.
+   - Replace the automatic procedures in the model call with the static choices made by the automated model.
+
+
+4. **Bonus: re-estimating using base R:**
+
+   - Re-estimate the seasonal adjustment of `fdeaths` using the base R `arima()` function.
+   - Compare the coefficients from the `arima()` function with those from the `seas()` function.
+   - Explain why the coefficients might differ between the two methods.
