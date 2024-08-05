@@ -179,11 +179,11 @@ While `seas()` calls SEATS by default, X11 is often easier to use.
 To perform a seasonal adjustment on `AirPassengers` with X11, we need to activate the `x11` spec.
 
 ```{r}
-m_x11 <- seas(AirPassengers, x11 = "")
+m_x11 <- seas(AirPassengers, x11 = list())
 ```
 
-An empty string `""` tells `seas()` to use the spec without an argument.
-Alternatively, you can also use an empty list, `list()`.
+An empty list `list()` tells `seas()` to use the spec without an argument.
+Alternatively, you can also use an empty string, `""`.
 If more than one mutually exclusive spec is included in `seas()`, specs are overwritten according to the priority rules shown in @tbl-priority-rules
 
 +----------------------+----------------+

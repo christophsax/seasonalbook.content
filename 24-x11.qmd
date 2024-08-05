@@ -17,37 +17,36 @@ library(tsbox)
 
  -->
 ```
-The fundamental task of seasonal adjustment is to decompose a series into its constituent components: a trend, a seasonal component, and an irregular component.
-X-13 offers two main techniques for this task: the X-11 method and SEATS.
-Ultimately, both X-11 and SEATS estimate the components by passing moving average filters over the series.
-In this chapter, we will discuss X-11, one of the two main methods available.
-X-11 is a non-parametric procedure that works by passing predefined moving-average filters over the data.
-SEATS, on the other hand, derives the moving-average filters from the underlying ARIMA model and will be discussed in @sec-seats.
+
+As discussed in @sec-additive-and-multiplicative-adjustment, the primary objective of seasonal adjustment is to break down a time series into its trend, seasonal, and irregular components. X-13 provides two methods for this task: X-11 and SEATS. Both methods estimate these components by applying moving average filters to the series.
+
+In this chapter, we will focus on the X-11 method, a non-parametric procedure that utilizes predefined moving-average filters on the data. SEATS, which will be covered in @sec-seats, derives its filters from the underlying ARIMA model.
 
 ## Basics
 
-As you remember from @sec-additive-and-multiplicative-adjustment, seasonal adjustment decomposes a time series into a trend, a seasonal, and an irregular component.
-Both X-11 and SEATS achieve the decomposition by applying moving average filters over the series.
-In the following, we describe the basic idea behind the seasonal decomposition in X-11.
-If you want to perform a seasonal adjustment in R, run the following:
+Here, we describe the basic idea behind the seasonal decomposition in X-11. To perform a seasonal adjustment in R, you can use the following code:
 
 ```{r}
-m <- seas(AirPassengers, x11 = "")
+m <- seas(AirPassengers, x11 = list())
 summary(m)
 ```
+As we have seen in @sec-overwiew, by providing an empty list, the default SEATS spec is overwritten and X-11 is activated. The line 'X11 adj.' in the summary indicates the use of X-11.
 
-#### Estimating the trend component {.unnumbered}
+X-11 utilizes predefined moving-average filters on the data. It first estimates a trend and a seasonal component, while ensuring unbiased results at the series' margins. It also uses extreme value correction to for more robust results.
 
-X-11 starts by estimating the trend component.
+
+#### Trend component {.unnumbered}
+
+Estimating the trend component is the first step of an X-11 decomposition.
 The trend component is estimated by applying a symmetric moving average over the series.
 Each point in time is averaged using a set number of observations to the left and right of the series.
 Because the window is symmetric, we need the series to be extended by forecasts and backcasts.
 
 Once the trend component is computed, we can subtract it from the original series to compute a *de-trended series*.
 
-#### Estimating the seasonal component {.unnumbered}
+#### Seasonal component {.unnumbered}
 
-To estimate the seasonal component, a *seasonal filter* is applied to the de-trended series.
+To estimate the seasonal component, a seasonal filter is applied to the de-trended series.
 A seasonal filter is a symmetric moving average that is calculated by taking the mean of the same period across several years.
 For instance, the average for January would be computed using all the January values from the time series data, February would use all February values, and so on.
 
@@ -99,12 +98,13 @@ Part D
 :   Final estimation of seasonally adjusted series, seasonal factors, trend, irregular.
     Combined factors incorporate the trading day and moving holiday regression effects estimated in Part A
 
-## R-Fundamentals: A Simple Decomposition {#sec-simple-decomposition}
 
-To deepen our understanding of the X-11 method, we start with a "by-hand" approach in R.
-As a basic trend filter, we trend filter---a 2x12 moving average.
-The weights for this filter are distributed as 1/24, followed by 1/12 for the next 11 points, and then 1/24 again.
-We apply these weights to estimate the trend of the `AirPassengers` series:
+
+## A Simple Decomposition
+
+<span class="tag tag-fundamentals"><i class="fas fa-registered"></i> Fundamentals</span>
+
+To deepen our understanding of the X-11 method, we begin with a manual approach in R. As a basic trend filter, we use a 2x12 moving average. The weights for this filter are distributed as follows: 1/24 for the first and last points, and 1/12 for each of the 11 points in between. We apply these weights to estimate the trend of the `AirPassengers` series:
 
 ```{r x11-trend}
 observed <- AirPassengers
@@ -145,12 +145,14 @@ When using the x11 spec you can change the length of the filter used for the tre
 Additionally, `sigmalim` will control the amount of extreme value adjustment that is done during the seasonal adjustment.
  -->
 ```
-## Frequency Domain (optional)
 
-We present the following as optional reading material.
-For those interesting in simply performing seasonal adjustment, an understanding of the frequency domain of a time series, is not mandatory.
-However, the spectral domain representation will help the interested reader further understand the impact a linear filter has on a time series.
-Since both X-11 and SEATS use linear filters, this will deepen the users' understanding of whichever seasonal adjustment procedure is chosen.
+## Linear Filters
+
+<span class="tag tag-frequency"><i class="fas fa-wave-square"></i> Frequency Domain</span>
+
+Time series analysis in the frequency domain offers a valuable perspective for understanding the behavior of time series data. If you are not familiar with the frequency domain, you may skip these sections.
+
+For those interested, the frequency domain representation enhances the comprehension of how a linear filter affects a time series. Since both X-11 and SEATS utilize linear filters, this insight will deepen the  understanding of whichever seasonal adjustment procedure is chosen.
 
 Seasonal adjustment is highly motivated by the study, estimation, and ultimately removal of regular fluctuations in a time series.
 The words *regular fluctuations* immediately lead us to trigonometric functions sine and cosine.
@@ -408,19 +410,38 @@ It has been observed that when multiplicative seasonal adjustment produces more 
 <!-- NEED TO SHOW USERS HOW TO VIEW THEIR EXTREME VALUES - D8.B TABLE DESIGNATIONS NEXT TO OBSERVATIONS. A good reference on the subject is Baxter (1994). -->
 
 
-
 ## Exercises
 
-1.  Use *seasonal* to perform an automated seasonal adjustment of `fdeaths`, using X-11.
+<span class="tag tag-exercises"><i class="fas fa-shoe-prints"></i> Exercises</span>
 
-2. Use `monthplot()` to inspect the seasonal component.
+1. **Performing an Automated Seasonal Adjustment with X-11:**
 
-3. Adjust the filter length to a longer filter (`s3x15`). Can you see the differences in `monthplot()`?
+   - Use the `seasonal` package to perform an automated seasonal adjustment on the `fdeaths` dataset using the X-11 method.
+   - Plot the results and summarize the key components of the model.
 
-4. Use `out()` to inspect the extreme value adjustment. Which default values for `sigmalim` have been chosen?
+2. **Inspecting the Seasonal Component with `monthplot()`:**
 
-5. Use lower values for `sigmalim` and see if it affects the results of `monthplot()`.
+   - Use the `monthplot()` function to inspect the seasonal component of the adjusted `fdeaths` series.
+   - Describe the observed seasonal pattern.
 
+3. **Adjusting Filter Length:**
+
+   - Adjust the seasonal filter length to a longer filter (`s3x15`) for the `fdeaths` dataset.
+   - Use the `monthplot()` function to compare the seasonal components between the default and longer filter.
+   - Describe the differences observed.
+
+
+4. **Inspecting Extreme Value Adjustment:**
+
+   - Use the `out()` function to inspect the extreme value adjustment for the `fdeaths` dataset.
+   - Identify the default values for `sigmalim` used in the adjustment.
+
+
+5. **Modifying `sigmalim` Values:**
+
+   - Change the `sigmalim` values to lower thresholds for the `fdeaths` dataset.
+   - Plot the results and use the `monthplot()` function to see if the changes affect the seasonal component.
+   - Describe any differences observed.
 
 
 <!--

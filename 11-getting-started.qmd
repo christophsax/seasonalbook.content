@@ -182,6 +182,8 @@ Revisions
     
 ## Exercises
 
+<span class="tag tag-exercises"><i class="fas fa-shoe-prints"></i> Exercises</span>
+
 1. **Running a basic seasonal adjustment:**
 
    - Run the following code to perform a seasonal adjustment on the `unemp` dataset and plot the results.
