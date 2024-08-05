@@ -109,6 +109,36 @@ div.csl-indent {
     "search-submit-button-title": "Submit"
   }
 }</script><meta name="robots" content="noindex">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<style>
+.tag {
+    display: inline-block;
+    padding: 0.2em 0.4em;
+    margin-right: 0.5em;
+    font-size: 0.85em;
+    color: white;
+    border-radius: 0.25em;
+}
+
+.tag-case-study {
+    background-color: green;
+}
+
+.tag-frequency {
+    background-color: orange;
+}
+
+.tag-fundamentals {
+    background-color: blue;
+}
+
+.tag-exercises {
+    background-color: grey;
+}
+
+
+
+</style>
 </head>
 <body class="nav-sidebar floating slimcontent">
 
@@ -317,7 +347,6 @@ div.csl-indent {
   </ul>
 </li>
   <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="header-section-number">2.4</span> Exercises</a></li>
-  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">2.5</span> References</a></li>
   </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/11-getting-started.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
@@ -466,14 +495,39 @@ Sax, Christoph, and Dirk Eddelbuettel. 2018. <span>“Seasonal Adjustment by <sp
 </dd>
 </dl></section></section><section id="exercises" class="level2" data-number="2.4"><h2 data-number="2.4" class="anchored" data-anchor-id="exercises">
 <span class="header-section-number">2.4</span> Exercises</h2>
+<p><span class="tag tag-exercises"><i class="fas fa-shoe-prints"></i> Exercises</span></p>
 <ol type="1">
-<li>Run the following code:</li>
+<li>
+<p><strong>Running a basic seasonal adjustment:</strong></p>
+<ul>
+<li>Run the following code to perform a seasonal adjustment on the <code>unemp</code> dataset and plot the results.</li>
+<li>Why is the seasonally adjusted series not entirely smooth? What components are still present in the adjusted series?</li>
+</ul>
+</li>
+<li>
+<p><strong>Working with <code>AirPassengers</code>:</strong></p>
+<ul>
+<li>Perform a seasonal adjustment on the <code>AirPassengers</code> data using the <code>seas</code> function and plot the results.</li>
+<li>Describe the seasonal pattern observed in the original series and how it changes in the adjusted series.</li>
+</ul>
+</li>
+<li>
+<p><strong>Interpreting the summary output:</strong></p>
+<ul>
+<li>Run the <code>summary</code> function on the seasonal adjustment model <code>m</code> from the <code>AirPassengers</code> dataset.</li>
+<li>Identify and explain the key diagnostics provided in the summary output.</li>
+<li>Discuss how these diagnostics help in evaluating the quality of the seasonal adjustment.</li>
+</ul>
+</li>
+<li>
+<p><strong>Exploring seasonal adjustment with different data:</strong></p>
+<ul>
+<li>Load the <code>seasonal</code> package and use the <code>seas</code> function on a different time series dataset, such as <code>nottem</code> (average air temperatures in Nottingham).</li>
+<li>Perform a seasonal adjustment on the <code>nottem</code> dataset and plot the results.</li>
+<li>Discuss any visible patterns and how the seasonal adjustment has altered the original series.</li>
+</ul>
+</li>
 </ol>
-<pre><code>m &lt;- seas(unemp)
-plot(m)</code></pre>
-<p>Why is the seasonally adjusted series not entirely smooth?</p>
-</section><section id="references" class="level2" data-number="2.5"><h2 data-number="2.5" class="anchored" data-anchor-id="references">
-<span class="header-section-number">2.5</span> References</h2>
 
 
 

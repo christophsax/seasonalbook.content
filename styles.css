@@ -1,0 +1,27 @@
+.case-study {
+    background-color: #e6ffe6;
+    border-left: 5px solid #00cc00;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+.r-fundamentals {
+    background-color: #ffe6e6;
+    border-left: 5px solid #cc0000;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+.frequency-domain {
+    background-color: #ffffe6;
+    border-left: 5px solid #cccc00;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+.exercices {
+    background-color: #ffffe6;
+    border-left: 5px solid #cccc00;
+    padding: 10px;
+    margin: 10px 0;
+}

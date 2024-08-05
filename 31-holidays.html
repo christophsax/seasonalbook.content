@@ -90,6 +90,36 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-submit-button-title": "Submit"
   }
 }</script><meta name="robots" content="noindex">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<style>
+.tag {
+    display: inline-block;
+    padding: 0.2em 0.4em;
+    margin-right: 0.5em;
+    font-size: 0.85em;
+    color: white;
+    border-radius: 0.25em;
+}
+
+.tag-case-study {
+    background-color: green;
+}
+
+.tag-frequency {
+    background-color: orange;
+}
+
+.tag-fundamentals {
+    background-color: blue;
+}
+
+.tag-exercises {
+    background-color: grey;
+}
+
+
+
+</style>
 <link href="site_libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
 <script src="site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script><script src="site_libs/jquery-1.11.1/jquery.min.js"></script><link href="site_libs/dygraphs-1.1.1/dygraph.css" rel="stylesheet">
 <script src="site_libs/dygraphs-1.1.1/dygraph-combined.js"></script><script src="site_libs/dygraphs-1.1.1/shapes.js"></script><script src="site_libs/moment-2.8.4/moment.js"></script><script src="site_libs/moment-timezone-0.2.5/moment-timezone-with-data.js"></script><script src="site_libs/moment-fquarter-1.0.0/moment-fquarter.min.js"></script><script src="site_libs/dygraphs-binding-1.1.1.6/dygraphs.js"></script>
@@ -508,7 +538,7 @@ How to read data from FRED into R
 </div>
 <div class="callout-body-container callout-body">
 <p><em>fredr</em> provides access to the <a href="https://fred.stlouisfed.org">Federal Reserve of Economic Data</a> (FRED), provided by the Federal Reserve Bank of St.&nbsp;Louis. To use <em>fredr</em> and the FRED API in general, you must first obtain a FRED API key. Take a look at the <a href="https://cran.r-project.org/web/packages/fredr/vignettes/fredr.html">Documentation</a> for details.</p>
-<p>The core function in this package is <code>fredr()</code>, which fetches observations for a FRED series.</p>
+<p>The core function in this package is <code><a href="https://rdrr.io/pkg/fredr/man/fredr.html">fredr()</a></code>, which fetches observations for a FRED series.</p>
 <p>We can use <code><a href="https://purrr.tidyverse.org/reference/map_dfr.html">purrr::map_dfr()</a></code> to download multiple series at once:</p>
 <div class="cell">
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/sboysel/fredr">fredr</a></span><span class="op">)</span></span>

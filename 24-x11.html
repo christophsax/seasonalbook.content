@@ -109,6 +109,36 @@ div.csl-indent {
     "search-submit-button-title": "Submit"
   }
 }</script><meta name="robots" content="noindex">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<style>
+.tag {
+    display: inline-block;
+    padding: 0.2em 0.4em;
+    margin-right: 0.5em;
+    font-size: 0.85em;
+    color: white;
+    border-radius: 0.25em;
+}
+
+.tag-case-study {
+    background-color: green;
+}
+
+.tag-frequency {
+    background-color: orange;
+}
+
+.tag-fundamentals {
+    background-color: blue;
+}
+
+.tag-exercises {
+    background-color: grey;
+}
+
+
+
+</style>
 <script src="site_libs/quarto-diagram/mermaid.min.js"></script><script src="site_libs/quarto-diagram/mermaid-init.js"></script><link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 </head>
@@ -308,8 +338,8 @@ div.csl-indent {
    
   <ul>
 <li><a href="#basics" id="toc-basics" class="nav-link active" data-scroll-target="#basics"><span class="header-section-number">6.1</span> Basics</a></li>
-  <li><a href="#sec-simple-decomposition" id="toc-sec-simple-decomposition" class="nav-link" data-scroll-target="#sec-simple-decomposition"><span class="header-section-number">6.2</span> R-Fundamentals: A Simple Decomposition</a></li>
-  <li><a href="#frequency-domain-optional" id="toc-frequency-domain-optional" class="nav-link" data-scroll-target="#frequency-domain-optional"><span class="header-section-number">6.3</span> Frequency Domain (optional)</a></li>
+  <li><a href="#a-simple-decomposition" id="toc-a-simple-decomposition" class="nav-link" data-scroll-target="#a-simple-decomposition"><span class="header-section-number">6.2</span> A Simple Decomposition</a></li>
+  <li><a href="#linear-filters" id="toc-linear-filters" class="nav-link" data-scroll-target="#linear-filters"><span class="header-section-number">6.3</span> Linear Filters</a></li>
   <li><a href="#x-11-filters" id="toc-x-11-filters" class="nav-link" data-scroll-target="#x-11-filters"><span class="header-section-number">6.4</span> X-11 Filters</a></li>
   <li><a href="#extreme-value" id="toc-extreme-value" class="nav-link" data-scroll-target="#extreme-value"><span class="header-section-number">6.5</span> Extreme value</a></li>
   <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="header-section-number">6.6</span> Exercises</a></li>
@@ -335,16 +365,17 @@ div.csl-indent {
 
 -   Case Study: Changing the length of trend and/or seasonal filter
 
- --><p>The fundamental task of seasonal adjustment is to decompose a series into its constituent components: a trend, a seasonal component, and an irregular component. X-13 offers two main techniques for this task: the X-11 method and SEATS. Ultimately, both X-11 and SEATS estimate the components by passing moving average filters over the series. In this chapter, we will discuss X-11, one of the two main methods available. X-11 is a non-parametric procedure that works by passing predefined moving-average filters over the data. SEATS, on the other hand, derives the moving-average filters from the underlying ARIMA model and will be discussed in <a href="25-seats.html"><span>Chapter&nbsp;7</span></a>.</p>
+ --><p>As discussed in <a href="22-transform.html#sec-additive-and-multiplicative-adjustment"><span>Section&nbsp;4.1</span></a>, the primary objective of seasonal adjustment is to break down a time series into its trend, seasonal, and irregular components. X-13 provides two methods for this task: X-11 and SEATS. Both methods estimate these components by applying moving average filters to the series.</p>
+<p>In this chapter, we will focus on the X-11 method, a non-parametric procedure that utilizes predefined moving-average filters on the data. SEATS, which will be covered in <a href="25-seats.html"><span>Chapter&nbsp;7</span></a>, derives its filters from the underlying ARIMA model.</p>
 <section id="basics" class="level2 page-columns page-full" data-number="6.1"><h2 data-number="6.1" class="anchored" data-anchor-id="basics">
 <span class="header-section-number">6.1</span> Basics</h2>
-<p>As you remember from <a href="22-transform.html#sec-additive-and-multiplicative-adjustment"><span>Section&nbsp;4.1</span></a>, seasonal adjustment decomposes a time series into a trend, a seasonal, and an irregular component. Both X-11 and SEATS achieve the decomposition by applying moving average filters over the series. In the following, we describe the basic idea behind the seasonal decomposition in X-11. If you want to perform a seasonal adjustment in R, run the following:</p>
+<p>Here, we describe the basic idea behind the seasonal decomposition in X-11. To perform a seasonal adjustment in R, you can use the following code:</p>
 <div class="cell">
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, x11 <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, x11 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Call:</span></span>
-<span><span class="co">#&gt; seas(x = AirPassengers, x11 = "")</span></span>
+<span><span class="co">#&gt; seas(x = AirPassengers, x11 = list())</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Coefficients:</span></span>
 <span><span class="co">#&gt;                     Estimate Std. Error z value Pr(&gt;|z|)    </span></span>
@@ -364,11 +395,13 @@ div.csl-indent {
 <span><span class="co">#&gt; - Visually significant seasonal and trading day peaks have</span></span>
 <span><span class="co">#&gt;   been found in one or more of the estimated spectra.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<section id="estimating-the-trend-component" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="estimating-the-trend-component">Estimating the trend component</h4>
-<p>X-11 starts by estimating the trend component. The trend component is estimated by applying a symmetric moving average over the series. Each point in time is averaged using a set number of observations to the left and right of the series. Because the window is symmetric, we need the series to be extended by forecasts and backcasts.</p>
+<p>As we have seen in <a href="21-overview.html"><span>Chapter&nbsp;3</span></a>, by providing an empty list, the default SEATS spec is overwritten and X-11 is activated. The line ‘X11 adj.’ in the summary indicates the use of X-11.</p>
+<p>X-11 utilizes predefined moving-average filters on the data. It first estimates a trend and a seasonal component, while ensuring unbiased results at the series’ margins. It also uses extreme value correction to for more robust results.</p>
+<section id="trend-component" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="trend-component">Trend component</h4>
+<p>Estimating the trend component is the first step of an X-11 decomposition. The trend component is estimated by applying a symmetric moving average over the series. Each point in time is averaged using a set number of observations to the left and right of the series. Because the window is symmetric, we need the series to be extended by forecasts and backcasts.</p>
 <p>Once the trend component is computed, we can subtract it from the original series to compute a <em>de-trended series</em>.</p>
-</section><section id="estimating-the-seasonal-component" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="estimating-the-seasonal-component">Estimating the seasonal component</h4>
-<p>To estimate the seasonal component, a <em>seasonal filter</em> is applied to the de-trended series. A seasonal filter is a symmetric moving average that is calculated by taking the mean of the same period across several years. For instance, the average for January would be computed using all the January values from the time series data, February would use all February values, and so on.</p>
+</section><section id="seasonal-component" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="seasonal-component">Seasonal component</h4>
+<p>To estimate the seasonal component, a seasonal filter is applied to the de-trended series. A seasonal filter is a symmetric moving average that is calculated by taking the mean of the same period across several years. For instance, the average for January would be computed using all the January values from the time series data, February would use all February values, and so on.</p>
 <!--
     FIXME
 
@@ -401,9 +434,10 @@ Ladiray, Dominique, and Benoit Quenneville. 2012. <em>Seasonal Adjustment with t
 <dd>
 <p>Final estimation of seasonally adjusted series, seasonal factors, trend, irregular. Combined factors incorporate the trading day and moving holiday regression effects estimated in Part A</p>
 </dd>
-</dl></section></section><section id="sec-simple-decomposition" class="level2" data-number="6.2"><h2 data-number="6.2" class="anchored" data-anchor-id="sec-simple-decomposition">
-<span class="header-section-number">6.2</span> R-Fundamentals: A Simple Decomposition</h2>
-<p>To deepen our understanding of the X-11 method, we start with a “by-hand” approach in R. As a basic trend filter, we trend filter—a 2x12 moving average. The weights for this filter are distributed as 1/24, followed by 1/12 for the next 11 points, and then 1/24 again. We apply these weights to estimate the trend of the <code>AirPassengers</code> series:</p>
+</dl></section></section><section id="a-simple-decomposition" class="level2" data-number="6.2"><h2 data-number="6.2" class="anchored" data-anchor-id="a-simple-decomposition">
+<span class="header-section-number">6.2</span> A Simple Decomposition</h2>
+<p><span class="tag tag-fundamentals"><i class="fas fa-registered"></i> Fundamentals</span></p>
+<p>To deepen our understanding of the X-11 method, we begin with a manual approach in R. As a basic trend filter, we use a 2x12 moving average. The weights for this filter are distributed as follows: 1/24 for the first and last points, and 1/12 for each of the 11 points in between. We apply these weights to estimate the trend of the <code>AirPassengers</code> series:</p>
 <div class="cell">
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">observed</span> <span class="op">&lt;-</span> <span class="va">AirPassengers</span></span>
 <span><span class="va">filter_trend</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">24</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">12</span>, <span class="fl">11</span><span class="op">)</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">24</span><span class="op">)</span></span>
@@ -441,9 +475,11 @@ Being able to understand the
 When using the x11 spec you can change the length of the filter used for the trend and seasonal components with the `trendma` and `seasonalma` arguments respectively.
 Additionally, `sigmalim` will control the amount of extreme value adjustment that is done during the seasonal adjustment.
  -->
-</section><section id="frequency-domain-optional" class="level2 page-columns page-full" data-number="6.3"><h2 data-number="6.3" class="anchored" data-anchor-id="frequency-domain-optional">
-<span class="header-section-number">6.3</span> Frequency Domain (optional)</h2>
-<p>We present the following as optional reading material. For those interesting in simply performing seasonal adjustment, an understanding of the frequency domain of a time series, is not mandatory. However, the spectral domain representation will help the interested reader further understand the impact a linear filter has on a time series. Since both X-11 and SEATS use linear filters, this will deepen the users’ understanding of whichever seasonal adjustment procedure is chosen.</p>
+</section><section id="linear-filters" class="level2 page-columns page-full" data-number="6.3"><h2 data-number="6.3" class="anchored" data-anchor-id="linear-filters">
+<span class="header-section-number">6.3</span> Linear Filters</h2>
+<p><span class="tag tag-frequency"><i class="fas fa-wave-square"></i> Frequency Domain</span></p>
+<p>Time series analysis in the frequency domain offers a valuable perspective for understanding the behavior of time series data. If you are not familiar with the frequency domain, you may skip these sections.</p>
+<p>For those interested, the frequency domain representation enhances the comprehension of how a linear filter affects a time series. Since both X-11 and SEATS utilize linear filters, this insight will deepen the understanding of whichever seasonal adjustment procedure is chosen.</p>
 <p>Seasonal adjustment is highly motivated by the study, estimation, and ultimately removal of regular fluctuations in a time series. The words <em>regular fluctuations</em> immediately lead us to trigonometric functions sine and cosine. It turns out, there exist two equivalent representations of a time series. The first, and usually easier for beginners to understand, is the time domain representation. This is expressing how <span class="math inline">\(X_t\)</span> evolves as time <span class="math inline">\(t\)</span> evolves. For example, an MA(1) time domain representation:</p>
 <p><span class="math display">\[X_t = w_t + \theta w_{t-1}\]</span></p>
 <p>The second, is a frequency domain representation of a series. Here, <span class="math inline">\(X_t\)</span> is represented as the sum of trigonometric functions. More specifically, the spectral density of <span class="math inline">\(X_t\)</span> is the fourier transform of the acf of the series. <span class="math display">\[f_X(\nu) = \sum_{h = - \infty}^{\infty} \gamma(h) e^{-2\pi i \nu h}\]</span> For example, the spectral density of an MA(1) is: <span class="math display">\[f_X(\nu) = \sigma^2 \left( 1 + \theta^2 + 2\theta\cos(2\pi\nu) \right)\]</span></p>
@@ -683,12 +719,45 @@ It has been observed that when multiplicative seasonal adjustment produces more 
 <!-- NEED TO SHOW USERS HOW TO VIEW THEIR EXTREME VALUES - D8.B TABLE DESIGNATIONS NEXT TO OBSERVATIONS. A good reference on the subject is Baxter (1994). -->
 </section><section id="exercises" class="level2" data-number="6.6"><h2 data-number="6.6" class="anchored" data-anchor-id="exercises">
 <span class="header-section-number">6.6</span> Exercises</h2>
+<p><span class="tag tag-exercises"><i class="fas fa-shoe-prints"></i> Exercises</span></p>
 <ol type="1">
-<li><p>Use <em>seasonal</em> to perform an automated seasonal adjustment of <code>fdeaths</code>, using X-11.</p></li>
-<li><p>Use <code><a href="https://rdrr.io/r/stats/monthplot.html">monthplot()</a></code> to inspect the seasonal component.</p></li>
-<li><p>Adjust the filter length to a longer filter (<code>s3x15</code>). Can you see the differences in <code><a href="https://rdrr.io/r/stats/monthplot.html">monthplot()</a></code>?</p></li>
-<li><p>Use <code>out()</code> to inspect the extreme value adjustment. Which default values for <code>sigmalim</code> have been chosen?</p></li>
-<li><p>Use lower values for <code>sigmalim</code> and see if it affects the results of <code><a href="https://rdrr.io/r/stats/monthplot.html">monthplot()</a></code>.</p></li>
+<li>
+<p><strong>Performing an Automated Seasonal Adjustment with X-11:</strong></p>
+<ul>
+<li>Use the <code>seasonal</code> package to perform an automated seasonal adjustment on the <code>fdeaths</code> dataset using the X-11 method.</li>
+<li>Plot the results and summarize the key components of the model.</li>
+</ul>
+</li>
+<li>
+<p><strong>Inspecting the Seasonal Component with <code><a href="https://rdrr.io/r/stats/monthplot.html">monthplot()</a></code>:</strong></p>
+<ul>
+<li>Use the <code><a href="https://rdrr.io/r/stats/monthplot.html">monthplot()</a></code> function to inspect the seasonal component of the adjusted <code>fdeaths</code> series.</li>
+<li>Describe the observed seasonal pattern.</li>
+</ul>
+</li>
+<li>
+<p><strong>Adjusting Filter Length:</strong></p>
+<ul>
+<li>Adjust the seasonal filter length to a longer filter (<code>s3x15</code>) for the <code>fdeaths</code> dataset.</li>
+<li>Use the <code><a href="https://rdrr.io/r/stats/monthplot.html">monthplot()</a></code> function to compare the seasonal components between the default and longer filter.</li>
+<li>Describe the differences observed.</li>
+</ul>
+</li>
+<li>
+<p><strong>Inspecting Extreme Value Adjustment:</strong></p>
+<ul>
+<li>Use the <code>out()</code> function to inspect the extreme value adjustment for the <code>fdeaths</code> dataset.</li>
+<li>Identify the default values for <code>sigmalim</code> used in the adjustment.</li>
+</ul>
+</li>
+<li>
+<p><strong>Modifying <code>sigmalim</code> Values:</strong></p>
+<ul>
+<li>Change the <code>sigmalim</code> values to lower thresholds for the <code>fdeaths</code> dataset.</li>
+<li>Plot the results and use the <code><a href="https://rdrr.io/r/stats/monthplot.html">monthplot()</a></code> function to see if the changes affect the seasonal component.</li>
+<li>Describe any differences observed.</li>
+</ul>
+</li>
 </ol>
 <!--
 ## Case study

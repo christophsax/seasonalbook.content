@@ -109,6 +109,36 @@ div.csl-indent {
     "search-submit-button-title": "Submit"
   }
 }</script><meta name="robots" content="noindex">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<style>
+.tag {
+    display: inline-block;
+    padding: 0.2em 0.4em;
+    margin-right: 0.5em;
+    font-size: 0.85em;
+    color: white;
+    border-radius: 0.25em;
+}
+
+.tag-case-study {
+    background-color: green;
+}
+
+.tag-frequency {
+    background-color: orange;
+}
+
+.tag-fundamentals {
+    background-color: blue;
+}
+
+.tag-exercises {
+    background-color: grey;
+}
+
+
+
+</style>
 <script src="site_libs/quarto-diagram/mermaid.min.js"></script><script src="site_libs/quarto-diagram/mermaid-init.js"></script><link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 </head>
 <body class="nav-sidebar floating slimcontent">
@@ -319,7 +349,6 @@ div.csl-indent {
   <li><a href="#turning-off-aic-testing-for-outlier-detection-and-regressors" id="toc-turning-off-aic-testing-for-outlier-detection-and-regressors" class="nav-link" data-scroll-target="#turning-off-aic-testing-for-outlier-detection-and-regressors"><span class="header-section-number">3.6.3</span> Turning off AIC testing for outlier detection and regressors</a></li>
   </ul>
 </li>
-  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">3.7</span> References</a></li>
   </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/21-overview.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
@@ -572,9 +601,9 @@ US Census Bureau. 2017. <em>X-13ARIMA-SEATS Reference Manual</em>. Version 1.1. 
 <span class="header-section-number">3.6.1</span> Using X11</h3>
 <p>While <code>seas()</code> calls SEATS by default, X11 is often easier to use. To perform a seasonal adjustment on <code>AirPassengers</code> with X11, we need to activate the <code>x11</code> spec.</p>
 <div class="cell">
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_x11</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, x11 <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_x11</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, x11 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>An empty string <code>""</code> tells <code>seas()</code> to use the spec without an argument. Alternatively, you can also use an empty list, <code><a href="https://rdrr.io/r/base/list.html">list()</a></code>. If more than one mutually exclusive spec is included in <code>seas()</code>, specs are overwritten according to the priority rules shown in <a href="#tbl-priority-rules">Table&nbsp;<span>3.5</span></a></p>
+<p>An empty list <code><a href="https://rdrr.io/r/base/list.html">list()</a></code> tells <code>seas()</code> to use the spec without an argument. Alternatively, you can also use an empty string, <code>""</code>. If more than one mutually exclusive spec is included in <code>seas()</code>, specs are overwritten according to the priority rules shown in <a href="#tbl-priority-rules">Table&nbsp;<span>3.5</span></a></p>
 <div id="tbl-priority-rules" class="anchored">
 <table class="table">
 <caption>Table&nbsp;3.5: If more than one mutually exclusive spec is included, specs are overwritten according to priority rules.</caption>
@@ -662,12 +691,10 @@ US Census Bureau. 2017. <em>X-13ARIMA-SEATS Reference Manual</em>. Version 1.1. 
 <figure class="figure"><p><a href="http://www.seasonal.website"><img src="img/seasonalview.png" class="img-fluid figure-img" alt="graphical user interface"></a></p>
 <figcaption class="figure-caption">Manipulating spec argument combinations in the seasonalview graphical user interface</figcaption></figure>
 </div>
-</section></section><section id="references" class="level2" data-number="3.7"><h2 data-number="3.7" class="anchored" data-anchor-id="references">
-<span class="header-section-number">3.7</span> References</h2>
 
 
 
-</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+</section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
