@@ -232,4 +232,3 @@ view(m)
 
 [![Manipulating spec argument combinations in the seasonalview graphical user interface](img/seasonalview.png){fig-alt="graphical user interface"}](http://www.seasonal.website)
 
-## References

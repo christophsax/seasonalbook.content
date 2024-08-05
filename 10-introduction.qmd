@@ -108,5 +108,3 @@ Help and support by Brian Monsell are especially acknowledged.
 seasonal was originally developed for use at the Swiss State Secretariat of Economic Affairs.
 It has been dramatically improved thanks to suggestions and support from Matthias Bannert, Freya Beamish, Vidur Dhanda, Alain Galli, Ronald Indergand, Preetha Kalambaden, Stefan Leist, James Livsey, Pinaki Mukherjee, Bruno Parnisari and many others.
 The related work on the x13binary package facilitated (automated) deployment thanks to the R package system, CRAN, and GitHub for the x13prebuilt repository.
-
-## References {.unnumbered}

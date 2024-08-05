@@ -188,5 +188,3 @@ m <- seas(unemp)
 plot(m)
 ```
 Why is the seasonally adjusted series not entirely smooth?
-
-## References
