@@ -1,3 +1,8 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
 # regARIMA Model {#sec-regarima}
 
 ```{r}
@@ -261,7 +266,7 @@ The `static()` function from the *seasonal* package can automate this process.
 
  -->
 ```
-## Case Study: `AirPassengers`
+## Example: `AirPassengers`
 
 Once again, consider the default seasonal adjustment:
 
@@ -319,29 +324,112 @@ As we can see, small changes in outlier identification can have a substantial ef
 
 <!-- Construct a simple user defined regressor to handle specific issue. -->
 
+## Case Study: 
+
+Let's fit a regARIMA model to a series and decide if you should be adding a regression variable that accounts for the number of weekdays vs weekend days in each month. 
+This is known as a 1-coefficient trading day and will be discussed in further detail in @sec-trading-days. 
+For the sake of this case study we will just need to know that the regression variable is added via the additon of `regression.variables = "td1coef"` to our `seas()` function. 
+
+Consider the Total Vehicle Miles Traveled series from the `fred` database. 
+This is the series with `id = TRFVOLUSM227NFWA`
+
+```{r, echo=FALSE}
+plot_fred = function(ID){
+  fred |> filter(id == ID) |> pull(ts) -> xL
+  plot_title = fred |> 
+    filter(id == ID) |>
+    pull(title)
+  x = xL[[1]]
+  tsbox::ts_plot(x, title = plot_title)
+}
+
+ext_fred = function(ID){
+  fred |> filter(id == ID) |> pull(ts) -> xL
+  x = xL[[1]]
+  return(x)
+}
+```
+
+```{r}
+plot_fred("TRFVOLUSM227NFWA")
+```
+
+First we can do arima modeling without regressors to see the stocastic structure. 
+
+```{r}
+x = ext_fred("TRFVOLUSM227NFWA")
+m = seas(x,
+         x11 = "",
+         outlier = NULL,
+         regression.aictest = NULL)
+summary(m)
+```
+
+The automatic modeling identifies an ARIMA(1 1 2)(0 1 1) model. 
+This is a fairly complex non-seasonal model and we will see if this can be simplified without causing any modeling issues.
+Additionally, it would make sense the number of vehicle miles traveled would be effected by weekday/weekend composition of the month. 
+
+```{r}
+m_td = seas(
+  x,
+  x11 = "",
+  outlier = NULL,
+  regression.aictest = NULL,
+  regression.variables = "td1coef"
+)
+summary(m_td)
+```
+
+The trading day regressor is highly significant.
+We can see this looking at the p-value in the summary table.
+Now can we get away with a simplier model? 
+Say, the *airline model*.
+
+```{r}
+m_td_airline = seas(
+  x,
+  x11 = "",
+  outlier = NULL,
+  regression.aictest = NULL,
+  regression.variables = "td1coef", 
+  arima.model = "(0 1 1)(0 1 1)"
+)
+summary(m_td_airline)
+```
+
+Let's compare AIC values to see which model is preferred. 
+
+```{r}
+AIC(m_td)
+AIC(m_td_airline)
+```
+
+The AIC of the original model selected is much lower.
+
+
+
+
 
 ## Exercises
 
-1. **Performing an automated seasonal adjustment:**
+1.  **Performing an automated seasonal adjustment:**
 
-   - Perform a seasonal adjustment on the `fdeaths` data using the default settings.
-   - Plot the results and summarize the key components of the model.
+    -   Perform a seasonal adjustment on the `fdeaths` data using the default settings.
+    -   Plot the results and summarize the key components of the model.
 
-2. **Inspecting model parameters:**
+2.  **Inspecting model parameters:**
 
-   - Inspect the model chosen for the `fdeaths` dataset.
-   - Identify the degrees of seasonal and non-seasonal differencing.
-   - Determine the seasonal and non-seasonal AR and MA orders.
+    -   Inspect the model chosen for the `fdeaths` dataset.
+    -   Identify the degrees of seasonal and non-seasonal differencing.
+    -   Determine the seasonal and non-seasonal AR and MA orders.
 
+3.  **Using the `static()` function:**
 
-3. **Using the `static()` function:**
+    -   Use the `static()` function to extract the static version of the automated model chosen for the `fdeaths` dataset.
+    -   Replace the automatic procedures in the model call with the static choices made by the automated model.
 
-   - Use the `static()` function to extract the static version of the automated model chosen for the `fdeaths` dataset.
-   - Replace the automatic procedures in the model call with the static choices made by the automated model.
+4.  **Bonus: re-estimating using base R:**
 
-
-4. **Bonus: re-estimating using base R:**
-
-   - Re-estimate the seasonal adjustment of `fdeaths` using the base R `arima()` function.
-   - Compare the coefficients from the `arima()` function with those from the `seas()` function.
-   - Explain why the coefficients might differ between the two methods.
+    -   Re-estimate the seasonal adjustment of `fdeaths` using the base R `arima()` function.
+    -   Compare the coefficients from the `arima()` function with those from the `seas()` function.
+    -   Explain why the coefficients might differ between the two methods.
