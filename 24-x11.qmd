@@ -252,7 +252,22 @@ However, these revisions can impact historical data values further back in the t
 In contrast, shorter filters, which use fewer data points, are more likely to produce larger revisions with each new data addition.
 These revisions, while more significant, extend less far back into the historical data.
 
-If a user does not select a filter, the X-11 method defaults to automatic filter selection.
+If a user does not select a filter, the program will choose the final seasonal filter automatically; this option can also be invoked by setting `seasonalma = msr`. 
+This is done using the *moving seasonality ratio (msr)* procedure.
+The msr procedure works as follows: 
+For the first two seasonal adjustment iterations (A and B), a 3×3 moving average is used to calculate seasonal factors.
+Then a 3×5 filer is used to calculate the final seasonal factor.
+The value I/S is calculated as the global moving seasonality ratio and the filter chosen is given in @tbl-gmsr-categories.
+
+| GMSR Range           | Filter  |
+|----------------------|---------|
+| GMSR ≤ 2.5           | 3x3     |
+| 3.5 < GMSR ≤ 5.5     | 3x5     |
+| GMSR > 6.5           | 3x9     |
+
+: Moving Seasonality Ratio Categories {#tbl-gmsr-categories}
+
+
 To understand the implications of filter length, consider the finite set of options available during an X-11 adjustment.
 @tbl-x11-filters details the different filters that can be applied to extract the seasonal component of the series.
 
