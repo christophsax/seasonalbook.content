@@ -254,7 +254,7 @@ These revisions, while more significant, extend less far back into the historica
 
 If a user does not select a filter, the X-11 method defaults to automatic filter selection.
 To understand the implications of filter length, consider the finite set of options available during an X-11 adjustment.
-@tbl-x11-filters details the different filters that can be applied to both the seasonal and trend components of the series.
+@tbl-x11-filters details the different filters that can be applied to extract the seasonal component of the series.
 
 | Value        | Description                                                                                                                                                                                                                     |
 |--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
