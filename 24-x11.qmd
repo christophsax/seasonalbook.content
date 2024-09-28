@@ -1,3 +1,8 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
 # X-11 {#sec-x11}
 
 ```{r}
@@ -423,6 +428,65 @@ It has been observed that when multiplicative seasonal adjustment produces more 
  -->
 ```
 <!-- NEED TO SHOW USERS HOW TO VIEW THEIR EXTREME VALUES - D8.B TABLE DESIGNATIONS NEXT TO OBSERVATIONS. A good reference on the subject is Baxter (1994). -->
+
+
+## Case study: Choose a filter length
+
+Suppose we want to choose a filter length for the Retail Sales in Book Stores before the 2020 covid pandemic.
+
+```{r, echo = FALSE}
+plot_fred = function(ID){
+  fred |> filter(id == ID) |> pull(ts) -> xL
+  plot_title = fred |> 
+    filter(id == ID) |>
+    pull(title)
+  x = xL[[1]]
+  tsbox::ts_plot(x, title = plot_title)
+}
+
+ext_fred = function(ID){
+  fred |> filter(id == ID) |> pull(ts) -> xL
+  x = xL[[1]]
+  return(x)
+}
+```
+
+
+```{r}
+x = ext_fred("MRTSSM451211USN") |>
+  tsbox::ts_span(end = 2019)
+tsbox::ts_plot(x, title = "Retail Sales: Book Stores")
+```
+
+The basic principles outlined above tell us we want a long filter for stable seasonal patterns and short filter for more variable seasonal patterns. 
+
+```{r}
+m_3x3 = seas(x, x11.seasonalma = "s3x3")
+m_3x15 = seas(x, x11.seasonalma = "s3x15")
+```
+
+If we plot the final seasonal adjustments
+
+```{r}
+ts_plot(ts_c(x, final(m_3x3), final(m_3x15)))
+```
+
+we see the 3x15 seasonal filter is too long and is allowing seasonality to leach into the final seasonally adjusted series. 
+In subsequent chapters we will learn diagnostic tools to detect this but we can see the seasonality if we zoom in a bit and focus on the August months. 
+We should not see dramatic spikes in any months (this is the whole point of seasonal adjustment!), however the poor performance of the 3x15 seasonal filter and the peaks in multiple August values in a row remain. 
+
+```{r}
+ts_plot(
+  ts_c(
+    ts_span(start = 2008, end = 2011, x = x),
+    ts_span(start = 2008, end = 2011, x = final(m_3x3)),
+    ts_span(start = 2008, end = 2011, x = final(m_3x15))
+  )
+)
+```
+
+
+
 
 
 ## Exercises
