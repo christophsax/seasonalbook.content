@@ -172,6 +172,7 @@ ts_dygraphs(
 Notice the large differences during certain Easter periods.
 For example, the final seasonally adjusted series including an Easter regressor in April 2011 was 1360.52.
 The final seasonally adjusted values without an Easter regressor was 1449.3, a difference of 89 million dollars which more than 7.5% higher than the original series value.
+Moreover, including the Easter regressor resulted in a smoother seasonally adjusted series.
 
 ## Case Study: Chinese New Year
 
