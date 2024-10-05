@@ -41,8 +41,20 @@ As well as the following statistics:
 None of the three statistics shows any significance (indicated by one or several stars), which is a good sign.
 By now we know that `AirPassengers` is a series that is easy to adjust and that the automated procedures of X-13 work well on this series, so this should not come as a surprise.
 
-We will already discussed the role of information criterion and the statistics in more detail below.
+At this point in the text we introduce an intentionally poor seasonal adjustment model for the `AirPassengers` series. 
+This will be a useful tool to understand some of the basic concepts and a contrast when trying to understand the output of the X-13 program and the `seas()` function.
+Our poor seasonal adjustment will have a very short seasonal filter and a mispecified ARIMA model. 
+```{r}
+m_bad = seas(AirPassengers, x11.seasonalma = "s3x3", arima.model = "(0 0 1)(0 0 0)")
+summary(m_bad)
+```
+
+When we compare the bottom half of the `summary` output to the automatic model above, which we know fits well, we can see stars next to the QS (indicating residual seasonality), the Box-Ljung (indicating autocorrelation left in the model residuals) and the Shapiro normality test (indicating non-normality of the model residuals).
 Usually, it makes sense to look at the statics if the summary indicates significance on any of them.
+
+We will already discussed the role of information criterion and the statistics in more detail below.
+We also can see the AICc value is significantly higher. 
+This tells us the model above is a better fit.
 
 In addition, looking the estimated seasonal component gives you a good understanding on what actually happened during seasonal adjustment.
 We will start with visually inspecting the seasonal component of a seasonal adjustment model.
