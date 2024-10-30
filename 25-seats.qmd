@@ -7,6 +7,14 @@ source("_common.R")
 status("polishing", "2023-01-21", section = "SEATS")  # drafting, polishing, complete
 ```
 
+```{r}
+library(seasonal)
+m <- seas(AirPassengers)
+summary(m)
+
+plot(m)
+
+```
 
 <!--
 
@@ -26,7 +34,10 @@ status("polishing", "2023-01-21", section = "SEATS")  # drafting, polishing, com
 
 
  -->
-## Model based decomposition
+
+In the previous chapter, we got to know X-11, a seasonal decomposition procedure that utilizes predefined moving-average filters. SEATS, which we will get to know in this chapter, derives its filters from the underlying ARIMA model.
+
+## Basics
 
 Signal Extraction in ARIMA Time Series, or SEATS, is a method for estimating unobserved components in a time series.
 It is developed from the work of @cleveland76, @hillmer82, @maravall86.
@@ -34,18 +45,19 @@ If applied properly, SEATS seasonal factors are usually more stable than X-11, a
 
 Like X-11, SEATS applies a series of filters to an observed time series, as described in @sec-x11.
 Like X-11, SEATS uses a forecast extended series, in order to obtain unbiased results at the margin.
-
 Unlike X-11, however, SEATS filters are derived from the ARIMA model of the time series.
 While X-11 filters are predefined and fixed, the SEATS filters are different for each ARIMA model.
 
-While X-11 offers a finite set of filters (in fact, there are seven seasonal filters available), SEATS offers an infinite set of filters.
+While X-11 offers a finite set of filters,
+<!-- (in fact, there are seven seasonal filters available),  -->
+SEATS offers an infinite set of filters.
 Overall, they cover a broader set of possible filter lengths, which makes SEATS a more flexible option than X-11.
-**The available set filter lengths is the most crucial difference between X-11 and SEATS**.
+The available set filter lengths is the most crucial difference between X-11 and SEATS.
 At the same time, the additional flexibility may lead at times to filters that are undesirable.
 As will be shown later on, SEATS sometimes choose a filter that is too narrow, and produces an overly volatile seasonal component.
 
-::: callout-note
-## Comparing X-11 and SEATS filters
+<!--
+Let's compare X-11 and SEATS filters
 
 #### X-11 filters {.unnumbered}
 
@@ -58,38 +70,42 @@ As will be shown later on, SEATS sometimes choose a filter that is too narrow, a
 -   derives seasonal adjustment filters from these models
 -   infinite number of possible filter choices
 -   requires more statistical machinery
-:::
 
-::: callout-note
-## TODO
+ -->
 
-Plots of X-11 filters vs SEATS filters
-:::
+To perform a SEATS seasonal adjustment in R, you can use the following code:
 
-Given a certain ARIMA model (such as the "Airline" (0 1 1)(0 1 1) which is appropriate for the description of the `AirPassengers` time series), SEATS decomposes the model into separate models for the trend, the seasonal and the irregular component.
+```{r}
+m <- seas(AirPassengers)
+summary(m)
+```
+
+As long as SEATS and X-11 use similar filters, the final adjustment will be similar.
+Using the default arguments of `seas()` on `AirPassengers`, the adjustment is very similar:
+
+```{r}
+m_x11 <- seas(AirPassengers, x11 = list())
+tsbox::ts_plot(final(m), final(m_x11))
+```
+We will look into the similarities between SEATS and X-11 in section ...
+
+
+## ARIMA Model decompostion
+
+Given a certain ARIMA model (such as the "Airline" `(0 1 1)(0 1 1)` which is appropriate for the description of the `AirPassengers` time series), SEATS decomposes the model into separate models for the trend, the seasonal and the irregular component.
 This is done by the *Canonical Decomposition* and will be discussed in @sec-canonical-decomposition.
 
 For a given set of ARIMA model parameter, the decomposition of the ARIMA model is almost independent of the data.
 For each ARIMA specification, there is a unique canonical decomposition.
-For an "Airline" (0 1 1)(0 1 1) model (with both moving average coefficients not being to close to 1), the trend component can be described with a (0 2 2)(0 0 0) model, while the seasonal sum of seasonal component can be described by a (0 0 11)(0 0 0) model.
+For an "Airline" `(0 1 1)(0 1 1)` model (with both moving average coefficients not being to close to 1), the trend component can be described with a `(0 2 2)(0 0 0)` model, while the seasonal sum of seasonal component can be described by a `(0 0 11)(0 0 0)` model.
 The parameters of these models can be derived from the parameter estimates of the initial airline model that describes the original series.
-The irregular component is usually white noise, described by the trivial (0 0 0)(0 0 0) model.
+The irregular component is usually white noise, described by the trivial `(0 0 0)(0 0 0)` model.
 
 The decomposed ARIMA models imply a certain filter, which is derived by the Wiener-Kolmogorov procedure (@sec-wiener-kolmogorov-algorithm).
 
 ## Comparing SEATS with X-11 filters
 
-If SEATS and X-11 use similar filters, the final adjustment will be similar.
-Using the default arguments of `seas()` on `AirPassengers`, the adjustment is very similar:
-
-```{r}
-seats <- seas(AirPassengers)
-x11 <- seas(AirPassengers, x11 = list())
-tsbox::ts_plot(final(seats), final(x11))
-```
-
-Others have looked at comparing SEATS and X-11 filters.
-In @planas02 they show with X11 seasonal filter that is closest to an implied (0 1 1)(0 1 1) "Airline" SEATS model based on the $\Theta$.
+@planas02 systematically compare SEATS and X-11 filters and show which X11 seasonal filter that is closest to an implied `(0 1 1)(0 1 1)` "Airline" SEATS model based on the $\Theta$.
 As a reminder, $\Theta$ refers to the seasonal moving average parameter of the ARIMA model.
 
 | Filter | Closest Seasonal MA | Seasonal MA Interval |
@@ -120,24 +136,15 @@ It is too volatile, essentially catching much of the irregular component and mak
 
 <!-- Additionally, the filters that are -->
 
-## Transitory component
 
-Sometimes SEATS includes a transitory component in its decomposition:
+## Advanced theory
 
-$$ X_t = T_t + S_t + R_t + I_t $$
-
-The transitory component captures short, erratic behavior that is not white noise, sometimes associated with awkward frequencies.
-
--   The variation from the transitory component should not contaminate the trend or seasonal, and removing it allows SEATS to obtain smoother, more stable trends and seasonal components.
--   In the final decomposition, the transitory and irregular components are usually combined.
--   SEATS does not always estimate a transitory component
-
-## Quick refresher on ARIMA models and notation
+### Quick refresher on ARIMA models and notation
 
 The remaining of the SEATS section will heavily rely on the auto-regressive and moving-average operators $\phi(B)$ and $\theta(B)$ where $B X_t = X_{t-1}$.
 
 If $X_t$ follows and ARIMA($p$, $d$, $q$) model: $$
-\phi(B) X_t = \theta(B) a_t 
+\phi(B) X_t = \theta(B) a_t
 $$
 
 $$
@@ -152,14 +159,14 @@ $$
 
 and all model information is contained in $\phi(B)$ and $\theta(B)$.
 Moreover, for any specified $\phi(B)$ and $\theta(B)$ that satisfy certain causality criteria there exists a unique Wold decomposition $$
-\phi(B) X_t = \theta(B) a_t  
+\phi(B) X_t = \theta(B) a_t
 $$
 
 $$
 X_t = \frac{\theta(B)}{\phi(B)} a_t = \Psi(B) a_t = \sum_{k=0}^{\infty} \psi_k a_{t-k}
 $$
 
-## SEATS Assumptions
+### SEATS Assumptions
 
 -   The linearized series can be represented by an ARIMA model which captures the stochastic structure of the series. As a reminder, the linearized series is the series with regression effects removed.
 -   After differencing each with the ARIMA's differencing polynomial, the components are orthogonal (uncorrelated)
@@ -171,8 +178,8 @@ $$
 $$
 
 Hence we have, $$
-X_t = 
-\frac{\theta(B)}{\phi(B)} a_{t} = 
+X_t =
+\frac{\theta(B)}{\phi(B)} a_{t} =
 \frac{\theta_T(B)}{\phi_T(B)} a_{T,t} +
 \frac{\theta_S(B)}{\phi_S(B)} a_{S,t}  +
 \frac{\theta_R(B)}{\phi_R(B)} a_{R,t}  + u_t
@@ -180,7 +187,7 @@ $$
 
 If the spectra of all components in non-negative the decomposition is admissible, SEATS finds admissible models for components $$ \phi_T(B) T_t = \theta_T(B) a_{T, t} $$ $$ \phi_S(B) S_t = \theta_S(B) a_{S, t} $$ $$\phi_R(B) R_t = \theta_R(B) a_{R, t} $$
 
-## Canonical Decomposition {#sec-canonical-decomposition}
+### Canonical Decomposition {#sec-canonical-decomposition}
 
 However, there infinite number of models that yield the same aggregate.
 The choices differ in how white noise is allocated among the components.
@@ -196,7 +203,7 @@ We already stated that both X-11 and SEATS estimate the unobserved components by
 So how do we use these implied component models to get a linear filter?
 It should be clear that the filter weights will depend on that arima model is picked $X_t = \Psi(B) a_t$, and what the implied seasonal model, $\phi_S(B) S_t = \theta_S(B) a_{S,t} \Rightarrow S_t = \Psi(B) a_t$, is.
 
-## Wiener-Kolmogorov Algorithm {#sec-wiener-kolmogorov-algorithm}
+### Wiener-Kolmogorov Algorithm {#sec-wiener-kolmogorov-algorithm}
 
 The **Wiener-Kolmogorov** (WK) algorithm outlines the methodology to get the so-called WK filter.
 This is the filter that is equal to the conditional expectation of the seasonal component conditional on the observed series.
@@ -205,19 +212,36 @@ $$\widehat{S}_t = \underbrace{\left[ \frac{\Sigma_S}{\Sigma} \frac{\Psi_S(B)\Psi
 
 More than other coefficients, the seasonal MA ($\theta_{12}$) influences whether estimated seasonal factors change either slowly over time ($\theta_{12}$ close to 1) or rapidly over time ($\theta_{12}$ close to zero).
 
-## Example SEATS adjustment
+
+### Transitory component
+
+Sometimes SEATS includes a transitory component in its decomposition:
+
+$$ X_t = T_t + S_t + R_t + I_t $$
+
+The transitory component captures short, erratic behavior that is not white noise, sometimes associated with awkward frequencies.
+
+-   The variation from the transitory component should not contaminate the trend or seasonal, and removing it allows SEATS to obtain smoother, more stable trends and seasonal components.
+-   In the final decomposition, the transitory and irregular components are usually combined.
+-   SEATS does not always estimate a transitory component
+
+
+## Case study: narrow SEATS filters
+
+<span class="tag tag-case-study"><i class="fas fa-graduation-cap"></i> Case Study</span>
 
 Let's have a look at nominal taxes from Swiss production account.
 
-<!--
-, previously discussed [here](https://github.com/dpkj/dpkj-research/blob/master/seas_adj/pk_tax_n.md).
-*(added some minutes ago, to be discussed in class).*
--->
+```{r, echo = FALSE}
+tax_n <- ts(c(5512.43723529998, 5302.66127551312, 5637.04650218708, 5407.75865307982, 5254.75041765537, 5883.31044127543, 5465.12983546186, 5296.83011638733, 5577.28917595672, 5634.79857930988, 5832.41514259211, 5640.32968921129, 6066.78258591999, 6222.68082980585, 6504.17063502564, 6074.99091524851, 6580.71692950301, 6274.60948561261, 7157.60005559455, 6944.58546551983, 7448.63554376696, 6976.09702323069, 7818.38121589548, 7289.71620307687, 7768.40193169586, 6942.77891782026, 7578.22907029965, 7077.70301249423, 7410.68364011917, 6927.73248230177, 7087.72613485434, 6926.90090299472, 7336.73867165469, 7108.4949497024, 7145.42480380572, 7154.30815153718, 7498.01519467561, 7559.01824893372, 7156.60513953808, 7639.02255770258, 7569.94029094276, 7515.34158790891, 7732.93688269533, 7551.953334793, 8197.88127458863, 7939.93851007643, 8141.79136494712, 7568.40068251781, 8499.84629558006, 8345.25921525785, 8386.38082590207, 7886.29186614002, 8821.87792569236, 8595.73223990369, 8637.63939154854, 7991.04698685541, 8464.50040108557, 8003.27264004253, 8399.90637539542, 8384.22143621648, 8784.63271925264, 8595.77482962329, 8591.67855177336, 8602.6019974407, 8966.1740189959, 8993.28779502417, 8839.41351045546, 8468.69899389445, 9221.6367572731, 8801.73025651442, 8426.53923852333, 8661.00570414916, 8930.21895672981, 9116.66536122397, 8794.81591614758, 8559.38402031864, 9056.19152051174, 8842.45736626125, 9043.08264307781, 8549.5389771392, 8980.20969432594, 8893.75993928538, 9010.28560160679, 8664.05904218189, 8765.47235867103, 9170.15544669832, 8970.77030836517, 8310.62969865549, 9180.42069018707, 8566.35919301958, 9497.27766001259, 9012.51934200076, 8454.34333463005, 9357.61750287723, 9190.28660347765, 9060.07897285508, 9253.43694298711, 8809.60616470625, 8825.87955511076, 9047.15212801588, 9255.87581159138, 8423.29760776073), start = c(1995, 1), frequency = 4)
+```
 
 The series looks as follows:
 
 ```{r}
-tax_n <- ts(c(5512.43723529998, 5302.66127551312, 5637.04650218708, 5407.75865307982, 5254.75041765537, 5883.31044127543, 5465.12983546186, 5296.83011638733, 5577.28917595672, 5634.79857930988, 5832.41514259211, 5640.32968921129, 6066.78258591999, 6222.68082980585, 6504.17063502564, 6074.99091524851, 6580.71692950301, 6274.60948561261, 7157.60005559455, 6944.58546551983, 7448.63554376696, 6976.09702323069, 7818.38121589548, 7289.71620307687, 7768.40193169586, 6942.77891782026, 7578.22907029965, 7077.70301249423, 7410.68364011917, 6927.73248230177, 7087.72613485434, 6926.90090299472, 7336.73867165469, 7108.4949497024, 7145.42480380572, 7154.30815153718, 7498.01519467561, 7559.01824893372, 7156.60513953808, 7639.02255770258, 7569.94029094276, 7515.34158790891, 7732.93688269533, 7551.953334793, 8197.88127458863, 7939.93851007643, 8141.79136494712, 7568.40068251781, 8499.84629558006, 8345.25921525785, 8386.38082590207, 7886.29186614002, 8821.87792569236, 8595.73223990369, 8637.63939154854, 7991.04698685541, 8464.50040108557, 8003.27264004253, 8399.90637539542, 8384.22143621648, 8784.63271925264, 8595.77482962329, 8591.67855177336, 8602.6019974407, 8966.1740189959, 8993.28779502417, 8839.41351045546, 8468.69899389445, 9221.6367572731, 8801.73025651442, 8426.53923852333, 8661.00570414916, 8930.21895672981, 9116.66536122397, 8794.81591614758, 8559.38402031864, 9056.19152051174, 8842.45736626125, 9043.08264307781, 8549.5389771392, 8980.20969432594, 8893.75993928538, 9010.28560160679, 8664.05904218189, 8765.47235867103, 9170.15544669832, 8970.77030836517, 8310.62969865549, 9180.42069018707, 8566.35919301958, 9497.27766001259, 9012.51934200076, 8454.34333463005, 9357.61750287723, 9190.28660347765, 9060.07897285508, 9253.43694298711, 8809.60616470625, 8825.87955511076, 9047.15212801588, 9255.87581159138, 8423.29760776073), start = c(1995, 1), frequency = 4)
+
+ts_plot(tax_n)
+
 
 # static(seas(tax_n))
 
@@ -252,6 +276,8 @@ These kind of SI-ratios appear in around 10 to 20% of SEATS adjustment and may b
 
 How to detect these cases?
 How to deal with these adjustments?
+
+
 
 ## Considerations when using SEATS in X-13
 
@@ -288,7 +314,7 @@ In the following example the symmetric trend filter is saved and then exported.
 Note the `finite='yes'` argument must be specified to save filter weights.
 
 ```{r}
-m <- seas(AirPassengers, 
+m <- seas(AirPassengers,
           seats.finite = 'yes',
           seats.save   = 'ftf', # symmetric finite trend filter
           out          = TRUE)
@@ -296,9 +322,9 @@ ftf_file <- file.path(m$wdir, 'iofile.ftf')
 # reads in filter weights from ftf_file
 w <- read.delim(textConnection(readLines(ftf_file)[-2]),
                 header = TRUE, stringsAsFactors = FALSE)
-plot(-72:71, w[,2], type = "l", 
-     xlab = "", 
-     ylab = "weights", 
+plot(-72:71, w[,2], type = "l",
+     xlab = "",
+     ylab = "weights",
      main = "SEATS trend filter")
 ```
 
@@ -310,11 +336,11 @@ The naming conventions for the `mdc` table follow the Wald decomposition notatio
 The following assumes there are no AR components and anything appearing in the denominator is attributed to the differencing operator.
 
 ```{r}
-m <- seas(AirPassengers, 
-          outlier = NULL, 
+m <- seas(AirPassengers,
+          outlier = NULL,
           regression.aictest = NULL,
           arima.model = '(0 1 1)(0 1 1)',
-          seats.save = 'mdc', 
+          seats.save = 'mdc',
           out = TRUE)
 
 summary(m)
@@ -372,56 +398,56 @@ We can use these component models to apply the WK algorithm and get the seasonal
 The details of this complex operation are omitted here but a plot of the seasonal filter weights is given in Figure ???.
 
 ```{r, eval=TRUE, echo=FALSE}
-fw <- c(0.00956552692576638, -0.00274727619388826, -0.00188080728374881, 
--0.00157641397678636, -0.00149801928067724, -0.00151081133797857, 
--0.00156118547095051, -0.00162900607708162, -0.0017096746540415, 
--0.00181003459214481, -0.00195446558853261, -0.00220659523541729, 
-0.019229165863672, -0.0011872897724425, -0.00152782360394282, 
--0.00172383721349435, -0.00186198724713144, -0.001977399429168, 
--0.0020849500680648, -0.00219251431918478, -0.00230797944438408, 
--0.00244626891662387, -0.00264263262430528, -0.00298403900836074, 
-0.0293780531621944, -0.00257399457527579, -0.00272918779570106, 
--0.00288701341719907, -0.00304622872422657, -0.00320682861151727, 
--0.00337004100935546, -0.0035394204590024, -0.00372401360975988, 
--0.00394641582694833, -0.00426289366955524, -0.00481349361513796, 
-0.0498812120016985, -0.00486795626363904, -0.00489248040543202, 
--0.00506773338978908, -0.0053041255594562, -0.00556651532555663, 
--0.00584291348445426, -0.00613380614622446, -0.00645258762044093, 
--0.00683748886470009, -0.00738562438897464, -0.00833947848864793, 
-0.0879651536698458, -0.00887764371836037, -0.00878014235384082, 
--0.00903459105136617, -0.00943147699490281, -0.00988813615150383, 
--0.0103751360726832, -0.0108900645492654, -0.0114553814064586, 
--0.0121384202964276, -0.0131113533044853, -0.014804520360688, 
-0.157053218249434, -0.0160149379363951, -0.0157590434545534, 
--0.0161773841902343, -0.0168622414274719, -0.0176432451043688, 
--0.0184356492983448, -0.0191648608671602, -0.0197000099546059, 
--0.019737402540734, -0.018530063067005, -0.0142225084534422, 
-0.211318774793622, -0.0140864598336031, -0.0184754535208136, 
--0.0197155990392415, -0.0196915951908584, -0.0191623409966496, 
--0.0184367802274008, -0.0176490339921908, -0.0168778436208376, 
--0.0162166943646363, -0.0158570696439896, -0.0162589782571106, 
-0.157334041476404, -0.0147285126974924, -0.0130809131031503, 
--0.0121264387583282, -0.0114511882636044, -0.0108899255601401, 
--0.0103789274591928, -0.00989923436751466, -0.0094597656577513, 
--0.00910526288757988, -0.00895613481108483, -0.00931568848314211, 
-0.0886257771126413, -0.00829672265316354, -0.00736862479221523, 
--0.0068311063609374, -0.00645113821270646, -0.00613599905134524, 
--0.00585070161397506, -0.00558683446927849, -0.00535507111588482, 
--0.00519467538850876, -0.00520846820004705, -0.00565439566403268, 
-0.0511544743746994, -0.00478892018486581, -0.00425334311850445, 
--0.00394338282490519, -0.00372479708905327, -0.00354471815432786, 
--0.00338457083148406, -0.00324353022601475, -0.00313778708824834, 
--0.00311496666618348, -0.0032965417726257, -0.00398601153416262, 
-0.0317127196167608, -0.0029689869841078, -0.00263716494893945, 
--0.00244551630198261, -0.00231127164269655, -0.00220278322759373, 
--0.00211134075659429, -0.00204341436589488, -0.0020264166355632, 
--0.00213311514374545, -0.00254643626626461, -0.00372237195500053, 
-0.0234485494199315, -0.00219463252010391, -0.00194834895249063, 
--0.00180431680906984, -0.00169926370054469, -0.0016046303831841, 
--0.00150113704082987, -0.0013616134945194, -0.00112680252535651, 
+fw <- c(0.00956552692576638, -0.00274727619388826, -0.00188080728374881,
+-0.00157641397678636, -0.00149801928067724, -0.00151081133797857,
+-0.00156118547095051, -0.00162900607708162, -0.0017096746540415,
+-0.00181003459214481, -0.00195446558853261, -0.00220659523541729,
+0.019229165863672, -0.0011872897724425, -0.00152782360394282,
+-0.00172383721349435, -0.00186198724713144, -0.001977399429168,
+-0.0020849500680648, -0.00219251431918478, -0.00230797944438408,
+-0.00244626891662387, -0.00264263262430528, -0.00298403900836074,
+0.0293780531621944, -0.00257399457527579, -0.00272918779570106,
+-0.00288701341719907, -0.00304622872422657, -0.00320682861151727,
+-0.00337004100935546, -0.0035394204590024, -0.00372401360975988,
+-0.00394641582694833, -0.00426289366955524, -0.00481349361513796,
+0.0498812120016985, -0.00486795626363904, -0.00489248040543202,
+-0.00506773338978908, -0.0053041255594562, -0.00556651532555663,
+-0.00584291348445426, -0.00613380614622446, -0.00645258762044093,
+-0.00683748886470009, -0.00738562438897464, -0.00833947848864793,
+0.0879651536698458, -0.00887764371836037, -0.00878014235384082,
+-0.00903459105136617, -0.00943147699490281, -0.00988813615150383,
+-0.0103751360726832, -0.0108900645492654, -0.0114553814064586,
+-0.0121384202964276, -0.0131113533044853, -0.014804520360688,
+0.157053218249434, -0.0160149379363951, -0.0157590434545534,
+-0.0161773841902343, -0.0168622414274719, -0.0176432451043688,
+-0.0184356492983448, -0.0191648608671602, -0.0197000099546059,
+-0.019737402540734, -0.018530063067005, -0.0142225084534422,
+0.211318774793622, -0.0140864598336031, -0.0184754535208136,
+-0.0197155990392415, -0.0196915951908584, -0.0191623409966496,
+-0.0184367802274008, -0.0176490339921908, -0.0168778436208376,
+-0.0162166943646363, -0.0158570696439896, -0.0162589782571106,
+0.157334041476404, -0.0147285126974924, -0.0130809131031503,
+-0.0121264387583282, -0.0114511882636044, -0.0108899255601401,
+-0.0103789274591928, -0.00989923436751466, -0.0094597656577513,
+-0.00910526288757988, -0.00895613481108483, -0.00931568848314211,
+0.0886257771126413, -0.00829672265316354, -0.00736862479221523,
+-0.0068311063609374, -0.00645113821270646, -0.00613599905134524,
+-0.00585070161397506, -0.00558683446927849, -0.00535507111588482,
+-0.00519467538850876, -0.00520846820004705, -0.00565439566403268,
+0.0511544743746994, -0.00478892018486581, -0.00425334311850445,
+-0.00394338282490519, -0.00372479708905327, -0.00354471815432786,
+-0.00338457083148406, -0.00324353022601475, -0.00313778708824834,
+-0.00311496666618348, -0.0032965417726257, -0.00398601153416262,
+0.0317127196167608, -0.0029689869841078, -0.00263716494893945,
+-0.00244551630198261, -0.00231127164269655, -0.00220278322759373,
+-0.00211134075659429, -0.00204341436589488, -0.0020264166355632,
+-0.00213311514374545, -0.00254643626626461, -0.00372237195500053,
+0.0234485494199315, -0.00219463252010391, -0.00194834895249063,
+-0.00180431680906984, -0.00169926370054469, -0.0016046303831841,
+-0.00150113704082987, -0.0013616134945194, -0.00112680252535651,
 -0.000652587845103192, 0.000418350003536461, 0.00297474772180491
 )
-plot(-72:71, fw, col = 1, type = 'l', xlab = "", 
+plot(-72:71, fw, col = 1, type = 'l', xlab = "",
      ylab = "weights", main = "Comparison of SEATS vs X-11 Seasonal Filter"); abline(h = 0, lty = 'dotted')
 
 # cairo_pdf(file.path(ourdir, 'seasfilter_sigex_x11.pdf'), width = 7, height = 5, )
@@ -479,3 +505,8 @@ The ultimate decision between the two comes down to a few questions.
 -   If you check SEATS models carefully, it may produce a more stable adjustment.
 
 To sum up, whether you should use SEATS or X11 also depends on how much work you are willing to invest in a series.
+
+
+## Exercises
+
+<span class="tag tag-exercises"><i class="fas fa-shoe-prints"></i> Exercises</span>

@@ -1,5 +1,7 @@
 set.seed(1014)
 
+suppressMessages(library(tsbox))
+
 suppressMessages(library(tibble))
 suppressMessages(library(dplyr))
 suppressMessages(library(seasonal))
