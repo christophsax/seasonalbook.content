@@ -41,9 +41,10 @@ As well as the following statistics:
 None of the three statistics shows any significance (indicated by one or several stars), which is a good sign.
 By now we know that `AirPassengers` is a series that is easy to adjust and that the automated procedures of X-13 work well on this series, so this should not come as a surprise.
 
-At this point in the text we introduce an intentionally poor seasonal adjustment model for the `AirPassengers` series. 
+At this point in the text we introduce an intentionally poor seasonal adjustment model for the `AirPassengers` series.
 This will be a useful tool to understand some of the basic concepts and a contrast when trying to understand the output of the X-13 program and the `seas()` function.
-Our poor seasonal adjustment will have a very short seasonal filter and a mispecified ARIMA model. 
+Our poor seasonal adjustment will have a very short seasonal filter and a mispecified ARIMA model.
+
 ```{r}
 m_bad = seas(AirPassengers, x11.seasonalma = "s3x3", arima.model = "(0 0 1)(0 0 0)")
 summary(m_bad)
@@ -53,7 +54,7 @@ When we compare the bottom half of the `summary` output to the automatic model a
 Usually, it makes sense to look at the statics if the summary indicates significance on any of them.
 
 We will already discussed the role of information criterion and the statistics in more detail below.
-We also can see the AICc value is significantly higher. 
+We also can see the AICc value is significantly higher.
 This tells us the model above is a better fit.
 
 In addition, looking the estimated seasonal component gives you a good understanding on what actually happened during seasonal adjustment.
@@ -79,8 +80,8 @@ Three prominent ones are:
 -   Visual inspection of the spectrum,
 -   or an F-test for residual seasonality
 
-Additionally, (Findley, Lytras and Mcelroy 2017) find the  most diagnostics must be applied to a subspan of the seasonally adjusted series for best residual seasonality detection. 
-Keep this in mind when doing any analysis of your final seasonal adjustment. 
+Additionally, (Findley, Lytras and Mcelroy 2017) find the most diagnostics must be applied to a subspan of the seasonally adjusted series for best residual seasonality detection.
+Keep this in mind when doing any analysis of your final seasonal adjustment.
 
 <!-- (I THINK THIS IS A GOOD PLACE TO ADD A REFERENCE TABLE THAT LISTS THESE THREE METHODS ALONG WITH PROS, CONS, IMMEDIATE INTERPRETATIONS. I THINK MANY READERS WILL JUST WANT TO KNOW HOW TO IDENTIFY RESIDUAL SEASONALITY AND MATCH UP A TEST WITH THEIR SKILL-SET AND THEN SEE HOW TO APPLY IT) -->
 
@@ -182,17 +183,17 @@ Always try to eliminate peaks at 1/12, 2/12, 3/12, 4/12, or TD 0.348 but be awar
 When employing X-11 seasonal adjustment, it is crucial to consider that peaks observed in the spectrum of the seasonally adjusted series or irregular component, these are more significance than peaks in the spectrum of the model residuals.
 In the case of indirect adjustments, it is advisable to prioritize the analysis of the seasonally adjusted series.
 
-## Model Appropriateness
+## Model Appropriateness {#sec-model-appropriateness}
 
 Often a poor seasonal adjustment might be due to a poor fitting regARIMA model.
-The converse is not always true and does not always need to be rectified if the resulting seasonal adjustment is free of residual seasonality and passes other diagnostic test. 
+The converse is not always true and does not always need to be rectified if the resulting seasonal adjustment is free of residual seasonality and passes other diagnostic test.
 Some diagnostics that can be used to test your regARIMA model are:
 
-- t-tests on model coefficients (reported in the summary)
-- Normality of residuals (reported in the summary as `Shapiro`)
-- Sample autocorrelations and partial autocorrelations
-- The Ljung-Box Q statistic
-- A spectrum plot of regARIMA residuals 
+-   t-tests on model coefficients (reported in the summary)
+-   Normality of residuals (reported in the summary as `Shapiro`)
+-   Sample autocorrelations and partial autocorrelations
+-   The Ljung-Box Q statistic
+-   A spectrum plot of regARIMA residuals
 
 ```{=html}
 <!--
@@ -208,7 +209,6 @@ names(udg(m))
 Box.test(resid(m), lag = 24, type = "Ljung")
  -->
 ```
-
 ## Stability and smoothness
 
 We explore two related concepts and their associated specs.
@@ -271,7 +271,7 @@ The 0.03 on the right hand side comes from the default cutoff.
 Some of the other defaults are as follows
 
 | Series                                          | Default cutoff | spec option     |
-|-------------------------------------|------------------|------------------|
+|------------------------------------|------------------|------------------|
 | Seasonal factors and seasonally adjusted series | 3%             | `cutseas = 3.0` |
 | month-to-month and year-to-year change          | 3%             | `cutchng = 3.0` |
 | trading day factors                             | 2%             | `cuttd = 2.0`   |
@@ -399,7 +399,28 @@ knitr::kable(M2M, caption = "Month-to-Month Changes in SA Series")
 
 Some overall guidance for using modifications to a failing sliding span diagnostic can be summarized as follows:
 
-- Try raising X-11 sigma limits 
-- Look at regARIMA model
-- Don't use sliding spans to choose seasonal filters as they tend to favor longer filters. 
+-   Try raising X-11 sigma limits
+-   Look at regARIMA model
+-   Don't use sliding spans to choose seasonal filters as they tend to favor longer filters.
 
+
+## Exercises
+
+[<i class="fas fa-shoe-prints"></i> Exercises]{.tag .tag-exercises}
+
+1.  **Using SARIMA(1 1 0)(1 1 0) model for the `AirPassengers` series**
+
+    -   Perform seasonal adjustment on `AirPassengers` series using the X-11 method and specify SARIMA(1, 1, 0)(1, 1, 0) model.
+    -   Does the QS diagnostic indicate residual seasonality?
+
+2.  **Stability and smoothness**
+
+    -   Perform seasonal adjustment on `AirPassengers` series using the X-11 method and specify SARIMA(1, 1, 0)(1, 1, 0) model.
+    -   Which seasonal adjustment is smoother? Use the monthplot and sliding spans to decide. 
+
+3.  **Compare SARIMA(1 1 0)(1 1 0) to airline model**
+
+    -   Perform seasonal adjustment on `AirPassengers` series using the X-11 method and specify SARIMA(1, 1, 0)(1, 1, 0) model.
+    -   Perform seasonal adjustment on `AirPassengers` series using the X-11 method and specify SARIMA(0, 1, 1)(0, 1, 1) model.
+    -   Describe the differences observed.
+    -   Use statistical diagnotics listed in @sec-model-appropriateness to compare the model fits.
