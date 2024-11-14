@@ -3,6 +3,7 @@ output: html_document
 editor_options: 
   chunk_output_type: console
 ---
+
 # Presence of seasonality {#sec-presence-of-seasonality}
 
 ```{r}
@@ -28,9 +29,8 @@ In general, adjusting a non-seasonal series is less of a problem than not adjust
 So, unless you have good reasons to believe that a series is not-seasonal, adjust it.
 *When in doubt, adjust!*
 
-Of course the final answer is never so simple. 
-For example, the International Monetary Fund (IMF) in their [Quarterly National Accounts Manual](https://www.imf.org/external/pubs/ft/qna/pdf/2017/chapter7.pdf) about seasonal adjustment says, "A series should be seasonally adjusted only when there is evidence of identifiable seasonality. Series with no seasonality or too unstable seasonality should not be seasonally adjusted." 
-The IMF is attempting to maintain accounting relationship which are of utmost important to their seasonal adjustment policies. 
+Of course the final answer is never so simple.
+For example, the International Monetary Fund (IMF) in their [Quarterly National Accounts Manual](https://www.imf.org/external/pubs/ft/qna/pdf/2017/chapter7.pdf) about seasonal adjustment says, "A series should be seasonally adjusted only when there is evidence of identifiable seasonality. Series with no seasonality or too unstable seasonality should not be seasonally adjusted." The IMF is attempting to maintain accounting relationship which are of utmost important to their seasonal adjustment policies.
 
 ## Available Tests
 
@@ -44,11 +44,11 @@ To help you to make a good decision, X-13 offers a few formal checks:
 
 -   The M7 statistic applies critical values to the Identifiable Seasonality Test (IDS) and returns a simple yes or no answer.
 
-- F-test for seasonal regressors
+-   F-test for seasonal regressors
 
 Which tests are preferable, and how should a user decide if the tests are not aligned?
-Often, this will only happen with marginal cases and hence we suggest following our guiding principle and adjusting your series. 
-More often than not the tests will provide enough evidence to make help make an informed decision about whether a series is seasonal or not. 
+Often, this will only happen with marginal cases and hence we suggest following our guiding principle and adjusting your series.
+More often than not the tests will provide enough evidence to make help make an informed decision about whether a series is seasonal or not.
 
 ## QS Test
 
@@ -65,12 +65,12 @@ qs(seas(AirPassengers))
 The QS Statistic shows the degree of seasonality in various components of the seasonal adjustment.
 For our purposes, the first line is the most interesting.
 It shows that the QS value of the original series is 168, which comes with a p-value of essentially 0.
-Since the null hypothesis is no seasonality, this p-value can be read as high evidence the series is seasonal. 
+Since the null hypothesis is no seasonality, this p-value can be read as high evidence the series is seasonal.
 
 In other words, `AirPassengers` is a clearly seasonal series, which should not come as a surprise at this point.
 
 If you encounter a series with a moderate p-value for the first line, you can also consider the 8th line (the second occurrence of `qsori`) which again calculates the QS statistic for the original series but restricting the view to the most recent 8 years of data.
-Since often the more recent data is more crucial to seasonal adjust correctly this additional test can help make the decision. 
+Since often the more recent data is more crucial to seasonal adjust correctly this additional test can help make the decision.
 
 ## Identifiable Seasonality Test
 
@@ -183,7 +183,7 @@ From the previous discussion, it should not be surprising that the answer is *no
 udg(m_x11, "f2.idseasonal")
 ```
 
-## F-test for seasonality
+## F-test for seasonality {#sec-f-test-seasonality}
 
 Another simple yet effective test for seasonality is to include seasonal regressor in your model and then check if they are significant.
 
@@ -201,7 +201,7 @@ rownames(Ftest) = c("df1", "df2", "test_stat", "p_value")
 knitr::kable(Ftest)
 ```
 
-We see again that AirPassengers is seasonal. 
+We see again that AirPassengers is seasonal.
 
 ```{r}
 m = seas(

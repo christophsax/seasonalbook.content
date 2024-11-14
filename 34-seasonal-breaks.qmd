@@ -3,6 +3,7 @@ output: html_document
 editor_options: 
   chunk_output_type: console
 ---
+
 ## Seasonal breaks {#sec-seasonal-breaks}
 
 ```{r}
@@ -74,6 +75,10 @@ monthplot(seas(imp_cn))
 This makes it obvious that there were very strong December effects before 2000.
 We don't know anything about the series, but we can speculate that prior to 2000, custom receipts were counted at the end of the year, rather than at the date of import.
 
+We can put in a change of regime regression variable that allows for different seasonal regressors before and after January 2000. 
+This regression variable is discussed in more detail below in @sec-modelling-seasonal-breaks.
+
+
 ```{r}
 m = seas(
   imp_cn,
@@ -88,24 +93,24 @@ summary(m)
 
 The coefficients from the summary are as follows:
 
-| Month | Pre 2000 coefficients | Post 2000 coefficients |
-|-------|-----------------------|------------------------|
-| Jan   |       -0.0654535      |       -0.3183942       |
-| Feb   |       -0.1970206      |       -0.1122450       |
-| Mar   |        0.0356460      |       -0.0295122       |
-| Apr   |        0.0328228      |       -0.0286242       |
-| May   |       -0.0238587      |        0.0669706       |
-| Jun   |        0.0067156      |        0.0165824       |
-| Jul   |        0.0354693      |       -0.0001398       |
-| Aug   |        0.0350369      |       -0.0354610       |
-| Sep   |        0.0813043      |       -0.0641267       |
-| Oct   |       -0.0441661      |        0.0496035       |
-| Nov   |        0.0328833      |        0.0332059       |
-| Dec (derived) | -0.0294782      |      0.3710507  |
+| Month         | Pre 2000 coefficients | Post 2000 coefficients |
+|---------------|-----------------------|------------------------|
+| Jan           | -0.0654535            | -0.3183942             |
+| Feb           | -0.1970206            | -0.1122450             |
+| Mar           | 0.0356460             | -0.0295122             |
+| Apr           | 0.0328228             | -0.0286242             |
+| May           | -0.0238587            | 0.0669706              |
+| Jun           | 0.0067156             | 0.0165824              |
+| Jul           | 0.0354693             | -0.0001398             |
+| Aug           | 0.0350369             | -0.0354610             |
+| Sep           | 0.0813043             | -0.0641267             |
+| Oct           | -0.0441661            | 0.0496035              |
+| Nov           | 0.0328833             | 0.0332059              |
+| Dec (derived) | -0.0294782            | 0.3710507              |
 
-We see multiple sign changes and multiple large discrepancies between the two model spans. 
-This is an indication that this series has a change-of-regime. 
-Also as previously indicated the December effect was much different post 2000. 
+We see multiple sign changes and multiple large discrepancies between the two model spans.
+This is an indication that this series has a change-of-regime.
+Also as previously indicated the December effect was much different post 2000.
 
 ## Restricting model span
 
@@ -144,25 +149,24 @@ Note that the ARIMA model that has been chosen is not optimal for the period bef
 This will affect the backcast of the series, and may lead to slighly sub-optimal results for the first year.
 Since the interest in the accuracy of the latest data is usually much higher, this seems like a good compromise in many cases.
 
-## Modelling seasonal breaks
+## Modelling seasonal breaks {#sec-modelling-seasonal-breaks}
 
 A way to 'model' seasonal breaks to include seasonal dummies before (and possibly after) the supposed break.
 A seasonal dummy model can be estimated by an appropriate specification of the `regression.variables` argument.
 This is done with a so-called *change-of-regime* regression variable.
 There are two types of change-of-regime regressors available: full and partial.
 
-Change of regime regressors are denoted by adding the change date, enclosed in one or two slashes. 
-This designated date divides the series under analysis into two periods: an early span encompassing data prior to the change date, and a late span covering data from this date onwards. 
+Change of regime regressors are denoted by adding the change date, enclosed in one or two slashes.
+This designated date divides the series under analysis into two periods: an early span encompassing data prior to the change date, and a late span covering data from this date onwards.
 
-- Partial change of regime variables are active only within one of these spans, while remaining zero in the other. 
-- Full change of regime variables simultaneously estimate the base regression and the partial change of regime regression for the early span. 
+-   Partial change of regime variables are active only within one of these spans, while remaining zero in the other.
+-   Full change of regime variables simultaneously estimate the base regression and the partial change of regime regression for the early span.
 
-
-| Type                                          | Syntax              | Example       |
-|-----------------------------------------------|---------------------|---------------|
-| Full change of regime regressor              | `reg/date/`        | `seasonal/2000.jan/` |
-| Partial change of regime regressor, zero before change date | `reg//date/`       | `seasonal//2000.jan/` |
-| Partial change of regime regressor, zero on and after change date | `reg/date//`       | `sesaonal/2000.jan//` |
+| Type                                                              | Syntax       | Example               |
+|--------------------------------------|-----------------|-----------------|
+| Full change of regime regressor                                   | `reg/date/`  | `seasonal/2000.jan/`  |
+| Partial change of regime regressor, zero before change date       | `reg//date/` | `seasonal//2000.jan/` |
+| Partial change of regime regressor, zero on and after change date | `reg/date//` | `sesaonal/2000.jan//` |
 
 To model the span after 2000, we can either cut the time series input (as we did in the case study), or use the `series.span` argument:
 
@@ -213,13 +217,27 @@ summary(m3)
 
 By default, seasonal outliers are removed from the final series.
 
+## F-test for seasonality when using change of regime regressor
+
+We can conduct an F-test for seasonality similar to those discussed in @sec-f-test-seasonality. 
+Here instead of a single F-test over the whole model span, instead we look at 3 different F-tests; before the change of regime, after the change of regime and a combined test.
+We can find the F-test results by using the `grep` function over the `names(udg(m))` character vector. 
+
+```{r}
+ftest_udg_names = grep(pattern = "ftest", names(udg(m)), value = TRUE)
+ftest = udg(m, ftest_udg_names) |> t() |> round(4)
+colnames(ftest) = c("df1", "df2", "test_stat", "p_val")
+ftest
+```
+
+
 ## When to model a seasonal break?
 
 When should we model a seasonal break?
 When we have enough data after the break (as in the imports of goods to China example), restricting `series.modelspan` is the easiest way and leads to good results.
 
 In some situations you may not be able to restrict the model span.
-For example if the seasonal break too close to the end of the series or if there is a policy restricting it. 
+For example if the seasonal break too close to the end of the series or if there is a policy restricting it.
 In this case, modelling the seasonal break using seasonal regressors may be an option.
 We apply this technique in the following Case study.
 
