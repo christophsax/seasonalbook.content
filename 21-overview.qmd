@@ -205,7 +205,7 @@ This is why the default SEATS procedure in the introductory example was overwrit
 
 By default, the `automdl` spec finds a good ARIMA model.
 By specifying the `model` argument of the `arima` spec, the automated modeling is deactivated.
-Instead of the automatically chosen (0 1 1)0 1 1) ARIMA model, the following estimates an (1 1 0)(1 1 0) model.
+Instead of the automatically chosen (0 1 1)(0 1 1) ARIMA model, the following estimates an (1 1 0)(1 1 0) model.
 
 ```{r}
 m_arima <- seas(AirPassengers, arima.model = c(1, 1, 0, 1, 1, 0))
