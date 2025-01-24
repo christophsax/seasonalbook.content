@@ -198,3 +198,17 @@ df_to_md <- function(data) {
   paste(c(header_row, separator_row, data_rows), collapse = "\n")
 }
 
+plot_fred = function(ID){
+  fred |> filter(id == ID) |> pull(ts) -> xL
+  plot_title = fred |> 
+    filter(id == ID) |>
+    pull(title)
+  x = xL[[1]]
+  tsbox::ts_plot(x, title = plot_title)
+}
+
+ext_fred = function(ID){
+  fred |> filter(id == ID) |> pull(ts) -> xL
+  x = xL[[1]]
+  return(x)
+}
