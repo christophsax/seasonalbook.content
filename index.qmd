@@ -12,11 +12,11 @@ It presents background material and references for the theoretically minded read
 The main focus, however, is on concrete problems and examples.
 
 We will showcase methods through detailed examples with associated code.
-This presentation allows the academic level to be quite broad; understood by undergraduates all the way through advanced Ph.D. students.
+This presentation allows the academic level to be quite broad.
 
 ## Key features of the book
 
--   Each chapter include a concrete practical problem and shows how X-13 can be used to address it
+-   Each chapter includes a concrete practical problem and shows how X-13 can be used to address it
 
 -   Teach-by-example format
 
@@ -26,30 +26,31 @@ This presentation allows the academic level to be quite broad; understood by und
 
 -   For each example given the book will give answers, code and provide data
 
-
-Certainly! Here's a refined version of the section describing the specialized boxes used throughout your book:
-
-
 ## Specialized Content Boxes
 
-We employ a variety of specialized content boxes to enhance the reading experience. Each type of box serves a unique purpose, catering to different reader interests.
+We employ a variety of specialized content boxes to enhance the reading experience.
+Each type of box serves a unique purpose, catering to different reader interests.
 
-<span class="tag tag-case-study"><i class="fas fa-graduation-cap"></i> Case Study</span>
+[<i class="fas fa-graduation-cap"></i> Case Study]{.tag .tag-case-study}
 
-These boxes present practical applications of specific topics discussed in the book. They feature a wide array of time series examples, varying in geographical and topological contexts. Case studies are designed to be universally appealing, offering insights for all readers.
+These boxes present practical applications of specific topics discussed in the book.
+They feature a wide array of time series examples, varying in geographical and topological contexts.
+Case studies are designed to be universally appealing, offering insights for all readers.
 
+[<i class="fas fa-registered"></i> Fundamentals]{.tag .tag-fundamentals}
 
-<span class="tag tag-fundamentals"><i class="fas fa-registered"></i> Fundamentals</span>
+To gain deeper insights, it is sometimes interesting to derive of X-13 from basic fundamentals.
+Instead of solely depending on X-13 for analysis, we explore key concepts through R functions.
+This approach is particularly engaging for readers who are proficient in R.
 
-To gain deeper insights, it is sometimes interesting to derive of X-13 from basic fundamentals. Instead of solely depending on X-13 for analysis, we explore key concepts through R functions. This approach is particularly engaging for readers who are proficient in R.
+[<i class="fas fa-wave-square"></i> Frequency Domain]{.tag .tag-frequency}
 
-
-<span class="tag tag-frequency"><i class="fas fa-wave-square"></i> Frequency Domain</span>
-
-Time series analysis in the frequency domain provides a powerful perspective for understanding time series behaviors. These boxes introduce and explain the applications and advantages of frequency domain methods in time series analysis.
+Time series analysis in the frequency domain provides a powerful perspective for understanding time series behaviors.
+These boxes introduce and explain the applications and advantages of frequency domain methods in time series analysis.
 If you are unfamiliar with the frequency domain, you can safely skip these sections.
 
+[<i class="fas fa-shoe-prints"></i> Exercises]{.tag .tag-exercises}
 
-<span class="tag tag-exercises"><i class="fas fa-shoe-prints"></i> Exercises</span>
-
-Each chapter concludes with a series of exercises. These are designed to reinforce the material covered and test your knowledge. They are particularly valuable for readers using this book in an academic course or for self-study.
+Each chapter concludes with a series of exercises.
+These are designed to reinforce the material covered and test your knowledge.
+They are particularly valuable for readers using this book in an academic course or for self-study.
