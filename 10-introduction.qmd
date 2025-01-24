@@ -100,8 +100,10 @@ library(seasonalbook)
 plot(grocery)
 ```
 
+The *seasonalbook* package contains a tibble, `fred`, with 4000 series from the Federal Reserve Economic Data ([FRED](https://fred.stlouisfed.org)) website. We will utilize these throughout as well as provide helper functions to work with this data frame. For example, the `ext_fred` and `plot_fred` functions will extract and plot a series based on its *id* within the tibble. The Producer Price Index by Industry: Supermarkets and Other Grocery Stores series is given by the following:
+
 ```{r}
-plot_fred("PCU445110445110")
+plot_fred(ID = "PCU445110445110")
 ```
 
 ## Acknowledgements {.unnumbered}
