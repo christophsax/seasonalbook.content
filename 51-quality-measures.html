@@ -2,10 +2,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.336">
+<meta name="generator" content="quarto-1.6.32">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="James Livsey and Christoph Sax">
-<title>Seasonal Adjustment in R - 15&nbsp; Quality measures</title>
+<title>15&nbsp; Quality measures – Seasonal Adjustment in R</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,7 +20,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -31,7 +31,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -68,16 +68,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2486e1f0a3ee9ee1fc393803a1361cdb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap-ed6da6eef3892af8a4b5ed59bfb951f5.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
   "panel-placement": "start",
   "type": "textbox",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -86,8 +92,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script><meta name="robots" content="noindex">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -121,25 +129,50 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </style>
 <script src="site_libs/quarto-diagram/mermaid.min.js"></script><script src="site_libs/quarto-diagram/mermaid-init.js"></script><link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 </head>
 <body class="nav-sidebar floating">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./50-part-quality-assessment.html">Quality assessment</a></li><li class="breadcrumb-item"><a href="./51-quality-measures.html"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Quality measures</span></a></li></ol></nav>
-      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-      </a>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./50-part-quality-assessment.html">Quality assessment</a></li><li class="breadcrumb-item"><a href="./51-quality-measures.html"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Quality measures</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
     </div>
   </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Seasonal Adjustment in R</a> 
         <div class="sidebar-tools-main">
@@ -163,7 +196,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="sidebar-item-container"> 
             <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Welcome</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -186,7 +219,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="sidebar-item-container"> 
             <a href="./20-part-basics.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Basics</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -227,7 +260,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="sidebar-item-container"> 
             <a href="./30-part-data-problems.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Data Problems</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -262,7 +295,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="sidebar-item-container"> 
             <a href="./40-part-other-issues.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Other Issues</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -291,7 +324,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="sidebar-item-container"> 
             <a href="./50-part-quality-assessment.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Quality assessment</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -312,7 +345,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
     </ul>
 </div>
-</nav><div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+</nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
@@ -326,7 +359,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#frequency-domain-optional-spectrum" id="toc-frequency-domain-optional-spectrum" class="nav-link" data-scroll-target="#frequency-domain-optional-spectrum"><span class="header-section-number">15.2.2</span> Frequency Domain (optional): Spectrum</a></li>
   </ul>
 </li>
-  <li><a href="#model-appropriateness" id="toc-model-appropriateness" class="nav-link" data-scroll-target="#model-appropriateness"><span class="header-section-number">15.3</span> Model Appropriateness</a></li>
+  <li><a href="#sec-model-appropriateness" id="toc-sec-model-appropriateness" class="nav-link" data-scroll-target="#sec-model-appropriateness"><span class="header-section-number">15.3</span> Model Appropriateness</a></li>
   <li>
 <a href="#stability-and-smoothness" id="toc-stability-and-smoothness" class="nav-link" data-scroll-target="#stability-and-smoothness"><span class="header-section-number">15.4</span> Stability and smoothness</a>
   <ul class="collapse">
@@ -334,10 +367,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#sliding-spans" id="toc-sliding-spans" class="nav-link" data-scroll-target="#sliding-spans"><span class="header-section-number">15.4.2</span> Sliding spans</a></li>
   </ul>
 </li>
-  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/51-quality-measures.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="header-section-number">15.5</span> Exercises</a></li>
+  </ul><div class="toc-actions"><ul><li><a href="https://github.com/christophsax/seasonalbook.content/edit/main/51-quality-measures.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./50-part-quality-assessment.html">Quality assessment</a></li><li class="breadcrumb-item"><a href="./51-quality-measures.html"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Quality measures</span></a></li></ol></nav><div class="quarto-title">
 <h1 class="title"><span id="sec-quality-measures" class="quarto-section-identifier"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Quality measures</span></span></h1>
 </div>
 
@@ -350,6 +384,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     
   </div>
   
+
 
 </header><p>What makes a good seasonal adjustment? Different users will have varying definitions of ‘quality’ based on their specific needs and the audiences they serve. For example, a federal statistical agency, who is concerned about the users of their seasonal adjustments, may have very different definition of quality compared with a single analyst who is interested in only long-term trend.</p>
 <p>Regardless of the end goal, some criteria are valid most of the time. <strong>A good seasonal adjustment should, most importantly, have no residual seasonality.</strong> It should also, be free of calendar effects, exhibit stability and smoothness, and have no significant trading day effects.</p>
@@ -378,7 +413,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span><span class="co">#&gt; AICc: 947.3, BIC: 963.9  QS (no seasonality in final):    0  </span></span>
 <span><span class="co">#&gt; Box-Ljung (no autocorr.): 26.65   Shapiro (normality): 0.9908</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The summary gives an overview of the adjustment model and provides diagnostics - we briefly went through its elements in <a href="11-getting-started.html"><span>Chapter&nbsp;2</span></a>.</p>
+<p>The summary gives an overview of the adjustment model and provides diagnostics - we briefly went through its elements in <a href="11-getting-started.html" class="quarto-xref"><span>Chapter 2</span></a>.</p>
 <p>In the lower part, the summary of the adjustment model shows various quality measures:</p>
 <ul>
 <li>The AICc and BIC information criterion (we use them for model comparison)</li>
@@ -390,13 +425,39 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>and the Shapiro statistic (are the residuals normally-distributed? Is our ARIMA model appropriate?).</li>
 </ul>
 <p>None of the three statistics shows any significance (indicated by one or several stars), which is a good sign. By now we know that <code>AirPassengers</code> is a series that is easy to adjust and that the automated procedures of X-13 work well on this series, so this should not come as a surprise.</p>
-<p>We will already discussed the role of information criterion and the statistics in more detail below. Usually, it makes sense to look at the statics if the summary indicates significance on any of them.</p>
+<p>At this point in the text we introduce an intentionally poor seasonal adjustment model for the <code>AirPassengers</code> series. This will be a useful tool to understand some of the basic concepts and a contrast when trying to understand the output of the X-13 program and the <code><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas()</a></code> function. Our poor seasonal adjustment will have a very short seasonal filter and a mispecified ARIMA model.</p>
+<div class="cell">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_bad</span> <span class="op">=</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, x11.seasonalma <span class="op">=</span> <span class="st">"s3x3"</span>, arima.model <span class="op">=</span> <span class="st">"(0 0 1)(0 0 0)"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m_bad</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; seas(x = AirPassengers, x11.seasonalma = "s3x3", arima.model = "(0 0 1)(0 0 0)")</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients:</span></span>
+<span><span class="co">#&gt;                     Estimate Std. Error z value Pr(&gt;|z|)    </span></span>
+<span><span class="co">#&gt; LS1952.Jun          76.00843   11.59453   6.556 5.54e-11 ***</span></span>
+<span><span class="co">#&gt; LS1955.Mar          70.06467   14.15525   4.950 7.43e-07 ***</span></span>
+<span><span class="co">#&gt; LS1956.Jun          69.88725   14.16298   4.935 8.04e-07 ***</span></span>
+<span><span class="co">#&gt; LS1959.Mar          92.30970   13.68401   6.746 1.52e-11 ***</span></span>
+<span><span class="co">#&gt; AO1960.Nov         385.39110   29.95826  12.864  &lt; 2e-16 ***</span></span>
+<span><span class="co">#&gt; LS1960.Nov        -459.92364   11.29136 -40.732  &lt; 2e-16 ***</span></span>
+<span><span class="co">#&gt; AO1960.Dec         432.00000   38.37792  11.256  &lt; 2e-16 ***</span></span>
+<span><span class="co">#&gt; MA-Nonseasonal-01   -0.82960    0.04724 -17.562  &lt; 2e-16 ***</span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; X11 adj.  ARIMA: (0 0 1)(0 0 0)  Obs.: 144  Transform: none</span></span>
+<span><span class="co">#&gt; AICc:  1404, BIC:  1430  QS (no seasonality in final):11.21 **</span></span>
+<span><span class="co">#&gt; Box-Ljung (no autocorr.): 244.9 *** Shapiro (normality): 0.9769 *</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>When we compare the bottom half of the <code>summary</code> output to the automatic model above, which we know fits well, we can see stars next to the QS (indicating residual seasonality), the Box-Ljung (indicating autocorrelation left in the model residuals) and the Shapiro normality test (indicating non-normality of the model residuals). Usually, it makes sense to look at the statics if the summary indicates significance on any of them.</p>
+<p>We will already discussed the role of information criterion and the statistics in more detail below. We also can see the AICc value is significantly higher. This tells us the model above is a better fit.</p>
 <p>In addition, looking the estimated seasonal component gives you a good understanding on what actually happened during seasonal adjustment. We will start with visually inspecting the seasonal component of a seasonal adjustment model.</p>
 </section><section id="residual-seasonality" class="level2" data-number="15.2"><h2 data-number="15.2" class="anchored" data-anchor-id="residual-seasonality">
 <span class="header-section-number">15.2</span> Residual Seasonality</h2>
 <p>The QS statistic in the <code>summary</code> has not shown any significance, meaning the seasonally adjusted series show no seasonality. This is closely related to the concept of residual seasonality. Residual seasonality plays a crucial role in determining the quality of a seasonal adjustment.</p>
 <p>Residual seasonality refers to the presence of remaining seasonal patterns or fluctuations in the seasonally adjusted series or its residuals. It indicates that the seasonal adjustment may not have fully removed all the seasonal effects from the data. If residual seasonality is present in the adjusted series, it can lead to biased or misleading analysis and forecasts.</p>
-<p>It implies that there are still systematic patterns or cycles left in the data, which can hinder accurate interpretation and decision-making. There are many ways to test for residual seasonality. Essentially, this mimics what we learned in <a href="41-presence-of-seasonality.html"><span>Chapter&nbsp;12</span></a> but now applied to the final seasonally adjusted series.</p>
+<p>It implies that there are still systematic patterns or cycles left in the data, which can hinder accurate interpretation and decision-making. There are many ways to test for residual seasonality. Essentially, this mimics what we learned in <a href="41-presence-of-seasonality.html" class="quarto-xref"><span>Chapter 12</span></a> but now applied to the final seasonally adjusted series.</p>
 <p>Three prominent ones are:</p>
 <ul>
 <li>The QS-statistic,</li>
@@ -404,7 +465,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>or an F-test for residual seasonality</li>
 </ul>
 <p>Additionally, (Findley, Lytras and Mcelroy 2017) find the most diagnostics must be applied to a subspan of the seasonally adjusted series for best residual seasonality detection. Keep this in mind when doing any analysis of your final seasonal adjustment.</p>
-
 <!-- (I THINK THIS IS A GOOD PLACE TO ADD A REFERENCE TABLE THAT LISTS THESE THREE METHODS ALONG WITH PROS, CONS, IMMEDIATE INTERPRETATIONS. I THINK MANY READERS WILL JUST WANT TO KNOW HOW TO IDENTIFY RESIDUAL SEASONALITY AND MATCH UP A TEST WITH THEIR SKILL-SET AND THEN SEE HOW TO APPLY IT) -->
 <section id="qs-statistic" class="level3" data-number="15.2.1"><h3 data-number="15.2.1" class="anchored" data-anchor-id="qs-statistic">
 <span class="header-section-number">15.2.1</span> QS statistic</h3>
@@ -415,7 +475,7 @@ QS = n(n+2)\left(\frac{\hat{\gamma}(12)^2}{n - 12} + \frac{\hat{\gamma}(24)^2}{n
 \]</span> For a quarterly series replace the 12s and 24s with 4s and 8s. The value QS is approximately chi-squared with 2 degrees of freedom.</p>
 <p>The seasonal package provides functionality to look at the QS values of various series. We will breakdown what all these tests and p-values are</p>
 <div class="cell">
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">qs</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">qs</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                     qs  p-val</span></span>
 <span><span class="co">#&gt; qsori        167.64858 0.0000</span></span>
 <span><span class="co">#&gt; qsorievadj   203.07731 0.0000</span></span>
@@ -450,27 +510,36 @@ QS = n(n+2)\left(\frac{\hat{\gamma}(12)^2}{n - 12} + \frac{\hat{\gamma}(24)^2}{n
 <p>We start with visual inspection of the spectrum of a series. For those unfamiliar with spectral analysis of a time series, the following discussion is intended to be accessible to all trying to perform seasonal adjustment. Hence, we take some liberties with language an interpretation in an effort to make the discussion accessible. For example, we use the term spectrum to refer to the theoretical construct as well as the estimated periodogram.</p>
 <p>We note here that we will use a parametric AR representation to estimate the spectrum of a process. This is the easiest and most straight forward way to get smooth yet sensible empirical spectral estimates for the everyday user. Peaks in the spectrum indicate significant influence to your series of a sin/cos curve of the corresponding frequency. For example, looking at the spectrum of the AirPassengers series we see large peaks at frequencies 1/12, 2/12, 3/12, …</p>
 <div class="cell">
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/spec.ar.html">spec.ar</a></span><span class="op">(</span><span class="va">AirPassengers</span>, order <span class="op">=</span> <span class="fl">13</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/spec.ar.html">spec.ar</a></span><span class="op">(</span><span class="va">AirPassengers</span>, order <span class="op">=</span> <span class="fl">13</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="51-quality-measures_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="864"></p>
+<div>
+<figure class="figure"><p><img src="51-quality-measures_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="864"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>We know that X-11 with automatic modeling and automatic filter identification performs a good seasonal adjustment. If we look at the spectrum of the seasonally adjusted series, the peaks have been removed.</p>
 <div class="cell">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.seasonal.website">seasonal</a></span><span class="op">)</span></span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.seasonal.website">seasonal</a></span><span class="op">)</span></span>
 <span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">AirPassengers</span>, x11 <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/spec.ar.html">spec.ar</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/final.html">final</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="51-quality-measures_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="864"></p>
+<div>
+<figure class="figure"><p><img src="51-quality-measures_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="864"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Let’s intentionally perform a poor seasonal adjustment and see the effect on the spectrum of the seasonally adjusted series.</p>
 <div class="cell">
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.seasonal.website">seasonal</a></span><span class="op">)</span></span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.seasonal.website">seasonal</a></span><span class="op">)</span></span>
 <span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">AirPassengers</span>, transform.function <span class="op">=</span> <span class="st">"none"</span>, x11 <span class="op">=</span> <span class="st">""</span>, x11.seasonalma <span class="op">=</span> <span class="st">'stable'</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/spec.ar.html">spec.ar</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/final.html">final</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="51-quality-measures_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="864"></p>
+<div>
+<figure class="figure"><p><img src="51-quality-measures_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="864"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Here we see peaks remaining the the final seasonal adjustment. This is a clear indication of lack of quality and something needs to be done to improve the adjustment.</p>
@@ -479,7 +548,7 @@ QS = n(n+2)\left(\frac{\hat{\gamma}(12)^2}{n - 12} + \frac{\hat{\gamma}(24)^2}{n
 <p>Exploring different estimations of the spectrum can also provide insights into potential solutions. Here we used the <code>spec.ar</code> function which utilizes an AIC test to find an appropriate AR(p) model for the series and plots the associated spectrum. This results in a smooth function as apposed to say, <code>spec.pgram</code> which will be much rougher.</p>
 <p>It is important to acknowledge that sometimes these peaks may be spurious, making it challenging to ascertain their significance. Always try to eliminate peaks at 1/12, 2/12, 3/12, 4/12, or TD 0.348 but be aware that not every situation lends itself to a clear-cut answer.</p>
 <p>When employing X-11 seasonal adjustment, it is crucial to consider that peaks observed in the spectrum of the seasonally adjusted series or irregular component, these are more significance than peaks in the spectrum of the model residuals. In the case of indirect adjustments, it is advisable to prioritize the analysis of the seasonally adjusted series.</p>
-</section></section><section id="model-appropriateness" class="level2" data-number="15.3"><h2 data-number="15.3" class="anchored" data-anchor-id="model-appropriateness">
+</section></section><section id="sec-model-appropriateness" class="level2" data-number="15.3"><h2 data-number="15.3" class="anchored" data-anchor-id="sec-model-appropriateness">
 <span class="header-section-number">15.3</span> Model Appropriateness</h2>
 <p>Often a poor seasonal adjustment might be due to a poor fitting regARIMA model. The converse is not always true and does not always need to be rectified if the resulting seasonal adjustment is free of residual seasonality and passes other diagnostic test. Some diagnostics that can be used to test your regARIMA model are:</p>
 <ul>
@@ -507,11 +576,14 @@ Box.test(resid(m), lag = 24, type = "Ljung")
 <p>Secondly, in the following chapter, we will discuss the history spec and revisions.</p>
 <section id="monthplot" class="level3" data-number="15.4.1"><h3 data-number="15.4.1" class="anchored" data-anchor-id="monthplot">
 <span class="header-section-number">15.4.1</span> Monthplot</h3>
-<p>Visually inspecting the seasonal component makes sense almost any adjusmten process. We already looked at the <code>monthplot</code> function in <a href="22-transform.html"><span>Chapter&nbsp;4</span></a>.</p>
+<p>Visually inspecting the seasonal component makes sense almost any adjusmten process. We already looked at the <code>monthplot</code> function in <a href="22-transform.html" class="quarto-xref"><span>Chapter 4</span></a>.</p>
 <div class="cell">
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/monthplot.html">monthplot</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/monthplot.html">monthplot</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="51-quality-measures_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="864"></p>
+<div>
+<figure class="figure"><p><img src="51-quality-measures_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="864"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>The plot organizes the data by month. Observing the January (<code>J</code>) data, the blue bars represent the evolution of the detrended series from 1949 through 1960. The red bar shows the average seasonal component across these years, while the smooth red line indicates the seasonal component as calculated by the model.</p>
@@ -520,9 +592,10 @@ Box.test(resid(m), lag = 24, type = "Ljung")
 </section><section id="sliding-spans" class="level3" data-number="15.4.2"><h3 data-number="15.4.2" class="anchored" data-anchor-id="sliding-spans">
 <span class="header-section-number">15.4.2</span> Sliding spans</h3>
 <p>The sliding span spec and diagnostics provide descriptive information about how seasonal adjustments and their month-to-month changes vary when the data span used to calculate them is changed systematically. Quoting the seminal paper (Findley, et al 1990) “A minimal requirement of the output of any smoothing or adjustment procedure is stability: Appending or deleting a small number of series values should not substantially change the smoothed values-otherwise, what reliable interpretation can they have?” When comparing two neighboring spans, the extent of their differences depends on whether one starts and ends a year later than the other. The default length of the data span is determined by the length of the seasonal filter used for the adjustment.</p>
-<div class="cell">
+<div class="cell" data-layout-align="default">
 <div class="cell-output-display">
 <div>
+<p></p><figure class="figure"></figure><p></p>
 <div>
 <pre class="mermaid mermaid-js">gantt
     title Example of four 8-year spans starting in January 2000
@@ -534,6 +607,7 @@ Box.test(resid(m), lag = 24, type = "Ljung")
     Fourth Span :a4, 2003-01-01, 2920d
 </pre>
 </div>
+<p></p>
 </div>
 </div>
 </div>
@@ -544,11 +618,11 @@ Box.test(resid(m), lag = 24, type = "Ljung")
 \min_j \frac{A_t^{(j)}}{A_{t-1}^{(j)}} &gt; 0.03
 \]</span></p>
 <p>The 0.03 on the right hand side comes from the default cutoff. Some of the other defaults are as follows</p>
-<table class="table">
+<table class="caption-top table">
 <colgroup>
 <col style="width: 50%">
-<col style="width: 24%">
-<col style="width: 24%">
+<col style="width: 25%">
+<col style="width: 25%">
 </colgroup>
 <thead><tr class="header">
 <th>Series</th>
@@ -575,7 +649,7 @@ Box.test(resid(m), lag = 24, type = "Ljung")
 </table>
 <p>The recommendation provided in the X13 manual indicate A(%) &gt; 15 is problematic and A(%) &gt; 25 should not be used. MM(%) &gt; 35 is problematic and MM(%) &gt; 40 should not be used. Why a different ranges? Sometimes, the causes of high values in A(%) or MM(%) can be identified and determined to be relatively unproblematic. This is particularly true when the months with unstable adjustments or changes are predominantly concentrated in a well-known problematic period that occurred several years ago or in one or two specific calendar months each year. These months are typically acknowledged by all data users as potentially troublesome, such as winter months in datasets known to be highly sensitive to variations in winter weather conditions. The sliding spans output is instrumental in identifying such concentrations, making it effortless to spot these patterns.</p>
 <div class="cell">
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">AirPassengers</span>,</span>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">AirPassengers</span>,</span>
 <span>          slidingspans.numspans <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
 <span><span class="co"># Seasonal Factors - Percentage of months flagged as unstable</span></span>
 <span><span class="va">SF</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/udg.html">udg</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"s2.a.per"</span><span class="op">)</span></span>
@@ -586,7 +660,7 @@ Box.test(resid(m), lag = 24, type = "Ljung")
 <span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">SF</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"seasonal factors"</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="va">SF</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<table class="table table-sm table-striped small">
+<table class="caption-top table table-sm table-striped small">
 <thead><tr class="header">
 <th style="text-align: left;"></th>
 <th style="text-align: right;">seasonal factors</th>
@@ -607,7 +681,7 @@ Box.test(resid(m), lag = 24, type = "Ljung")
 </tbody>
 </table>
 </div>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Month-to-Month Changes in SA Series - Percentage of months flagged as unstable</span></span>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Month-to-Month Changes in SA Series - Percentage of months flagged as unstable</span></span>
 <span><span class="va">M2M</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/udg.html">udg</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"s2.d.per"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span><span class="op">(</span><span class="va">M2M</span><span class="op">)</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Number of months flagged"</span>, </span>
@@ -616,7 +690,7 @@ Box.test(resid(m), lag = 24, type = "Ljung")
 <span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">M2M</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"Month-to-Month Changes in SA Series"</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="va">M2M</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<table class="table table-sm table-striped small">
+<table class="caption-top table table-sm table-striped small">
 <thead><tr class="header">
 <th style="text-align: left;"></th>
 <th style="text-align: right;">Month-to-Month Changes in SA Series</th>
@@ -640,7 +714,7 @@ Box.test(resid(m), lag = 24, type = "Ljung")
 </div>
 <p>Let’s return to our example where we intentionally make a poor seasonal adjustment. Now we need to take a log transform which will certainly improve the results from the prior run.</p>
 <div class="cell">
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span></span>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span></span>
 <span>    <span class="va">AirPassengers</span>,</span>
 <span>    transform.function <span class="op">=</span> <span class="st">"log"</span>,</span>
@@ -657,7 +731,7 @@ Box.test(resid(m), lag = 24, type = "Ljung")
 <span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">SF</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"seasonal factors"</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="va">SF</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<table class="table table-sm table-striped small">
+<table class="caption-top table table-sm table-striped small">
 <thead><tr class="header">
 <th style="text-align: left;"></th>
 <th style="text-align: right;">seasonal factors</th>
@@ -678,7 +752,7 @@ Box.test(resid(m), lag = 24, type = "Ljung")
 </tbody>
 </table>
 </div>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Month-to-Month Changes in SA Series - Percentage of months flagged as unstable</span></span>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Month-to-Month Changes in SA Series - Percentage of months flagged as unstable</span></span>
 <span><span class="va">M2M</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/udg.html">udg</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"s2.d.per"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span><span class="op">(</span><span class="va">M2M</span><span class="op">)</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Number of months flagged"</span>, </span>
@@ -687,7 +761,7 @@ Box.test(resid(m), lag = 24, type = "Ljung")
 <span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">M2M</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"Month-to-Month Changes in SA Series"</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="va">M2M</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<table class="table table-sm table-striped small">
+<table class="caption-top table table-sm table-striped small">
 <thead><tr class="header">
 <th style="text-align: left;"></th>
 <th style="text-align: right;">Month-to-Month Changes in SA Series</th>
@@ -711,7 +785,7 @@ Box.test(resid(m), lag = 24, type = "Ljung")
 </div>
 <p>We see the A(%) value of 16.667 falls squarely in the problematic range. If we were to lower the cutoff threshold we could expect to get even more values being flagged yielding a higher percentage.</p>
 <div class="cell">
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span></span>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span></span>
 <span>    <span class="va">AirPassengers</span>,</span>
 <span>    transform.function <span class="op">=</span> <span class="st">"log"</span>,</span>
@@ -727,7 +801,7 @@ Box.test(resid(m), lag = 24, type = "Ljung")
 <span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">SF</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"seasonal factors"</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="va">SF</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<table class="table table-sm table-striped small">
+<table class="caption-top table table-sm table-striped small">
 <thead><tr class="header">
 <th style="text-align: left;"></th>
 <th style="text-align: right;">seasonal factors</th>
@@ -748,14 +822,14 @@ Box.test(resid(m), lag = 24, type = "Ljung")
 </tbody>
 </table>
 </div>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Month-to-Month Changes in SA Series - Percentage of months flagged as unstable</span></span>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Month-to-Month Changes in SA Series - Percentage of months flagged as unstable</span></span>
 <span><span class="va">M2M</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/udg.html">udg</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"s2.d.per"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span><span class="op">(</span><span class="va">M2M</span><span class="op">)</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Number of months flagged"</span>, <span class="st">"Total number of months"</span>, <span class="st">"Percent"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">M2M</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"Month-to-Month Changes in SA Series"</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="va">M2M</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<table class="table table-sm table-striped small">
+<table class="caption-top table table-sm table-striped small">
 <thead><tr class="header">
 <th style="text-align: left;"></th>
 <th style="text-align: right;">Month-to-Month Changes in SA Series</th>
@@ -779,7 +853,7 @@ Box.test(resid(m), lag = 24, type = "Ljung")
 </div>
 <p>We can also examine the series provided to us</p>
 <div class="cell">
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">old_sa</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span></span>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">old_sa</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span></span>
 <span>  x <span class="op">=</span> <span class="va">old</span>,</span>
 <span>  transform.function <span class="op">=</span> <span class="st">"log"</span>,</span>
 <span>  regression.aictest <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -799,7 +873,7 @@ Box.test(resid(m), lag = 24, type = "Ljung")
 <span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">SF</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"old_sa"</span>, <span class="st">"auto_sa"</span><span class="op">)</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="va">SF</span>, caption <span class="op">=</span> <span class="st">"Seasonal Factors"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<table class="table table-sm table-striped small">
+<table class="caption-top table table-sm table-striped small">
 <caption>Seasonal Factors</caption>
 <thead><tr class="header">
 <th style="text-align: left;"></th>
@@ -825,13 +899,13 @@ Box.test(resid(m), lag = 24, type = "Ljung")
 </tbody>
 </table>
 </div>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Month-to-Month Changes in SA Series - Percentage of months flagged as unstable</span></span>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Month-to-Month Changes in SA Series - Percentage of months flagged as unstable</span></span>
 <span><span class="va">M2M</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/udg.html">udg</a></span><span class="op">(</span><span class="va">old_sa</span>, <span class="st">"s2.d.per"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/udg.html">udg</a></span><span class="op">(</span><span class="va">auto_sa</span>, <span class="st">"s2.a.per"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span><span class="op">(</span><span class="va">M2M</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Number of months flagged"</span>, <span class="st">"Total number of months"</span>, <span class="st">"Percent"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">M2M</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"old_sa"</span>, <span class="st">"auto_sa"</span><span class="op">)</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="va">M2M</span>, caption <span class="op">=</span> <span class="st">"Month-to-Month Changes in SA Series"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<table class="table table-sm table-striped small">
+<table class="caption-top table table-sm table-striped small">
 <caption>Month-to-Month Changes in SA Series</caption>
 <thead><tr class="header">
 <th style="text-align: left;"></th>
@@ -863,10 +937,37 @@ Box.test(resid(m), lag = 24, type = "Ljung")
 <li>Try raising X-11 sigma limits</li>
 <li>Look at regARIMA model</li>
 <li>Don’t use sliding spans to choose seasonal filters as they tend to favor longer filters.</li>
+</ul></section></section><section id="exercises" class="level2" data-number="15.5"><h2 data-number="15.5" class="anchored" data-anchor-id="exercises">
+<span class="header-section-number">15.5</span> Exercises</h2>
+<p><span class="tag tag-exercises"><i class="fas fa-shoe-prints"></i> Exercises</span></p>
+<ol type="1">
+<li>
+<p><strong>Using SARIMA(1 1 0)(1 1 0) model for the <code>AirPassengers</code> series</strong></p>
+<ul>
+<li>Perform seasonal adjustment on <code>AirPassengers</code> series using the X-11 method and specify SARIMA(1, 1, 0)(1, 1, 0) model.</li>
+<li>Does the QS diagnostic indicate residual seasonality?</li>
 </ul>
+</li>
+<li>
+<p><strong>Stability and smoothness</strong></p>
+<ul>
+<li>Perform seasonal adjustment on <code>AirPassengers</code> series using the X-11 method and specify SARIMA(1, 1, 0)(1, 1, 0) model.</li>
+<li>Which seasonal adjustment is smoother? Use the monthplot and sliding spans to decide.</li>
+</ul>
+</li>
+<li>
+<p><strong>Compare SARIMA(1 1 0)(1 1 0) to airline model</strong></p>
+<ul>
+<li>Perform seasonal adjustment on <code>AirPassengers</code> series using the X-11 method and specify SARIMA(1, 1, 0)(1, 1, 0) model.</li>
+<li>Perform seasonal adjustment on <code>AirPassengers</code> series using the X-11 method and specify SARIMA(0, 1, 1)(0, 1, 1) model.</li>
+<li>Describe the differences observed.</li>
+<li>Use statistical diagnotics listed in <a href="#sec-model-appropriateness" class="quarto-xref"><span>Section 15.3</span></a> to compare the model fits.</li>
+</ul>
+</li>
+</ol>
 
 
-</section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
@@ -901,18 +1002,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -944,11 +1034,50 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
-  function tippyHover(el, contentFn) {
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/christophsax\.github\.io\/seasonalbook\.content");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -958,8 +1087,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -971,7 +1109,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -1015,6 +1276,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -1040,6 +1302,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -1099,23 +1387,27 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
-      <a href="./50-part-quality-assessment.html" class="pagination-link">
+      <a href="./50-part-quality-assessment.html" class="pagination-link" aria-label="Quality assessment">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Quality assessment</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./52-revisions.html" class="pagination-link">
+      <a href="./52-revisions.html" class="pagination-link" aria-label="Revisions">
         <span class="nav-page-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Revisions</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
 </div> <!-- /content -->
 <footer class="footer"><div class="nav-footer">
-    <div class="nav-footer-left">by James Livsey and Christoph Sax</div>   
+    <div class="nav-footer-left">
+<p>by James Livsey and Christoph Sax</p>
+</div>   
     <div class="nav-footer-center">
       &nbsp;
-    </div>
-    <div class="nav-footer-right">Seasonal Adjustment in R</div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/christophsax/seasonalbook.content/edit/main/51-quality-measures.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<p>Seasonal Adjustment in R</p>
+</div>
   </div>
 </footer>
 

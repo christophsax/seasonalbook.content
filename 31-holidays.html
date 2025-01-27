@@ -2,10 +2,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.336">
+<meta name="generator" content="quarto-1.6.32">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="James Livsey and Christoph Sax">
-<title>Seasonal Adjustment in R - 8&nbsp; Irregular holidays</title>
+<title>8&nbsp; Irregular holidays – Seasonal Adjustment in R</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,7 +20,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -31,7 +31,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -68,16 +68,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2486e1f0a3ee9ee1fc393803a1361cdb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap-ed6da6eef3892af8a4b5ed59bfb951f5.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
   "panel-placement": "start",
   "type": "textbox",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -86,8 +92,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script><meta name="robots" content="noindex">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -128,19 +136,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./30-part-data-problems.html">Data Problems</a></li><li class="breadcrumb-item"><a href="./31-holidays.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Irregular holidays</span></a></li></ol></nav>
-      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-      </a>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./30-part-data-problems.html">Data Problems</a></li><li class="breadcrumb-item"><a href="./31-holidays.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Irregular holidays</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
     </div>
   </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Seasonal Adjustment in R</a> 
         <div class="sidebar-tools-main">
@@ -164,7 +172,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="sidebar-item-container"> 
             <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Welcome</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -187,7 +195,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="sidebar-item-container"> 
             <a href="./20-part-basics.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Basics</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -228,7 +236,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="sidebar-item-container"> 
             <a href="./30-part-data-problems.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Data Problems</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -263,7 +271,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="sidebar-item-container"> 
             <a href="./40-part-other-issues.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Other Issues</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -292,7 +300,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="sidebar-item-container"> 
             <a href="./50-part-quality-assessment.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Quality assessment</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -313,7 +321,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
     </ul>
 </div>
-</nav><div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+</nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
@@ -331,10 +339,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
   <li><a href="#case-study-azerbaijani-retail-sales" id="toc-case-study-azerbaijani-retail-sales" class="nav-link" data-scroll-target="#case-study-azerbaijani-retail-sales"><span class="header-section-number">8.3</span> Case Study: Azerbaijani Retail Sales</a></li>
   <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="header-section-number">8.4</span> Exercises</a></li>
-  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/31-holidays.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+  </ul><div class="toc-actions"><ul><li><a href="https://github.com/christophsax/seasonalbook.content/edit/main/31-holidays.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./30-part-data-problems.html">Data Problems</a></li><li class="breadcrumb-item"><a href="./31-holidays.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Irregular holidays</span></a></li></ol></nav><div class="quarto-title">
 <h1 class="title"><span id="sec-holidays" class="quarto-section-identifier"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Irregular holidays</span></span></h1>
 </div>
 
@@ -347,6 +355,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     
   </div>
   
+
 
 </header><!--
 
@@ -366,9 +375,11 @@ Jim
  --><p>Many time series are affected by public holidays. For example, retail sales typically increase before Christmas, and are much lower during Christmas days. Similar effects occur for Chinese New Year, Ramadan, Diwali or Easter. In seasonal adjustment, the treatment of Christmas is usually not much of a problem because Christmas always occurs on the same date in December. Thus, the Christmas effect is simply part of the December effect (or of the fourth quarter effect, if you have a quarterly series).</p>
 <p>Things are more complicated with irregular holidays. Because their occurrence follows different rules, the holiday happens at different months in different years. Easter, for example, is based on the lunar cycles of the Jewish calendar, and is sometimes in March and sometimes in April. In quarterly data, Easter falls either in the first or in the second quarter.</p>
 <p>For the interpretation of many time series, this constitutes a problem. Retails sales, for example, are usually reduced during the Easter holiday. If March values are compared between years, their interpretation depends on the exact day of Easter. If Easter falls into March, we would expect lower retail sales in this month. Conversely, if it falls into April, we would expect April numbers to be lower.</p>
-<div id="tbl-regression-arguments" class="anchored">
-<table class="table">
-<caption>Table&nbsp;8.1: Values for <code>regression.variables</code> that are relevant for holiday adjustment</caption>
+<div id="tbl-regression-arguments" class="quarto-float quarto-figure quarto-figure-center anchored" data-tbl-colwidths="[20,80]">
+<figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-regression-arguments-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;8.1: Values for <code>regression.variables</code> that are relevant for holiday adjustment
+</figcaption><div aria-describedby="tbl-regression-arguments-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
 <colgroup>
 <col style="width: 20%">
 <col style="width: 80%">
@@ -392,6 +403,8 @@ Jim
 </tr>
 </tbody>
 </table>
+</div>
+</figure>
 </div>
 <section id="automated-adjustment" class="level2" data-number="8.1"><h2 data-number="8.1" class="anchored" data-anchor-id="automated-adjustment">
 <span class="header-section-number">8.1</span> Automated Adjustment</h2>
@@ -481,7 +494,10 @@ How to read data from CENSUS into R
 <div class="cell">
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">ts_plot</span><span class="op">(</span><span class="va">hobby_toy_game</span>, title <span class="op">=</span> <span class="st">"Hobby, Toy and Game store monthly sales"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="31-holidays_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="864"></p>
+<div>
+<figure class="figure"><p><img src="31-holidays_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="864"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>We can perform a seasonal adjustment on this series with and without the Easter[8] regressor.</p>
@@ -498,7 +514,7 @@ How to read data from CENSUS into R
 <script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"attrs":{"labels":["month","hobby_toy_game","SA_noEaster","SA_withEaster"],"legend":"auto","retainDateWindow":false,"axes":{"x":{"pixelsPerLabel":60}}},"scale":"monthly","annotations":[],"shadings":[],"events":[],"format":"date","data":[["1992-01-01T00:00:00.000Z","1992-02-01T00:00:00.000Z","1992-03-01T00:00:00.000Z","1992-04-01T00:00:00.000Z","1992-05-01T00:00:00.000Z","1992-06-01T00:00:00.000Z","1992-07-01T00:00:00.000Z","1992-08-01T00:00:00.000Z","1992-09-01T00:00:00.000Z","1992-10-01T00:00:00.000Z","1992-11-01T00:00:00.000Z","1992-12-01T00:00:00.000Z","1993-01-01T00:00:00.000Z","1993-02-01T00:00:00.000Z","1993-03-01T00:00:00.000Z","1993-04-01T00:00:00.000Z","1993-05-01T00:00:00.000Z","1993-06-01T00:00:00.000Z","1993-07-01T00:00:00.000Z","1993-08-01T00:00:00.000Z","1993-09-01T00:00:00.000Z","1993-10-01T00:00:00.000Z","1993-11-01T00:00:00.000Z","1993-12-01T00:00:00.000Z","1994-01-01T00:00:00.000Z","1994-02-01T00:00:00.000Z","1994-03-01T00:00:00.000Z","1994-04-01T00:00:00.000Z","1994-05-01T00:00:00.000Z","1994-06-01T00:00:00.000Z","1994-07-01T00:00:00.000Z","1994-08-01T00:00:00.000Z","1994-09-01T00:00:00.000Z","1994-10-01T00:00:00.000Z","1994-11-01T00:00:00.000Z","1994-12-01T00:00:00.000Z","1995-01-01T00:00:00.000Z","1995-02-01T00:00:00.000Z","1995-03-01T00:00:00.000Z","1995-04-01T00:00:00.000Z","1995-05-01T00:00:00.000Z","1995-06-01T00:00:00.000Z","1995-07-01T00:00:00.000Z","1995-08-01T00:00:00.000Z","1995-09-01T00:00:00.000Z","1995-10-01T00:00:00.000Z","1995-11-01T00:00:00.000Z","1995-12-01T00:00:00.000Z","1996-01-01T00:00:00.000Z","1996-02-01T00:00:00.000Z","1996-03-01T00:00:00.000Z","1996-04-01T00:00:00.000Z","1996-05-01T00:00:00.000Z","1996-06-01T00:00:00.000Z","1996-07-01T00:00:00.000Z","1996-08-01T00:00:00.000Z","1996-09-01T00:00:00.000Z","1996-10-01T00:00:00.000Z","1996-11-01T00:00:00.000Z","1996-12-01T00:00:00.000Z","1997-01-01T00:00:00.000Z","1997-02-01T00:00:00.000Z","1997-03-01T00:00:00.000Z","1997-04-01T00:00:00.000Z","1997-05-01T00:00:00.000Z","1997-06-01T00:00:00.000Z","1997-07-01T00:00:00.000Z","1997-08-01T00:00:00.000Z","1997-09-01T00:00:00.000Z","1997-10-01T00:00:00.000Z","1997-11-01T00:00:00.000Z","1997-12-01T00:00:00.000Z","1998-01-01T00:00:00.000Z","1998-02-01T00:00:00.000Z","1998-03-01T00:00:00.000Z","1998-04-01T00:00:00.000Z","1998-05-01T00:00:00.000Z","1998-06-01T00:00:00.000Z","1998-07-01T00:00:00.000Z","1998-08-01T00:00:00.000Z","1998-09-01T00:00:00.000Z","1998-10-01T00:00:00.000Z","1998-11-01T00:00:00.000Z","1998-12-01T00:00:00.000Z","1999-01-01T00:00:00.000Z","1999-02-01T00:00:00.000Z","1999-03-01T00:00:00.000Z","1999-04-01T00:00:00.000Z","1999-05-01T00:00:00.000Z","1999-06-01T00:00:00.000Z","1999-07-01T00:00:00.000Z","1999-08-01T00:00:00.000Z","1999-09-01T00:00:00.000Z","1999-10-01T00:00:00.000Z","1999-11-01T00:00:00.000Z","1999-12-01T00:00:00.000Z","2000-01-01T00:00:00.000Z","2000-02-01T00:00:00.000Z","2000-03-01T00:00:00.000Z","2000-04-01T00:00:00.000Z","2000-05-01T00:00:00.000Z","2000-06-01T00:00:00.000Z","2000-07-01T00:00:00.000Z","2000-08-01T00:00:00.000Z","2000-09-01T00:00:00.000Z","2000-10-01T00:00:00.000Z","2000-11-01T00:00:00.000Z","2000-12-01T00:00:00.000Z","2001-01-01T00:00:00.000Z","2001-02-01T00:00:00.000Z","2001-03-01T00:00:00.000Z","2001-04-01T00:00:00.000Z","2001-05-01T00:00:00.000Z","2001-06-01T00:00:00.000Z","2001-07-01T00:00:00.000Z","2001-08-01T00:00:00.000Z","2001-09-01T00:00:00.000Z","2001-10-01T00:00:00.000Z","2001-11-01T00:00:00.000Z","2001-12-01T00:00:00.000Z","2002-01-01T00:00:00.000Z","2002-02-01T00:00:00.000Z","2002-03-01T00:00:00.000Z","2002-04-01T00:00:00.000Z","2002-05-01T00:00:00.000Z","2002-06-01T00:00:00.000Z","2002-07-01T00:00:00.000Z","2002-08-01T00:00:00.000Z","2002-09-01T00:00:00.000Z","2002-10-01T00:00:00.000Z","2002-11-01T00:00:00.000Z","2002-12-01T00:00:00.000Z","2003-01-01T00:00:00.000Z","2003-02-01T00:00:00.000Z","2003-03-01T00:00:00.000Z","2003-04-01T00:00:00.000Z","2003-05-01T00:00:00.000Z","2003-06-01T00:00:00.000Z","2003-07-01T00:00:00.000Z","2003-08-01T00:00:00.000Z","2003-09-01T00:00:00.000Z","2003-10-01T00:00:00.000Z","2003-11-01T00:00:00.000Z","2003-12-01T00:00:00.000Z","2004-01-01T00:00:00.000Z","2004-02-01T00:00:00.000Z","2004-03-01T00:00:00.000Z","2004-04-01T00:00:00.000Z","2004-05-01T00:00:00.000Z","2004-06-01T00:00:00.000Z","2004-07-01T00:00:00.000Z","2004-08-01T00:00:00.000Z","2004-09-01T00:00:00.000Z","2004-10-01T00:00:00.000Z","2004-11-01T00:00:00.000Z","2004-12-01T00:00:00.000Z","2005-01-01T00:00:00.000Z","2005-02-01T00:00:00.000Z","2005-03-01T00:00:00.000Z","2005-04-01T00:00:00.000Z","2005-05-01T00:00:00.000Z","2005-06-01T00:00:00.000Z","2005-07-01T00:00:00.000Z","2005-08-01T00:00:00.000Z","2005-09-01T00:00:00.000Z","2005-10-01T00:00:00.000Z","2005-11-01T00:00:00.000Z","2005-12-01T00:00:00.000Z","2006-01-01T00:00:00.000Z","2006-02-01T00:00:00.000Z","2006-03-01T00:00:00.000Z","2006-04-01T00:00:00.000Z","2006-05-01T00:00:00.000Z","2006-06-01T00:00:00.000Z","2006-07-01T00:00:00.000Z","2006-08-01T00:00:00.000Z","2006-09-01T00:00:00.000Z","2006-10-01T00:00:00.000Z","2006-11-01T00:00:00.000Z","2006-12-01T00:00:00.000Z","2007-01-01T00:00:00.000Z","2007-02-01T00:00:00.000Z","2007-03-01T00:00:00.000Z","2007-04-01T00:00:00.000Z","2007-05-01T00:00:00.000Z","2007-06-01T00:00:00.000Z","2007-07-01T00:00:00.000Z","2007-08-01T00:00:00.000Z","2007-09-01T00:00:00.000Z","2007-10-01T00:00:00.000Z","2007-11-01T00:00:00.000Z","2007-12-01T00:00:00.000Z","2008-01-01T00:00:00.000Z","2008-02-01T00:00:00.000Z","2008-03-01T00:00:00.000Z","2008-04-01T00:00:00.000Z","2008-05-01T00:00:00.000Z","2008-06-01T00:00:00.000Z","2008-07-01T00:00:00.000Z","2008-08-01T00:00:00.000Z","2008-09-01T00:00:00.000Z","2008-10-01T00:00:00.000Z","2008-11-01T00:00:00.000Z","2008-12-01T00:00:00.000Z","2009-01-01T00:00:00.000Z","2009-02-01T00:00:00.000Z","2009-03-01T00:00:00.000Z","2009-04-01T00:00:00.000Z","2009-05-01T00:00:00.000Z","2009-06-01T00:00:00.000Z","2009-07-01T00:00:00.000Z","2009-08-01T00:00:00.000Z","2009-09-01T00:00:00.000Z","2009-10-01T00:00:00.000Z","2009-11-01T00:00:00.000Z","2009-12-01T00:00:00.000Z","2010-01-01T00:00:00.000Z","2010-02-01T00:00:00.000Z","2010-03-01T00:00:00.000Z","2010-04-01T00:00:00.000Z","2010-05-01T00:00:00.000Z","2010-06-01T00:00:00.000Z","2010-07-01T00:00:00.000Z","2010-08-01T00:00:00.000Z","2010-09-01T00:00:00.000Z","2010-10-01T00:00:00.000Z","2010-11-01T00:00:00.000Z","2010-12-01T00:00:00.000Z","2011-01-01T00:00:00.000Z","2011-02-01T00:00:00.000Z","2011-03-01T00:00:00.000Z","2011-04-01T00:00:00.000Z","2011-05-01T00:00:00.000Z","2011-06-01T00:00:00.000Z","2011-07-01T00:00:00.000Z","2011-08-01T00:00:00.000Z","2011-09-01T00:00:00.000Z","2011-10-01T00:00:00.000Z","2011-11-01T00:00:00.000Z","2011-12-01T00:00:00.000Z","2012-01-01T00:00:00.000Z","2012-02-01T00:00:00.000Z","2012-03-01T00:00:00.000Z","2012-04-01T00:00:00.000Z","2012-05-01T00:00:00.000Z","2012-06-01T00:00:00.000Z","2012-07-01T00:00:00.000Z","2012-08-01T00:00:00.000Z","2012-09-01T00:00:00.000Z","2012-10-01T00:00:00.000Z","2012-11-01T00:00:00.000Z","2012-12-01T00:00:00.000Z","2013-01-01T00:00:00.000Z","2013-02-01T00:00:00.000Z","2013-03-01T00:00:00.000Z","2013-04-01T00:00:00.000Z","2013-05-01T00:00:00.000Z","2013-06-01T00:00:00.000Z","2013-07-01T00:00:00.000Z","2013-08-01T00:00:00.000Z","2013-09-01T00:00:00.000Z","2013-10-01T00:00:00.000Z","2013-11-01T00:00:00.000Z","2013-12-01T00:00:00.000Z","2014-01-01T00:00:00.000Z","2014-02-01T00:00:00.000Z","2014-03-01T00:00:00.000Z","2014-04-01T00:00:00.000Z","2014-05-01T00:00:00.000Z","2014-06-01T00:00:00.000Z","2014-07-01T00:00:00.000Z","2014-08-01T00:00:00.000Z","2014-09-01T00:00:00.000Z","2014-10-01T00:00:00.000Z","2014-11-01T00:00:00.000Z","2014-12-01T00:00:00.000Z","2015-01-01T00:00:00.000Z","2015-02-01T00:00:00.000Z","2015-03-01T00:00:00.000Z","2015-04-01T00:00:00.000Z","2015-05-01T00:00:00.000Z","2015-06-01T00:00:00.000Z"],[620,585,643,706,660,721,678,653,638,789,1332,3226,598,576,683,735,685,722,745,682,671,799,1480,3275,618,637,819,782,742,758,778,801,806,987,1677,3445,683,665,823,867,821,873,851,846,846,993,1830,3616,705,737,890,862,669,849,877,874,870,1094,2002,4073,730,791,1032,896,947,940,963,958,971,1141,2009,3643,858,883,987,1022,986,1016,1042,1025,1005,1197,2011,3801,933,966,1135,1076,1061,1101,1083,1101,1111,1277,2096,3711,893,1002,1106,1136,1072,1098,1124,1132,1175,1285,2161,3763,880,971,1176,1063,1038,1107,1094,1065,1050,1303,2445,3628,896,966,1186,1014,1078,1065,1103,1087,1048,1347,2468,3651,910,940,1111,1139,1088,1064,1094,1087,1095,1286,2223,3545,962,1045,1125,1082,974,1024,1086,1016,1051,1311,2187,3451,950,980,1173,1098,1061,1049,1077,1028,1019,1229,2120,3471,1063,1022,1117,1094,1040,1048,1070,1043,1086,1205,1933,3299,948,974,1188,1064,1050,1096,1102,1084,1102,1275,2208,3253,1043,1077,1183,1080,1131,1044,1097,1065,1061,1218,1959,3117,1031,1009,1095,1086,1064,1020,1058,1007,1063,1194,1842,2999,953,1000,1155,1059,1030,1024,1070,1039,1074,1254,1990,3064,967,1023,1193,1184,1065,1061,1082,1067,1143,1243,1951,3033,1063,1182,1259,1146,1175,1120,1113,1117,1148,1263,1929,2963,1019,1068,1239,1107,1116,1057,1106,1145,1161,1338,2134,3263,1012,1084,1213,1195,1170,1084,1183,1185,1253,1360,2140,3511,1157,1190,1360,1260,1274,1196],[978.834065206668,946.8632202848009,852.716456497819,923.553148042559,924.042650457051,959.437926484073,912.794568538507,908.134307853118,898.060043361358,919.634817414153,870.677108972338,1006.50445952684,946.968507858852,931.018045237946,905.0673073807681,962.641152492651,959.307285471145,962.101300438355,1002.11385636371,945.412279146161,941.498248443743,928.126410880462,961.935762468846,1027.79784826816,983.245515083792,1026.88837877363,1082.03123371265,1025.0757494484,1035.81090871829,1014.28754385078,1042.48978677529,1101.52475642356,1119.55585444547,1138.96145817591,1081.71651990631,1096.32644023216,1088.93782162153,1061.40384086636,1080.76174262199,1137.94242062153,1139.38102835971,1170.90639583452,1132.88003256678,1147.49231360827,1157.98960107615,1131.43295775153,1174.12911021734,1177.65757842263,1117.93309904744,1158.42505771248,1161.2012077709,1129.68611931434,918.806134276037,1133.05516744467,1156.60144400036,1166.4741373122,1168.53441870638,1232.53738407799,1282.79589479772,1365.94351487684,1147.2372818008,1212.2652769867,1335.29341970291,1169.37346112308,1286.74139454229,1242.66476812556,1255.79017863945,1256.75740749828,1282.84000008848,1270.37875678229,1290.5393716205,1260.7885111073,1335.9810064694,1320.07102880743,1261.11380572467,1326.02219778083,1324.93558017932,1325.7130818131,1342.09139034481,1326.97130133384,1309.97921783134,1320.43985298936,1297.35570786091,1354.78911250069,1444.51353696367,1410.57762867362,1426.0033599976,1387.22777934125,1412.8203327482,1424.08855435633,1380.9272118891,1411.10697417362,1438.90385880259,1391.79263752745,1356.55738718529,1355.06172793532,1378.23803112665,1444.09381508086,1366.383554669,1455.2136307631,1415.31313554078,1411.01602583847,1426.62493299701,1444.90981176287,1516.14899836862,1387.27220044594,1394.97721736444,1402.0737468783,1352.07000749465,1385.75991097926,1436.33679245319,1351.63309685238,1360.80473198704,1424.27902222558,1383.07412560208,1361.95844722357,1357.21575333534,1394.5447481502,1565.71404569367,1373.45670424439,1366.09658220381,1374.77749684089,1434.11023056097,1282.75918131345,1404.21491039151,1373.69411770737,1390.29140940548,1398.20975683635,1357.54683753619,1435.40144312256,1567.16029539333,1402.46570861082,1364.70291946887,1329.16699953112,1338.02852150078,1433.39664157275,1409.76765423861,1377.23589583969,1373.36394134591,1405.21695633314,1417.60834803805,1369.60109123494,1410.77360495633,1376.83028764876,1413.97478970451,1466.55042401439,1347.93204177188,1357.28674660565,1257.67467056218,1322.81794148063,1359.36788323122,1314.40598555944,1351.54672501664,1403.69654560623,1395.02537768347,1357.62508733139,1363.52367057034,1353.20057149337,1399.08048347236,1374.61736375324,1366.03658588879,1350.787416778,1341.06083580651,1324.63919954312,1297.16925172777,1323.04796654328,1366.90071230117,1384.4542052812,1495.7381549632,1389.37553198578,1318.69248440208,1368.0571626274,1333.45806001254,1340.61904060271,1324.90974626856,1335.9280512852,1367.89652880806,1303.09596494027,1263.02026354723,1336.43475466355,1310.87077824783,1301.15172555531,1386.66859727213,1327.8801319162,1338.85176775204,1396.18624645889,1356.74999715704,1378.7451124478,1372.91124150773,1377.60729064912,1463.34184821522,1338.75506857155,1426.90757813813,1421.37728793222,1362.50848487928,1341.02300309323,1431.60220175163,1324.11751383183,1345.86401354543,1346.36568819872,1305.92430388065,1314.24447432097,1313.35957830947,1305.67778528182,1395.34539790441,1314.77944944412,1247.5627903053,1341.91456496395,1334.18167727058,1290.88679403656,1295.42316488682,1266.44562015546,1294.18727143756,1282.78877216471,1246.21459186092,1277.70983833711,1280.36899660556,1291.75555410161,1301.34780413707,1301.38782829353,1278.50474384869,1295.42449774197,1312.32151945814,1300.91602268685,1296.86190965288,1342.44035554586,1356.17858478542,1321.21786199518,1289.66505200051,1312.02217144206,1337.42113716635,1449.29791447712,1310.25354553681,1346.50893998343,1330.74648444652,1328.83339862874,1370.75622875586,1328.74230615599,1337.61163143975,1315.39592018673,1411.16756918996,1511.62866266673,1407.40466258956,1400.42050113611,1436.93166207216,1427.48080631693,1373.64560497925,1384.45030666332,1369.32530328167,1351.32969336063,1326.96750659123,1287.407951208,1345.80476669055,1363.35985124746,1388.36958119243,1353.15795522518,1358.03388690904,1355.98044541082,1367.64492910828,1412.39878695846,1380.79595799812,1433.76647569903,1470.17215922469,1416.74434187259,1333.04480307888,1382.96727742415,1363.51517901638,1460.05609121173,1420.30101233236,1400.6555251791,1464.85921982015,1457.7961907972,1488.47230527992,1457.94181323039,1474.95922880828,1520.67134847467,1522.87811864492,1518.8510615937,1534.62609414044,1538.11050317501,1546.02339589027,1554.78021159568],[970.589252301427,894.973664045222,870.206743816914,914.9201644993231,905.781325053621,939.745290184807,910.838976878887,912.281202031844,895.86440458633,898.484268186641,907.144748862187,1012.93807574084,929.2342928890361,925.468747508326,919.174779801714,934.5000624578011,956.8434010013279,951.796625777245,975.587509019335,943.998428250972,954.5039065427241,917.05751725456,967.259457748487,1044.17113225986,987.141949288123,1024.1434164327,1034.35391235227,1031.90902322759,1033.00771690401,1027.91499187971,1035.82212315707,1100.37907006019,1108.48494109799,1138.10689681213,1086.04815188765,1081.41720437515,1091.19967913791,1070.96756885386,1092.68191168215,1126.57478095273,1139.26188616709,1158.93405983042,1146.89227062787,1146.3267649957,1132.15979027281,1129.97159703694,1190.37227402301,1174.25363591151,1124.251154862,1133.12545918089,1140.90040128821,1130.83195107524,927.916625495216,1131.95938127113,1158.99445235,1151.15677854498,1200.74482578631,1222.14520181795,1247.69419246638,1379.24865101303,1150.20034534558,1228.42954749888,1277.09386951032,1234.58545678681,1262.95863396288,1266.99813882718,1244.00548541012,1255.02456908739,1276.67292247751,1283.07295679304,1286.62036301198,1272.17597330166,1296.49478472589,1327.30510766718,1285.50657820595,1331.05173309476,1317.61270467208,1313.95141773146,1342.64386404068,1334.55638061982,1310.91139946458,1301.50630129071,1328.9957605288,1355.91719271849,1418.48184262463,1417.91373457833,1399.5138256723,1409.17725812573,1427.06855055076,1417.44015248416,1349.38358780044,1407.24085448769,1468.49101747651,1392.71518522537,1341.66245672345,1368.87751701762,1386.28359950303,1374.65593672944,1399.62063839835,1434.80715545331,1422.16320896427,1409.32473064131,1434.59339177047,1433.22450261215,1496.87006715765,1399.40491850433,1406.78302910406,1393.16107300097,1365.11474967074,1393.35869749282,1429.39026252747,1376.765345348,1360.73936805835,1396.3826933829,1387.68211888286,1375.91144096793,1368.76668364058,1397.38241717449,1542.10814867621,1386.27050076791,1372.13401459547,1371.62261081227,1368.57013212433,1352.29704117171,1421.8084204036,1378.92674217409,1395.90137539459,1379.84510177012,1393.03960166215,1421.03790136077,1524.17652980199,1407.0629049411,1386.00603712688,1320.29081203055,1388.63017634724,1422.18966212572,1392.34468188611,1409.06322824491,1376.56448432474,1405.96768609496,1396.17609887189,1372.91397655506,1403.77865852668,1384.80401514019,1387.92244874649,1421.87828658151,1393.02279900989,1338.33662882851,1280.55053824903,1317.19354878158,1339.40304579036,1330.43578560543,1358.37256030458,1387.26611985299,1377.94510361396,1368.84828002885,1378.81092940549,1348.15047103563,1350.03828336756,1409.10777520207,1381.64092404267,1367.32153582117,1338.46567701754,1333.5566999293,1278.20667772034,1333.96621694547,1359.10354923813,1359.77756254673,1496.47180203633,1389.34095178974,1376.06990321875,1343.02796958603,1342.03311147309,1328.87866236783,1338.49630170726,1326.37282859375,1332.66714314124,1305.7674263862,1285.5649949775,1332.20658507264,1304.33906877298,1312.11411879302,1406.77357265331,1334.06925093667,1329.4307122666,1361.59352796596,1360.15736363305,1378.57968368001,1374.44423059772,1383.74528694153,1453.62290789845,1364.23021378326,1399.1813291446,1370.98019057143,1356.08766935139,1375.21021891949,1391.80606143107,1357.77618422004,1334.79483371744,1330.22050241588,1298.44654677213,1323.09570621692,1314.16643464174,1319.54467420393,1352.75209058249,1324.94655076295,1312.29283515767,1310.09510691208,1317.3017617293,1281.31759727175,1304.2197784866,1278.09750085915,1290.62863432579,1261.61150861577,1275.87917332673,1274.98214761881,1267.77674182132,1298.08886105765,1309.04256513028,1291.01627868426,1288.97423738991,1290.75362332016,1292.11542856319,1308.11831735793,1315.29524629398,1339.96163375694,1347.36131151245,1327.60174717174,1307.09298721557,1317.189501114,1381.31577852092,1360.51732985796,1318.72274301844,1364.65257008092,1333.84605049825,1336.74184538998,1356.15663412018,1348.67282580791,1339.36899117602,1285.47039807553,1421.10731860675,1482.6597745514,1415.50319690051,1391.07247440446,1430.55105881319,1398.40799128938,1392.33671051708,1396.49222056439,1368.50377683579,1358.22172851299,1327.75935621197,1298.0886888362,1344.92032983241,1365.52940499077,1338.44828436885,1369.6002503752,1371.98986484239,1363.0470201745,1381.2030891483,1393.16314723294,1412.84308388719,1427.93325071529,1445.66450645706,1417.28535637728,1354.10308536483,1389.10003761261,1416.13515909673,1398.01488816817,1403.01316423995,1440.87340812895,1462.21913118497,1463.61450750189,1472.54737339677,1470.34643496568,1481.47593120763,1515.76603417991,1513.67853566478,1526.83356047255,1531.86862956576,1549.07426309429,1554.1919494388,1541.94714448336]]},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
-<p>Notice the large differences during certain Easter periods. For example, the final seasonally adjusted series including an Easter regressor in April 2011 was 1360.52. The final seasonally adjusted values without an Easter regressor was 1449.3, a difference of 89 million dollars which more than 7.5% higher than the original series value.</p>
+<p>Notice the large differences during certain Easter periods. For example, the final seasonally adjusted series including an Easter regressor in April 2011 was 1360.52. The final seasonally adjusted values without an Easter regressor was 1449.3, a difference of 89 million dollars which more than 7.5% higher than the original series value. Moreover, including the Easter regressor resulted in a smoother seasonally adjusted series.</p>
 </section><section id="case-study-chinese-new-year" class="level2" data-number="8.2"><h2 data-number="8.2" class="anchored" data-anchor-id="case-study-chinese-new-year">
 <span class="header-section-number">8.2</span> Case Study: Chinese New Year</h2>
 <p>The Lunar New Year is the most important holiday in China and many other Asian countries. Traditionally, the holiday starts on Lunar New Year’s Eve, and lasts until the Lantern Festival on the 15th day of the first month of the lunisolar calendar. The Chinese New Year is celebrated either in January or in February of the Gregorian calendar.</p>
@@ -512,7 +528,10 @@ How to read data from CENSUS into R
 <span><span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/packageDescription.html">packageVersion</a></span><span class="op">(</span><span class="st">"seasonalbook"</span><span class="op">)</span> <span class="op">&gt;=</span> <span class="st">"0.0.2"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://docs.ropensci.org/tsbox/reference/ts_plot.html">ts_plot</a></span><span class="op">(</span><span class="va">imp_cn</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="31-holidays_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="864"></p>
+<div>
+<figure class="figure"><p><img src="31-holidays_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="864"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>The series has a very different seasonal pattern before 2000, we focus on the later period. (Adjusting the whole series in one step is possible, but for good results one should manually model the seasonal break.)</p>
@@ -611,7 +630,10 @@ How to read data from FRED into R
 <span><span class="co">#&gt; Box-Ljung (no autocorr.): 26.03   Shapiro (normality): 0.9704 ***</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">m1</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="31-holidays_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="864"></p>
+<div>
+<figure class="figure"><p><img src="31-holidays_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="864"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>With <code>xreg</code>, arbitrary user-defined regressors can be included, <code>regression.usertype = "holiday"</code> ensures that the final series does not include the regression effect. We also have chosen X11 as the decomposition method.</p>
@@ -651,7 +673,10 @@ How to read data from FRED into R
 <span><span class="co">#&gt; Box-Ljung (no autocorr.): 27.37   Shapiro (normality): 0.9687 ***</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">m2</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="31-holidays_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="864"></p>
+<div>
+<figure class="figure"><p><img src="31-holidays_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="864"></p>
+</figure>
+</div>
 </div>
 </div>
 </section><section id="compare-with-official-adjustments" class="level3" data-number="8.2.4"><h3 data-number="8.2.4" class="anchored" data-anchor-id="compare-with-official-adjustments">
@@ -924,10 +949,16 @@ Replicate automated Easter adjustment in R
 <span><span class="co">#&gt; AICc: 726.5, BIC:   741  QS (no seasonality in final):0.1123  </span></span>
 <span><span class="co">#&gt; Box-Ljung (no autocorr.): 22.75   Shapiro (normality): 0.9542 *</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="31-holidays_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid" width="864"></p>
+<div>
+<figure class="figure"><p><img src="31-holidays_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="864"></p>
+</figure>
+</div>
 </div>
 <div class="cell-output-display">
-<p><img src="31-holidays_files/figure-html/unnamed-chunk-23-2.png" class="img-fluid" width="864"></p>
+<div>
+<figure class="figure"><p><img src="31-holidays_files/figure-html/unnamed-chunk-23-2.png" class="img-fluid figure-img" width="864"></p>
+</figure>
+</div>
 </div>
 </div>
 </section><section id="exercises" class="level2" data-number="8.4"><h2 data-number="8.4" class="anchored" data-anchor-id="exercises">
@@ -975,18 +1006,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -1018,11 +1038,50 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
-  function tippyHover(el, contentFn) {
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/christophsax\.github\.io\/seasonalbook\.content");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -1032,8 +1091,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -1045,7 +1113,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -1089,6 +1280,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -1114,6 +1306,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -1173,23 +1391,27 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
-      <a href="./30-part-data-problems.html" class="pagination-link">
+      <a href="./30-part-data-problems.html" class="pagination-link" aria-label="Data Problems">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Data Problems</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./32-trading-days.html" class="pagination-link">
+      <a href="./32-trading-days.html" class="pagination-link" aria-label="Trading days">
         <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Trading days</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
 </div> <!-- /content -->
 <footer class="footer"><div class="nav-footer">
-    <div class="nav-footer-left">by James Livsey and Christoph Sax</div>   
+    <div class="nav-footer-left">
+<p>by James Livsey and Christoph Sax</p>
+</div>   
     <div class="nav-footer-center">
       &nbsp;
-    </div>
-    <div class="nav-footer-right">Seasonal Adjustment in R</div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/christophsax/seasonalbook.content/edit/main/31-holidays.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<p>Seasonal Adjustment in R</p>
+</div>
   </div>
 </footer>
 

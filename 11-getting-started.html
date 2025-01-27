@@ -2,10 +2,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.336">
+<meta name="generator" content="quarto-1.6.32">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="James Livsey and Christoph Sax">
-<title>Seasonal Adjustment in R - 2&nbsp; Getting started</title>
+<title>2&nbsp; Getting started – Seasonal Adjustment in R</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,7 +20,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -31,7 +31,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -56,6 +56,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
+  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -87,16 +88,22 @@ div.csl-indent {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2486e1f0a3ee9ee1fc393803a1361cdb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap-ed6da6eef3892af8a4b5ed59bfb951f5.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
   "panel-placement": "start",
   "type": "textbox",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -105,8 +112,10 @@ div.csl-indent {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script><meta name="robots" content="noindex">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -144,19 +153,19 @@ div.csl-indent {
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Welcome</a></li><li class="breadcrumb-item"><a href="./11-getting-started.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Getting started</span></a></li></ol></nav>
-      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-      </a>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Welcome</a></li><li class="breadcrumb-item"><a href="./11-getting-started.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Getting started</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
     </div>
   </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Seasonal Adjustment in R</a> 
         <div class="sidebar-tools-main">
@@ -180,7 +189,7 @@ div.csl-indent {
       <div class="sidebar-item-container"> 
             <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Welcome</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -203,7 +212,7 @@ div.csl-indent {
       <div class="sidebar-item-container"> 
             <a href="./20-part-basics.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Basics</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -244,7 +253,7 @@ div.csl-indent {
       <div class="sidebar-item-container"> 
             <a href="./30-part-data-problems.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Data Problems</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -279,7 +288,7 @@ div.csl-indent {
       <div class="sidebar-item-container"> 
             <a href="./40-part-other-issues.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Other Issues</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -308,7 +317,7 @@ div.csl-indent {
       <div class="sidebar-item-container"> 
             <a href="./50-part-quality-assessment.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Quality assessment</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -329,7 +338,7 @@ div.csl-indent {
 </li>
     </ul>
 </div>
-</nav><div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+</nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
@@ -347,10 +356,10 @@ div.csl-indent {
   </ul>
 </li>
   <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="header-section-number">2.4</span> Exercises</a></li>
-  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/11-getting-started.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+  </ul><div class="toc-actions"><ul><li><a href="https://github.com/christophsax/seasonalbook.content/edit/main/11-getting-started.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content page-columns page-full" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<main class="content page-columns page-full" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Welcome</a></li><li class="breadcrumb-item"><a href="./11-getting-started.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Getting started</span></a></li></ol></nav><div class="quarto-title">
 <h1 class="title"><span id="sec-getting-started" class="quarto-section-identifier"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Getting started</span></span></h1>
 </div>
 
@@ -363,6 +372,7 @@ div.csl-indent {
     
   </div>
   
+
 
 </header><section id="installation" class="level2 page-columns page-full" data-number="2.1"><h2 data-number="2.1" class="anchored" data-anchor-id="installation">
 <span class="header-section-number">2.1</span> Installation</h2>
@@ -397,7 +407,10 @@ Sax, Christoph, and Dirk Eddelbuettel. 2018. <span>“Seasonal Adjustment by <sp
 <div class="cell">
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="11-getting-started_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="864"></p>
+<div>
+<figure class="figure"><p><img src="11-getting-started_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="864"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>As you can see, the adjusted series is much less volatile than the original one because the seasonal component was removed from the original series. But the adjusted series is not entirely smooth. This is because it still contains the irregular component.</p>
@@ -427,7 +440,7 @@ Sax, Christoph, and Dirk Eddelbuettel. 2018. <span>“Seasonal Adjustment by <sp
 </section><section id="where-to-go-from-here" class="level2" data-number="2.3"><h2 data-number="2.3" class="anchored" data-anchor-id="where-to-go-from-here">
 <span class="header-section-number">2.3</span> Where to go from here</h2>
 <p><code>seas(AirPassengers)</code> produces a good seasonal adjustment of the airline passengers time series. If you are very new to seasonal adjustment, the automated routines of X-13 and seasonal produce an adjustment that works well in most circumstances.</p>
-<p>The command <code>seas(AirPassengers)</code> has invoked a large number of <em>specs</em> of X-13. <em>spec</em> is X-13 slang for a module within the software. X-13 is built on top of twenty specs that perform various subtasks of seasonal adjustment. Some specs are required most of the time (e.g., <code>regression</code>), while others are optional (e.g., <code>seats</code>) or purely technical (e.g., <code>spans</code> shortens the time series in use). <a href="21-overview.html"><span>Chapter&nbsp;3</span></a> discusses the available specs in more detail.</p>
+<p>The command <code>seas(AirPassengers)</code> has invoked a large number of <em>specs</em> of X-13. <em>spec</em> is X-13 slang for a module within the software. X-13 is built on top of twenty specs that perform various subtasks of seasonal adjustment. Some specs are required most of the time (e.g., <code>regression</code>), while others are optional (e.g., <code>seats</code>) or purely technical (e.g., <code>spans</code> shortens the time series in use). <a href="21-overview.html" class="quarto-xref"><span>Chapter 3</span></a> discusses the available specs in more detail.</p>
 <p>This book teaches you how to use and fine-tune the individual specs and deal with concrete data problems.</p>
 <section id="fundamentals" class="level3" data-number="2.3.1"><h3 data-number="2.3.1" class="anchored" data-anchor-id="fundamentals">
 <span class="header-section-number">2.3.1</span> Fundamentals</h3>
@@ -435,15 +448,15 @@ Sax, Christoph, and Dirk Eddelbuettel. 2018. <span>“Seasonal Adjustment by <sp
 <dl>
 <dt>Transform</dt>
 <dd>
-<p>A decision on initial transformation was made. The automated procedures concluded that a log transformation was made and a multiplicative seasonal adjustment model, rather than an additive model, was estimated. <a href="22-transform.html"><span>Chapter&nbsp;4</span></a> discusses the choices. Since <code>transform</code> is a relatively simple spec, it is a good starting point to familiarize yourself with the spec idea.</p>
+<p>A decision on initial transformation was made. The automated procedures concluded that a log transformation was made and a multiplicative seasonal adjustment model, rather than an additive model, was estimated. <a href="22-transform.html" class="quarto-xref"><span>Chapter 4</span></a> discusses the choices. Since <code>transform</code> is a relatively simple spec, it is a good starting point to familiarize yourself with the spec idea.</p>
 </dd>
 <dt>Regression</dt>
 <dd>
-<p>An automated model search concluded that <code>AirPassengers</code> is best modeled by an (0 1 1)(0 1 1) ARIMA model. <a href="23-regARIMA.html"><span>Chapter&nbsp;5</span></a> explains what that means and how such a model structure is determined and estimated.</p>
+<p>An automated model search concluded that <code>AirPassengers</code> is best modeled by an (0 1 1)(0 1 1) ARIMA model. <a href="23-regARIMA.html" class="quarto-xref"><span>Chapter 5</span></a> explains what that means and how such a model structure is determined and estimated.</p>
 </dd>
 <dt>SEATS / X11</dt>
 <dd>
-<p>Seasonal decomposition is performed by SEATS. SEATS is one of the two options for decomposing a series and is discussed in more detail in <a href="25-seats.html"><span>Chapter&nbsp;7</span></a>. The alternative, X11, is discussed in <a href="24-x11.html"><span>Chapter&nbsp;6</span></a>.</p>
+<p>Seasonal decomposition is performed by SEATS. SEATS is one of the two options for decomposing a series and is discussed in more detail in <a href="25-seats.html" class="quarto-xref"><span>Chapter 7</span></a>. The alternative, X11, is discussed in <a href="24-x11.html" class="quarto-xref"><span>Chapter 6</span></a>.</p>
 </dd>
 </dl></section><section id="data-issues" class="level3" data-number="2.3.2"><h3 data-number="2.3.2" class="anchored" data-anchor-id="data-issues">
 <span class="header-section-number">2.3.2</span> Data issues</h3>
@@ -451,19 +464,19 @@ Sax, Christoph, and Dirk Eddelbuettel. 2018. <span>“Seasonal Adjustment by <sp
 <dl>
 <dt>Holiday</dt>
 <dd>
-<p>Significant Easter effects have been found in <code>AirPassengers</code> and were removed from the adjusted series. Moving holidays like Easter or Chinese New Year are vital in seasonal adjustment since they may significantly impact the behavior of many time series. For <code>AirPassengers</code>, the number of passengers is higher in months with Easter. Moving holiday effects will be discussed in <a href="31-holidays.html"><span>Chapter&nbsp;8</span></a>.</p>
+<p>Significant Easter effects have been found in <code>AirPassengers</code> and were removed from the adjusted series. Moving holidays like Easter or Chinese New Year are vital in seasonal adjustment since they may significantly impact the behavior of many time series. For <code>AirPassengers</code>, the number of passengers is higher in months with Easter. Moving holiday effects will be discussed in <a href="31-holidays.html" class="quarto-xref"><span>Chapter 8</span></a>.</p>
 </dd>
 <dt>Weekday</dt>
 <dd>
-<p>Not every month has the same number of weekdays. Since many activities (such as air traveling) differ between weekends and weekdays, this constitutes another predictable component. In <code>AirPassengers</code>, there are fewer passengers on a weekday than during a weekend, and the automated procedures decided to remove the effect. These effects are discussed in <a href="32-trading-days.html"><span>Chapter&nbsp;9</span></a>.</p>
+<p>Not every month has the same number of weekdays. Since many activities (such as air traveling) differ between weekends and weekdays, this constitutes another predictable component. In <code>AirPassengers</code>, there are fewer passengers on a weekday than during a weekend, and the automated procedures decided to remove the effect. These effects are discussed in <a href="32-trading-days.html" class="quarto-xref"><span>Chapter 9</span></a>.</p>
 </dd>
 <dt>Outliers</dt>
 <dd>
-<p>Certain data points may be well out of the ordinary. These <em>outliers</em> are a problem for the modeling and adjustment process. An automated procedure scanned the series for outliers and found an additive outlier on May 1951. This outlier is shown in the plot above, too. Outliers are discussed in <a href="33-outliers.html"><span>Chapter&nbsp;10</span></a>.</p>
+<p>Certain data points may be well out of the ordinary. These <em>outliers</em> are a problem for the modeling and adjustment process. An automated procedure scanned the series for outliers and found an additive outlier on May 1951. This outlier is shown in the plot above, too. Outliers are discussed in <a href="33-outliers.html" class="quarto-xref"><span>Chapter 10</span></a>.</p>
 </dd>
 <dt>Seasonal Breaks</dt>
 <dd>
-<p>The seasonal pattern in <code>AirPassengers</code> looks relatively stable. Some time series, however, show abrupt changes in the seasonal pattern. <a href="34-seasonal-breaks.html"><span>Chapter&nbsp;11</span></a> discusses them and shows how to deal with seasonal breaks.</p>
+<p>The seasonal pattern in <code>AirPassengers</code> looks relatively stable. Some time series, however, show abrupt changes in the seasonal pattern. <a href="34-seasonal-breaks.html" class="quarto-xref"><span>Chapter 11</span></a> discusses them and shows how to deal with seasonal breaks.</p>
 </dd>
 </dl></section><section id="additional-issues" class="level3" data-number="2.3.3"><h3 data-number="2.3.3" class="anchored" data-anchor-id="additional-issues">
 <span class="header-section-number">2.3.3</span> Additional issues</h3>
@@ -471,15 +484,15 @@ Sax, Christoph, and Dirk Eddelbuettel. 2018. <span>“Seasonal Adjustment by <sp
 <dl>
 <dt>Presence of seasonality</dt>
 <dd>
-<p>While the presence of seasonality in <code>AirPassengers</code> is prominent, this is not always the case. If a series has no seasonal pattern, there is no need for a seasonal adjustment. If it is adjusted anyway, the process adds noise to the series and should be avoided. <a href="41-presence-of-seasonality.html"><span>Chapter&nbsp;12</span></a> shows how seasonality can be detected and how to decide whether an adjustment should be made or not.</p>
+<p>While the presence of seasonality in <code>AirPassengers</code> is prominent, this is not always the case. If a series has no seasonal pattern, there is no need for a seasonal adjustment. If it is adjusted anyway, the process adds noise to the series and should be avoided. <a href="41-presence-of-seasonality.html" class="quarto-xref"><span>Chapter 12</span></a> shows how seasonality can be detected and how to decide whether an adjustment should be made or not.</p>
 </dd>
 <dt>Annual constraining</dt>
 <dd>
-<p>Usually, a seasonal adjustment may affect the annual values of a time series. In part, this is by design. The number of weekdays may differ between years, so the adjusted annual values may be different too. In part, this may be an artifact of the adjustment process. X-13 offers tools to enforce the annual values of the adjusted series to be the same as the original one. <a href="42-annual-constraining.html"><span>Chapter&nbsp;13</span></a> shows how to constrain annual value and whether it is a good idea.</p>
+<p>Usually, a seasonal adjustment may affect the annual values of a time series. In part, this is by design. The number of weekdays may differ between years, so the adjusted annual values may be different too. In part, this may be an artifact of the adjustment process. X-13 offers tools to enforce the annual values of the adjusted series to be the same as the original one. <a href="42-annual-constraining.html" class="quarto-xref"><span>Chapter 13</span></a> shows how to constrain annual value and whether it is a good idea.</p>
 </dd>
 <dt>Indirect vs.&nbsp;direct adjustment</dt>
 <dd>
-<p>Often, a seasonal adjustment may be performed on individual series or on an aggregate of multiple series. X-13 offers tools that let you compare these two possibilities. <a href="43-indirect-vs-direct.html"><span>Chapter&nbsp;14</span></a> discusses the options and helps you to decide which one is better.</p>
+<p>Often, a seasonal adjustment may be performed on individual series or on an aggregate of multiple series. X-13 offers tools that let you compare these two possibilities. <a href="43-indirect-vs-direct.html" class="quarto-xref"><span>Chapter 14</span></a> discusses the options and helps you to decide which one is better.</p>
 </dd>
 </dl></section><section id="quality-assessment" class="level3" data-number="2.3.4"><h3 data-number="2.3.4" class="anchored" data-anchor-id="quality-assessment">
 <span class="header-section-number">2.3.4</span> Quality assessment</h3>
@@ -487,11 +500,11 @@ Sax, Christoph, and Dirk Eddelbuettel. 2018. <span>“Seasonal Adjustment by <sp
 <dl>
 <dt>Quality measures</dt>
 <dd>
-<p>In the lower part, the summary of the adjustment model shows various quality measures: The AICc and BIC information criterion and the QS, the Box-Ljung, and the Shapiro statistic. None of them shows any significance (indicated by one or several stars), which is a good sign. Various quality measures and their interpretation is shown in <a href="51-quality-measures.html"><span>Chapter&nbsp;15</span></a>.</p>
+<p>In the lower part, the summary of the adjustment model shows various quality measures: The AICc and BIC information criterion and the QS, the Box-Ljung, and the Shapiro statistic. None of them shows any significance (indicated by one or several stars), which is a good sign. Various quality measures and their interpretation is shown in <a href="51-quality-measures.html" class="quarto-xref"><span>Chapter 15</span></a>.</p>
 </dd>
 <dt>Revisions</dt>
 <dd>
-<p>When comparing seasonal adjustment models, the stability of the model and the series is often an important consideration. One does not want to get a different series with a new data point. X-13 offers tools to analyze revisions. <a href="52-revisions.html"><span>Chapter&nbsp;16</span></a> discusses them and helps you to decide which model to pick.</p>
+<p>When comparing seasonal adjustment models, the stability of the model and the series is often an important consideration. One does not want to get a different series with a new data point. X-13 offers tools to analyze revisions. <a href="52-revisions.html" class="quarto-xref"><span>Chapter 16</span></a> discusses them and helps you to decide which model to pick.</p>
 </dd>
 </dl></section></section><section id="exercises" class="level2" data-number="2.4"><h2 data-number="2.4" class="anchored" data-anchor-id="exercises">
 <span class="header-section-number">2.4</span> Exercises</h2>
@@ -566,18 +579,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -609,11 +611,50 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
-  function tippyHover(el, contentFn) {
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/christophsax\.github\.io\/seasonalbook\.content");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -623,8 +664,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -636,7 +686,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -680,6 +853,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -705,6 +879,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -764,23 +964,27 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
-      <a href="./10-introduction.html" class="pagination-link">
+      <a href="./10-introduction.html" class="pagination-link" aria-label="Introduction">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./20-part-basics.html" class="pagination-link">
+      <a href="./20-part-basics.html" class="pagination-link" aria-label="Basics">
         <span class="nav-page-text">Basics</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
 </div> <!-- /content -->
 <footer class="footer"><div class="nav-footer">
-    <div class="nav-footer-left">by James Livsey and Christoph Sax</div>   
+    <div class="nav-footer-left">
+<p>by James Livsey and Christoph Sax</p>
+</div>   
     <div class="nav-footer-center">
       &nbsp;
-    </div>
-    <div class="nav-footer-right">Seasonal Adjustment in R</div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/christophsax/seasonalbook.content/edit/main/11-getting-started.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<p>Seasonal Adjustment in R</p>
+</div>
   </div>
 </footer>
 

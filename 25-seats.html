@@ -2,10 +2,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.336">
+<meta name="generator" content="quarto-1.6.32">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="James Livsey and Christoph Sax">
-<title>Seasonal Adjustment in R - 7&nbsp; SEATS</title>
+<title>7&nbsp; SEATS – Seasonal Adjustment in R</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,7 +20,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -31,7 +31,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -56,6 +56,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
+  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -87,16 +88,22 @@ div.csl-indent {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2486e1f0a3ee9ee1fc393803a1361cdb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap-ed6da6eef3892af8a4b5ed59bfb951f5.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
   "panel-placement": "start",
   "type": "textbox",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -105,8 +112,10 @@ div.csl-indent {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script><meta name="robots" content="noindex">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -139,25 +148,50 @@ div.csl-indent {
 
 
 </style>
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 </head>
 <body class="nav-sidebar floating slimcontent">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./20-part-basics.html">Basics</a></li><li class="breadcrumb-item"><a href="./25-seats.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">SEATS</span></a></li></ol></nav>
-      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-      </a>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./20-part-basics.html">Basics</a></li><li class="breadcrumb-item"><a href="./25-seats.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">SEATS</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
     </div>
   </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Seasonal Adjustment in R</a> 
         <div class="sidebar-tools-main">
@@ -181,7 +215,7 @@ div.csl-indent {
       <div class="sidebar-item-container"> 
             <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Welcome</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -204,7 +238,7 @@ div.csl-indent {
       <div class="sidebar-item-container"> 
             <a href="./20-part-basics.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Basics</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -245,7 +279,7 @@ div.csl-indent {
       <div class="sidebar-item-container"> 
             <a href="./30-part-data-problems.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Data Problems</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -280,7 +314,7 @@ div.csl-indent {
       <div class="sidebar-item-container"> 
             <a href="./40-part-other-issues.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Other Issues</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -309,7 +343,7 @@ div.csl-indent {
       <div class="sidebar-item-container"> 
             <a href="./50-part-quality-assessment.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Quality assessment</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -330,32 +364,39 @@ div.csl-indent {
 </li>
     </ul>
 </div>
-</nav><div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+</nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
-<li><a href="#model-based-decomposition" id="toc-model-based-decomposition" class="nav-link active" data-scroll-target="#model-based-decomposition"><span class="header-section-number">7.1</span> Model based decomposition</a></li>
-  <li><a href="#comparing-seats-with-x-11-filters" id="toc-comparing-seats-with-x-11-filters" class="nav-link" data-scroll-target="#comparing-seats-with-x-11-filters"><span class="header-section-number">7.2</span> Comparing SEATS with X-11 filters</a></li>
-  <li><a href="#transitory-component" id="toc-transitory-component" class="nav-link" data-scroll-target="#transitory-component"><span class="header-section-number">7.3</span> Transitory component</a></li>
-  <li><a href="#quick-refresher-on-arima-models-and-notation" id="toc-quick-refresher-on-arima-models-and-notation" class="nav-link" data-scroll-target="#quick-refresher-on-arima-models-and-notation"><span class="header-section-number">7.4</span> Quick refresher on ARIMA models and notation</a></li>
-  <li><a href="#seats-assumptions" id="toc-seats-assumptions" class="nav-link" data-scroll-target="#seats-assumptions"><span class="header-section-number">7.5</span> SEATS Assumptions</a></li>
-  <li><a href="#sec-canonical-decomposition" id="toc-sec-canonical-decomposition" class="nav-link" data-scroll-target="#sec-canonical-decomposition"><span class="header-section-number">7.6</span> Canonical Decomposition</a></li>
-  <li><a href="#sec-wiener-kolmogorov-algorithm" id="toc-sec-wiener-kolmogorov-algorithm" class="nav-link" data-scroll-target="#sec-wiener-kolmogorov-algorithm"><span class="header-section-number">7.7</span> Wiener-Kolmogorov Algorithm</a></li>
-  <li><a href="#example-seats-adjustment" id="toc-example-seats-adjustment" class="nav-link" data-scroll-target="#example-seats-adjustment"><span class="header-section-number">7.8</span> Example SEATS adjustment</a></li>
-  <li><a href="#considerations-when-using-seats-in-x-13" id="toc-considerations-when-using-seats-in-x-13" class="nav-link" data-scroll-target="#considerations-when-using-seats-in-x-13"><span class="header-section-number">7.9</span> Considerations when using SEATS in X-13</a></li>
+<li><a href="#basics" id="toc-basics" class="nav-link active" data-scroll-target="#basics"><span class="header-section-number">7.1</span> Basics</a></li>
+  <li><a href="#arima-model-decompostion" id="toc-arima-model-decompostion" class="nav-link" data-scroll-target="#arima-model-decompostion"><span class="header-section-number">7.2</span> ARIMA Model decompostion</a></li>
+  <li><a href="#comparing-seats-with-x-11-filters" id="toc-comparing-seats-with-x-11-filters" class="nav-link" data-scroll-target="#comparing-seats-with-x-11-filters"><span class="header-section-number">7.3</span> Comparing SEATS with X-11 filters</a></li>
   <li>
-<a href="#sec-comparing" id="toc-sec-comparing" class="nav-link" data-scroll-target="#sec-comparing"><span class="header-section-number">7.10</span> Comparing X-11 and SEATS</a>
+<a href="#advanced-theory" id="toc-advanced-theory" class="nav-link" data-scroll-target="#advanced-theory"><span class="header-section-number">7.4</span> Advanced theory</a>
   <ul class="collapse">
-<li><a href="#seats-filters-from-seas-output" id="toc-seats-filters-from-seas-output" class="nav-link" data-scroll-target="#seats-filters-from-seas-output"><span class="header-section-number">7.10.1</span> SEATS filters from <code>seas</code> output</a></li>
-  <li><a href="#reasons-for-using-seats-or-x11" id="toc-reasons-for-using-seats-or-x11" class="nav-link" data-scroll-target="#reasons-for-using-seats-or-x11"><span class="header-section-number">7.10.2</span> Reasons for using SEATS or X11</a></li>
+<li><a href="#quick-refresher-on-arima-models-and-notation" id="toc-quick-refresher-on-arima-models-and-notation" class="nav-link" data-scroll-target="#quick-refresher-on-arima-models-and-notation"><span class="header-section-number">7.4.1</span> Quick refresher on ARIMA models and notation</a></li>
+  <li><a href="#seats-assumptions" id="toc-seats-assumptions" class="nav-link" data-scroll-target="#seats-assumptions"><span class="header-section-number">7.4.2</span> SEATS Assumptions</a></li>
+  <li><a href="#sec-canonical-decomposition" id="toc-sec-canonical-decomposition" class="nav-link" data-scroll-target="#sec-canonical-decomposition"><span class="header-section-number">7.4.3</span> Canonical Decomposition</a></li>
+  <li><a href="#sec-wiener-kolmogorov-algorithm" id="toc-sec-wiener-kolmogorov-algorithm" class="nav-link" data-scroll-target="#sec-wiener-kolmogorov-algorithm"><span class="header-section-number">7.4.4</span> Wiener-Kolmogorov Algorithm</a></li>
+  <li><a href="#transitory-component" id="toc-transitory-component" class="nav-link" data-scroll-target="#transitory-component"><span class="header-section-number">7.4.5</span> Transitory component</a></li>
   </ul>
 </li>
-  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/25-seats.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+  <li><a href="#case-study-narrow-seats-filters" id="toc-case-study-narrow-seats-filters" class="nav-link" data-scroll-target="#case-study-narrow-seats-filters"><span class="header-section-number">7.5</span> Case study: narrow SEATS filters</a></li>
+  <li><a href="#considerations-when-using-seats-in-x-13" id="toc-considerations-when-using-seats-in-x-13" class="nav-link" data-scroll-target="#considerations-when-using-seats-in-x-13"><span class="header-section-number">7.6</span> Considerations when using SEATS in X-13</a></li>
+  <li>
+<a href="#sec-comparing" id="toc-sec-comparing" class="nav-link" data-scroll-target="#sec-comparing"><span class="header-section-number">7.7</span> Comparing X-11 and SEATS</a>
+  <ul class="collapse">
+<li><a href="#seats-filters-from-seas-output" id="toc-seats-filters-from-seas-output" class="nav-link" data-scroll-target="#seats-filters-from-seas-output"><span class="header-section-number">7.7.1</span> SEATS filters from <code>seas</code> output</a></li>
+  <li><a href="#reasons-for-using-seats-or-x11" id="toc-reasons-for-using-seats-or-x11" class="nav-link" data-scroll-target="#reasons-for-using-seats-or-x11"><span class="header-section-number">7.7.2</span> Reasons for using SEATS or X11</a></li>
+  </ul>
+</li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="header-section-number">7.8</span> Exercises</a></li>
+  </ul><div class="toc-actions"><ul><li><a href="https://github.com/christophsax/seasonalbook.content/edit/main/25-seats.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content page-columns page-full" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<main class="content page-columns page-full" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./20-part-basics.html">Basics</a></li><li class="breadcrumb-item"><a href="./25-seats.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">SEATS</span></a></li></ol></nav><div class="quarto-title">
 <h1 class="title"><span id="sec-seats" class="quarto-section-identifier"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">SEATS</span></span></h1>
 </div>
 
@@ -369,7 +410,38 @@ div.csl-indent {
   </div>
   
 
-</header><!--
+
+</header><div class="cell">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.seasonal.website">seasonal</a></span><span class="op">)</span></span>
+<span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; seas(x = AirPassengers)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients:</span></span>
+<span><span class="co">#&gt;                     Estimate Std. Error z value Pr(&gt;|z|)    </span></span>
+<span><span class="co">#&gt; Weekday           -0.0029497  0.0005232  -5.638 1.72e-08 ***</span></span>
+<span><span class="co">#&gt; Easter[1]          0.0177674  0.0071580   2.482   0.0131 *  </span></span>
+<span><span class="co">#&gt; AO1951.May         0.1001558  0.0204387   4.900 9.57e-07 ***</span></span>
+<span><span class="co">#&gt; MA-Nonseasonal-01  0.1156204  0.0858588   1.347   0.1781    </span></span>
+<span><span class="co">#&gt; MA-Seasonal-12     0.4973600  0.0774677   6.420 1.36e-10 ***</span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; SEATS adj.  ARIMA: (0 1 1)(0 1 1)  Obs.: 144  Transform: log</span></span>
+<span><span class="co">#&gt; AICc: 947.3, BIC: 963.9  QS (no seasonality in final):    0  </span></span>
+<span><span class="co">#&gt; Box-Ljung (no autocorr.): 26.65   Shapiro (normality): 0.9908</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="25-seats_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="864"></p>
+</figure>
+</div>
+</div>
+</div>
+<!--
 
   Nest time:
 
@@ -386,72 +458,80 @@ div.csl-indent {
 
 
 
- --><section id="model-based-decomposition" class="level2 page-columns page-full" data-number="7.1"><h2 data-number="7.1" class="anchored" data-anchor-id="model-based-decomposition">
-<span class="header-section-number">7.1</span> Model based decomposition</h2>
-<p>Signal Extraction in ARIMA Time Series, or SEATS, is a method for estimating unobserved components in a time series. It is developed from the work of <span class="citation" data-cites="cleveland76">Cleveland and Tiao (<a href="#ref-cleveland76" role="doc-biblioref">1976</a>)</span>, <span class="citation" data-cites="hillmer82">Hillmer and Tiao (<a href="#ref-hillmer82" role="doc-biblioref">1982</a>)</span>, <span class="citation" data-cites="maravall86">Maravall (<a href="#ref-maravall86" role="doc-biblioref">1986</a>)</span>. If applied properly, SEATS seasonal factors are usually more stable than X-11, and the seasonally adjusted series show less revisions than X11 (see <a href="#sec-comparing"><span>Section&nbsp;7.10</span></a> for a more extensive discussion).</p>
+ -->
+<p>In the previous chapter, we got to know X-11, a seasonal decomposition procedure that utilizes predefined moving-average filters. SEATS, which we will get to know in this chapter, derives its filters from the underlying ARIMA model.</p>
+<section id="basics" class="level2 page-columns page-full" data-number="7.1"><h2 data-number="7.1" class="anchored" data-anchor-id="basics">
+<span class="header-section-number">7.1</span> Basics</h2>
+<p>Signal Extraction in ARIMA Time Series, or SEATS, is a method for estimating unobserved components in a time series. It is developed from the work of <span class="citation" data-cites="cleveland76">Cleveland and Tiao (<a href="#ref-cleveland76" role="doc-biblioref">1976</a>)</span>, <span class="citation" data-cites="hillmer82">Hillmer and Tiao (<a href="#ref-hillmer82" role="doc-biblioref">1982</a>)</span>, <span class="citation" data-cites="maravall86">Maravall (<a href="#ref-maravall86" role="doc-biblioref">1986</a>)</span>. If applied properly, SEATS seasonal factors are usually more stable than X-11, and the seasonally adjusted series show less revisions than X11 (see <a href="#sec-comparing" class="quarto-xref"><span>Section 7.7</span></a> for a more extensive discussion).</p>
 <div class="no-row-height column-margin column-container"><div id="ref-cleveland76" class="csl-entry" role="listitem">
 Cleveland, William P, and George C Tiao. 1976. <span>“Decomposition of Seasonal Time Series: A Model for the Census x-11 Program.”</span> <em>Journal of the American Statistical Association</em> 71 (355): 581–87.
 </div><div id="ref-hillmer82" class="csl-entry" role="listitem">
 Hillmer, S. C., and G. C. Tiao. 1982. <span>“An ARIMA-Model-Based Approach to Seasonal Adjustment.”</span> <em>Journal of the American Statistical Association</em> 77 (377): 63–70. <a href="http://www.jstor.org/stable/2287770">http://www.jstor.org/stable/2287770</a>.
 </div><div id="ref-maravall86" class="csl-entry" role="listitem">
 Maravall, Agustin. 1986. <span>“Revisions in ARIMA Signal Extraction.”</span> <em>Journal of the American Statistical Association</em> 81 (395): 736–40. <a href="http://www.jstor.org/stable/2289005">http://www.jstor.org/stable/2289005</a>.
-</div></div><p>Like X-11, SEATS applies a series of filters to an observed time series, as described in <a href="24-x11.html"><span>Chapter&nbsp;6</span></a>. Like X-11, SEATS uses a forecast extended series, in order to obtain unbiased results at the margin.</p>
-<p>Unlike X-11, however, SEATS filters are derived from the ARIMA model of the time series. While X-11 filters are predefined and fixed, the SEATS filters are different for each ARIMA model.</p>
-<p>While X-11 offers a finite set of filters (in fact, there are seven seasonal filters available), SEATS offers an infinite set of filters. Overall, they cover a broader set of possible filter lengths, which makes SEATS a more flexible option than X-11. <strong>The available set filter lengths is the most crucial difference between X-11 and SEATS</strong>. At the same time, the additional flexibility may lead at times to filters that are undesirable. As will be shown later on, SEATS sometimes choose a filter that is too narrow, and produces an overly volatile seasonal component.</p>
-<div class="callout callout-style-simple callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Comparing X-11 and SEATS filters
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<section id="x-11-filters" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="x-11-filters">X-11 filters</h4>
-<ul>
-<li>finite set of empirically developed moving average filters</li>
-<li>fixed filtering seen as easier to use (less statistical machinery)</li>
-</ul></section><section id="seats-filters" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="seats-filters">SEATS filters</h4>
-<ul>
-<li>specifies stochastic models for unobserved components</li>
-<li>derives seasonal adjustment filters from these models</li>
-<li>infinite number of possible filter choices</li>
-<li>requires more statistical machinery</li>
-</ul></section>
-</div>
-</div>
-<div class="callout callout-style-simple callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-TODO
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Plots of X-11 filters vs SEATS filters</p>
-</div>
-</div>
-<p>Given a certain ARIMA model (such as the “Airline” (0 1 1)(0 1 1) which is appropriate for the description of the <code>AirPassengers</code> time series), SEATS decomposes the model into separate models for the trend, the seasonal and the irregular component. This is done by the <em>Canonical Decomposition</em> and will be discussed in <a href="#sec-canonical-decomposition"><span>Section&nbsp;7.6</span></a>.</p>
-<p>For a given set of ARIMA model parameter, the decomposition of the ARIMA model is almost independent of the data. For each ARIMA specification, there is a unique canonical decomposition. For an “Airline” (0 1 1)(0 1 1) model (with both moving average coefficients not being to close to 1), the trend component can be described with a (0 2 2)(0 0 0) model, while the seasonal sum of seasonal component can be described by a (0 0 11)(0 0 0) model. The parameters of these models can be derived from the parameter estimates of the initial airline model that describes the original series. The irregular component is usually white noise, described by the trivial (0 0 0)(0 0 0) model.</p>
-<p>The decomposed ARIMA models imply a certain filter, which is derived by the Wiener-Kolmogorov procedure (<a href="#sec-wiener-kolmogorov-algorithm"><span>Section&nbsp;7.7</span></a>).</p>
-</section><section id="comparing-seats-with-x-11-filters" class="level2 page-columns page-full" data-number="7.2"><h2 data-number="7.2" class="anchored" data-anchor-id="comparing-seats-with-x-11-filters">
-<span class="header-section-number">7.2</span> Comparing SEATS with X-11 filters</h2>
-<p>If SEATS and X-11 use similar filters, the final adjustment will be similar. Using the default arguments of <code>seas()</code> on <code>AirPassengers</code>, the adjustment is very similar:</p>
+</div></div><p>Like X-11, SEATS applies a series of filters to an observed time series, as described in <a href="24-x11.html" class="quarto-xref"><span>Chapter 6</span></a>. Like X-11, SEATS uses a forecast extended series, in order to obtain unbiased results at the margin. Unlike X-11, however, SEATS filters are derived from the ARIMA model of the time series. While X-11 filters are predefined and fixed, the SEATS filters are different for each ARIMA model.</p>
+<p>While X-11 offers a finite set of filters, <!-- (in fact, there are seven seasonal filters available),  --> SEATS offers an infinite set of filters. Overall, they cover a broader set of possible filter lengths, which makes SEATS a more flexible option than X-11. The available set filter lengths is the most crucial difference between X-11 and SEATS. At the same time, the additional flexibility may lead at times to filters that are undesirable. As will be shown later on, SEATS sometimes choose a filter that is too narrow, and produces an overly volatile seasonal component.</p>
+<!--
+Let's compare X-11 and SEATS filters
+
+#### X-11 filters {.unnumbered}
+
+-   finite set of empirically developed moving average filters
+-   fixed filtering seen as easier to use (less statistical machinery)
+
+#### SEATS filters {.unnumbered}
+
+-   specifies stochastic models for unobserved components
+-   derives seasonal adjustment filters from these models
+-   infinite number of possible filter choices
+-   requires more statistical machinery
+
+ -->
+<p>To perform a SEATS seasonal adjustment in R, you can use the following code:</p>
 <div class="cell">
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">seats</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span></span>
-<span><span class="va">x11</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, x11 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu">tsbox</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/tsbox/reference/ts_plot.html">ts_plot</a></span><span class="op">(</span><span class="fu">final</span><span class="op">(</span><span class="va">seats</span><span class="op">)</span>, <span class="fu">final</span><span class="op">(</span><span class="va">x11</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; seas(x = AirPassengers)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients:</span></span>
+<span><span class="co">#&gt;                     Estimate Std. Error z value Pr(&gt;|z|)    </span></span>
+<span><span class="co">#&gt; Weekday           -0.0029497  0.0005232  -5.638 1.72e-08 ***</span></span>
+<span><span class="co">#&gt; Easter[1]          0.0177674  0.0071580   2.482   0.0131 *  </span></span>
+<span><span class="co">#&gt; AO1951.May         0.1001558  0.0204387   4.900 9.57e-07 ***</span></span>
+<span><span class="co">#&gt; MA-Nonseasonal-01  0.1156204  0.0858588   1.347   0.1781    </span></span>
+<span><span class="co">#&gt; MA-Seasonal-12     0.4973600  0.0774677   6.420 1.36e-10 ***</span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; SEATS adj.  ARIMA: (0 1 1)(0 1 1)  Obs.: 144  Transform: log</span></span>
+<span><span class="co">#&gt; AICc: 947.3, BIC: 963.9  QS (no seasonality in final):    0  </span></span>
+<span><span class="co">#&gt; Box-Ljung (no autocorr.): 26.65   Shapiro (normality): 0.9908</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>As long as SEATS and X-11 use similar filters, the final adjustment will be similar. Using the default arguments of <code><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas()</a></code> on <code>AirPassengers</code>, the adjustment is very similar:</p>
+<div class="cell">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_x11</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">AirPassengers</span>, x11 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">tsbox</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/tsbox/reference/ts_plot.html">ts_plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/final.html">final</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/final.html">final</a></span><span class="op">(</span><span class="va">m_x11</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="25-seats_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="864"></p>
+<div>
+<figure class="figure"><p><img src="25-seats_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="864"></p>
+</figure>
 </div>
 </div>
-<p>Others have looked at comparing SEATS and X-11 filters. In <span class="citation" data-cites="planas02">Planas and Depoutot (<a href="#ref-planas02" role="doc-biblioref">2002</a>)</span> they show with X11 seasonal filter that is closest to an implied (0 1 1)(0 1 1) “Airline” SEATS model based on the <span class="math inline">\(\Theta\)</span>. As a reminder, <span class="math inline">\(\Theta\)</span> refers to the seasonal moving average parameter of the ARIMA model.</p>
+</div>
+<p>We will look into the similarities between SEATS and X-11 in section …</p>
+</section><section id="arima-model-decompostion" class="level2" data-number="7.2"><h2 data-number="7.2" class="anchored" data-anchor-id="arima-model-decompostion">
+<span class="header-section-number">7.2</span> ARIMA Model decompostion</h2>
+<p>Given a certain ARIMA model (such as the “Airline” <code>(0 1 1)(0 1 1)</code> which is appropriate for the description of the <code>AirPassengers</code> time series), SEATS decomposes the model into separate models for the trend, the seasonal and the irregular component. This is done by the <em>Canonical Decomposition</em> and will be discussed in <a href="#sec-canonical-decomposition" class="quarto-xref"><span>Section 7.4.3</span></a>.</p>
+<p>For a given set of ARIMA model parameter, the decomposition of the ARIMA model is almost independent of the data. For each ARIMA specification, there is a unique canonical decomposition. For an “Airline” <code>(0 1 1)(0 1 1)</code> model (with both moving average coefficients not being to close to 1), the trend component can be described with a <code>(0 2 2)(0 0 0)</code> model, while the seasonal sum of seasonal component can be described by a <code>(0 0 11)(0 0 0)</code> model. The parameters of these models can be derived from the parameter estimates of the initial airline model that describes the original series. The irregular component is usually white noise, described by the trivial <code>(0 0 0)(0 0 0)</code> model.</p>
+<p>The decomposed ARIMA models imply a certain filter, which is derived by the Wiener-Kolmogorov procedure (<a href="#sec-wiener-kolmogorov-algorithm" class="quarto-xref"><span>Section 7.4.4</span></a>).</p>
+</section><section id="comparing-seats-with-x-11-filters" class="level2 page-columns page-full" data-number="7.3"><h2 data-number="7.3" class="anchored" data-anchor-id="comparing-seats-with-x-11-filters">
+<span class="header-section-number">7.3</span> Comparing SEATS with X-11 filters</h2>
+<p><span class="citation" data-cites="planas02">Planas and Depoutot (<a href="#ref-planas02" role="doc-biblioref">2002</a>)</span> systematically compare SEATS and X-11 filters and show which X11 seasonal filter that is closest to an implied <code>(0 1 1)(0 1 1)</code> “Airline” SEATS model based on the <span class="math inline">\(\Theta\)</span>. As a reminder, <span class="math inline">\(\Theta\)</span> refers to the seasonal moving average parameter of the ARIMA model.</p>
 <div class="no-row-height column-margin column-container"><div id="ref-planas02" class="csl-entry" role="listitem">
 Planas, Christophe, and Raoul Depoutot. 2002. <span>“Controlling Revisions in Arima-Model-Based Seasonal Adjustment.”</span> <em>Journal of Time Series Analysis</em> 23 (2): 193–213.
-</div></div><table class="table">
+</div></div><table class="caption-top table">
 <thead><tr class="header">
 <th>Filter</th>
 <th>Closest Seasonal MA</th>
@@ -485,17 +565,10 @@ Planas, Christophe, and Raoul Depoutot. 2002. <span>“Controlling Revisions in 
 <p>Overall, we may think of SEATS filters as a broader, more flexible set of filters than X-11 filers. While we have just seven filters in X-11, we have an infinite number of filters in SEATS. They cover a larger range of filters spans, ranging from filters that are much narrower than X-11 to filters that are much wider.</p>
 <p>SEATS greatest strength is also its greatest weakness. As we will see in the example below, SEATS sometimes chooses a filter that is very narrow. From a SEATS perspective, this makes sense: Given an ARIMA model with a very weak seasonality, the filter lengths should be chooses narrowly. From a practical perspective, the resulting seasonal component is undesirable. It is too volatile, essentially catching much of the irregular component and making the resulting seasonally adjusted series too smooth.</p>
 <!-- Additionally, the filters that are -->
-</section><section id="transitory-component" class="level2" data-number="7.3"><h2 data-number="7.3" class="anchored" data-anchor-id="transitory-component">
-<span class="header-section-number">7.3</span> Transitory component</h2>
-<p>Sometimes SEATS includes a transitory component in its decomposition:</p>
-<p><span class="math display">\[ X_t = T_t + S_t + R_t + I_t \]</span></p>
-<p>The transitory component captures short, erratic behavior that is not white noise, sometimes associated with awkward frequencies.</p>
-<ul>
-<li>The variation from the transitory component should not contaminate the trend or seasonal, and removing it allows SEATS to obtain smoother, more stable trends and seasonal components.</li>
-<li>In the final decomposition, the transitory and irregular components are usually combined.</li>
-<li>SEATS does not always estimate a transitory component</li>
-</ul></section><section id="quick-refresher-on-arima-models-and-notation" class="level2" data-number="7.4"><h2 data-number="7.4" class="anchored" data-anchor-id="quick-refresher-on-arima-models-and-notation">
-<span class="header-section-number">7.4</span> Quick refresher on ARIMA models and notation</h2>
+</section><section id="advanced-theory" class="level2" data-number="7.4"><h2 data-number="7.4" class="anchored" data-anchor-id="advanced-theory">
+<span class="header-section-number">7.4</span> Advanced theory</h2>
+<section id="quick-refresher-on-arima-models-and-notation" class="level3" data-number="7.4.1"><h3 data-number="7.4.1" class="anchored" data-anchor-id="quick-refresher-on-arima-models-and-notation">
+<span class="header-section-number">7.4.1</span> Quick refresher on ARIMA models and notation</h3>
 <p>The remaining of the SEATS section will heavily rely on the auto-regressive and moving-average operators <span class="math inline">\(\phi(B)\)</span> and <span class="math inline">\(\theta(B)\)</span> where <span class="math inline">\(B X_t = X_{t-1}\)</span>.</p>
 <p>If <span class="math inline">\(X_t\)</span> follows and ARIMA(<span class="math inline">\(p\)</span>, <span class="math inline">\(d\)</span>, <span class="math inline">\(q\)</span>) model: <span class="math display">\[
 \phi(B) X_t = \theta(B) a_t
@@ -508,13 +581,13 @@ Planas, Christophe, and Raoul Depoutot. 2002. <span>“Controlling Revisions in 
 X_t = \phi_1 X_{t-1} + \phi_2 X_{t-2} + a_t + \theta_1 a_{t-1}
 \]</span></p>
 <p>and all model information is contained in <span class="math inline">\(\phi(B)\)</span> and <span class="math inline">\(\theta(B)\)</span>. Moreover, for any specified <span class="math inline">\(\phi(B)\)</span> and <span class="math inline">\(\theta(B)\)</span> that satisfy certain causality criteria there exists a unique Wold decomposition <span class="math display">\[
-\phi(B) X_t = \theta(B) a_t  
+\phi(B) X_t = \theta(B) a_t
 \]</span></p>
 <p><span class="math display">\[
 X_t = \frac{\theta(B)}{\phi(B)} a_t = \Psi(B) a_t = \sum_{k=0}^{\infty} \psi_k a_{t-k}
 \]</span></p>
-</section><section id="seats-assumptions" class="level2" data-number="7.5"><h2 data-number="7.5" class="anchored" data-anchor-id="seats-assumptions">
-<span class="header-section-number">7.5</span> SEATS Assumptions</h2>
+</section><section id="seats-assumptions" class="level3" data-number="7.4.2"><h3 data-number="7.4.2" class="anchored" data-anchor-id="seats-assumptions">
+<span class="header-section-number">7.4.2</span> SEATS Assumptions</h3>
 <ul>
 <li>The linearized series can be represented by an ARIMA model which captures the stochastic structure of the series. As a reminder, the linearized series is the series with regression effects removed.</li>
 <li>After differencing each with the ARIMA’s differencing polynomial, the components are orthogonal (uncorrelated)</li>
@@ -530,8 +603,8 @@ X_t =
 \frac{\theta_R(B)}{\phi_R(B)} a_{R,t}  + u_t
 \]</span></p>
 <p>If the spectra of all components in non-negative the decomposition is admissible, SEATS finds admissible models for components <span class="math display">\[ \phi_T(B) T_t = \theta_T(B) a_{T, t} \]</span> <span class="math display">\[ \phi_S(B) S_t = \theta_S(B) a_{S, t} \]</span> <span class="math display">\[\phi_R(B) R_t = \theta_R(B) a_{R, t} \]</span></p>
-</section><section id="sec-canonical-decomposition" class="level2" data-number="7.6"><h2 data-number="7.6" class="anchored" data-anchor-id="sec-canonical-decomposition">
-<span class="header-section-number">7.6</span> Canonical Decomposition</h2>
+</section><section id="sec-canonical-decomposition" class="level3" data-number="7.4.3"><h3 data-number="7.4.3" class="anchored" data-anchor-id="sec-canonical-decomposition">
+<span class="header-section-number">7.4.3</span> Canonical Decomposition</h3>
 <p>However, there infinite number of models that yield the same aggregate. The choices differ in how white noise is allocated among the components. This is where the <em>Canonical Decomposition</em> comes into play. SEATS uses the method of Pierce, Box-Hillmer, Tiao and Burman:</p>
 <ul>
 <li>Put all the white noise into the irregular components</li>
@@ -539,25 +612,33 @@ X_t =
 <li>Minimizes the variance of the stationary transforms of the other components</li>
 </ul>
 <p>This is called the <em>Canonical Decomposition</em>. We already stated that both X-11 and SEATS estimate the unobserved components by passing a moving-average filter over the observed data. So how do we use these implied component models to get a linear filter? It should be clear that the filter weights will depend on that arima model is picked <span class="math inline">\(X_t = \Psi(B) a_t\)</span>, and what the implied seasonal model, <span class="math inline">\(\phi_S(B) S_t = \theta_S(B) a_{S,t} \Rightarrow S_t = \Psi(B) a_t\)</span>, is.</p>
-</section><section id="sec-wiener-kolmogorov-algorithm" class="level2" data-number="7.7"><h2 data-number="7.7" class="anchored" data-anchor-id="sec-wiener-kolmogorov-algorithm">
-<span class="header-section-number">7.7</span> Wiener-Kolmogorov Algorithm</h2>
+</section><section id="sec-wiener-kolmogorov-algorithm" class="level3" data-number="7.4.4"><h3 data-number="7.4.4" class="anchored" data-anchor-id="sec-wiener-kolmogorov-algorithm">
+<span class="header-section-number">7.4.4</span> Wiener-Kolmogorov Algorithm</h3>
 <p>The <strong>Wiener-Kolmogorov</strong> (WK) algorithm outlines the methodology to get the so-called WK filter. This is the filter that is equal to the conditional expectation of the seasonal component conditional on the observed series.</p>
 <p><span class="math display">\[\widehat{S}_t = \underbrace{\left[ \frac{\Sigma_S}{\Sigma} \frac{\Psi_S(B)\Psi_S(F)}{\Psi(B)\Psi(F)} \right]}_{\mbox{WK filter weights}} X_t\]</span> where <span class="math inline">\(F=B^{-1}\)</span> if the forward shift operator such that <span class="math inline">\(F X_t = X_{t+1}\)</span>.</p>
 <p>More than other coefficients, the seasonal MA (<span class="math inline">\(\theta_{12}\)</span>) influences whether estimated seasonal factors change either slowly over time (<span class="math inline">\(\theta_{12}\)</span> close to 1) or rapidly over time (<span class="math inline">\(\theta_{12}\)</span> close to zero).</p>
-</section><section id="example-seats-adjustment" class="level2" data-number="7.8"><h2 data-number="7.8" class="anchored" data-anchor-id="example-seats-adjustment">
-<span class="header-section-number">7.8</span> Example SEATS adjustment</h2>
+</section><section id="transitory-component" class="level3" data-number="7.4.5"><h3 data-number="7.4.5" class="anchored" data-anchor-id="transitory-component">
+<span class="header-section-number">7.4.5</span> Transitory component</h3>
+<p>Sometimes SEATS includes a transitory component in its decomposition:</p>
+<p><span class="math display">\[ X_t = T_t + S_t + R_t + I_t \]</span></p>
+<p>The transitory component captures short, erratic behavior that is not white noise, sometimes associated with awkward frequencies.</p>
+<ul>
+<li>The variation from the transitory component should not contaminate the trend or seasonal, and removing it allows SEATS to obtain smoother, more stable trends and seasonal components.</li>
+<li>In the final decomposition, the transitory and irregular components are usually combined.</li>
+<li>SEATS does not always estimate a transitory component</li>
+</ul></section></section><section id="case-study-narrow-seats-filters" class="level2" data-number="7.5"><h2 data-number="7.5" class="anchored" data-anchor-id="case-study-narrow-seats-filters">
+<span class="header-section-number">7.5</span> Case study: narrow SEATS filters</h2>
+<p><span class="tag tag-case-study"><i class="fas fa-graduation-cap"></i> Case Study</span></p>
 <p>Let’s have a look at nominal taxes from Swiss production account.</p>
-<!--
-, previously discussed [here](https://github.com/dpkj/dpkj-research/blob/master/seas_adj/pk_tax_n.md).
-*(added some minutes ago, to be discussed in class).*
--->
 <p>The series looks as follows:</p>
 <div class="cell">
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">tax_n</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/ts.html">ts</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">5512.43723529998</span>, <span class="fl">5302.66127551312</span>, <span class="fl">5637.04650218708</span>, <span class="fl">5407.75865307982</span>, <span class="fl">5254.75041765537</span>, <span class="fl">5883.31044127543</span>, <span class="fl">5465.12983546186</span>, <span class="fl">5296.83011638733</span>, <span class="fl">5577.28917595672</span>, <span class="fl">5634.79857930988</span>, <span class="fl">5832.41514259211</span>, <span class="fl">5640.32968921129</span>, <span class="fl">6066.78258591999</span>, <span class="fl">6222.68082980585</span>, <span class="fl">6504.17063502564</span>, <span class="fl">6074.99091524851</span>, <span class="fl">6580.71692950301</span>, <span class="fl">6274.60948561261</span>, <span class="fl">7157.60005559455</span>, <span class="fl">6944.58546551983</span>, <span class="fl">7448.63554376696</span>, <span class="fl">6976.09702323069</span>, <span class="fl">7818.38121589548</span>, <span class="fl">7289.71620307687</span>, <span class="fl">7768.40193169586</span>, <span class="fl">6942.77891782026</span>, <span class="fl">7578.22907029965</span>, <span class="fl">7077.70301249423</span>, <span class="fl">7410.68364011917</span>, <span class="fl">6927.73248230177</span>, <span class="fl">7087.72613485434</span>, <span class="fl">6926.90090299472</span>, <span class="fl">7336.73867165469</span>, <span class="fl">7108.4949497024</span>, <span class="fl">7145.42480380572</span>, <span class="fl">7154.30815153718</span>, <span class="fl">7498.01519467561</span>, <span class="fl">7559.01824893372</span>, <span class="fl">7156.60513953808</span>, <span class="fl">7639.02255770258</span>, <span class="fl">7569.94029094276</span>, <span class="fl">7515.34158790891</span>, <span class="fl">7732.93688269533</span>, <span class="fl">7551.953334793</span>, <span class="fl">8197.88127458863</span>, <span class="fl">7939.93851007643</span>, <span class="fl">8141.79136494712</span>, <span class="fl">7568.40068251781</span>, <span class="fl">8499.84629558006</span>, <span class="fl">8345.25921525785</span>, <span class="fl">8386.38082590207</span>, <span class="fl">7886.29186614002</span>, <span class="fl">8821.87792569236</span>, <span class="fl">8595.73223990369</span>, <span class="fl">8637.63939154854</span>, <span class="fl">7991.04698685541</span>, <span class="fl">8464.50040108557</span>, <span class="fl">8003.27264004253</span>, <span class="fl">8399.90637539542</span>, <span class="fl">8384.22143621648</span>, <span class="fl">8784.63271925264</span>, <span class="fl">8595.77482962329</span>, <span class="fl">8591.67855177336</span>, <span class="fl">8602.6019974407</span>, <span class="fl">8966.1740189959</span>, <span class="fl">8993.28779502417</span>, <span class="fl">8839.41351045546</span>, <span class="fl">8468.69899389445</span>, <span class="fl">9221.6367572731</span>, <span class="fl">8801.73025651442</span>, <span class="fl">8426.53923852333</span>, <span class="fl">8661.00570414916</span>, <span class="fl">8930.21895672981</span>, <span class="fl">9116.66536122397</span>, <span class="fl">8794.81591614758</span>, <span class="fl">8559.38402031864</span>, <span class="fl">9056.19152051174</span>, <span class="fl">8842.45736626125</span>, <span class="fl">9043.08264307781</span>, <span class="fl">8549.5389771392</span>, <span class="fl">8980.20969432594</span>, <span class="fl">8893.75993928538</span>, <span class="fl">9010.28560160679</span>, <span class="fl">8664.05904218189</span>, <span class="fl">8765.47235867103</span>, <span class="fl">9170.15544669832</span>, <span class="fl">8970.77030836517</span>, <span class="fl">8310.62969865549</span>, <span class="fl">9180.42069018707</span>, <span class="fl">8566.35919301958</span>, <span class="fl">9497.27766001259</span>, <span class="fl">9012.51934200076</span>, <span class="fl">8454.34333463005</span>, <span class="fl">9357.61750287723</span>, <span class="fl">9190.28660347765</span>, <span class="fl">9060.07897285508</span>, <span class="fl">9253.43694298711</span>, <span class="fl">8809.60616470625</span>, <span class="fl">8825.87955511076</span>, <span class="fl">9047.15212801588</span>, <span class="fl">9255.87581159138</span>, <span class="fl">8423.29760776073</span><span class="op">)</span>, start <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1995</span>, <span class="fl">1</span><span class="op">)</span>, frequency <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span></span>
+<span><span class="fu">ts_plot</span><span class="op">(</span><span class="va">tax_n</span><span class="op">)</span></span>
+<span></span>
 <span></span>
 <span><span class="co"># static(seas(tax_n))</span></span>
 <span></span>
-<span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span></span>
+<span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span></span>
 <span>  x <span class="op">=</span> <span class="va">tax_n</span>,</span>
 <span>  regression.variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"easter[15]"</span><span class="op">)</span>,</span>
 <span>  arima.model <span class="op">=</span> <span class="st">"(0 1 1)(1 0 0)"</span>,</span>
@@ -568,12 +649,21 @@ X_t =
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="25-seats_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="864"></p>
+<div>
+<figure class="figure"><p><img src="25-seats_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="864"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="25-seats_files/figure-html/unnamed-chunk-6-2.png" class="img-fluid figure-img" width="864"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>While the summary looks fine,</p>
 <div class="cell">
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; seas(x = tax_n, transform.function = "none", regression.aictest = NULL, </span></span>
@@ -593,16 +683,19 @@ X_t =
 </div>
 <p>the seasonal factors seem erratic:</p>
 <div class="cell">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/monthplot.html">monthplot</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/monthplot.html">monthplot</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="25-seats_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="864"></p>
+<div>
+<figure class="figure"><p><img src="25-seats_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="864"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>To me (Christoph), this seems against the very basic idea of seasonal adjustment: We want to collect predictable fluctuations in the seasonal component, not random noise. The other side of the coin is a very smooth seasonal adjustment.</p>
 <p>These kind of SI-ratios appear in around 10 to 20% of SEATS adjustment and may be the reason why SEATS often seems smoother than X11.</p>
 <p>How to detect these cases? How to deal with these adjustments?</p>
-</section><section id="considerations-when-using-seats-in-x-13" class="level2" data-number="7.9"><h2 data-number="7.9" class="anchored" data-anchor-id="considerations-when-using-seats-in-x-13">
-<span class="header-section-number">7.9</span> Considerations when using SEATS in X-13</h2>
+</section><section id="considerations-when-using-seats-in-x-13" class="level2" data-number="7.6"><h2 data-number="7.6" class="anchored" data-anchor-id="considerations-when-using-seats-in-x-13">
+<span class="header-section-number">7.6</span> Considerations when using SEATS in X-13</h2>
 <p>Some model limitations when using SEATS are as follows.</p>
 <ul>
 <li>SEATS does not accept missing lag models. Hence, it is acceptable to specify a (0 1 3)(0 1 1) model but unacceptable to specify (0 1 [1 3])(0 1 1).</li>
@@ -610,16 +703,16 @@ X_t =
 <li>
 <em>Inadmissible decomposition</em>: Sometimes, the estimated values of coefficients make it impossible to estimate components from the estimated ARIMA models. SEATS will usually change the model and re-estimate it in order to get an admissible decomposition. When it is difficult to find an admissible decomposition the airline model is often used as a replacement. This usually gives acceptable results for a broad range of series.</li>
 <li>Model span can have large implications in a SEATS adjustment. This is due to the changing dynamics of long time series and how SEATS derives its filters.</li>
-</ul></section><section id="sec-comparing" class="level2" data-number="7.10"><h2 data-number="7.10" class="anchored" data-anchor-id="sec-comparing">
-<span class="header-section-number">7.10</span> Comparing X-11 and SEATS</h2>
+</ul></section><section id="sec-comparing" class="level2" data-number="7.7"><h2 data-number="7.7" class="anchored" data-anchor-id="sec-comparing">
+<span class="header-section-number">7.7</span> Comparing X-11 and SEATS</h2>
 <p>The Bureau of Labor Statistics formed a group to do a comparison study between X-11 and model-based seasonal adjustments (CITE BLS 2007). The examined a cross section of 87 BLS series with X-11, SEATS, and STAMP using spectral, revisions history, model adequacy and sliding spans diagnostics. They found that SEATS seasonal factors are usually more stable than X-11 and X-11 trend component is usually more stable than SEATS. Also, among series that were seasonal, residual seasonality almost never appears using either method.</p>
 <p>The only exception being a small number of SEATS runs where model inadequacy for the full span of data was present. This manifested as SEATS having difficulty identifying a usable model for decomposition and falling back on the airline model. They found even in these situations the SEATS seasonal adjustment is usually reasonable.</p>
 <p>Overall, X-11 and SEATS seasonal adjustments are very similar for many series. SEATS adjustments are often smoother than X-11 seasonal adjustments. For some series, the variance can be different based on the month or season. For example, U.S. Housing Starts is more variable in the winter months than in the summer due to the differences in warm and cold winters. ARIMA model-based seasonal adjustment does not handle this situation very well and assumes a constant variance and the SEATS adjustment wont compensate for this.</p>
-<section id="seats-filters-from-seas-output" class="level3" data-number="7.10.1"><h3 data-number="7.10.1" class="anchored" data-anchor-id="seats-filters-from-seas-output">
-<span class="header-section-number">7.10.1</span> SEATS filters from <code>seas</code> output</h3>
+<section id="seats-filters-from-seas-output" class="level3" data-number="7.7.1"><h3 data-number="7.7.1" class="anchored" data-anchor-id="seats-filters-from-seas-output">
+<span class="header-section-number">7.7.1</span> SEATS filters from <code>seas</code> output</h3>
 <p>The trend filter and seasonal adjustment filter can be extracted from the output of a <code>seasonal</code> run. This is done via the <strong>save</strong> argument in the seats spec. In the following example the symmetric trend filter is saved and then exported. Note the <code>finite='yes'</code> argument must be specified to save filter weights.</p>
 <div class="cell">
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, </span>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">AirPassengers</span>,</span>
 <span>          seats.finite <span class="op">=</span> <span class="st">'yes'</span>,</span>
 <span>          seats.save   <span class="op">=</span> <span class="st">'ftf'</span>, <span class="co"># symmetric finite trend filter</span></span>
 <span>          out          <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -627,21 +720,24 @@ X_t =
 <span><span class="co"># reads in filter weights from ftf_file</span></span>
 <span><span class="va">w</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.delim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/textconnections.html">textConnection</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/readLines.html">readLines</a></span><span class="op">(</span><span class="va">ftf_file</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span>,</span>
 <span>                header <span class="op">=</span> <span class="cn">TRUE</span>, stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="op">-</span><span class="fl">72</span><span class="op">:</span><span class="fl">71</span>, <span class="va">w</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span>, type <span class="op">=</span> <span class="st">"l"</span>, </span>
-<span>     xlab <span class="op">=</span> <span class="st">""</span>, </span>
-<span>     ylab <span class="op">=</span> <span class="st">"weights"</span>, </span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="op">-</span><span class="fl">72</span><span class="op">:</span><span class="fl">71</span>, <span class="va">w</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span>, type <span class="op">=</span> <span class="st">"l"</span>,</span>
+<span>     xlab <span class="op">=</span> <span class="st">""</span>,</span>
+<span>     ylab <span class="op">=</span> <span class="st">"weights"</span>,</span>
 <span>     main <span class="op">=</span> <span class="st">"SEATS trend filter"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="25-seats_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="864"></p>
+<div>
+<figure class="figure"><p><img src="25-seats_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="864"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>The default SEATS output tables do not allow users to save the seasonal filter, only the seasonal adjustment and trend filters. Some additional work can be done to calculate the seasonal filters via the canonical decomposition implied models and the Wiener-Kolmogorov algorithm. The code provided here is a bit complicated and will be improved/modularized in subsequent version of this textbook. It involves outputting the <code>mdc</code> table and the using the <code>grep</code> functions to extract salient features for each model component. The naming conventions for the <code>mdc</code> table follow the Wald decomposition notation where moving average components appear in the numerator and differencing and/or autoregressive components appear in the denominator. The following assumes there are no AR components and anything appearing in the denominator is attributed to the differencing operator.</p>
 <div class="cell">
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">seas</span><span class="op">(</span><span class="va">AirPassengers</span>, </span>
-<span>          outlier <span class="op">=</span> <span class="cn">NULL</span>, </span>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/seasonal/man/seas.html">seas</a></span><span class="op">(</span><span class="va">AirPassengers</span>,</span>
+<span>          outlier <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>          regression.aictest <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>          arima.model <span class="op">=</span> <span class="st">'(0 1 1)(0 1 1)'</span>,</span>
-<span>          seats.save <span class="op">=</span> <span class="st">'mdc'</span>, </span>
+<span>          seats.save <span class="op">=</span> <span class="st">'mdc'</span>,</span>
 <span>          out <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
@@ -743,28 +839,31 @@ X_t =
 </div>
 <p>To further understand these components the implied trend model is the following:</p>
 <div class="cell">
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">macoefs</span></span>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">macoefs</span></span>
 <span><span class="co">#&gt; [1]  0.04751813 -0.95248187</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>which tells us the trend is an MA(2) with coefficients <span class="math inline">\(\theta_1 = 0.04751813\)</span> and <span class="math inline">\(\theta_2 = -0.95248187\)</span>. The variance of the innovations, <span class="math inline">\(\sigma\)</span> is</p>
 <div class="cell">
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">trend.var</span></span>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">trend.var</span></span>
 <span><span class="co">#&gt; [1] 0.05400767</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>and the differencing is</p>
 <div class="cell">
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">trendDiff</span></span>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">trendDiff</span></span>
 <span><span class="co">#&gt; [1]  1 -2  1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>which is second differencing, i.e.&nbsp;<span class="math inline">\(\delta(B) = 1 - 2B + B^2 = (1-B)^2\)</span>.</p>
 <p>We can use these component models to apply the WK algorithm and get the seasonal filter weights. The details of this complex operation are omitted here but a plot of the seasonal filter weights is given in Figure ???.</p>
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="25-seats_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="864"></p>
+<div>
+<figure class="figure"><p><img src="25-seats_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="864"></p>
+</figure>
 </div>
 </div>
-</section><section id="reasons-for-using-seats-or-x11" class="level3" data-number="7.10.2"><h3 data-number="7.10.2" class="anchored" data-anchor-id="reasons-for-using-seats-or-x11">
-<span class="header-section-number">7.10.2</span> Reasons for using SEATS or X11</h3>
+</div>
+</section><section id="reasons-for-using-seats-or-x11" class="level3" data-number="7.7.2"><h3 data-number="7.7.2" class="anchored" data-anchor-id="reasons-for-using-seats-or-x11">
+<span class="header-section-number">7.7.2</span> Reasons for using SEATS or X11</h3>
 <div class="callout callout-style-simple callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -799,10 +898,13 @@ TODO
 <li><p>If you check SEATS models carefully, it may produce a more stable adjustment.</p></li>
 </ul>
 <p>To sum up, whether you should use SEATS or X11 also depends on how much work you are willing to invest in a series.</p>
+</section></section><section id="exercises" class="level2" data-number="7.8"><h2 data-number="7.8" class="anchored" data-anchor-id="exercises">
+<span class="header-section-number">7.8</span> Exercises</h2>
+<p><span class="tag tag-exercises"><i class="fas fa-shoe-prints"></i> Exercises</span></p>
 
 
 
-</section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
@@ -837,18 +939,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -880,11 +971,50 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
-  function tippyHover(el, contentFn) {
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/christophsax\.github\.io\/seasonalbook\.content");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -894,8 +1024,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -907,7 +1046,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -951,6 +1213,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -976,6 +1239,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -1035,23 +1324,27 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
-      <a href="./24-x11.html" class="pagination-link">
+      <a href="./24-x11.html" class="pagination-link" aria-label="X-11">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">X-11</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./30-part-data-problems.html" class="pagination-link">
+      <a href="./30-part-data-problems.html" class="pagination-link" aria-label="Data Problems">
         <span class="nav-page-text">Data Problems</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
 </div> <!-- /content -->
 <footer class="footer"><div class="nav-footer">
-    <div class="nav-footer-left">by James Livsey and Christoph Sax</div>   
+    <div class="nav-footer-left">
+<p>by James Livsey and Christoph Sax</p>
+</div>   
     <div class="nav-footer-center">
       &nbsp;
-    </div>
-    <div class="nav-footer-right">Seasonal Adjustment in R</div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/christophsax/seasonalbook.content/edit/main/25-seats.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<p>Seasonal Adjustment in R</p>
+</div>
   </div>
 </footer>
 

@@ -2,10 +2,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.336">
+<meta name="generator" content="quarto-1.6.32">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="James Livsey and Christoph Sax">
-<title>Seasonal Adjustment in R - 5&nbsp; regARIMA Model</title>
+<title>5&nbsp; regARIMA Model – Seasonal Adjustment in R</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,7 +20,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -31,7 +31,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -56,6 +56,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
+  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -87,16 +88,22 @@ div.csl-indent {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2486e1f0a3ee9ee1fc393803a1361cdb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap-ed6da6eef3892af8a4b5ed59bfb951f5.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
   "panel-placement": "start",
   "type": "textbox",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -105,8 +112,10 @@ div.csl-indent {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script><meta name="robots" content="noindex">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -140,25 +149,50 @@ div.csl-indent {
 
 </style>
 <script src="site_libs/quarto-diagram/mermaid.min.js"></script><script src="site_libs/quarto-diagram/mermaid-init.js"></script><link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 </head>
 <body class="nav-sidebar floating slimcontent">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./20-part-basics.html">Basics</a></li><li class="breadcrumb-item"><a href="./23-regARIMA.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">regARIMA Model</span></a></li></ol></nav>
-      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-      </a>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./20-part-basics.html">Basics</a></li><li class="breadcrumb-item"><a href="./23-regARIMA.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">regARIMA Model</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
     </div>
   </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Seasonal Adjustment in R</a> 
         <div class="sidebar-tools-main">
@@ -182,7 +216,7 @@ div.csl-indent {
       <div class="sidebar-item-container"> 
             <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Welcome</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -205,7 +239,7 @@ div.csl-indent {
       <div class="sidebar-item-container"> 
             <a href="./20-part-basics.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Basics</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -246,7 +280,7 @@ div.csl-indent {
       <div class="sidebar-item-container"> 
             <a href="./30-part-data-problems.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Data Problems</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -281,7 +315,7 @@ div.csl-indent {
       <div class="sidebar-item-container"> 
             <a href="./40-part-other-issues.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Other Issues</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -310,7 +344,7 @@ div.csl-indent {
       <div class="sidebar-item-container"> 
             <a href="./50-part-quality-assessment.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Quality assessment</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -331,7 +365,7 @@ div.csl-indent {
 </li>
     </ul>
 </div>
-</nav><div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+</nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
@@ -342,12 +376,13 @@ div.csl-indent {
   <li><a href="#automated-arima-modeling" id="toc-automated-arima-modeling" class="nav-link" data-scroll-target="#automated-arima-modeling"><span class="header-section-number">5.3</span> Automated ARIMA modeling</a></li>
   <li><a href="#regression" id="toc-regression" class="nav-link" data-scroll-target="#regression"><span class="header-section-number">5.4</span> Regression</a></li>
   <li><a href="#automated-regressor-identification" id="toc-automated-regressor-identification" class="nav-link" data-scroll-target="#automated-regressor-identification"><span class="header-section-number">5.5</span> Automated regressor identification</a></li>
-  <li><a href="#case-study-airpassengers" id="toc-case-study-airpassengers" class="nav-link" data-scroll-target="#case-study-airpassengers"><span class="header-section-number">5.6</span> Case Study: <code>AirPassengers</code></a></li>
-  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="header-section-number">5.7</span> Exercises</a></li>
-  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/christophsax/seasonalbook.content/edit/main/23-regARIMA.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+  <li><a href="#example-airpassengers" id="toc-example-airpassengers" class="nav-link" data-scroll-target="#example-airpassengers"><span class="header-section-number">5.6</span> Example: <code>AirPassengers</code></a></li>
+  <li><a href="#case-study" id="toc-case-study" class="nav-link" data-scroll-target="#case-study"><span class="header-section-number">5.7</span> Case Study:</a></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="header-section-number">5.8</span> Exercises</a></li>
+  </ul><div class="toc-actions"><ul><li><a href="https://github.com/christophsax/seasonalbook.content/edit/main/23-regARIMA.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content page-columns page-full" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<main class="content page-columns page-full" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./20-part-basics.html">Basics</a></li><li class="breadcrumb-item"><a href="./23-regARIMA.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">regARIMA Model</span></a></li></ol></nav><div class="quarto-title">
 <h1 class="title"><span id="sec-regarima" class="quarto-section-identifier"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">regARIMA Model</span></span></h1>
 </div>
 
@@ -361,17 +396,19 @@ div.csl-indent {
   </div>
   
 
+
 </header><!--
 Style Guide:
 X-13
 X-13ARIMA-SEATS
 Titles in sentence style
- --><p>An ARIMA model with external regressors (regARIMA) lies at the heart of many of the procedures in X-13. As we have seen in <a href="21-overview.html"><span>Chapter&nbsp;3</span></a>, regARIMA consists of several interacting specs. Some of the these specs will be further detailed in <a href="31-holidays.html"><span>Chapter&nbsp;8</span></a>, <a href="32-trading-days.html"><span>Chapter&nbsp;9</span></a>, and <a href="33-outliers.html"><span>Chapter&nbsp;10</span></a> (Holidays, Trading Days, and Outliers).</p>
+ --><p>An ARIMA model with external regressors (regARIMA) lies at the heart of many of the procedures in X-13. As we have seen in <a href="21-overview.html" class="quarto-xref"><span>Chapter 3</span></a>, regARIMA consists of several interacting specs. Some of the these specs will be further detailed in <a href="31-holidays.html" class="quarto-xref"><span>Chapter 8</span></a>, <a href="32-trading-days.html" class="quarto-xref"><span>Chapter 9</span></a>, and <a href="33-outliers.html" class="quarto-xref"><span>Chapter 10</span></a> (Holidays, Trading Days, and Outliers).</p>
 <p>Like most statistical modeling in X-13, the process of finding the best model is iterative. Analysts use statistical tools and their expertise to fine-tune the regARIMA model. This iterative process is visualized in the flow chart below.</p>
-<div class="cell">
+<div class="cell" data-layout-align="default">
 <div class="cell-output-display">
-<div id="fig-arima-interact" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure"><div>
+<div id="fig-arima-interact" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-arima-interact-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div>
 <pre class="mermaid mermaid-js" data-label="fig-arima-interact">flowchart TD
   A[RegARIMA Modeling] --&gt; B(Model Comparison / Diagnostics)
   B --&gt; A
@@ -381,7 +418,10 @@ Titles in sentence style
   D --&gt; A
 </pre>
 </div>
-<figcaption class="figure-caption">Figure&nbsp;5.1: Interaction between regARIMA, diagnostics and seasonal adjustment</figcaption></figure>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-arima-interact-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.1: Interaction between regARIMA, diagnostics and seasonal adjustment
+</figcaption></figure>
 </div>
 </div>
 </div>
@@ -392,35 +432,41 @@ Titles in sentence style
 <p>The regARIMA model combines two elements: <strong>reg</strong>ression and <strong>ARIMA</strong>. The ARIMA segment itself is composed of a differencing order (the “I”, for “integrated”) and the ARMA part. This chapter aims to simplify these concepts without getting too technical, providing enough understanding for effective seasonal adjustment.</p>
 <p>ARIMA stands for Autoregressive Integrated Moving Average. “Autoregressive” (AR) means the model uses past values of the series to predict the current value. For instance, an AR(1) model uses one lagged value:</p>
 <p><span class="math display">\[ Y_t = \phi Y_{t-1} + a_t \]</span></p>
-<div class="page-columns page-full"><p>Here, <span class="math inline">\(Y_t\)</span> is the time series, <span class="math inline">\(\phi\)</span> a coefficient, and <span class="math inline">\(\{a_t\}\)</span> an uncorrelated sequence of errors.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn1">
+<p>Here, <span class="math inline">\(Y_t\)</span> is the time series, <span class="math inline">\(\phi\)</span> a coefficient, and <span class="math inline">\(\{a_t\}\)</span> an uncorrelated sequence of errors.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<div class="no-row-height column-margin column-container"><div id="fn1">
 <p>An AR(p) model extends this to <span class="math inline">\(p\)</span> lagged values:</p>
 <p><span class="math display">\[ Y_t = \phi_1 Y_{t-1} + \phi_2 Y_{t-2} + \cdots + \phi_p Y_{t-p} + a_t \]</span></p>
 <p>where now we have <span class="math inline">\(p\)</span> coefficients <span class="math inline">\(\phi_1, \phi_2, \ldots, \phi_p\)</span> to be estimated.</p>
-</li></div></div>
-<p>The “Moving Average” (MA) part uses past errors of the series for prediction. An MA(1) model looks like:</p>
+</div></div><p>The “Moving Average” (MA) part uses past errors of the series for prediction. An MA(1) model looks like:</p>
 <p><span class="math display">\[ Y_t = a_t + \theta a_{t-1} \]</span></p>
-<div class="page-columns page-full"><p>and uses the current and one lagged error term.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn2">
+<p>and uses the current and one lagged error term.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<div class="no-row-height column-margin column-container"><div id="fn2">
 <p>An MA(q) model includes <span class="math inline">\(q\)</span> lagged error terms:</p>
 <p><span class="math display">\[ Y_t = a_t + \theta_1 a_{t-1} + \theta_2 a_{t-2} + \cdots + \theta_q a_{t-q} \]</span>.</p>
-</li></div></div>
-<p>An ARMA(p, q) model combines these AR and MA components, using <span class="math inline">\(p\)</span> lagged values of the series and <span class="math inline">\(q\)</span> lagged error terms. In practice, X13’s automatic modeling usually finds appropriate <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span> values. However, it is worth paying attention to correctly set the differencing and regression variables for seasonal adjustment.</p>
+</div></div><p>An ARMA(p, q) model combines these AR and MA components, using <span class="math inline">\(p\)</span> lagged values of the series and <span class="math inline">\(q\)</span> lagged error terms. In practice, X13’s automatic modeling usually finds appropriate <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span> values. However, it is worth paying attention to correctly set the differencing and regression variables for seasonal adjustment.</p>
 </section><section id="differencing" class="level2 page-columns page-full" data-number="5.2"><h2 data-number="5.2" class="anchored" data-anchor-id="differencing">
 <span class="header-section-number">5.2</span> Differencing</h2>
 <p>ARMA models are most effective with stationary time series, where both the mean and correlation structure do not vary over time. For non-stationary time series, transforming them into stationary ones is essential, and differencing is a widely used method for this purpose. It is known that differencing a series <span class="math inline">\(k\)</span> times can remove a polynomial trend of degree <span class="math inline">\(k\)</span>. Therefore, the first differencing is effective for a series with a linear trend, while the second differencing works for a series with a quadratic trend.</p>
-<div class="page-columns page-full"><p>Seasonal patterns might also require seasonal differencing to achieve stationarity. The orders of differencing for the non-seasonal and seasonal parts are denoted as <span class="math inline">\(d\)</span> and <span class="math inline">\(D\)</span>, respectively. Combining these with the stochastic model specification gives the notation SARIMA(p, d, q)(P, D, Q), where <span class="math inline">\(p\)</span>, <span class="math inline">\(d\)</span>, <span class="math inline">\(q\)</span> are non-seasonal parameters, and <span class="math inline">\(P\)</span>, <span class="math inline">\(D\)</span>, <span class="math inline">\(Q\)</span> are seasonal.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>:</p><div class="no-row-height column-margin column-container"><li id="fn3"><p><sup>3</sup>&nbsp;The “S” in SARIMA stands for seasonal. Since most of the ARIMA models within X-13 are seasonal, we will restrain from using the term and usually refer to an ARIMA model of the structure (p, d, q)(P, D, Q).</p></li></div></div>
-<p><span class="math display">\[\text{SARIMA}\underbrace{(p, d, q)}_{\text{non-seasonal }}\underbrace{(P, D, Q)}_{\text{seasonal}}.\]</span></p>
+<p>Seasonal patterns might also require seasonal differencing to achieve stationarity. The orders of differencing for the non-seasonal and seasonal parts are denoted as <span class="math inline">\(d\)</span> and <span class="math inline">\(D\)</span>, respectively. Combining these with the stochastic model specification gives the notation SARIMA(p, d, q)(P, D, Q), where <span class="math inline">\(p\)</span>, <span class="math inline">\(d\)</span>, <span class="math inline">\(q\)</span> are non-seasonal parameters, and <span class="math inline">\(P\)</span>, <span class="math inline">\(D\)</span>, <span class="math inline">\(Q\)</span> are seasonal.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>:</p>
+<div class="no-row-height column-margin column-container"><div id="fn3"><p><sup>3</sup>&nbsp;The “S” in SARIMA stands for seasonal. Since most of the ARIMA models within X-13 are seasonal, we will restrain from using the term and usually refer to an ARIMA model of the structure (p, d, q)(P, D, Q).</p></div></div><p><span class="math display">\[\text{SARIMA}\underbrace{(p, d, q)}_{\text{non-seasonal }}\underbrace{(P, D, Q)}_{\text{seasonal}}.\]</span></p>
 <p>Let’s apply this to <code>AirPassengers</code>. A log-transformed version of the series looks as follows:</p>
 <div class="cell">
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="23-regARIMA_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="864"></p>
+<div>
+<figure class="figure"><p><img src="23-regARIMA_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="864"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>This series exhibits a clear increasing trend and seasonal pattern. Let’s call the log-transformed series <span class="math inline">\(X_t\)</span>. We can now difference the series to make <span class="math inline">\(Y_t = \Delta X_t = X_t - X_{t-1}\)</span>. Which looks like:</p>
 <div class="cell">
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="23-regARIMA_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="864"></p>
+<div>
+<figure class="figure"><p><img src="23-regARIMA_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="864"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>The trend is removed, but some seasonal patterns remain. Seasonal differencing is then applied to the already first differenced series <span class="math inline">\(Y_t\)</span>:</p>
@@ -429,13 +475,16 @@ Titles in sentence style
 <div class="cell">
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span><span class="op">)</span>, <span class="fl">12</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="23-regARIMA_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="864"></p>
+<div>
+<figure class="figure"><p><img src="23-regARIMA_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="864"></p>
+</figure>
 </div>
 </div>
-<div class="page-columns page-full"><p>Now, both the linear trend and seasonal patterns are removed, leaving a stationary process suitable for modeling with an (0, 0, 1)(0, 0, 1) ARIMA model. When the differencing order for both seasonal and non-seasonal components is included, the model becomes (0, 1, 1)(0, 1, 1), often called the “airline model” after Box and Jenkins’ work.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn4"><p><sup>4</sup>&nbsp;The “airline model,” or the ARIMA(0, 1, 1)(0, 1, 1) model, was popularized by <span class="citation" data-cites="box1970time">Box and Jenkins (<a href="#ref-box1970time" role="doc-biblioref">1970</a>)</span> through their influential work in the field of time series analysis. This model is often associated with their seminal book “Time Series Analysis: Forecasting and Control.” First published in 1970, this book has been a foundational text in the field of time series analysis. The airline model, named for its application in modeling airline passenger data, exemplifies the application of Seasonal ARIMA modeling in practical scenarios.</p><div id="ref-box1970time" class="csl-entry" role="listitem">
+</div>
+<p>Now, both the linear trend and seasonal patterns are removed, leaving a stationary process suitable for modeling with an (0, 0, 1)(0, 0, 1) ARIMA model. When the differencing order for both seasonal and non-seasonal components is included, the model becomes (0, 1, 1)(0, 1, 1), often called the “airline model” after Box and Jenkins’ work.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
+<div class="no-row-height column-margin column-container"><div id="fn4"><p><sup>4</sup>&nbsp;The “airline model,” or the ARIMA(0, 1, 1)(0, 1, 1) model, was popularized by <span class="citation" data-cites="box1970time">Box and Jenkins (<a href="#ref-box1970time" role="doc-biblioref">1970</a>)</span> through their influential work in the field of time series analysis. This model is often associated with their seminal book “Time Series Analysis: Forecasting and Control.” First published in 1970, this book has been a foundational text in the field of time series analysis. The airline model, named for its application in modeling airline passenger data, exemplifies the application of Seasonal ARIMA modeling in practical scenarios.</p><div id="ref-box1970time" class="csl-entry" role="listitem">
 Box, George E. P., and Gwilym M. Jenkins. 1970. <em>Time Series Analysis: Forecasting and Control</em>. San Francisco: Holden-Day.
-</div></li></div></div>
-</section><section id="automated-arima-modeling" class="level2" data-number="5.3"><h2 data-number="5.3" class="anchored" data-anchor-id="automated-arima-modeling">
+</div></div></div></section><section id="automated-arima-modeling" class="level2" data-number="5.3"><h2 data-number="5.3" class="anchored" data-anchor-id="automated-arima-modeling">
 <span class="header-section-number">5.3</span> Automated ARIMA modeling</h2>
 <p>By default, <code>seas()</code> invokes the <em>automdl</em> spec to perform an automated ARIMA model search.</p>
 <p>Unsurprisingly, the basic call to <code>seas(AirPassengers)</code> opts for the (0, 1, 1)(0, 1, 1) “airline model” that has its name from the series:</p>
@@ -506,7 +555,6 @@ acf(x_MA, xlab = "h", main = ""); title("ACF of MA(1) model")
 par <- op
 ```
 
-
 ::: {.cell-output-display}
 ![](23-regARIMA_files/figure-html/unnamed-chunk-8-1.png){width=864}
 :::
@@ -516,19 +564,18 @@ par <- op
 :::
 :::
 
-
  -->
 </section><section id="regression" class="level2 page-columns page-full" data-number="5.4"><h2 data-number="5.4" class="anchored" data-anchor-id="regression">
 <span class="header-section-number">5.4</span> Regression</h2>
 <p>After ARIMA and differencing, the final element of regARIMA is the regression component. The regression component describes the effect of exogenous variables on the residuals of an ARIMA model.</p>
-<div class="page-columns page-full"><p>If no transformation or intervention is needed, the regARIMA model takes the following form:<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn5">
+<p>If no transformation or intervention is needed, the regARIMA model takes the following form:<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p>
+<div class="no-row-height column-margin column-container"><div id="fn5">
 <p>The left-hand side of an regARIMA can be transformed and adjusted for subjective interventions. In such cases, the regARIMA formula extends to:</p>
 <p><span class="math display">\[
 f\left(\frac{Y_t}{D_t} \right) = \boldsymbol{\beta}^\prime {\mathbf X}_t + Z_t
 \]</span></p>
 <p>The function <span class="math inline">\(f\)</span> represents a transformation, with the logarithmic transformation (<span class="math inline">\(f(x) = \log(x)\)</span>) being a common choice. <span class="math inline">\(D_t\)</span> represents any interventions applied before transformation or modeling. These interventions are often specific to each time series and are applied based on the unique circumstances of the data. For example, if an event like a soybean farmer strike affects the data series, this intervention can help adjust the data before further analysis.</p>
-</li></div></div>
-<p><span class="math display">\[
+</div></div><p><span class="math display">\[
 Y_t = \underbrace{\boldsymbol{\beta}^\prime {\mathbf X}_t}_{\text{regression}} + \underbrace{Z_t}_{\text{ARIMA}}
 \]</span></p>
 <p>In this model, <span class="math inline">\(Y_t\)</span> is the observed time series. The regression component is <span class="math inline">\({\mathbf X}_t\)</span> and <span class="math inline">\(Z_t\)</span> represents the ARIMA process. The key difference between a regARIMA model and classical linear models is the assumption about <span class="math inline">\(Z_t\)</span>. In regARIMA, <span class="math inline">\(Z_t\)</span> is an ARIMA process, where in classic models the error terms are typically assumed to be uncorrelated.</p>
@@ -562,7 +609,7 @@ Y_t = \underbrace{\boldsymbol{\beta}^\prime {\mathbf X}_t}_{\text{regression}} +
 <span><span class="co">#&gt; AICc: 947.3, BIC: 963.9  QS (no seasonality in final):    0  </span></span>
 <span><span class="co">#&gt; Box-Ljung (no autocorr.): 26.65   Shapiro (normality): 0.9908</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>We will cover these regressors in more detail in later chapters. The decision whether to include a regressor is typically left to an augmented AICc test, which we already covered in <a href="22-transform.html#sec-auto-transform"><span>Section&nbsp;4.2</span></a>.</p>
+<p>We will cover these regressors in more detail in later chapters. The decision whether to include a regressor is typically left to an augmented AICc test, which we already covered in <a href="22-transform.html#sec-auto-transform" class="quarto-xref"><span>Section 4.2</span></a>.</p>
 <p>In production, the general rule is to <em>not</em> use automatic modeling. This implies that if you plan to include seasonal adjustment as part of a regular, large-scale data processing routine (such as monthly operations), it’s not recommended to run automatic model identification each month. A better approach is to use automatic model selection once and then set the chosen model permanently in the specification. The <code>static()</code> function from the <em>seasonal</em> package can automate this process.</p>
 <!-- Perhaps move to outlier? -->
 <!--
@@ -578,8 +625,8 @@ Y_t = \underbrace{\boldsymbol{\beta}^\prime {\mathbf X}_t}_{\text{regression}} +
 | Seasonal outliers (SO)      | No                             |
 
  -->
-</section><section id="case-study-airpassengers" class="level2" data-number="5.6"><h2 data-number="5.6" class="anchored" data-anchor-id="case-study-airpassengers">
-<span class="header-section-number">5.6</span> Case Study: <code>AirPassengers</code>
+</section><section id="example-airpassengers" class="level2" data-number="5.6"><h2 data-number="5.6" class="anchored" data-anchor-id="example-airpassengers">
+<span class="header-section-number">5.6</span> Example: <code>AirPassengers</code>
 </h2>
 <p>Once again, consider the default seasonal adjustment:</p>
 <div class="cell">
@@ -681,8 +728,111 @@ Y_t = \underbrace{\boldsymbol{\beta}^\prime {\mathbf X}_t}_{\text{regression}} +
 <!-- ## Case study 2 -->
 <!-- Decide if you should include AO in May 2014. -->
 <!-- Construct a simple user defined regressor to handle specific issue. -->
-</section><section id="exercises" class="level2" data-number="5.7"><h2 data-number="5.7" class="anchored" data-anchor-id="exercises">
-<span class="header-section-number">5.7</span> Exercises</h2>
+</section><section id="case-study" class="level2" data-number="5.7"><h2 data-number="5.7" class="anchored" data-anchor-id="case-study">
+<span class="header-section-number">5.7</span> Case Study:</h2>
+<p>Let’s fit a regARIMA model to a series and decide if you should be adding a regression variable that accounts for the number of weekdays vs weekend days in each month. This is known as a 1-coefficient trading day and will be discussed in further detail in <a href="32-trading-days.html" class="quarto-xref"><span>Chapter 9</span></a>. For the sake of this case study we will just need to know that the regression variable is added via the additon of <code>regression.variables = "td1coef"</code> to our <code>seas()</code> function.</p>
+<p>Consider the Total Vehicle Miles Traveled series from the <code>fred</code> database. This is the series with <code>id = TRFVOLUSM227NFWA</code></p>
+<div class="cell">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">plot_fred</span><span class="op">(</span><span class="st">"TRFVOLUSM227NFWA"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="23-regARIMA_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="864"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>First we can do arima modeling without regressors to see the stocastic structure.</p>
+<div class="cell">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">x</span> <span class="op">=</span> <span class="fu">ext_fred</span><span class="op">(</span><span class="st">"TRFVOLUSM227NFWA"</span><span class="op">)</span></span>
+<span><span class="va">m</span> <span class="op">=</span> <span class="fu">seas</span><span class="op">(</span><span class="va">x</span>,</span>
+<span>         x11 <span class="op">=</span> <span class="st">""</span>,</span>
+<span>         outlier <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>         regression.aictest <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; seas(x = x, regression.aictest = NULL, outlier = NULL, x11 = "")</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients:</span></span>
+<span><span class="co">#&gt;                   Estimate Std. Error z value Pr(&gt;|z|)    </span></span>
+<span><span class="co">#&gt; AR-Nonseasonal-01  0.36675    0.08144   4.503 6.70e-06 ***</span></span>
+<span><span class="co">#&gt; MA-Nonseasonal-01  0.53572    0.08070   6.638 3.18e-11 ***</span></span>
+<span><span class="co">#&gt; MA-Nonseasonal-02  0.27866    0.05264   5.293 1.20e-07 ***</span></span>
+<span><span class="co">#&gt; MA-Seasonal-12     0.81880    0.02510  32.619  &lt; 2e-16 ***</span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; X11 adj.  ARIMA: (1 1 2)(0 1 1)  Obs.: 653  Transform: log</span></span>
+<span><span class="co">#&gt; AICc: 1.261e+04, BIC: 1.264e+04  QS (no seasonality in final):    0  </span></span>
+<span><span class="co">#&gt; Box-Ljung (no autocorr.): 26.53   Shapiro (normality): 0.6782 ***</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The automatic modeling identifies an ARIMA(1 1 2)(0 1 1) model. This is a fairly complex non-seasonal model and we will see if this can be simplified without causing any modeling issues. Additionally, it would make sense the number of vehicle miles traveled would be effected by weekday/weekend composition of the month.</p>
+<div class="cell">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_td</span> <span class="op">=</span> <span class="fu">seas</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  x11 <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  outlier <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  regression.aictest <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  regression.variables <span class="op">=</span> <span class="st">"td1coef"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m_td</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; seas(x = x, regression.aictest = NULL, outlier = NULL, x11 = "", </span></span>
+<span><span class="co">#&gt;     regression.variables = "td1coef")</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients:</span></span>
+<span><span class="co">#&gt;                    Estimate Std. Error z value Pr(&gt;|z|)    </span></span>
+<span><span class="co">#&gt; Weekday           0.0008651  0.0002023   4.276 1.90e-05 ***</span></span>
+<span><span class="co">#&gt; AR-Nonseasonal-01 0.4279865  0.0837257   5.112 3.19e-07 ***</span></span>
+<span><span class="co">#&gt; MA-Nonseasonal-01 0.6277301  0.0856906   7.326 2.38e-13 ***</span></span>
+<span><span class="co">#&gt; MA-Nonseasonal-02 0.2059410  0.0567153   3.631 0.000282 ***</span></span>
+<span><span class="co">#&gt; MA-Seasonal-12    0.8244534  0.0247570  33.302  &lt; 2e-16 ***</span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; X11 adj.  ARIMA: (1 1 2)(0 1 1)  Obs.: 653  Transform: log</span></span>
+<span><span class="co">#&gt; AICc: 1.262e+04, BIC: 1.264e+04  QS (no seasonality in final):    0  </span></span>
+<span><span class="co">#&gt; Box-Ljung (no autocorr.): 20.53   Shapiro (normality): 0.678 ***</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The trading day regressor is highly significant. We can see this looking at the p-value in the summary table. Now can we get away with a simplier model? Say, the <em>airline model</em>.</p>
+<div class="cell">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m_td_airline</span> <span class="op">=</span> <span class="fu">seas</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  x11 <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  outlier <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  regression.aictest <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  regression.variables <span class="op">=</span> <span class="st">"td1coef"</span>, </span>
+<span>  arima.model <span class="op">=</span> <span class="st">"(0 1 1)(0 1 1)"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m_td_airline</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; seas(x = x, regression.aictest = NULL, outlier = NULL, x11 = "", </span></span>
+<span><span class="co">#&gt;     regression.variables = "td1coef", arima.model = "(0 1 1)(0 1 1)")</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients:</span></span>
+<span><span class="co">#&gt;                    Estimate Std. Error z value Pr(&gt;|z|)    </span></span>
+<span><span class="co">#&gt; Weekday           0.0008731  0.0002126   4.107 4.01e-05 ***</span></span>
+<span><span class="co">#&gt; MA-Nonseasonal-01 0.1432122  0.0386804   3.702 0.000214 ***</span></span>
+<span><span class="co">#&gt; MA-Seasonal-12    0.8337828  0.0242370  34.401  &lt; 2e-16 ***</span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; X11 adj.  ARIMA: (0 1 1)(0 1 1)  Obs.: 653  Transform: log</span></span>
+<span><span class="co">#&gt; AICc: 1.269e+04, BIC: 1.271e+04  QS (no seasonality in final):    0  </span></span>
+<span><span class="co">#&gt; Box-Ljung (no autocorr.): 74.15 *** Shapiro (normality): 0.6684 ***</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s compare AIC values to see which model is preferred.</p>
+<div class="cell">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/AIC.html">AIC</a></span><span class="op">(</span><span class="va">m_td</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 12616.12</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/AIC.html">AIC</a></span><span class="op">(</span><span class="va">m_td_airline</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 12693.01</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The AIC of the original model selected is much lower.</p>
+</section><section id="exercises" class="level2" data-number="5.8"><h2 data-number="5.8" class="anchored" data-anchor-id="exercises">
+<span class="header-section-number">5.8</span> Exercises</h2>
 <ol type="1">
 <li>
 <p><strong>Performing an automated seasonal adjustment:</strong></p>
@@ -753,18 +903,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -796,11 +935,50 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
-  function tippyHover(el, contentFn) {
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/christophsax\.github\.io\/seasonalbook\.content");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -810,8 +988,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -823,7 +1010,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -867,6 +1177,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -892,6 +1203,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -951,23 +1288,27 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
-      <a href="./22-transform.html" class="pagination-link">
+      <a href="./22-transform.html" class="pagination-link" aria-label="Transform">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Transform</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./24-x11.html" class="pagination-link">
+      <a href="./24-x11.html" class="pagination-link" aria-label="X-11">
         <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">X-11</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
 </div> <!-- /content -->
 <footer class="footer"><div class="nav-footer">
-    <div class="nav-footer-left">by James Livsey and Christoph Sax</div>   
+    <div class="nav-footer-left">
+<p>by James Livsey and Christoph Sax</p>
+</div>   
     <div class="nav-footer-center">
       &nbsp;
-    </div>
-    <div class="nav-footer-right">Seasonal Adjustment in R</div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/christophsax/seasonalbook.content/edit/main/23-regARIMA.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/christophsax/seasonalbook.content/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<p>Seasonal Adjustment in R</p>
+</div>
   </div>
 </footer>
 
